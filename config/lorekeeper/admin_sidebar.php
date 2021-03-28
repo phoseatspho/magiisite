@@ -155,7 +155,6 @@ return [
             ],
         ]
     ],
-    
     'Data' => [
         'power' => 'edit_data',
         'links' => [
@@ -210,6 +209,23 @@ return [
             [
                 'name' => 'Pets',
                 'url' => 'admin/data/pets'
+            ],
+        ]
+    ],
+    'Claymores' => [
+        'power' => 'edit_claymores',
+        'links' => [
+            [
+                'name' => 'Gear',
+                'url' => 'admin/gear'
+            ],
+            [
+                'name' => 'Weapons',
+                'url' => 'admin/weapons'
+            ],
+            [
+                'name' => 'Character Classes',
+                'url' => 'admin/character-classes'
             ],
         ]
     ],

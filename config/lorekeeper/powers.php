@@ -58,6 +58,10 @@ return [
     'edit_levels' => [
         'name' => 'Edit Levels',
         'description' => 'Allow rank to edit levels.'
+    ],
+    'edit_claymores' => [
+        'name' => 'Edit Claymores & Companions',
+        'description' => 'Allow rank to edit claymore & companions data.'
     ]
 
 ];

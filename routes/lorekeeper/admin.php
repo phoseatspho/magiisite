@@ -494,3 +494,25 @@ Route::group(['prefix' => 'levels', 'namespace' => 'Stats', 'middleware' => 'pow
     Route::post('character/edit/{id}', 'LevelController@postCharaCreateEditLevel');
     Route::post('character/delete/{id}', 'LevelController@postCharaDeleteLevel');    
 });
+
+/***********************************************************************************
+ * CLAYMORES
+ ***********************************************************************************/
+Route::group(['prefix' => 'gear', 'namespace' => 'Claymores', 'middleware' => 'power:edit_claymores'], function() {
+    Route::get('/', 'GearController@getGearIndex');
+    Route::get('/create', 'GearController@getCreateGear');
+    Route::post('/create', 'GearController@postCreateEditGear');
+    Route::get('/edit/{id}', 'GearController@getEditGear');
+    Route::post('/edit/{id}', 'GearController@postCreateEditGear');
+    Route::get('delete/{id}', 'GearController@getDeleteGear');
+    Route::post('delete/{id}', 'GearController@postDeleteGear');
+    # categories
+    Route::get('gear-categories', 'GearController@getGearCategoryIndex');
+    Route::get('gear-categories/create', 'GearController@getCreateGearCategory');
+    Route::get('gear-categories/edit/{id}', 'GearController@getEditGearCategory');
+    Route::get('gear-categories/delete/{id}', 'GearController@getDeleteGearCategory');
+    Route::post('gear-categories/create', 'GearController@postCreateEditGearCategory');
+    Route::post('gear-categories/edit/{id?}', 'GearController@postCreateEditGearCategory');
+    Route::post('gear-categories/delete/{id}', 'GearController@postDeleteGearCategory');
+    Route::post('gear-categories/sort', 'GearController@postSortGearCategory');
+});
