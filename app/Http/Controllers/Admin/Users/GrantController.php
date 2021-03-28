@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 
 use App\Models\User\User;
 use App\Models\Item\Item;
+use App\Models\Pet\Pet;
 use App\Models\Currency\Currency;
 
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use App\Services\Stats\ExperienceManager;
+use App\Services\PetManager;
 
 use App\Http\Controllers\Controller;
 
@@ -89,6 +91,20 @@ class GrantController extends Controller
     {
         return view('admin.grants.exp', [
             'users' => User::orderBy('id')->pluck('name', 'id'),
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+        ]);
+    }
+    
+    /**
+     * Show the pet grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPets()
+    {
+        return view('admin.grants.pets', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'pets' => Pet::orderBy('name')->pluck('name', 'id')
         ]);
     }
 
@@ -100,6 +116,25 @@ class GrantController extends Controller
         $data = $request->only(['names', 'quantity', 'data']);
         if($service->grantExp($data, Auth::user())) {
             flash('EXP granted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /** 
+     * Grants or removes pets from multiple users.
+     *
+     * @param  \Illuminate\Http\Request        $request
+     * @param  App\Services\InvenntoryManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postPets(Request $request, PetManager $service)
+    {
+        $data = $request->only(['names', 'pet_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
+        if($service->grantPets($data, Auth::user())) {
+            flash('Pets granted successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();

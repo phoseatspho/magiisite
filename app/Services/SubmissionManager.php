@@ -21,6 +21,7 @@ use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
 use App\Models\Prompt\Prompt;
+use App\Models\Pet\Pet;
 
 use App\Services\Stats\ExperienceManager;
 use App\Services\Stats\StatManager;
@@ -221,6 +222,10 @@ class SubmissionManager extends Service
                         case 'Currency':
                             $reward = Currency::find($data['rewardable_id'][$key]);
                             if(!$reward->is_user_owned) throw new \Exception("Invalid currency selected.");
+                            break;
+                        case 'Pet':
+                            if (!$isStaff) break;
+                            $reward = Pet::find($data['rewardable_id'][$key]);
                             break;
                         case 'LootTable':
                             if (!$isStaff) break;
