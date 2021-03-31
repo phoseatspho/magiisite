@@ -45,7 +45,7 @@
               <tr class="sort-item" data-id="{{ $stat->id }}">
                   <td>{{ $stat->name }}</td>
                   <td>{{ $stat->abbreviation }}</td>
-                  <td>{{ $stat->default }}</td>
+                  <td>{{ $stat->base }}</td>
                   <td>@if($stat->step) {{ $stat->step}} @else No Step @endif</td>
                   <td>@if($stat->multiplier) {{ $stat->multiplier}} @else No Multiplier @endif</td>
                   <td class="text-right">

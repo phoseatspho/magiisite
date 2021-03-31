@@ -214,6 +214,7 @@ class PetManager extends Service
                 if($character->user_id !== $user->id && !$user->hasPower('edit_inventories'))throw new \Exception("You do not own this character.");
 
                 $pet['chara_id'] = $character->id;
+                $pet['attached_at'] = Carbon::now();
                 $pet->save();
             
             return $this->commitReturn(true);

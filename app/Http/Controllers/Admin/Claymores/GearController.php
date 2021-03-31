@@ -16,6 +16,8 @@ use App\Models\Claymore\Gear;
 use App\Models\Character\CharacterClass;
 
 use App\Services\Claymore\GearService;
+use App\Models\Stats\Character\Stat;
+use App\Models\Currency\Currency;
 
 class GearController extends Controller
 {
@@ -33,7 +35,7 @@ class GearController extends Controller
             $query->where('gear_category_id', $data['gear_category_id']);
         if(isset($data['name']))
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
-        return view('admin.claymores.gear.index', [
+        return view('admin.claymores.gear.gears', [
             'gears' => $query->paginate(20)->appends($request->query()),
             'categories' => ['none' => 'Any Category'] + GearCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
         ]);
@@ -48,8 +50,9 @@ class GearController extends Controller
     {
         return view('admin.claymores.gear.create_edit_gear', [
             'gear' => new Gear,
-            'gears' => Gear::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'gears' => ['none' => 'No parent'] + Gear::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'No category'] + GearCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'currencies' => ['none' => 'No Parent ', 0 => 'Stat Points'] + Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -65,8 +68,10 @@ class GearController extends Controller
         if(!$gear) abort(404);
         return view('admin.claymores.gear.create_edit_gear', [
             'gear' => $gear,
-            'gears' => Gear::orderBy('name', 'DESC')->where('id', '!=', $id)->pluck('name', 'id')->toArray(),
+            'gears' => ['none' => 'No parent'] + Gear::orderBy('name', 'DESC')->where('id', '!=', $id)->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'No category'] + GearCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'stats' => Stat::orderBy('name')->get(),
+            'currencies' => ['none' => 'No Parent ', 0 => 'Stat Points'] + Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -82,7 +87,7 @@ class GearController extends Controller
     {
         $id ? $request->validate(Gear::$updateRules) : $request->validate(Gear::$createRules);
         $data = $request->only([
-            'name', 'allow_transfer', 'gear_category_id', 'description', 'image', 'remove_image'
+            'name', 'allow_transfer', 'gear_category_id', 'description', 'image', 'remove_image', 'currency_id', 'cost', 'parent_id'
         ]);
         if($id && $service->updateGear(Gear::find($id), $data, Auth::user())) {
             flash('Gear updated successfully.')->success();
@@ -106,7 +111,7 @@ class GearController extends Controller
     public function getDeleteGear($id)
     {
         $gear = Gear::find($id);
-        return view('admin.claymores.gear._delete', [
+        return view('admin.claymores.gear._delete_gear', [
             'gear' => $gear,
         ]);
     }
@@ -128,6 +133,18 @@ class GearController extends Controller
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
         }
         return redirect()->to('admin/gear');
+    }
+
+    public function postEditGearStats(Request $request, GearService $service, $id)
+    {
+        if ($id && $service->editStats($request->only(['stats']), $id)) {
+            flash('Gear stats editted successfully.')->success();
+            return redirect()->to('admin/gear/edit/'.$id);
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
     }
 
     /**********************************************************************************************
@@ -157,7 +174,7 @@ class GearController extends Controller
     {
         return view('admin.claymores.gear.create_edit_gear_category', [
             'category' => new GearCategory,
-            'classes' => ['none' => 'No category'] + CharacterClass::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'classes' => ['none' => 'No restriction'] + CharacterClass::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -173,7 +190,7 @@ class GearController extends Controller
         if(!$category) abort(404);
         return view('admin.claymores.gear.create_edit_gear_category', [
             'category' => $category,
-            'classes' => ['none' => 'No category'] + CharacterClass::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'classes' => ['none' => 'No restriction'] + CharacterClass::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 

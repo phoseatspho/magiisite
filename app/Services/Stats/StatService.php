@@ -20,7 +20,7 @@ class StatService extends Service
 
         try {
             if(!isset($data['name'])) throw new \Exception('Please name the stat');
-            if(!isset($data['default'])) throw new \Exception('Please set a default.');
+            if(!isset($data['base'])) throw new \Exception('Please set a default.');
             if(!isset($data['abbreviation'])) throw new \Exception('Please add an abbreviation.');
             
             $stat = Stat::create($data);

@@ -13,7 +13,7 @@ class CharacterStat extends Model
      * @var array
      */
     protected $fillable = [
-        'character_id', 'stat_id', 'stat_level', 'count', 'current_count'
+        'character_id', 'stat_id', 'stat_level', 'count', 'current_count', 'count'
     ];
 
     /**

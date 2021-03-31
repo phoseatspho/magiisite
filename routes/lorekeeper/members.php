@@ -54,6 +54,31 @@ Route::group(['prefix' => 'pets', 'namespace' => 'Users'], function() {
     Route::get('selector', 'PetController@getSelector');
 });
 
+Route::group(['prefix' => 'gears', 'namespace' => 'Users'], function() {
+    Route::get('/', 'GearController@getIndex');
+    Route::post('transfer/{id}', 'GearController@postTransfer');
+    Route::post('delete/{id}', 'GearController@postDelete');
+    Route::post('name/{id}', 'GearController@postName');
+    Route::post('attach/{id}', 'GearController@postAttach');
+    Route::post('detach/{id}', 'GearController@postDetach');
+    Route::post('upgrade/{id}', 'GearController@postUpgrade');
+
+    Route::get('selector', 'GearController@getSelector');
+});
+
+Route::group(['prefix' => 'weapons', 'namespace' => 'Users'], function() {
+    Route::get('/', 'WeaponController@getIndex');
+    Route::post('transfer/{id}', 'WeaponController@postTransfer');
+    Route::post('delete/{id}', 'WeaponController@postDelete');
+    Route::post('name/{id}', 'WeaponController@postName');
+    Route::post('attach/{id}', 'WeaponController@postAttach');
+    Route::post('detach/{id}', 'WeaponController@postDetach');
+    Route::post('upgrade/{id}', 'WeaponController@postUpgrade');
+    Route::post('image/{id}', 'WeaponController@postImage');
+
+    Route::get('selector', 'WeaponController@getSelector');
+});
+
 Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
     Route::get('/', 'CharacterController@getIndex');
     Route::post('sort', 'CharacterController@postSortCharacters');

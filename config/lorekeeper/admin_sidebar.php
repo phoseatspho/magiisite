@@ -102,6 +102,14 @@ return [
                 'name' => 'Pet Grants',
                 'url' => 'admin/grants/pets'
             ],
+            [
+                'name' => 'Gear Grants',
+                'url' => 'admin/grants/gear'
+            ],
+            [
+                'name' => 'Weapon Grants',
+                'url' => 'admin/grants/weapons'
+            ],
         ]
     ],
     'Masterlist' => [
@@ -221,7 +229,7 @@ return [
             ],
             [
                 'name' => 'Weapons',
-                'url' => 'admin/weapons'
+                'url' => 'admin/weapon'
             ],
             [
                 'name' => 'Character Classes',

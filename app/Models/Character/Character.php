@@ -218,6 +218,16 @@ class Character extends Model
         return $this->hasMany('App\Models\User\UserPet', 'chara_id');
     }
     
+    public function gear()
+    {
+        return $this->hasMany('App\Models\User\UserGear', 'character_id');
+    }
+
+    public function weapons()
+    {
+        return $this->hasMany('App\Models\User\UserWeapon', 'character_id');
+    }
+
     /**
      * Get the character's associated gallery submissions.
      */

@@ -151,6 +151,14 @@ class Notification extends Model
     const FORCED_PET_TRANSFER             = 243;
     const PET_GRANT                       = 244;
     const EXP_GRANT                       = 245;
+    const GEAR_GRANT                      = 250;
+    const WEAPON_GRANT                    = 251;
+    const WEAPON_REMOVAL                  = 252;
+    const WEAPON_TRANSFER                 = 253;
+    const FORCED_WEAPON_TRANSFER          = 254;
+    const GEAR_REMOVAL                    = 255;
+    const GEAR_TRANSFER                   = 256;
+    const FORCED_GEAR_TRANSFER            = 257;
     const CHARACTER_ITEM_GRANT            = 501;
     const CHARACTER_ITEM_REMOVAL          = 502;
     const GALLERY_SUBMISSION_COLLABORATOR   = 505;

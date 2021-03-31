@@ -4,6 +4,11 @@
             e.preventDefault();
             loadModal("{{ url('admin/character/image') }}/"+$(this).data('id')+"/traits", 'Edit Traits');
         });
+        $('.edit-class').on('click', function(e) {
+            e.preventDefault();
+            console.log($(this).data('id'));
+            loadModal("{{ url('admin/character/class/edit') }}/"+$(this).data('id'), 'Edit Class');
+        });
         $('.edit-notes').on('click', function(e) {
             e.preventDefault();
             $( "div.imagenoteseditingparse" ).load("{{ url('admin/character/image') }}/"+$(this).data('id')+"/notes", function() {

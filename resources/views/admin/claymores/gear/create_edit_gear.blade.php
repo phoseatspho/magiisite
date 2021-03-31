@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
-@section('admin-title') Gears @endsection
+@section('admin-title') Gear @endsection
 
 @section('admin-content')
-{!! breadcrumbs(['Admin Panel' => 'admin', 'Gears' => 'admin/gear', ($gear->id ? 'Edit' : 'Create').' Gear' => $gear->id ? 'admin/gear/edit/'.$gear->id : 'admin/gear/create']) !!}
+{!! breadcrumbs(['Admin Panel' => 'admin', 'Gear' => 'admin/gear', ($gear->id ? 'Edit' : 'Create').' Gear' => $gear->id ? 'admin/gear/edit/'.$gear->id : 'admin/gear/create']) !!}
 
 <h1>{{ $gear->id ? 'Edit' : 'Create' }} Gear
     @if($gear->id)
@@ -47,6 +47,21 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md">
+        <div class="form-group">
+            {!! Form::label('Gear -> Parent Currency Type (Optional)') !!} {!! add_help('If you want this gear to be able to turn into its parent.') !!}
+            {!! Form::select('currency_id', $currencies, $gear->currency_id, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="form-group">
+            {!! Form::label('Gear -> Parent Currency Cost (Optional)') !!} {!! add_help('This should be a number.') !!}
+            {!! Form::number('cost', $gear->cost, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+</div>
+
 <div class="form-group">
     {!! Form::label('Description (Optional)') !!}
     {!! Form::textarea('description', $gear->description, ['class' => 'form-control wysiwyg']) !!}
@@ -66,10 +81,27 @@
 {!! Form::close() !!}
 
 @if($gear->id)
+    @if($stats)
+    {!! Form::open(['url' => 'admin/gear/stats/'.$gear->id]) !!}
+    <h3>Stats {!! add_help('Leave empty to have no effect on stat.') !!}</h3>
+    <div class="form-group">
+        @foreach($stats as $stat)
+        @php if($gear->stats->where('stat_id', $stat->id)->first()) $base = $gear->stats->where('stat_id', $stat->id)->first()->count; else $base = null; @endphp
+            {!! Form::label($stat->name) !!}
+            {!! Form::number('stats['.$stat->id.']', $base, ['class' => 'form-control m-1',]) !!}
+        @endforeach
+    </div>
+    <div class="text-right">
+        {!! Form::submit('Edit Stats', ['class' => 'btn btn-primary']) !!}
+    </div>
+    
+    {!! Form::close() !!}
+    @endif
+
     <h3>Preview</h3>
     <div class="card mb-3">
         <div class="card-body">
-            @include('world._claymore_entry', ['imageUrl' => $gear->imageUrl, 'name' => $gear->displayName, 'description' => $gear->parsed_description, 'searchUrl' => $gear->searchUrl])
+            @include('world._claymore_entry', ['item' => $gear, 'imageUrl' => $gear->imageUrl, 'name' => $gear->displayName, 'description' => $gear->parsed_description, 'searchUrl' => $gear->searchUrl])
         </div>
     </div>
 @endif

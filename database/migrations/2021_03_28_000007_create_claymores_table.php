@@ -25,13 +25,18 @@ class CreateClaymoresTable extends Migration
         });
 
         Schema::table('characters', function (Blueprint $table) { 
-            $table->unsignedInteger('class_id')->unsigned()->nullable()->default(null);
+            $table->integer('class_id')->unsigned()->nullable()->default(null);
 
             $table->foreign('class_id')->references('id')->on('character_classes');
         });
 
         Schema::table('character_stats', function (Blueprint $table) { 
             $table->integer('count')->default(1)->change();
+        });
+
+        Schema::table('stats', function (Blueprint $table) { 
+            $table->dropColumn('default');
+            $table->integer('base')->default(1);
         });
 
         /************************************************************************************************
@@ -68,12 +73,15 @@ class CreateClaymoresTable extends Migration
             $table->Increments('id');
 
             $table->integer('gear_id')->unsigned();
-            $table->unsignedInteger('user_id');
+            $table->integer('user_id')->unsigned();
 
-            $table->unsignedInteger('character_id')->nullable()->default(null);
-            $table->timestamp('attached_at');
+            $table->integer('character_id')->unsigned()->nullable()->default(null);
+            $table->timestamp('attached_at')->nullable()->default(null);
 
             $table->string('data', 1024)->nullable();
+
+            // custom image
+            $table->boolean('has_image')->default(0);
 
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable()->default(null);
@@ -104,22 +112,29 @@ class CreateClaymoresTable extends Migration
             $table->integer('weapon_category_id')->unsigned()->nullable()->default(null);
 
             $table->string('name');
-            $table->text('description')->nullable()->default(null);
+            $table->string('description', 512)->nullable()->default(null);
             $table->boolean('has_image')->default(0);
+
+            $table->integer('parent_id')->unsigned()->nullable()->default(null);
+
+            $table->boolean('allow_transfer')->default(1);
 
             $table->foreign('weapon_category_id')->references('id')->on('weapon_categories');
         });
 
         Schema::create('user_weapons', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->integer('user_id')->unsigned();
 
-            $table->Integer('weapon_id')->unsigned();
+            $table->integer('weapon_id')->unsigned();
             
-            $table->unsignedInteger('character_id');
-            $table->timestamp('attached_at');
+            $table->integer('character_id')->unsigned()->nullable()->default(null);
+            $table->timestamp('attached_at')->nullable()->default(null);
 
             $table->string('data', 1024)->nullable();
+
+            // custom image
+            $table->boolean('has_image')->default(0);
 
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable()->default(null);

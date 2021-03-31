@@ -95,6 +95,7 @@ class StatManager extends Service
             $headerStat = $stat->stat;
             if($headerStat->multiplier || $headerStat->step)
             {
+                // FIN
                 // First if there's a step, add that
                 // This is so that the multiplier affects the new step total
                 // E.G if the current is 10 and step is 5, we do 15 * multiplier
@@ -107,6 +108,7 @@ class StatManager extends Service
                 if($headerStat->multiplier)
                 {
                     $total = $stat->count * $headerStat->multiplier;
+                    //if($total < 0) $total = $total * -1;
                     $stat->count = $total;
                     $stat->save();
                 }
@@ -215,6 +217,45 @@ class StatManager extends Service
                 $recipient_stack->save();
             }
             if($type && !$this->createTransferLog($sender ? $sender->id : null, $sender ? $sender->logType : null, $recipient ? $recipient->id : null, $recipient ? $recipient->logType : null, $type, $data, $quantity)) throw new \Exception("Failed to create log.");
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) { 
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * debit Stat 
+     *
+     */
+    public function debitStat($sender, $recipient, $type, $data, $quantity)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            // for user
+            if($sender->logType == 'User') {
+                $sender_stack = UserLevel::where('user_id', '=', $sender->id)->first();
+
+                if(!$sender_stack)
+                    $sender_stack = UserLevel::create(['user_id' => $sender->id,]);
+                if($sender_stack->current_points < $quantity) throw new \Exception('Not enough points to debit.'); 
+                $sender_stack->current_points -= $quantity;
+                $sender_stack->save();
+            }
+            // for character
+            else {
+                $sender_stack = CharaLevels::where('character_id', $sender->id)->first();
+                
+                if(!$sender_stack)
+                    $sender_stack = CharaLevels::create(['character_id' => $sender->id]);
+                if($sender_stack->current_points < $quantity) throw new \Exception('Not enough points to debit.'); 
+                $sender_stack->current_points -= $quantity;
+                $sender_stack->save();
+            }
+            if($type && !$this->createTransferLog($sender ? $sender->id : null, $sender ? $sender->logType : null, $recipient ? $recipient->id : null, $recipient ? $recipient->logType : null, $type, $data, $quantity * -1)) throw new \Exception("Failed to create log.");
 
             return $this->commitReturn(true);
         } catch(\Exception $e) { 

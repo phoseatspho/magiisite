@@ -67,7 +67,7 @@ function calculateGroupCurrency($data)
  */
 function getAssetKeys($isCharacter = false)
 {
-    if(!$isCharacter) return ['items', 'currencies', 'pets', 'raffle_tickets', 'loot_tables', 'user_items', 'characters'];
+    if(!$isCharacter) return ['items', 'currencies', 'pets', 'weapons', 'gears', 'raffle_tickets', 'loot_tables', 'user_items', 'characters'];
     else return ['currencies'];
 }
 
@@ -96,11 +96,18 @@ function getAssetModelString($type, $namespaced = true)
             if($namespaced) return '\App\Models\Pet\Pet';
             else return 'Pet';
             break;
+        case 'weapons':
+            if($namespaced) return '\App\Models\Claymore\Weapon';
+            else return 'Weapon';
+            break;
+        case 'gears':
+            if($namespaced) return '\App\Models\Claymore\Gear';
+            else return 'Gear';
+            break;
         case 'raffle_tickets':
             if($namespaced) return '\App\Models\Raffle\Raffle';
             else return 'Raffle';
             break;
-
         case 'loot_tables':
             if($namespaced) return '\App\Models\Loot\LootTable';
             else return 'LootTable';
@@ -258,6 +265,18 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data)
             $service = new \App\Services\PetManager;
             foreach($contents as $asset)
                 if(!$service->creditPet($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) return false;
+        }
+        elseif($key == 'gears' && count($contents))
+        {
+            $service = new \App\Services\Claymore\GearManager;
+            foreach($contents as $asset)
+                if(!$service->creditGear($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) return false;
+        }
+        elseif($key == 'weapons' && count($contents))
+        {
+            $service = new \App\Services\Claymore\WeaponManager;
+            foreach($contents as $asset)
+                if(!$service->creditWeapon($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) return false;
         }
         elseif($key == 'raffle_tickets' && count($contents))
         {

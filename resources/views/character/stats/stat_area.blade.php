@@ -17,8 +17,29 @@
                 <h5>{{$stat->stat->name}}</h5>
                 <p><strong>Current {{$stat->stat->name}} Level:</strong></p>
                 <p>{{$stat->stat_level}}</p>
+                <p><strong>Base {{$stat->stat->name}} Count: {!! add_help('The base amount is the stat of the character without any gear, weapons etc.') !!}</strong></p>
+                <p>{{ $stat->count }}</p>
+
                 <p><strong>Total {{$stat->stat->name}} Count:</strong></p>
-                <p>{{$stat->count}}</p>
+                @php $add = 0; @endphp
+                @foreach($character->gear as $gear)
+                    @php 
+                    if($gear->gear->stats->where('stat_id', $stat->id)->first())
+                    { 
+                        $add += $gear->gear->stats->where('stat_id', $stat->id)->first()->count;  
+                    }
+                    @endphp
+                @endforeach
+                @foreach($character->weapons as $weapon)
+                    @php 
+                    if($weapon->weapon->stats->where('stat_id', $stat->id)->first())
+                    {
+                        $add += $weapon->weapon->stats->where('stat_id', $stat->id)->first()->count;
+                    }
+                    @endphp
+                @endforeach
+                <p>@php echo($stat->count + $add); echo(' (+ '.$add.')'); @endphp</p>
+
                 @if($stat->current_count != $stat->count && $stat->current_count != NULL)
                 <p><strong>Current {{$stat->stat->name}} Count:</strong></p>
                 <p>{{$stat->current_count}}/{{$stat->count}}</p>

@@ -65,7 +65,7 @@ class CharacterClass extends Model
      */
     public function getDisplayNameAttribute()
     {
-        return '<a href="'.$this->url.'" class="display-category">'.$this->name.' ('.$this->code.')</a>';
+        return '<a href="'.$this->url.'" class="display-category">'.$this->name.'</a>';
     }
 
     /**
@@ -117,18 +117,5 @@ class CharacterClass extends Model
     public function getUrlAttribute()
     {
         return url('world/character-classes?name='.$this->name);
-    }
-
-    /**
-     * Gets the URL for a masterlist search of characters in this category.
-     *
-     * @return string
-     */
-    public function getSearchUrlAttribute()
-    {
-        if($this->masterlist_sub_id != 0 && $this->sublist->show_main == 0)
-        return url('sublist/'.$this->sublist->key.'?character_category_id='.$this->id);
-        else
-        return url('masterlist?character_category_id='.$this->id);
     }
 }

@@ -31,8 +31,8 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('default') !!} {!! add_help('This is the \'default\' or \'starter\' amount of stat.') !!}
-    {!! Form::number('default', $stat->default, ['class' => 'form-control', 'min' => 1]) !!}
+    {!! Form::label('default') !!} {!! add_help('This is the \'default\' or \'starter\' amount of stat. Can be negative. If negative, all level ups will apply as if the base was 1.') !!}
+    {!! Form::number('base', $stat->base, ['class' => 'form-control',]) !!}
 </div>
 
 <p>Multiplier can apply to step (e.g (current + step) X Multiplier) or just to current. Leave step blank if you want it to apply just to current</p>

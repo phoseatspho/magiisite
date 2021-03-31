@@ -5,7 +5,7 @@ namespace App\Models\Claymore;
 use Config;
 use DB;
 use App\Models\Model;
-use App\Models\Gear\GearCategory;
+use App\Models\Claymore\GearCategory;
 
 use App\Models\User\User;
 use App\Models\Shop\Shop;
@@ -21,7 +21,7 @@ class Gear extends Model
      */
     protected $fillable = [
         'gear_category_id', 'name', 'has_image', 'description', 'parsed_description', 'allow_transfer',
-        'parent_id'
+        'parent_id', 'currency_id', 'cost'
     ];
 
     protected $appends = ['image_url'];
@@ -77,6 +77,24 @@ class Gear extends Model
     public function parent()
     {
         return $this->belongsTo('App\Models\Claymore\Gear', 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Claymore\Gear', 'parent_id');
+    }
+
+    public function stats()
+    {
+        return $this->hasMany('App\Models\Claymore\GearStat');
+    }
+
+    /**
+     * Get the currency that the parent costs
+     */
+    public function currency() 
+    {
+        return $this->belongsTo('App\Models\Currency\Currency');
     }
 
     /**********************************************************************************************
@@ -165,7 +183,7 @@ class Gear extends Model
      */
     public function getImageDirectoryAttribute()
     {
-        return 'images/data/gears';
+        return 'images/data/gear';
     }
 
     /**
@@ -206,7 +224,7 @@ class Gear extends Model
      */
     public function getUrlAttribute()
     {
-        return url('world/gears?name='.$this->name);
+        return url('world/gear?name='.$this->name);
     }
 
     /**
@@ -216,7 +234,7 @@ class Gear extends Model
      */
     public function getIdUrlAttribute()
     {
-        return url('world/gears/'.$this->id);
+        return url('world/gear/'.$this->id);
     }
 
     /**

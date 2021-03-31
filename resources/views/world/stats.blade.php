@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="col-4 ml-3">
-                <h5>Base Stat:</h5> <br> {{ $stat->default }}
+                <h5>Base Stat:</h5> <br> {{ $stat->base }}
                 @if($stat->step)<div class="text-muted">Step: {{ $stat->step }}</div>@endif
                 @if($stat->multiplier)<div class="text-muted">Multiplier: {{ $stat->multiplier }}</div>@endif
             </div>

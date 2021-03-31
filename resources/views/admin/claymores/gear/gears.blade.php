@@ -1,13 +1,13 @@
 @extends('admin.layout')
 
-@section('admin-title') Gears @endsection
+@section('admin-title') Gear @endsection
 
 @section('admin-content')
-{!! breadcrumbs(['Admin Panel' => 'admin', 'Gears' => 'admin/gears']) !!}
+{!! breadcrumbs(['Admin Panel' => 'admin', 'Gear' => 'admin/gear']) !!}
 
-<h1>Gears</h1>
+<h1>Gear</h1>
 
-<p>This is a list of gears in the game. Specific details about gears can be added when they are granted to users (e.g. reason for grant). By default, gears are merely collectibles and any additional functionality must be manually processed, or custom coded in for the specific gear.</p>
+<p>This is a list of gear in the game. Specific details about gear can be added when they are granted to users (e.g. reason for grant). By default, gear are merely collectibles and any additional functionality must be manually processed, or custom coded in for the specific gear.</p>
 
 <div class="text-right mb-3">
     <a class="btn btn-primary" href="{{ url('admin/gear/gear-categories') }}"><i class="fas fa-folder"></i> Gear Categories</a>
@@ -29,7 +29,7 @@
 </div>
 
 @if(!count($gears))
-    <p>No gears found.</p>
+    <p>No gear found.</p>
 @else
     {!! $gears->render() !!}
 

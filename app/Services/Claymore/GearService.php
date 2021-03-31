@@ -7,6 +7,7 @@ use Config;
 
 use App\Models\Claymore\GearCategory;
 use App\Models\Claymore\Gear;
+use App\Models\Claymore\GearStat;
 
 class GearService extends Service
 {
@@ -187,6 +188,9 @@ class GearService extends Service
 
         try {
             if(isset($data['gear_category_id']) && $data['gear_category_id'] == 'none') $data['gear_category_id'] = null;
+            if(isset($data['parent_id']) && $data['parent_id'] == 'none') $data['parent_id'] = null;
+            if(isset($data['currency_id']) && $data['currency_id'] == 'none') $data['currency_id'] = null;
+
 
             if((isset($data['gear_category_id']) && $data['gear_category_id']) && !GearCategory::where('id', $data['gear_category_id'])->exists()) throw new \Exception("The selected gear category is invalid.");
 
@@ -225,6 +229,9 @@ class GearService extends Service
 
         try {
             if(isset($data['gear_category_id']) && $data['gear_category_id'] == 'none') $data['gear_category_id'] = null;
+            if(isset($data['parent_id']) && $data['parent_id'] == 'none') $data['parent_id'] = null;
+            if(isset($data['currency_id']) && $data['currency_id'] == 'none') $data['currency_id'] = null;
+
 
             // More specific validation
             if(Gear::where('name', $data['name'])->where('id', '!=', $gear->id)->exists()) throw new \Exception("The name has already been taken.");
@@ -270,7 +277,7 @@ class GearService extends Service
             }
             unset($data['remove_image']);
         }
-
+        
         return $data;
     }
 
@@ -296,6 +303,34 @@ class GearService extends Service
             if($gear->has_image) $this->deleteImage($gear->imagePath, $gear->imageFileName);
             $gear->delete();
 
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    public function editStats($data, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $gear = Gear::find($id);
+            $gear->stats()->delete();
+            
+            if(isset($data['stats']))
+            {
+                foreach($data['stats'] as $key=>$stat)
+                {
+                    if($stat != null && $stat > 0) {
+                        GearStat::create([
+                            'gear_id' => $id,
+                            'stat_id' => $key,
+                            'count' => $stat,
+                        ]);
+                    }
+                }
+            }
             return $this->commitReturn(true);
         } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());

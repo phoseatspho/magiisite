@@ -10,11 +10,15 @@ use App\Models\User\User;
 use App\Models\Item\Item;
 use App\Models\Pet\Pet;
 use App\Models\Currency\Currency;
+use App\Models\Claymore\Gear;
+use App\Models\Claymore\Weapon;
 
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use App\Services\Stats\ExperienceManager;
 use App\Services\PetManager;
+use App\Services\Claymore\GearManager;
+use App\Services\Claymore\WeaponManager;
 
 use App\Http\Controllers\Controller;
 
@@ -96,19 +100,6 @@ class GrantController extends Controller
     }
     
     /**
-     * Show the pet grant page.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getPets()
-    {
-        return view('admin.grants.pets', [
-            'users' => User::orderBy('id')->pluck('name', 'id'),
-            'pets' => Pet::orderBy('name')->pluck('name', 'id')
-        ]);
-    }
-
-    /**
      * Grants or removes exp
      */
     public function postExp(Request $request, ExperienceManager $service)
@@ -123,6 +114,19 @@ class GrantController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Show the pet grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPets()
+    {
+        return view('admin.grants.pets', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'pets' => Pet::orderBy('name')->pluck('name', 'id')
+        ]);
+    }
+
     /** 
      * Grants or removes pets from multiple users.
      *
@@ -135,6 +139,70 @@ class GrantController extends Controller
         $data = $request->only(['names', 'pet_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
         if($service->grantPets($data, Auth::user())) {
             flash('Pets granted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Show the pet grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getGear()
+    {
+        return view('admin.grants.gear', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'gears' => Gear::orderBy('name')->pluck('name', 'id')
+        ]);
+    }
+
+    /** 
+     * Grants or removes gear from multiple users.
+     *
+     * @param  \Illuminate\Http\Request        $request
+     * @param  App\Services\InvenntoryManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postGear(Request $request, GearManager $service)
+    {
+        $data = $request->only(['names', 'gear_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
+        if($service->grantGears($data, Auth::user())) {
+            flash('Gear granted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Show the pet grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getWeapons()
+    {
+        return view('admin.grants.weapons', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'weapons' => Weapon::orderBy('name')->pluck('name', 'id')
+        ]);
+    }
+
+    /** 
+     * Grants or removes gear from multiple users.
+     *
+     * @param  \Illuminate\Http\Request        $request
+     * @param  App\Services\InvenntoryManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postWeapons(Request $request, WeaponManager $service)
+    {
+        $data = $request->only(['names', 'weapon_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
+        if($service->grantWeapons($data, Auth::user())) {
+            flash('Weapons granted successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();

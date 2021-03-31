@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Models\Character\Character;
+use App\Models\Character\CharacterClass;
 use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterFeature;
@@ -2496,6 +2497,36 @@ is_object($sender) ? $sender->id : null,
             $request->vote_data = $voteData->toJson();
 
             $request->save();
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /*************************************************************************************
+     * CLAYMORE
+     *************************************************************************************/
+    public function editClass($data, $character, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            if($data['class_id'] != 'none') {
+                $class = CharacterClass::find($data['class_id']);
+                if(!$class) throw new \Exception('Invalid class.');
+                $character->class_id = $class->id;
+                $character->save();
+
+                if(!$this->createLog($user->id, null, $character->user_id, ($character->user_id ? null : $character->owner_url), $character->id, 'Character Class Updated', '['.$class->displayName.']', 'character')) throw new \Exception('Failed to create log.');
+            }
+            else {
+                $character->class_id = null;
+                $character->save();
+
+                if(!$this->createLog($user->id, null, $character->user_id, ($character->user_id ? null : $character->owner_url), $character->id, 'Character Class Removed', '[None]', 'character')) throw new \Exception('Failed to create log.');
+            }
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {

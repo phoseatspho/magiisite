@@ -42,6 +42,13 @@ class LevelController extends Controller
             $this->character = $query->first();
             if(!$this->character) abort(404);
 
+            if(!$this->character->level)
+            {
+                $this->character->level()->create([
+                    'character_id' => $this->character->id
+                ]);
+            }
+
             $this->character->updateOwner();
             return $next($request);
         });
@@ -56,12 +63,7 @@ class LevelController extends Controller
     {
         $character = $this->character;
         // create a character level if one doesn't exist
-        if(!$character->level)
-        {
-            $character->level()->create([
-                'character_id' => $character->id
-            ]);
-        }
+        
         //
         $level = $character->level->current_level + 1;
         $next = CharacterLevel::where('level', $level)->first();
@@ -105,7 +107,7 @@ class LevelController extends Controller
                     $character->stats()->create([
                         'character_id' => $character->id,
                         'stat_id' => $stat->id,
-                        'count' => $stat->default
+                        'count' => $stat->base,
                     ]);
                 }
             }

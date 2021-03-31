@@ -302,6 +302,12 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
     
     Route::get('pets', 'GrantController@getPets');
     Route::post('pets', 'GrantController@postPets');
+
+    Route::get('weapons', 'GrantController@getWeapons');
+    Route::post('weapons', 'GrantController@postWeapons');
+    
+    Route::get('gear', 'GrantController@getGear');
+    Route::post('gear', 'GrantController@postGear');
 });
 
 # MASTERLIST
@@ -359,6 +365,10 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     Route::post('image/{id}/delete', 'CharacterImageController@postImageDelete');
 
     Route::post('{slug}/images/sort', 'CharacterImageController@postSortImages');
+
+    # CLASS
+    Route::get('class/edit/{id}', 'CharacterController@getClassModal');
+    Route::post('class/edit/{id}', 'CharacterController@postClassModal');
 
     # CHARACTER
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
@@ -498,6 +508,7 @@ Route::group(['prefix' => 'levels', 'namespace' => 'Stats', 'middleware' => 'pow
 /***********************************************************************************
  * CLAYMORES
  ***********************************************************************************/
+# GEARS
 Route::group(['prefix' => 'gear', 'namespace' => 'Claymores', 'middleware' => 'power:edit_claymores'], function() {
     Route::get('/', 'GearController@getGearIndex');
     Route::get('/create', 'GearController@getCreateGear');
@@ -506,6 +517,9 @@ Route::group(['prefix' => 'gear', 'namespace' => 'Claymores', 'middleware' => 'p
     Route::post('/edit/{id}', 'GearController@postCreateEditGear');
     Route::get('delete/{id}', 'GearController@getDeleteGear');
     Route::post('delete/{id}', 'GearController@postDeleteGear');
+
+    Route::post('/stats/{id}', 'GearController@postEditGearStats');
+
     # categories
     Route::get('gear-categories', 'GearController@getGearCategoryIndex');
     Route::get('gear-categories/create', 'GearController@getCreateGearCategory');
@@ -515,4 +529,39 @@ Route::group(['prefix' => 'gear', 'namespace' => 'Claymores', 'middleware' => 'p
     Route::post('gear-categories/edit/{id?}', 'GearController@postCreateEditGearCategory');
     Route::post('gear-categories/delete/{id}', 'GearController@postDeleteGearCategory');
     Route::post('gear-categories/sort', 'GearController@postSortGearCategory');
+});
+
+# WEAPONS
+Route::group(['prefix' => 'weapon', 'namespace' => 'Claymores', 'middleware' => 'power:edit_claymores'], function() {
+    Route::get('/', 'WeaponController@getWeaponIndex');
+    Route::get('/create', 'WeaponController@getCreateWeapon');
+    Route::post('/create', 'WeaponController@postCreateEditWeapon');
+    Route::get('/edit/{id}', 'WeaponController@getEditWeapon');
+    Route::post('/edit/{id}', 'WeaponController@postCreateEditWeapon');
+    Route::get('delete/{id}', 'WeaponController@getDeleteWeapon');
+    Route::post('delete/{id}', 'WeaponController@postDeleteWeapon');
+
+    Route::post('/stats/{id}', 'WeaponController@postEditWeaponStats');
+
+    # categories
+    Route::get('weapon-categories', 'WeaponController@getWeaponCategoryIndex');
+    Route::get('weapon-categories/create', 'WeaponController@getCreateWeaponCategory');
+    Route::get('weapon-categories/edit/{id}', 'WeaponController@getEditWeaponCategory');
+    Route::get('weapon-categories/delete/{id}', 'WeaponController@getDeleteWeaponCategory');
+    Route::post('weapon-categories/create', 'WeaponController@postCreateEditWeaponCategory');
+    Route::post('weapon-categories/edit/{id?}', 'WeaponController@postCreateEditWeaponCategory');
+    Route::post('weapon-categories/delete/{id}', 'WeaponController@postDeleteWeaponCategory');
+    Route::post('weapon-categories/sort', 'WeaponController@postSortWeaponCategory');
+});
+
+# CHARACTER CLASSES
+Route::group(['prefix' => 'character-classes', 'namespace' => 'Claymores', 'middleware' => 'power:edit_claymores'], function() {
+    Route::get('/', 'CharacterClassController@getIndex');
+    Route::get('create', 'CharacterClassController@getCreateCharacterClass');
+    Route::get('edit/{id}', 'CharacterClassController@getEditCharacterClass');
+    Route::get('delete/{id}', 'CharacterClassController@getDeleteCharacterClass');
+    Route::post('create', 'CharacterClassController@postCreateEditCharacterClass');
+    Route::post('edit/{id?}', 'CharacterClassController@postCreateEditCharacterClass');
+    Route::post('delete/{id}', 'CharacterClassController@postDeleteCharacterClass');
+    Route::post('sort', 'CharacterClassController@postSortCharacterClass');
 });

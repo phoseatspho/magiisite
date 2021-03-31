@@ -16,6 +16,8 @@
 
 Route::get('items/{id}', 'Users\InventoryController@getStack');
 Route::get('pets/{id}', 'Users\PetController@getStack');
+Route::get('weapons/{id}', 'Users\WeaponController@getStack');
+Route::get('gears/{id}', 'Users\GearController@getStack');
 Route::get('items/character/{id}', 'Users\InventoryController@getCharacterStack');
 
 /**************************************************************************************************
@@ -58,6 +60,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/pets', 'UserController@getUserPets');
     Route::get('{name}/bank', 'UserController@getUserBank');
     Route::get('{name}/level', 'UserController@getUserLevel');
+    Route::get('{name}/armoury', 'UserController@getUserArmoury');
     
     Route::get('{name}/currency-logs', 'UserController@getUserCurrencyLogs');
     Route::get('{name}/item-logs', 'UserController@getUserItemLogs');
@@ -67,6 +70,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/exp-logs', 'UserController@getUserExpLogs');
     Route::get('{name}/level-logs', 'UserController@getUserLevelLogs');
     Route::get('{name}/stat-logs', 'UserController@getUserStatLogs');
+    Route::get('{name}/gear-logs', 'UserController@getUserGearLogs');
+    Route::get('{name}/weapon-logs', 'UserController@getUserWeaponLogs');
 });
 
 /**************************************************************************************************
@@ -125,6 +130,13 @@ Route::group(['prefix' => 'world'], function() {
     Route::get('levels/{type}', 'WorldController@getLevelTypes');
     Route::get('levels/{type}/{level}', 'WorldController@getSingleLevel');
     Route::get('stats', 'WorldController@getStats');
+    Route::get('weapon-categories', 'WorldController@getWeaponCategories');
+    Route::get('weapons', 'WorldController@getWeapons');
+    Route::get('weapons/{id}', 'WorldController@getWeapon');
+    Route::get('gear-categories', 'WorldController@getGearCategories');
+    Route::get('gear', 'WorldController@getGears');
+    Route::get('gear/{id}', 'WorldController@getGear');
+    Route::get('character-classes', 'WorldController@getCharacterClasses');
 });
 
 Route::group(['prefix' => 'prompts'], function() {
