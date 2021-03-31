@@ -20,4 +20,22 @@ return [
          ]),
          'version' => '1.0.0',
      ],
+
+     'Pets' => [
+        'key' => 'Pets',
+        'wiki_key' => 'Pets',
+        'creators' => json_encode([
+            'Newt' => 'https://github.com/ne-wt/',
+        ]),
+        'version' => '1.1.0',
+    ],
+
+    'Claymores and Companions' => [
+        'key' => 'Claymores and Companions',
+        'wiki_key' => 'Claymores_and_Companions',
+        'creators' => json_encode([
+            'Newt' => 'https://github.com/ne-wt/',
+        ]),
+        'version' => '1.0.0',
+    ],
 ];
