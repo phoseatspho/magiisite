@@ -219,7 +219,7 @@ class GearManager extends Service
                 if($character->gear()->where('gear_id', $gear->gear->id)->exists()) throw new \Exception("This type of gear is already attached to the character selected.");
                 foreach($character->gear as $cwea)
                 {
-                    dd($cwea);
+                    if($cwea->gear->gear_category_id == $gear->gear->gear_category_id) throw new \Exception("This type of gear is already attached to the character selected.");
                 }
 
                 $gear['character_id'] = $character->id;
