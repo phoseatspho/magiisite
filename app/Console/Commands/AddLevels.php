@@ -76,7 +76,7 @@ class Addlevels extends Command
         }
         $this->line("Migrated characters\n");
         $this->line("Successfully added levels!");
-
+        
         $this->line("Migrating prompts...");
         $prompts = Prompt::all();
         foreach ($prompts as $prompt)
