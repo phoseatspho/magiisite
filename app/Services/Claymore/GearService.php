@@ -293,7 +293,7 @@ class GearService extends Service
 
         try {
             // Check first if the gear is currently owned or if some other site feature uses it
-            if(DB::table('user_gears')->where([['gear_id', '=', $gear->id], ['count', '>', 0]])->exists()) throw new \Exception("At least one user currently owns this gear. Please remove the gear(s) before deleting it.");
+            if(DB::table('user_gears')->where('gear_id', '=', $gear->id)->exists()) throw new \Exception("At least one user currently owns this gear. Please remove the gear(s) before deleting it.");
             if(DB::table('loots')->where('rewardable_type', 'Gear')->where('rewardable_id', $gear->id)->exists()) throw new \Exception("A loot table currently distributes this gear as a potential reward. Please remove the gear before deleting it.");
             if(DB::table('prompt_rewards')->where('rewardable_type', 'Gear')->where('rewardable_id', $gear->id)->exists()) throw new \Exception("A prompt currently distributes this gear as a reward. Please remove the gear before deleting it.");
 
