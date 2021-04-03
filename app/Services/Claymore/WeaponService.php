@@ -293,7 +293,7 @@ class WeaponService extends Service
             if(DB::table('loots')->where('rewardable_type', 'Weapon')->where('rewardable_id', $weapon->id)->exists()) throw new \Exception("A loot table currently distributes this weapon as a potential reward. Please remove the weapon before deleting it.");
             if(DB::table('prompt_rewards')->where('rewardable_type', 'Weapon')->where('rewardable_id', $weapon->id)->exists()) throw new \Exception("A prompt currently distributes this weapon as a reward. Please remove the weapon before deleting it.");
 
-            DB::table('weapons_log')->where('weapon_id', $weapon->id)->delete();
+            DB::table('user_weapons_log')->where('weapon_id', $weapon->id)->delete();
             DB::table('user_weapons')->where('weapon_id', $weapon->id)->delete();
             DB::table('character_weapons')->where('weapon_id', $weapon->id)->delete();
             if($weapon->has_image) $this->deleteImage($weapon->imagePath, $weapon->imageFileName);
