@@ -299,7 +299,6 @@ class GearService extends Service
 
             DB::table('user_gears_log')->where('gear_id', $gear->id)->delete();
             DB::table('user_gears')->where('gear_id', $gear->id)->delete();
-            DB::table('character_gears')->where('gear_id', $gear->id)->delete();
             if($gear->has_image) $this->deleteImage($gear->imagePath, $gear->imageFileName);
             $gear->delete();
 

@@ -295,7 +295,6 @@ class WeaponService extends Service
 
             DB::table('user_weapons_log')->where('weapon_id', $weapon->id)->delete();
             DB::table('user_weapons')->where('weapon_id', $weapon->id)->delete();
-            DB::table('character_weapons')->where('weapon_id', $weapon->id)->delete();
             if($weapon->has_image) $this->deleteImage($weapon->imagePath, $weapon->imageFileName);
             $weapon->delete();
 
