@@ -289,7 +289,7 @@ class WeaponService extends Service
 
         try {
             // Check first if the weapon is currently owned or if some other site feature uses it
-            if(DB::table('user_weapons')->where('weapon_id', '=', $weapon->id)->exists()) throw new \Exception("At least one user currently owns this weapon. Please remove the weapon(s) before deleting it.");
+            if(DB::table('user_weapons')->where('weapon_id', '=', $weapon->id)->where('deleted_at', '!=', null)->exists()) throw new \Exception("At least one user currently owns this weapon. Please remove the weapon(s) before deleting it.");
             if(DB::table('loots')->where('rewardable_type', 'Weapon')->where('rewardable_id', $weapon->id)->exists()) throw new \Exception("A loot table currently distributes this weapon as a potential reward. Please remove the weapon before deleting it.");
             if(DB::table('prompt_rewards')->where('rewardable_type', 'Weapon')->where('rewardable_id', $weapon->id)->exists()) throw new \Exception("A prompt currently distributes this weapon as a reward. Please remove the weapon before deleting it.");
 
