@@ -230,7 +230,7 @@ class WeaponController extends Controller
     public function getDeleteWeaponCategory($id)
     {
         $category = WeaponCategory::find($id);
-        return view('admin.claymores.weapon._delete_weapon_cat', [
+        return view('admin.claymores.weapon._delete_weapon_category', [
             'category' => $category,
         ]);
     }
