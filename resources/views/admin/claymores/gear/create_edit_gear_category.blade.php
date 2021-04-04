@@ -52,7 +52,7 @@
     <h3>Preview</h3>
     <div class="card mb-3">
         <div class="card-body">
-            @include('world._claymore_entry', ['item' => null,'imageUrl' => $category->categoryImageUrl, 'name' => $category->displayName, 'description' => $category->parsed_description, 'category'=>$category])
+            @include('world._claymore_entry', ['item' => null,'imageUrl' => $category->categoryImageUrl, 'name' => $category->displayName, 'description' => $category->description, 'category'=>$category])
         </div>
     </div>
 @endif

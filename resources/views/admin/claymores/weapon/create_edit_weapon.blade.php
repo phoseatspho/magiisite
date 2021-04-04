@@ -101,7 +101,7 @@
     <h3>Preview</h3>
     <div class="card mb-3">
         <div class="card-body">
-            @include('world._claymore_entry', ['item' => $weapon,'imageUrl' => $weapon->imageUrl, 'name' => $weapon->displayName, 'description' => $weapon->parsed_description, 'searchUrl' => $weapon->searchUrl])
+            @include('world._claymore_entry', ['item' => $weapon,'imageUrl' => $weapon->imageUrl, 'name' => $weapon->displayName, 'description' => $weapon->description, 'searchUrl' => $weapon->searchUrl])
         </div>
     </div>
 @endif
