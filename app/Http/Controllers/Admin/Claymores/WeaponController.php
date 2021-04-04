@@ -251,7 +251,7 @@ class WeaponController extends Controller
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
         }
-        return redirect()->to('admin/data/weapon-categories');
+        return redirect()->to('admin/weapon/weapon-categories');
     }
 
     /**

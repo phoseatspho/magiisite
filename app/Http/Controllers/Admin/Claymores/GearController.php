@@ -251,7 +251,7 @@ class GearController extends Controller
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
         }
-        return redirect()->to('admin/data/gear-categories');
+        return redirect()->to('admin/gear/gear-categories');
     }
 
     /**

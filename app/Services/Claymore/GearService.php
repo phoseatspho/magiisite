@@ -132,7 +132,7 @@ class GearService extends Service
 
         try {
             // Check first if the category is currently in use
-            if(Gear::where('gear_category_id', $category->id)->exists()) throw new \Exception("An gear with this category exists. Please change its category first.");
+            if(Gear::where('gear_category_id', $category->id)->exists()) throw new \Exception("A gear with this category exists. Please change its category first.");
 
             if($category->has_image) $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
             $category->delete();
