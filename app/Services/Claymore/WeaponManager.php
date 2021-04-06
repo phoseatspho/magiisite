@@ -217,10 +217,12 @@ class WeaponManager extends Service
                 if($weapon->user_id != $user->id && !$user->hasPower('edit_inventories')) throw new \Exception("You do not own this weapon.");
                 if(!$character) throw new \Exception("An invalid character was selected.");
                 if($character->user_id !== $user->id && !$user->hasPower('edit_inventories'))throw new \Exception("You do not own this character.");
-                if($weapon->weapon->category->class_restriction)
+
+                if(isset($weapon->weapon->category->class_restriction))
                 {
                     if(!$character->class_id || $character->class_id != $weapon->weapon->category->class_restriction) throw new \Exception('This character does not have the right class to hold this weapon.');
                 }
+
                 if($character->weapons()->where('weapon_id', $weapon->weapon->id)->exists()) throw new \Exception("This type of weapon is already attached to the character selected.");
                 foreach($character->weapons as $cwea)
                 {

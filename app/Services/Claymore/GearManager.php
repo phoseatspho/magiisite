@@ -212,7 +212,7 @@ class GearManager extends Service
                 if($gear->user_id != $user->id && !$user->hasPower('edit_inventories')) throw new \Exception("You do not own this gear.");
                 if(!$character) throw new \Exception("An invalid character was selected.");
                 if($character->user_id !== $user->id && !$user->hasPower('edit_inventories'))throw new \Exception("You do not own this character.");
-                if($gear->gear->category->class_restriction)
+                if(isset($gear->gear->category->class_restriction))
                 {
                     if(!$character->class_id || $character->class_id != $gear->gear->category->class_restriction) throw new \Exception('This character does not have the right class to hold this gear.');
                 }

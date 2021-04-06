@@ -7,6 +7,8 @@ use Config;
 
 use App\Models\Character\Character;
 use App\Models\Character\CharacterClass;
+use App\Models\Claymore\WeaponCategory;
+use App\Models\Claymore\GearCategory;
 
 class CharacterClassService extends Service
 {
@@ -120,6 +122,8 @@ class CharacterClassService extends Service
 
         try {
             // Check first if the class is currently in use
+            if(GearCategory::where('class_restriction', $class->id)->exists()) throw new \Exception("A gear class with this restriction exists. Please change its class first.");
+            if(WeaponCategory::where('class_restriction', $class->id)->exists()) throw new \Exception("A weapon class with this restriction exists. Please change its class first.");
             if(Character::where('class_id', $class->id)->exists()) throw new \Exception("An character with this class exists. Please change its class first.");
             
             if($class->has_image) $this->deleteImage($class->classImagePath, $class->classImageFileName); 
