@@ -120,7 +120,7 @@ class CharacterClassService extends Service
 
         try {
             // Check first if the class is currently in use
-            if(Character::where('character_class_id', $class->id)->exists()) throw new \Exception("An character with this class exists. Please change its class first.");
+            if(Character::where('class_id', $class->id)->exists()) throw new \Exception("An character with this class exists. Please change its class first.");
             
             if($class->has_image) $this->deleteImage($class->classImagePath, $class->classImageFileName); 
             $class->delete();
