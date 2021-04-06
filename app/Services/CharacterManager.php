@@ -1394,6 +1394,10 @@ class CharacterManager extends Service
             if(!$recipient) throw new \Exception("Invalid user selected.");
             if($recipient->is_banned) throw new \Exception("Cannot transfer character to a banned member.");
 
+            if($character->pets()->exists()) throw new \Exception("This character has pets attached to it.");
+            if($character->weapons()->exists()) throw new \Exception("This character has weapons attached to it.");
+            if($character->gears()->exists()) throw new \Exception("This character has gear attached to it.");
+
             // deletes any pending design drafts
             foreach($character->designUpdate as $update)
             {
@@ -1444,6 +1448,10 @@ class CharacterManager extends Service
         DB::beginTransaction();
 
         try {
+            if($character->pets()->exists()) throw new \Exception("This character has pets attached to it.");
+            if($character->weapons()->exists()) throw new \Exception("This character has weapons attached to it.");
+            if($character->gears()->exists()) throw new \Exception("This character has gear attached to it.");
+
             if(isset($data['recipient_id']) && $data['recipient_id']) {
                 $recipient = User::find($data['recipient_id']);
                 if(!$recipient) throw new \Exception("Invalid user selected.");

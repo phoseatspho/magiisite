@@ -109,7 +109,12 @@
                         <div class="text-center row">
                         @foreach($image->character->pets as $pet)
                             <div class="ml-3 mr-3">
+                                @if($pet->has_image)
+                                <img src="{{ $pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
+                                @elseif($pet->pet->imageurl)
                                 <img src="{{ $pet->pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
+                                @else {!!$pet->pet->displayName !!}
+                                @endif
                                 <br>
                                 <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
                             </div>
@@ -128,7 +133,6 @@
                                 <img src="{{ $gear->gear->imageUrl }}" data-toggle="tooltip" title="{{ $gear->gear->name }}" style="max-width: 75px;"/>
                                 @else {!!$gear->gear->displayName !!}
                                 @endif
-                                <br>
                             </div>
                         @endforeach
                         </div>
@@ -145,7 +149,6 @@
                                 <img src="{{ $weapon->weapon->imageUrl }}" data-toggle="tooltip" title="{{ $weapon->weapon->name }}" style="max-width: 75px;"/>
                                 @else {!!$weapon->weapon->displayName !!}
                                 @endif
-                                <br>
                             </div>
                         @endforeach
                         </div>

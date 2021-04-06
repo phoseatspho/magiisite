@@ -46,7 +46,7 @@
                     $now = Carbon\Carbon::parse($stack->attached_at);
                     $diff = $now->addDays(Settings::get('claymore_cooldown'));
                     @endphp
-                    @if($stack->character_id != NULL && $diff < Carbon\Carbon::now())
+                    @if($stack->chara_id != NULL && $diff < Carbon\Carbon::now())
                     <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#attachForm">@if($stack->user_id != $user->id) [ADMIN] @endif Detach Pet from Character</a>
                     {!! Form::open(['url' => 'pets/detach/'.$stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
                         <p>This pet is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
