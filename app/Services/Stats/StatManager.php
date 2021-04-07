@@ -182,6 +182,31 @@ class StatManager extends Service
         return $this->rollbackReturn(false);
     }
 
+    /* edit base stat
+    */
+    public function editBaseCharaStat($stat, $character, $quantity)
+    {
+        DB::beginTransaction();
+
+        try {
+            $sender = Auth::user();
+            if(!$sender->isStaff) throw new \Exception('You are not staff.');
+
+            $stat->count += $quantity;
+            $stat->save();
+
+            $type =  'Staff Edit';
+            $data = 'Editted by staff';
+            
+            if(!$this->createCountLog($sender->id, $sender->logtype, $character, $type, $data, $quantity)) throw new \Exception('Error creating log.');
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) { 
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
     /*-----------------------------------------------
     *
     * MISC

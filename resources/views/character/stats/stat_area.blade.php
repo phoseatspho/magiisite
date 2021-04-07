@@ -24,17 +24,17 @@
                 @php $add = 0; @endphp
                 @foreach($character->gear as $gear)
                     @php 
-                    if($gear->gear->stats->where('stat_id', $stat->id)->first())
+                    if($gear->gear->stats->where('stat_id', $stat->stat->id)->first())
                     { 
-                        $add += $gear->gear->stats->where('stat_id', $stat->id)->first()->count;  
+                        $add += $gear->gear->stats->where('stat_id', $stat->stat->id)->first()->count;  
                     }
                     @endphp
                 @endforeach
                 @foreach($character->weapons as $weapon)
                     @php 
-                    if($weapon->weapon->stats->where('stat_id', $stat->id)->first())
+                    if($weapon->weapon->stats->where('stat_id', $stat->stat->id)->first())
                     {
-                        $add += $weapon->weapon->stats->where('stat_id', $stat->id)->first()->count;
+                        $add += $weapon->weapon->stats->where('stat_id', $stat->stat->id)->first()->count;
                     }
                     @endphp
                 @endforeach
@@ -63,6 +63,15 @@
                             {!! Form::number('count', $stat->current_count, ['class' => 'form-control m-1']) !!}
                             {!! add_help('Here you can decrement or increment the current stat count for a character') !!}
                             {!! Form::submit('Edit Current Count', ['class' => 'btn btn-sm btn-primary mb-2']) !!} 
+            
+                            {!! Form::close() !!}
+                        </div>
+                        <div class="col">
+                            {{ Form::open(['url' => $character->url . '/stats-area/edit/base/' . $stat->id]) }}
+                    
+                            {!! Form::number('count', $stat->count, ['class' => 'form-control m-1']) !!}
+                            {!! add_help('Here you can decrement or increment the base stat count for a character') !!}
+                            {!! Form::submit('Edit Base Count', ['class' => 'btn btn-sm btn-primary mb-2']) !!} 
             
                             {!! Form::close() !!}
                         </div>

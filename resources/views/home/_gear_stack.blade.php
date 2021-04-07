@@ -73,6 +73,7 @@
                 </li>
                 @endif
                 @if($stack->isTransferrable || $user->hasPower('edit_inventories'))
+                    @if(!$stack->character_id)
                     <li class="list-group-item">
                         <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#transferForm">@if($stack->user_id != $user->id) [ADMIN] @endif Transfer Gear</a>
                         {!! Form::open(['url' => 'gears/transfer/'.$stack->id, 'id' => 'transferForm', 'class' => 'collapse']) !!}
@@ -88,6 +89,11 @@
                             </div>
                         {!! Form::close() !!}
                     </li>
+                    @else
+                    <li class="list-group-item bg-light">
+                        <h5 class="card-title mb-0 text-muted"><i class="fas fa-lock mr-2"></i> Currently attached to a character</h5>
+                    </li>
+                    @endif
                 @else
                     <li class="list-group-item bg-light">
                         <h5 class="card-title mb-0 text-muted"><i class="fas fa-lock mr-2"></i> Account-bound</h5>

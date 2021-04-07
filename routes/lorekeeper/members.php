@@ -139,6 +139,8 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::post('{slug}/stats-area/{id}', 'LevelController@postStat');
     Route::post('{slug}/stats-area/admin/{id}', 'LevelController@postAdminStat');
     Route::post('{slug}/stats-area/edit/{id}', 'LevelController@postEditStat');
+    Route::post('{slug}/stats-area/edit/base/{id}', 'LevelController@postEditBaseStat');
+
     # EXP
     Route::post('{slug}/level-area/exp-grant', 'LevelController@postExpGrant');
     Route::post('{slug}/level-area/stat-grant', 'LevelController@postStatGrant');

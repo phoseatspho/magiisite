@@ -171,6 +171,24 @@ class LevelController extends Controller
         return redirect()->back();
     }
 
+    /*
+    *   Character stat base count edit
+    */
+    public function postEditBaseStat($slug, $id, StatManager $service, Request $request)
+    {
+        $quantity = $request->get('count');
+        $character = $this->character;
+        $stat = CharacterStat::find($id);
+        if($service->editBaseCharaStat($stat, $character, $quantity)) 
+        {
+            flash('Characters stat editted successfully!')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
     /**
      * Grants exp to characters
      *
