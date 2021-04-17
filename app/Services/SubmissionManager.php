@@ -22,6 +22,8 @@ use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
 use App\Models\Prompt\Prompt;
 use App\Models\Pet\Pet;
+use App\Models\Claymore\Gear;
+use App\Models\Claymore\Weapon;
 
 use App\Services\Stats\ExperienceManager;
 use App\Services\Stats\StatManager;
@@ -274,6 +276,14 @@ class SubmissionManager extends Service
                         case 'Raffle':
                             if (!$isStaff) break;
                             $reward = Raffle::find($data['rewardable_id'][$key]);
+                            break;
+                        case 'Gear':
+                            if (!$isStaff) break;
+                            $reward = Gear::find($data['rewardable_id'][$key]);
+                            break;
+                        case 'Weapon':
+                            if (!$isStaff) break;
+                            $reward = Weapon::find($data['rewardable_id'][$key]);
                             break;
                     }
                     if(!$reward) continue;
