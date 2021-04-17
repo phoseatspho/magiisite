@@ -1396,7 +1396,7 @@ class CharacterManager extends Service
 
             if($character->pets()->exists()) throw new \Exception("This character has pets attached to it.");
             if($character->weapons()->exists()) throw new \Exception("This character has weapons attached to it.");
-            if($character->gears()->exists()) throw new \Exception("This character has gear attached to it.");
+            if($character->gear()->exists()) throw new \Exception("This character has gear attached to it.");
 
             // deletes any pending design drafts
             foreach($character->designUpdate as $update)
@@ -1450,7 +1450,7 @@ class CharacterManager extends Service
         try {
             if($character->pets()->exists()) throw new \Exception("This character has pets attached to it.");
             if($character->weapons()->exists()) throw new \Exception("This character has weapons attached to it.");
-            if($character->gears()->exists()) throw new \Exception("This character has gear attached to it.");
+            if($character->gear()->exists()) throw new \Exception("This character has gear attached to it.");
 
             if(isset($data['recipient_id']) && $data['recipient_id']) {
                 $recipient = User::find($data['recipient_id']);
