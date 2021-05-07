@@ -22,17 +22,18 @@
 
 <h4>Groups</h4>
 <p>
-    Groups into which characters within this species may be sorted. Characters of this species can be assigned a group or be randomly assigned one upon creation, or may be manually assigned or reassigned a group after the fact.
+    Every character of the above selected species is sorted into a "group" - these groups are used for different item drops, which can be set in this form after the character drop is initially created.
+    These groups can be either assigned at character creation (either at random or manually after selecting an applicable species) or may be assigned after character creation in the character's "Collect" page, accessed via the character sidebar on applicable characters.
 </p>
 <div class="float-right mb-3">
-    <a href="#" class="btn btn-info" id="addLoot">Add Parameter</a>
+    <a href="#" class="btn btn-info" id="addLoot">Add Group</a>
 </div>
 <table class="table table-sm" id="lootTable">
     <thead>
         <tr>
-            <th width="25%">Label {!! add_help('This label will be shown to users.') !!}</th>
-            <th width="10%">Weight {!! add_help('A higher weight means a group is more likely to be rolled. Weights have to be integers above 0 (round positive number, no decimals) and do not have to add up to be a particular number.') !!}</th>
-            <th width="20%">Chance</th>
+            <th width="25%">Group Label {!! add_help('This label will be shown to users.') !!}</th>
+            <th width="10%">Weight {!! add_help('A higher weight means a character is more likely to be randomly assigned to this group upon creation. Weights have to be integers above 0 (round positive number, no decimals) and do not have to add up to be a particular number.') !!}</th>
+            <th width="20%">Chance {!! add_help('Calculated automatically based on the weights. A character has this percentage of chance of being automatically sorted into this group.') !!}</th>
             <th width="10%"></th>
         </tr>
     </thead>
@@ -73,7 +74,7 @@ Select how often drops should occur.
 
 @if($drop->id)
     <h2>Dropped Items</h2>
-    Select an item for each group of this species to drop, and/or for each group to drop per subtype of this species. Leave the item field blank to disable drops for the group.
+    Select an item for each group of this species to drop, and/or for each group to drop per subtype of this species. Leave the item field blank to disable drops for the group. To clear a previously set input, simply backspace when it's selected.
     <div class="card card-body my-2">
         @foreach($drop->parameters as $label=>$weight)
             <div class="mb-2">
