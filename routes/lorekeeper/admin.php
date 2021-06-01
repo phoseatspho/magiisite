@@ -21,6 +21,7 @@ Route::group(['prefix' => 'users', 'namespace' => 'Users'], function() {
         Route::post('{name}/basic', 'UserController@postUserBasicInfo');
         Route::post('{name}/alias/{id}', 'UserController@postUserAlias');
         Route::post('{name}/account', 'UserController@postUserAccount');
+        Route::post('{name}/birthday', 'UserController@postUserBirthday');
         Route::get('{name}/updates', 'UserController@getUserUpdates');
         Route::get('{name}/ban', 'UserController@getBan');
         Route::get('{name}/ban-confirm', 'UserController@getBanConfirmation');
@@ -84,7 +85,7 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('galleries/edit/{id?}', 'GalleryController@postCreateEditGallery');
     Route::post('galleries/delete/{id}', 'GalleryController@postDeleteGallery');
     Route::post('galleries/sort', 'GalleryController@postSortGallery');
-    
+
     # CURRENCIES
     Route::get('currencies', 'CurrencyController@getIndex');
     Route::get('currencies/sort', 'CurrencyController@getSort');
@@ -272,6 +273,8 @@ Route::group(['prefix' => 'sales', 'middleware' => 'power:edit_pages'], function
     Route::post('create', 'SalesController@postCreateEditSales');
     Route::post('edit/{id?}', 'SalesController@postCreateEditSales');
     Route::post('delete/{id}', 'SalesController@postDeleteSales');
+
+    Route::get('character/{slug}', 'SalesController@getCharacterInfo');
 });
 
 # SITE SETTINGS
@@ -287,7 +290,10 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
     Route::get('items', 'GrantController@getItems');
     Route::post('items', 'GrantController@postItems');
+
+    Route::get('item-search', 'GrantController@getItemSearch');
 });
+
 
 # MASTERLIST
 Route::group(['prefix' => 'masterlist', 'namespace' => 'Characters', 'middleware' => 'power:manage_characters'], function() {

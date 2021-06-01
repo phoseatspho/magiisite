@@ -52,7 +52,7 @@ class GallerySubmission extends Model
      */
     public static $createRules = [
         'title' => 'required|between:3,200',
-        'image' => 'required_without:text|mimes:png,jpeg,gif|max:3000',
+        'image' => 'required_without:text|mimes:png,jpeg,jpg,gif|max:3000',
         'text' => 'required_without:image',
         'description' => 'nullable',
     ];
@@ -65,7 +65,7 @@ class GallerySubmission extends Model
     public static $updateRules = [
         'title' => 'required|between:3,200',
         'description' => 'nullable',
-        'image' => 'mimes:png,jpeg,gif|max:3000'
+        'image' => 'mimes:png,jpeg,jpg,gif|max:3000'
     ];
 
     /**********************************************************************************************
@@ -363,6 +363,7 @@ class GallerySubmission extends Model
 
         $prefixList = [];
         if($this->promptSubmissions->count()) foreach($this->prompts as $prompt) isset($prompt->prefix) ? ($prefixList[] = $prompt->prefix) : null;
+        elseif(isset($this->prompt_id)) isset($this->prompt->prefix) ? $prefixList[] = $this->prompt->prefix : null;
         foreach($this->participants as $participant) {
             switch($participant->type) {
                 case 'Collab':
@@ -471,6 +472,17 @@ class GallerySubmission extends Model
         // Only returns submissions which are viewable to everyone,
         // but given that this is for the sake of public display, that's fine
         return Prompt::whereIn('id', $this->promptSubmissions->pluck('prompt_id'))->get();
+    }
+
+    /**
+     * Gets the excerpt of text for a literature submission.
+     *
+     * @return string
+     */
+    public function getExcerptAttribute()
+    {
+        if(!isset($this->parsed_text)) return null;
+        else return strip_tags(substr($this->parsed_text, 0, 500)).(strlen($this->parsed_text) > 500 ? '...' : '');
     }
 
 }
