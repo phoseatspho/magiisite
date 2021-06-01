@@ -81,6 +81,9 @@
                         <hr/>
                         <p>
                             <strong>Submitted By</strong> {!! $submission->user->displayName !!}
+                            @if($submission->prompt_id)
+                                <strong>for</strong> {!! $submission->prompt->displayName !!}
+                            @endif
                             @if($submission->favorites->count())
                                  ・ <a class="view-favorites" href="#">View Favorites</a>
                             @endif
@@ -190,7 +193,7 @@
                 In a comment:
                 <div class="alert alert-secondary">
                     @if(isset($submission->hash) && !isset($submission->content_warning))
-                        [![Image]($submission->thumbnailUrl }})]({{ $submission->url }})
+                        [![Image]({{$submission->thumbnailUrl }})]({{ $submission->url }})
                     @else
                         [{{ $submission->displayTitle }} by {{ $submission->creditsPlain }} {{ isset($submission->hash) ? '(Art)' : '(Literature)' }}{{ isset($submission->content_warning) ? ' ・ **Content Warning:** '.nl2br(htmlentities($submission->content_warning)) : '' }}]({{ $submission->url }})
                     @endif
