@@ -61,7 +61,7 @@ class AddClaymoreStats extends Migration
         //
         Schema::dropifExists('gear_stats');
         Schema::dropifExists('weapon_stats');
-        Schema::table('pets', function (Blueprint $table) { 
+        Schema::table('user_pets', function (Blueprint $table) { 
             $table->dropColumn('attached_at');
         });
         Schema::table('gears', function (Blueprint $table) {
