@@ -29,7 +29,11 @@
         <div class="card mt-3">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    @if($stack->character_id != NULL)
+                    @php 
+                    $now = Carbon\Carbon::parse($stack->attached_at);
+                    $diff = $now->addDays(Settings::get('claymore_cooldown'));
+                    @endphp
+                    @if($stack->character_id != NULL && $diff < Carbon\Carbon::now())
                     <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#attachForm">@if($stack->user_id != $user->id) [ADMIN] @endif Detach Weapon from Character</a>
                     {!! Form::open(['url' => 'weapons/detach/'.$stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
                         <p>This weapon is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
@@ -37,7 +41,7 @@
                             {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
                         </div>
                     {!! Form::close() !!}
-                    @else
+                    @elseif($stack->character_id == NULL || $diff < Carbon\Carbon::now())
                     <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#attachForm">@if($stack->user_id != $user->id) [ADMIN] @endif Attach Weapon to Character</a>
                     {!! Form::open(['url' => 'weapons/attach/'.$stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
                         <p>Attach this weapon to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
@@ -50,6 +54,8 @@
                             {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
                         </div>
                     {!! Form::close() !!}
+                    @else
+                    <a class="card-title h5">You cannot currently attach / detach this weapon! It is under cooldown.</a>
                     @endif
                 </li>
                 @if($stack->weapon->parent_id && $stack->weapon->cost && $stack->weapon->currency_id <= 0)
@@ -102,25 +108,6 @@
                         </div>
                     {!! Form::close() !!}
                 </li>
-                @if(Auth::user()->isStaff)
-                <li class="list-group-item">
-                    <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#imageForm"> [ADMIN] Unique Image to Gear</a>
-                    {!! Form::open(['url' => 'weapons/image/'.$stack->id, 'files' => true, 'id' => 'imageForm', 'class' => 'collapse']) !!}
-                        <p class="alert alert-info my-2">Give this weapon a unique image.</p>
-                        <div>{!! Form::file('image') !!}</div>
-                        <div class="text-muted">Recommended size: 100px x 100px</div>
-                        @if($stack->has_image)
-                            <div class="form-check">
-                                {!! Form::checkbox('remove_image', 1, false, ['class' => 'form-check-input']) !!}
-                                {!! Form::label('remove_image', 'Remove current image', ['class' => 'form-check-label']) !!}
-                            </div>
-                        @endif
-                        <div class="text-right">
-                            {!! Form::submit('Upload', ['class' => 'btn btn-primary']) !!}
-                        </div>
-                    {!! Form::close() !!}
-                </li>
-                @endif
             </ul>
         </div>
     @endif
