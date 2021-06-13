@@ -181,7 +181,7 @@ class PromptController extends Controller
     {
         return view('admin.prompts.create_edit_prompt', [
             'prompt' => new Prompt,
-            'prompts' => Prompt::active()->pluck('name', 'id')->toArray(),
+            'prompts' => ['none' => 'No parent'] + Prompt::active()->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'items' => Item::orderBy('name')->pluck('name', 'id'),
             'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
