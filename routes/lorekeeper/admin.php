@@ -358,6 +358,9 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     Route::post('{slug}/settings', 'CharacterController@postCharacterSettings');
 
     Route::post('{slug}/transfer', 'CharacterController@postTransfer');
+
+    # SKILLS
+    Route::get('skills', 'SkillController@getIndex');
 });
 // Might rewrite these parts eventually so there's less code duplication...
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters', 'middleware' => 'power:manage_characters'], function() {
