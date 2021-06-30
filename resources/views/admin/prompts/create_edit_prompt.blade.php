@@ -31,13 +31,13 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('World Page Image (Optional)') !!} {!! add_help('This image is used only on the world information pages.') !!}
-    <div>{!! Form::file('image') !!}</div>
+    {!! Form::label('World Page Prompt (Optional)') !!} {!! add_help('This prompt is used only on the world information pages.') !!}
+    <div>{!! Form::file('prompt') !!}</div>
     <div class="text-muted">Recommended size: 100px x 100px</div>
-    @if($prompt->has_image)
+    @if($prompt->has_prompt)
         <div class="form-check">
-            {!! Form::checkbox('remove_image', 1, false, ['class' => 'form-check-input']) !!}
-            {!! Form::label('remove_image', 'Remove current image', ['class' => 'form-check-label']) !!}
+            {!! Form::checkbox('remove_prompt', 1, false, ['class' => 'form-check-input']) !!}
+            {!! Form::label('remove_prompt', 'Remove current prompt', ['class' => 'form-check-label']) !!}
         </div>
     @endif
 </div>
@@ -101,12 +101,33 @@
 <p>Rewards are credited on a per-user basis. Mods are able to modify the specific rewards granted at approval time.</p>
 <p>You can add loot tables containing any kind of currencies (both user- and character-attached), but be sure to keep track of which are being distributed! Character-only currencies cannot be given to users.</p>
 @include('widgets._loot_select', ['loots' => $prompt->rewards, 'showLootTables' => true, 'showRaffles' => true])
+<hr class="w-70">
+<h3>Skill Rewards</h3>
+<p>Skills are rewarded to 
+<div class="form-group">
+    <div id="skillList">
+        @foreach($prompt->skills as $skill)
+            <div class="d-flex mb-2">
+                {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
+                {!! Form::text('quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+                <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
+            </div>
+        @endforeach
+    </div>
+    <div><a href="#" class="btn btn-primary" id="add-skill">Add Trait</a></div>
+</div>
 
 <div class="text-right">
     {!! Form::submit($prompt->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
 </div>
 
 {!! Form::close() !!}
+
+<div class="skill-row hide mb-2">
+    {!! Form::select('skill_id[]', $skills, null, ['class' => 'form-control mr-2 skill-select', 'placeholder' => 'Select Skill']) !!}
+    {!! Form::text('quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+    <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
+</div>
 
 @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'showLootTables' => true, 'showRaffles' => true])
 
@@ -125,7 +146,32 @@
 @parent
 @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
 <script>
-$( document ).ready(function() {    
+$( document ).ready(function() {
+
+    $('.original.skill-select').selectize();
+    $('#add-skill').on('click', function(e) {
+        e.preventDefault();
+        addSkillRow();
+    });
+    $('.remove-skill').on('click', function(e) {
+        e.preventDefault();
+        removeSkillRow($(this));
+    })
+    function addSkillRow() {
+        var $clone = $('.skill-row').clone();
+        $('#skillList').append($clone);
+        $clone.removeClass('hide skill-row');
+        $clone.addClass('d-flex');
+        $clone.find('.remove-skill').on('click', function(e) {
+            e.preventDefault();
+            removeSkillRow($(this));
+        })
+        $clone.find('.skill-select').selectize();
+    }
+    function removeSkillRow($trigger) {
+        $trigger.parent().remove();
+    }
+
     $('.delete-prompt-button').on('click', function(e) {
         e.preventDefault();
         loadModal("{{ url('admin/data/prompts/delete') }}/{{ $prompt->id }}", 'Delete Prompt');

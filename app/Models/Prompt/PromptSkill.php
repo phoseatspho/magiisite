@@ -5,7 +5,7 @@ namespace App\Models\Prompt;
 use Config;
 use App\Models\Model;
 
-class PromptReward extends Model
+class PromptSkill extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -50,7 +50,7 @@ class PromptReward extends Model
     **********************************************************************************************/
     
     /**
-     * Get the reward attached to the prompt reward.
+     * Get the skill attached to the prompt skill.
      */
     public function skill() 
     {

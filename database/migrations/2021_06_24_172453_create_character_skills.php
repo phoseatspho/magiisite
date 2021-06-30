@@ -16,9 +16,19 @@ class CreateCharacterSkills extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
+            $table->integer('skill_category_id')->unsigned()->nullable()->default(null);
             $table->integer('prerequisite_id')->unsigned()->nullable()->default(null); // Prerequisite id, from this table. Automatically set to parent_id unless specifically set to somethign else.
             $table->integer('parent_id')->unsigned()->nullable()->default(null);
+            $table->integer('parent_level')->unsigned()->nullable()->default(null);
+            $table->boolean('has_image')->default(0);
+        });
+
+        Schema::create('skill_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->boolean('has_image')->default(0);
         });
 
         Schema::create('character_skills', function (Blueprint $table) {
@@ -43,6 +53,7 @@ class CreateCharacterSkills extends Migration
     public function down()
     {
         Schema::dropIfExists('skills');
+        Schema::dropIfExists('skill_categories');
         Schema::dropIfExists('character_skills');
         Schema::dropIfExists('prompt_skills');
     }

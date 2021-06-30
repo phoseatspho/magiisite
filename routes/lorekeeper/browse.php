@@ -110,6 +110,9 @@ Route::group(['prefix' => 'world'], function() {
     Route::get('trait-categories', 'WorldController@getFeatureCategories');
     Route::get('traits', 'WorldController@getFeatures');
     Route::get('character-categories', 'WorldController@getCharacterCategories');
+    Route::get('skill-categories', 'WorldController@getSkillCategories');
+    Route::get('skills', 'WorldController@getSkills');
+    Route::get('skills/{id}', 'WorldController@getSkill');
 });
 
 Route::group(['prefix' => 'prompts'], function() {

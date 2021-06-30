@@ -85,6 +85,15 @@ class Prompt extends Model
         return $this->hasMany('App\Models\Prompt\PromptReward', 'prompt_id');
     }
 
+    /**
+     * Get the skills attached to this prompt.
+     */
+    public function skills()
+    {
+        return $this->hasMany('App\Models\Prompt\PromptSkill', 'prompt_id');
+    }
+
+
     /**********************************************************************************************
 
         SCOPES
