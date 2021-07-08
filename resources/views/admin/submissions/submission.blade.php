@@ -147,6 +147,10 @@
                             {!! Form::label('slug[]', 'Character Code') !!}
                             {!! Form::text('slug[]', null, ['class' => 'form-control character-code']) !!}
                         </div>
+                        <div class="form-group">
+                            {!! Form::label('is_focus[]', 'Focus Character?') !!}
+                            {!! Form::checkbox('is_focus[]', null, ['class' => 'form-check-input']) !!}
+                        </div>
                         <div class="character-rewards hide">
                             <h4>Character Rewards</h4>
                             <table class="table table-sm">

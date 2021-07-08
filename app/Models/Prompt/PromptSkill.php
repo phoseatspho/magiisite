@@ -54,6 +54,6 @@ class PromptSkill extends Model
      */
     public function skill() 
     {
-        $this->belongsTo('App\Models\Skill');
+        return $this->belongsTo('App\Models\Skill\Skill', 'skill_id');
     }
 }

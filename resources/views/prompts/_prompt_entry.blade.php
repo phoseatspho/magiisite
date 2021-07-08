@@ -52,6 +52,28 @@
                     </tbody>
                 </table>
             @endif
+            <hr>
+            <h4>Skills</h4>
+            @if(!count($prompt->skills))
+                No skill increase.
+            @else
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th width="70%">Skill</th>
+                            <th width="30%">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($prompt->skills as $skill)
+                            <tr>
+                                <td>{!! $skill->skill->displayName !!}</td>
+                                <td>{{ $skill->quantity }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
         <div class="text-right">
             @if($prompt->end_at && $prompt->end_at->isPast())

@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use App\Models\Prompt\PromptCategory;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptReward;
+use App\Models\Prompt\PromptSkill;
 use App\Models\Submission\Submission;
 
 class PromptService extends Service
@@ -212,6 +213,8 @@ class PromptService extends Service
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
 
+            $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
+
             return $this->commitReturn($prompt);
         } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
@@ -255,6 +258,8 @@ class PromptService extends Service
             if ($prompt) $this->handleImage($image, $prompt->imagePath, $prompt->imageFileName);
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
+
+            $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
 
             return $this->commitReturn($prompt);
         } catch(\Exception $e) {
@@ -314,6 +319,30 @@ class PromptService extends Service
             }
         }
     }
+
+    /**
+     * Processes user input for creating/updating prompt skill rewards.
+     *
+     * @param  array                      $data
+     * @param  \App\Models\Prompt\Prompt  $prompt
+     */
+    private function populateSkills($data, $prompt)
+    {
+        // Clear the old skills...
+        $prompt->skills()->delete();
+
+        if(isset($data['skill_id'])) {
+            foreach($data['skill_id'] as $key => $type)
+            {
+                PromptSkill::create([
+                    'prompt_id'       => $prompt->id,
+                    'skill_id' => $type,
+                    'quantity'        => $data['skill_quantity'][$key],
+                ]);
+            }
+        }
+    }
+
 
     /**
      * Deletes a prompt.

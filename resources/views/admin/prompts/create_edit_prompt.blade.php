@@ -109,12 +109,12 @@
         @foreach($prompt->skills as $skill)
             <div class="d-flex mb-2">
                 {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
-                {!! Form::text('quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+                {!! Form::text('skill_quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
                 <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
             </div>
         @endforeach
     </div>
-    <div><a href="#" class="btn btn-primary" id="add-skill">Add Trait</a></div>
+    <div><a href="#" class="btn btn-primary" id="add-skill">Add Skill Reward</a></div>
 </div>
 
 <div class="text-right">
@@ -125,7 +125,7 @@
 
 <div class="skill-row hide mb-2">
     {!! Form::select('skill_id[]', $skills, null, ['class' => 'form-control mr-2 skill-select', 'placeholder' => 'Select Skill']) !!}
-    {!! Form::text('quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+    {!! Form::text('skill_quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
     <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
 </div>
 
