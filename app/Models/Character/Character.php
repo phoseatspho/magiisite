@@ -252,6 +252,14 @@ class Character extends Model
         return $this->belongsTo('App\Models\Character\CharacterClass', 'class_id');
     }
 
+    /** 
+     * Get the character's skills.
+     */
+    public function skills()
+    {
+        return $this->hasMany('App\Models\Character\CharacterSkill', 'character_id');
+    }
+
     /**********************************************************************************************
 
         SCOPES
@@ -594,7 +602,18 @@ class Character extends Model
      */
     public function getCharacterLogs()
     {
-        $query = CharacterLog::with('sender.rank')->where('character_id', $this->id)->orderBy('id', 'DESC');
+        $query = CharacterLog::with('sender.rank')->where('character_id', $this->id)->where('log_type', '!=', 'Skill Awarded')->orderBy('id', 'DESC');
+        return $query->paginate(30);
+    }
+
+    /**
+     * Get the character's update logs.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getCharacterSkillLogs()
+    {
+        $query = CharacterLog::with('sender.rank')->where('character_id', $this->id)->where('log_type', 'Skill Awarded')->orderBy('id', 'DESC');
         return $query->paginate(30);
     }
 

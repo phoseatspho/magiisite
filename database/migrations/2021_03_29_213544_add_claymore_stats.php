@@ -36,10 +36,6 @@ class AddClaymoreStats extends Migration
             $table->foreign('stat_id')->references('id')->on('stats');
         });
 
-        Schema::table('user_pets', function (Blueprint $table) { 
-            $table->timestamp('attached_at')->nullable()->default(null);
-        });
-
         Schema::table('gears', function (Blueprint $table) {
             $table->integer('currency_id')->unsigned()->nullable()->default(null);
             $table->integer('cost')->unsigned()->nullable()->default(null);
@@ -61,9 +57,6 @@ class AddClaymoreStats extends Migration
         //
         Schema::dropifExists('gear_stats');
         Schema::dropifExists('weapon_stats');
-        Schema::table('user_pets', function (Blueprint $table) { 
-            $table->dropColumn('attached_at');
-        });
         Schema::table('gears', function (Blueprint $table) {
             $table->dropColumn('currency_id');
             $table->dropColumn('cost');

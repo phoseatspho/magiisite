@@ -66,6 +66,11 @@ class UserController extends Controller
 
         $this->user->updateCharacters();
         $this->user->updateArtDesignCredits();
+        if(!$this->user->level) {
+            $this->user->level()->create([
+                'user_id' => $this->user->id
+            ]);
+        }
     }
 
     /**
@@ -90,6 +95,23 @@ class UserController extends Controller
             'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
             'characters' => $characters,
             'armours' => $armours,
+        ]);
+    }
+
+    /**
+     * Shows a user's aliases.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserAliases($name)
+    {
+        $aliases = $this->user->aliases();
+        if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('edit_user_info'))) $aliases->visible();
+        
+        return view('user.aliases', [
+            'user' => $this->user,
+            'aliases' => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
         ]);
     }
 

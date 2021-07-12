@@ -155,11 +155,12 @@ class SubmissionController extends Controller
     public function postNewSubmission(Request $request, SubmissionManager $service)
     {
         $request->validate(Submission::$createRules);
-        if($service->createSubmission($request->only(['url', 'prompt_id', 'comments', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity',  'rewardable_type', 'rewardable_id', 'quantity', 'stack_id', 'stack_quantity', 'currency_id', 'currency_quantity','focus_chara']), Auth::user())) {
+        if($service->createSubmission($request->only(['url', 'prompt_id', 'comments', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity',  'rewardable_type', 'rewardable_id', 'quantity', 'stack_id', 'stack_quantity', 'currency_id', 'currency_quantity', 'is_focus']), Auth::user())) {
             flash('Prompt submitted successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+            return redirect()->back();
         }
         return redirect()->to('submissions');
     }
@@ -255,6 +256,7 @@ class SubmissionController extends Controller
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+            return redirect()->back();
         }
         return redirect()->to('claims');
     }

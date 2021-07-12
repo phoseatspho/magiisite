@@ -21,6 +21,7 @@ Route::group(['prefix' => 'users', 'namespace' => 'Users'], function() {
         Route::post('{name}/basic', 'UserController@postUserBasicInfo');
         Route::post('{name}/alias/{id}', 'UserController@postUserAlias');
         Route::post('{name}/account', 'UserController@postUserAccount');
+        Route::post('{name}/birthday', 'UserController@postUserBirthday');
         Route::get('{name}/updates', 'UserController@getUserUpdates');
         Route::get('{name}/ban', 'UserController@getBan');
         Route::get('{name}/ban-confirm', 'UserController@getBanConfirmation');
@@ -243,6 +244,23 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('prompts/create', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/edit/{id?}', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/delete/{id}', 'PromptController@postDeletePrompt');
+
+    # SKILLS
+    Route::get('skills', 'SkillController@getIndex');
+    Route::get('skills/create', 'SkillController@getCreateSkill');
+    Route::get('skills/edit/{id}', 'SkillController@getEditSkill');
+    Route::get('skills/delete/{id}', 'SkillController@getDeleteSkill');
+    Route::post('skills/create', 'SkillController@postCreateEditSkill');
+    Route::post('skills/edit/{id?}', 'SkillController@postCreateEditSkill');
+    Route::post('skills/delete/{id}', 'SkillController@postDeleteSkill');
+    # SKILL CATEGORIES
+    Route::get('skill-categories', 'SkillController@getCategoryIndex');
+    Route::get('skill-categories/create', 'SkillController@getCreateSkillCategory');
+    Route::get('skill-categories/edit/{id}', 'SkillController@getEditSkillCategory');
+    Route::get('skill-categories/delete/{id}', 'SkillController@getDeleteSkillCategory');
+    Route::post('skill-categories/create', 'SkillController@postCreateEditSkillCategory');
+    Route::post('skill-categories/edit/{id?}', 'SkillController@postCreateEditSkillCategory');
+    Route::post('skill-categories/delete/{id}', 'SkillController@postDeleteSkillCategory');
 });
 
 
@@ -281,6 +299,8 @@ Route::group(['prefix' => 'sales', 'middleware' => 'power:edit_pages'], function
     Route::post('create', 'SalesController@postCreateEditSales');
     Route::post('edit/{id?}', 'SalesController@postCreateEditSales');
     Route::post('delete/{id}', 'SalesController@postDeleteSales');
+
+    Route::get('character/{slug}', 'SalesController@getCharacterInfo');
 });
 
 # SITE SETTINGS

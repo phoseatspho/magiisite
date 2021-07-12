@@ -235,6 +235,10 @@ return [
                 'name' => 'Character Classes',
                 'url' => 'admin/character-classes'
             ],
+            [
+                'name' => 'Character Skills',
+                'url' => 'admin/data/skills'
+            ]
         ]
     ],
     'Raffles' => [

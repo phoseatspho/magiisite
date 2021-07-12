@@ -9,6 +9,7 @@ use Auth;
 use App\Models\Prompt\PromptCategory;
 use App\Models\Prompt\Prompt;
 use App\Models\Item\Item;
+use App\Models\Skill\Skill;
 use App\Models\Currency\Currency;
 use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
@@ -192,6 +193,7 @@ class PromptController extends Controller
             'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'tables' => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'skills' => Skill::pluck('name', 'id')->toArray()
         ]);
     }
 
@@ -215,6 +217,7 @@ class PromptController extends Controller
             'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'tables' => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'skills' => Skill::pluck('name', 'id')->toArray()
         ]);
     }
 
@@ -232,7 +235,7 @@ class PromptController extends Controller
         $data = $request->only([
             'name', 'prompt_category_id', 'summary', 'description', 'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'is_active', 'rewardable_type',
              'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions',
-             'chara_exp', 'chara_points', 'user_exp', 'user_points', 'level_req', 'level_check'
+             'chara_exp', 'chara_points', 'user_exp', 'user_points', 'level_req', 'level_check', 'skill_id', 'skill_quantity'
         ]);
         if($id && $service->updatePrompt(Prompt::find($id), $data, Auth::user())) {
             flash('Prompt updated successfully.')->success();
