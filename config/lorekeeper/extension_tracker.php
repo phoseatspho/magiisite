@@ -12,5 +12,12 @@ return [
     //     'version' => '1.0.0',
     // ],
     
-
+    'character_skills' => [
+        'key' => 'character_skills',
+        'wiki_key' => 'Character_Akills',
+            'creators' => json_encode([
+                'Newt' => 'https://github.com/ne-wt/',
+            ]),
+        'version' => '1.0.0',
+    ],
 ];
