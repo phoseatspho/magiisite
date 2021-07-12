@@ -61,6 +61,24 @@
         @endforeach
     </tbody>
 </table>
+<hr>
+<h2>Skills</h2>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th width="70%">Skill</th>
+            <th width="30%">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($submission->prompt->skills as $skill)
+            <tr>
+                <td>{!! $skill->skill->name !!}</td>
+                <td>{{ $skill->quantity }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
 
 <h2>Characters</h2>
 @foreach($submission->characters as $character)
@@ -106,6 +124,14 @@
                             @endforeach
 
                             --}}
+                            @if($character->is_focus)
+                                @foreach($submission->prompt->skills as $skill)
+                                    <tr>
+                                        <td>{!! $skill->skill->name !!} Skill</td>
+                                        <td>{{ $skill->quantity }}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                     </div>

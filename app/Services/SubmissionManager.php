@@ -21,6 +21,7 @@ use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
 use App\Models\Prompt\Prompt;
+use App\Services\SkillManager;
 
 class SubmissionManager extends Service
 {
@@ -172,6 +173,19 @@ class SubmissionManager extends Service
                     'data' => json_encode(getDataReadyAssets($assets)),
                     'is_focus' => isset($data['is_focus'][$key]) ? 1 : 0
                 ]);
+
+                if(isset($data['is_focus'][$key]) && $submission->prompt_id) {
+                    foreach($submission->prompt->skills as $skill) {
+                        if($skill->skill->parent) {
+                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
+                            if(!$charaSkill || $charaSkill->level < $skil->parent_level) throw new \Exception("Skill level too low on one or more characters.");
+                        }
+                        if($skill->skill->prerequisite) {
+                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
+                            if(!$charaSkill) throw new \Exception("Skill not unlocked on one or more characters.");
+                        }
+                    }
+                }
             }
 
             return $this->commitReturn($submission);
@@ -438,7 +452,7 @@ class SubmissionManager extends Service
             $submission->characters()->delete();
 
             // Distribute character rewards
-            foreach($characters as $c)
+            foreach($characters as $key => $c)
             {
                 // Users might not pass in clean arrays (may contain redundant data) so we need to clean that up
                 $assets = $this->processRewards($data + ['character_id' => $c->id, 'currencies' => $currencies, 'items' => $items, 'tables' => $tables], true);
@@ -448,8 +462,18 @@ class SubmissionManager extends Service
                 SubmissionCharacter::create([
                     'character_id' => $c->id,
                     'submission_id' => $submission->id,
-                    'data' => json_encode(getDataReadyAssets($assets))
+                    'data' => json_encode(getDataReadyAssets($assets)),
+                    'is_focus' => isset($data['is_focus'][$key]) ? 1 : 0
                 ]);
+
+                // here we do da skills
+                $skillManager = new SkillManager;
+
+                if(isset($data['is_focus'][$key]) && $submission->prompt_id) {
+                    foreach($submission->prompt->skills as $skill) {
+                        if(!$skillManager->creditSkill($user, $c, $skill->skill, $skill->quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
+                    }
+                }
             }
 
             // Increment user submission count if it's a prompt

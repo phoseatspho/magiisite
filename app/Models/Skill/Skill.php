@@ -57,6 +57,29 @@ class Skill extends Model
         return $this->belongsTo('App\Models\Skill\SkillCategory', 'skill_category_id');
     }
 
+    /**
+     * Get the children of the skill
+     */
+    public function children()
+    {
+        return $this->hasMany('App\Models\Skill\Skill', 'parent_id');
+    }
+
+    /**
+     * Get the parent the skill belongs to.
+     */
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\Skill\Skill', 'parent_id');
+    }
+
+    /**
+     * Get the prerequisite the skill belongs to.
+     */
+    public function prerequisite()
+    {
+        return $this->belongsTo('App\Models\Skill\Skill', 'prerequisite_id');
+    }
 
     /**********************************************************************************************
     

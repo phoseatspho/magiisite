@@ -38,4 +38,12 @@ class CharacterSkill extends Model
     {
         return $this->belongsTo('App\Models\Character\Character', 'character_id');
     }
+
+    /**
+     * Get the skill.
+     */
+    public function skill()
+    {
+        return $this->belongsTo('App\Models\Skill\Skill', 'skill_id');
+    }
 }

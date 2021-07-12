@@ -191,7 +191,9 @@ class SkillService extends Service
 
         try {
             if(isset($data['skill_category_id']) && $data['skill_category_id'] == 'none') $data['skill_category_id'] = null;
-
+            if(isset($data['parent_id']) && $data['parent_id'] == 'none') $data['parent_id'] = null;
+            if(isset($data['prerequisite_id']) && $data['prerequisite_id'] == 'none') $data['prerequisite_id'] = null;
+            
             if((isset($data['skill_category_id']) && $data['skill_category_id']) && !SkillCategory::where('id', $data['skill_category_id'])->exists()) throw new \Exception("The selected skill category is invalid.");
 
             $data = $this->populateData($data);
@@ -229,6 +231,8 @@ class SkillService extends Service
 
         try {
             if(isset($data['skill_category_id']) && $data['skill_category_id'] == 'none') $data['skill_category_id'] = null;
+            if(isset($data['parent_id']) && $data['parent_id'] == 'none') $data['parent_id'] = null;
+            if(isset($data['prerequisite_id']) && $data['prerequisite_id'] == 'none') $data['prerequisite_id'] = null;
 
             // More specific validation
             if(Skill::where('name', $data['name'])->where('id', '!=', $skill->id)->exists()) throw new \Exception("The name has already been taken.");

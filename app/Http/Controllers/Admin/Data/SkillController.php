@@ -26,7 +26,7 @@ class SkillController extends Controller
     public function getIndex()
     {
         return view('admin.skills.index', [
-            'skills' => Skill::orderBy('name', 'DESC')->get()
+            'skills' => Skill::orderBy('name', 'ASC')->get()
         ]);
     }
 
@@ -37,8 +37,8 @@ class SkillController extends Controller
     {
         return view('admin.skills.create_edit_skill', [
             'skill' => new Skill,
-            'skills' => Skill::orderBy('name', 'DESC')->get(),
             'prompts' => Prompt::where('is_active', 1)->orderBy('id')->pluck('name', 'id'),
+            'skills' => ['none' => 'No Parent/Prerequisite'] + Skill::orderBy('name', 'ASC')->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'Any Category'] + SkillCategory::pluck('name', 'id')->toArray()
         ]);
     }
@@ -55,7 +55,7 @@ class SkillController extends Controller
         return view('admin.skills.create_edit_skill', [
             'skill' => $skill,
             'prompts' => Prompt::where('is_active', 1)->orderBy('id')->pluck('name', 'id'),
-            'skills' => Skill::where('id', '!=', $skill->id)->orderBy('name', 'DESC')->get(),
+            'skills' => ['none' => 'No Parent/Prerequisite'] + Skill::where('id', '!=', $skill->id)->orderBy('name', 'ASC')->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'Any Category'] + SkillCategory::pluck('name', 'id')->toArray()
         ]);
     }
@@ -72,7 +72,7 @@ class SkillController extends Controller
     {
         $id ? $request->validate(Skill::$updateRules) : $request->validate(Skill::$createRules);
         $data = $request->only([
-            'name', 'skill_category_id', 'description', 'image', 'remove_image', 'parent_id', 'prerequisite_id' 
+            'name', 'skill_category_id', 'ascription', 'image', 'remove_image', 'parent_id', 'parent_level', 'prerequisite_id' 
         ]);
         if($id && $service->updateSkill(Skill::find($id), $data, Auth::user())) {
             flash('Skill updated successfully.')->success();
@@ -177,7 +177,7 @@ class SkillController extends Controller
     {
         $id ? $request->validate(SkillCategory::$updateRules) : $request->validate(SkillCategory::$createRules);
         $data = $request->only([
-            'name', 'description', 'image', 'remove_image'
+            'name', 'ascription', 'image', 'remove_image'
         ]);
         if($id && $service->updateSkillCategory(SkillCategory::find($id), $data, Auth::user())) {
             flash('Category updated successfully.')->success();

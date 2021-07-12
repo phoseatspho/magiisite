@@ -47,12 +47,13 @@
         <div class="form-group">
             {!! Form::label('Parent (Optional)') !!} {!! add_help('Related skill that transforms into this skill.') !!}
             {!! Form::select('parent_id', $skills, $skill->parent_id, ['class' => 'form-control']) !!}
+            <p>A parent locks this skill and all prompts associated with this skill until the parent level is reached. It is also in the same tree as the skill.</p>
         </div>
     </div>
     <div class="col-md">
         <div class="form-group">
             {!! Form::label('Parent Level (Optional)') !!} {!! add_help('Related skill that transforms into this skill.') !!}
-            {!! Form::number('parent_level', $skill->parent_level, ['class' => 'form-control', 'min' => 1]) !!}
+            {!! Form::number('parent_level', $skill->parent_level ? $skill->parent_level : 1, ['class' => 'form-control', 'min' => 1]) !!}
         </div>
     </div>
 </div>
@@ -60,6 +61,7 @@
 <div class="form-group">
     {!! Form::label('Prerequisite (Optional)') !!} {!! add_help('Unrelated skill required to have before the character can learn this skill.') !!}
     {!! Form::select('prerequisite_id', $skills, $skill->prerequisite_id, ['class' => 'form-control']) !!}
+    <p>A prerequisite is required to have at least level 1 in to enter any prompts with this skill reward.</p>
 </div>
 
 <div class="text-right">
@@ -72,7 +74,7 @@
 <h3>Preview</h3>
 <div class="card mb-3">
     <div class="card-body">
-        @include('world._item_entry', ['imageUrl' => $item->imageUrl, 'name' => $item->displayName, 'description' => $item->description, 'searchUrl' => $item->searchUrl])
+        @include('world._skill_entry', ['imageUrl' => $skill->imageUrl, 'name' => $skill->displayName, 'description' => $skill->description, 'searchUrl' => $skill->searchUrl])
     </div>
 </div>
 @endif

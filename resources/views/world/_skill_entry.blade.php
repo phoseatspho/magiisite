@@ -10,6 +10,16 @@
                     <p><strong>Category:</strong> {!! $skill->category->name !!}</p>
                 </div>
             @endif
+            @if(isset($skill->parent_id) && $skill->parent)
+                <div class="col-md">
+                    <p><strong>Parent:</strong> {!! $skill->parent->displayname !!}</p>
+                </div>
+            @endif
+            @if(isset($skill->prerequisite_id) && $skill->prerequisite)
+                <div class="col-md">
+                    <p><strong>Prerequisite:</strong> {!! $skill->prerequisite->displayname !!}</p>
+                </div>
+            @endif
         </div>
         <div class="world-entry-text">
             {!! $description !!}

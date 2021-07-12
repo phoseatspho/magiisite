@@ -67,7 +67,14 @@
                     <tbody>
                         @foreach($prompt->skills as $skill)
                             <tr>
-                                <td>{!! $skill->skill->displayName !!}</td>
+                                <td>{!! $skill->skill->displayName !!} 
+                                    @if($skill->skill->parent)
+                                    <br><span class="text-danger">This skill requires {!! $skill->skill->parent->displayname !!} level {{ $skill->skill->parent_level }} on all focus characters.</span>
+                                    @endif
+                                    @if($skill->skill->prerequisite)
+                                    <br><span class="text-danger">This skill requires {!! $skill->skill->prerequisite->displayname !!} on all focus characters.</span>
+                                    @endif
+                                </td>
                                 <td>{{ $skill->quantity }}</td>
                             </tr>
                         @endforeach

@@ -35,6 +35,7 @@ use App\Services\CharacterManager;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Skill\Skill;
 class CharacterController extends Controller
 {
     /*
@@ -75,6 +76,7 @@ class CharacterController extends Controller
     {
         return view('character.character', [
             'character' => $this->character,
+            'skills' => Skill::where('parent_id', null)->orderBy('name', 'ASC')->get()
         ]);
     }
 
@@ -409,6 +411,20 @@ class CharacterController extends Controller
         return view('character.submission_logs', [
             'character' => $this->character,
             'logs' => $this->character->getSubmissions()
+        ]);
+    }
+
+    /**
+     * Shows a character's skill logs.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterSkillLogs($slug)
+    {
+        return view('character.character_skill_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getCharacterSkillLogs()
         ]);
     }
 
