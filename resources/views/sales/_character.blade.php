@@ -21,18 +21,15 @@
                                     @if($character->image->features()->count())
                                         @foreach($traitgroup as $key => $group)
                                         <div>
-                                            @if(!$key)
-                                                <strong>Miscellaneous:</strong>
-                                            @endif
                                             @if($group->count() > 1)
                                                 <div>
-                                                    <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
+                                                    <strong>{!! $key ? $group->first()->feature->category->displayName : 'Miscellaneous' !!}:</strong>
                                                     @foreach($group as $feature)
                                                         {!! $feature->feature->displayName !!}@if($feature->data) ({{ $feature->data }})@endif{{ !$loop->last ? ', ' : '' }}
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
+                                                <strong>{!! $key ? $group->first()->feature->category->displayName : 'Miscellaneous' !!}:</strong>
                                                 {!! $group->first()->feature->displayName !!}
                                                     @if($group->first()->data)
                                                         ({{ $group->first()->data }})
@@ -76,8 +73,8 @@
                         @if(isset($character->data['end_point']))
                             {{ $character->data['end_point'] }}
                         @endif
-                        {{ isset($character->link) && isset($character->data['end_point']) ? ' ・ ' : '' }}
-                        @if(isset($character->link))
+                        {{ (isset($character->link) && ((!isset($character->sales->comments_open_at) || Auth::check() && Auth::user()->hasPower('edit_pages')) || $character->sales->comments_open_at < Carbon\Carbon::now())) && isset($character->data['end_point']) ? ' ・ ' : '' }}
+                        @if(isset($character->link) && ((!isset($character->sales->comments_open_at) || Auth::check() && Auth::user()->hasPower('edit_pages')) || $character->sales->comments_open_at < Carbon\Carbon::now()))
                             <a href="{{ $character->link }}">{{ $character->typeLink }}</a>
                         @endif
                     </h6>
