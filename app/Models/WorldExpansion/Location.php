@@ -127,6 +127,14 @@ class Location extends Model
     {
         return $this->belongsToMany('App\Models\WorldExpansion\Faction', 'faction_locations')->visible()->withPivot('id');
     }
+    /**
+     * Get the location attached to this location.
+     */
+    public function gallerysubmissions()
+    {
+        return $this->hasMany('App\Models\Gallery\GallerySubmission', 'location_id')->visible();
+    }
+
 
     /**********************************************************************************************
 
@@ -287,6 +295,17 @@ class Location extends Model
     public function getStyleAttribute()
     {
         return $this->displayStyles[$this->display_style];
+    }
+
+    /**
+     * Gets the display style of this particular location.
+     *
+     * @return string
+     */
+    public function getStyleParentAttribute()
+    {
+        if($this->parent_id) return $this->style . ' (' . $this->parent->style . ')';
+        else return $this->style;
     }
 
 

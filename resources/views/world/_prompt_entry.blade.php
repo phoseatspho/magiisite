@@ -22,7 +22,7 @@
                 <h4>Details</h4>
                 @if($prompt->parsed_description)
                     {!! $prompt->parsed_description !!}
-                @else 
+                @else
                     <p>No further details.</p>
                 @endif
                 @if($prompt->hide_submissions == 1 && isset($prompt->end_at) && $prompt->end_at > Carbon\Carbon::now())
@@ -34,7 +34,7 @@
             <h4>Rewards</h4>
             @if(!count($prompt->rewards))
                 No rewards.
-            @else 
+            @else
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -58,7 +58,7 @@
                 <span class="text-secondary">This prompt has ended.</span>
             @elseif($prompt->start_at && $prompt->start_at->isFuture())
                 <span class="text-secondary">This prompt is not open for submissions yet.</span>
-            @else 
+            @else
                 <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}" class="btn btn-primary">Submit Prompt</a>
             @endunless
         </div>

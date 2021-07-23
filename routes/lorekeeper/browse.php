@@ -179,6 +179,7 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() 
     Route::get('info', 'LocationController@getWorld');
     Route::get('locations', 'LocationController@getLocations');
     Route::get('locations/{id}', 'LocationController@getLocation');
+    Route::get('locations/{id}/submissions', 'LocationController@getLocationSubmissions');
     Route::get('location-types', 'LocationController@getLocationTypes');
     Route::get('location-types/{id}', 'LocationController@getLocationType');
 

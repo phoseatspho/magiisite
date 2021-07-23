@@ -159,4 +159,21 @@ class LocationController extends Controller
         ]);
     }
 
+    /**
+     * Shows the locations page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getLocationSubmissions($id)
+    {
+        $location = Location::find($id);
+        if(!$location || !$location->is_active && (!Auth::check() || !(Auth::check() && Auth::user()->isStaff))) abort(404);
+
+        return view('worldexpansion.location_submissions', [
+            'location' => $location,
+            'submissions' => $location->gallerysubmissions->paginate(15)
+        ]);
+    }
+
 }
