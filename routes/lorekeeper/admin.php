@@ -19,6 +19,8 @@ Route::group(['prefix' => 'users', 'namespace' => 'Users'], function() {
 
         Route::get('{name}/edit', 'UserController@getUser');
         Route::post('{name}/basic', 'UserController@postUserBasicInfo');
+        Route::post('{name}/location', 'UserController@postUserLocation');
+        Route::post('{name}/faction', 'UserController@postUserFaction');
         Route::post('{name}/alias/{id}', 'UserController@postUserAlias');
         Route::post('{name}/account', 'UserController@postUserAccount');
         Route::post('{name}/birthday', 'UserController@postUserBirthday');
