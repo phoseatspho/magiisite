@@ -62,6 +62,7 @@
     </tbody>
 </table>
 <hr>
+@if($submission->prompt_id)
 <h2>Skills</h2>
 <table class="table table-sm">
     <thead>
@@ -79,7 +80,7 @@
         @endforeach
     </tbody>
 </table>
-
+@endif
 @if($submission->prompt_id && $submission->prompt->expreward)
 <h2>Stat & Level Rewards</h2>
 <hr>
@@ -174,7 +175,7 @@
                             @endforeach
 
                             --}}
-                            @if($character->is_focus)
+                            @if($character->is_focus && $submission->prompt_id)
                                 @foreach($submission->prompt->skills as $skill)
                                     <tr>
                                         <td>{!! $skill->skill->name !!} Skill</td>

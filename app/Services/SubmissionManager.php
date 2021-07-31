@@ -479,7 +479,7 @@ class SubmissionManager extends Service
 
             // do the user stats stuff first so that we can use variables later
             // stats & exp ---- currently prompt only
-            if($submission->prompt->expreward) {
+            if($submission->prompt_id && $submission->prompt->expreward) {
                 // initialise
                 $levelLog = new ExperienceManager;
                 $statLog = new StatManager;
@@ -577,7 +577,7 @@ class SubmissionManager extends Service
                 }
             }
 
-            if($submission->prompt->expreward) {
+            if($submission->prompt_id && $submission->prompt->expreward) {
                 $json[] = [
                     'User_Bonus' => [
                         'exp' => $user_exp,
