@@ -389,10 +389,6 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
 
     Route::post('{slug}/images/sort', 'CharacterImageController@postSortImages');
 
-    # CLASS
-    Route::get('class/edit/{id}', 'CharacterController@getClassModal');
-    Route::post('class/edit/{id}', 'CharacterController@postClassModal');
-
     # CHARACTER
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
     Route::post('{slug}/stats', 'CharacterController@postEditCharacterStats');
