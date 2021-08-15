@@ -253,5 +253,4 @@ class GrantController extends Controller
             'submissions' => $item ? $submissions : null,
         ]);
     }
-
 }

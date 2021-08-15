@@ -362,7 +362,7 @@ class UserController extends Controller
     }
 
     /**
-     * Shows a user's item logs.
+     * Shows a user's exp logs.
      *
      * @param  string  $name
      * @return \Illuminate\Contracts\Support\Renderable
@@ -378,12 +378,12 @@ class UserController extends Controller
     }
 
     /**
-     * Shows a user's item logs.
+     * Shows a user's level logs.
      *
      * @param  string  $name
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserlevelLogs($name)
+    public function getUserLevelLogs($name)
     {
         $user = $this->user;
         return view('user.level_logs', [
@@ -394,7 +394,7 @@ class UserController extends Controller
     }
 
     /**
-     * Shows a user's item logs.
+     * Shows a user's stat logs.
      *
      * @param  string  $name
      * @return \Illuminate\Contracts\Support\Renderable

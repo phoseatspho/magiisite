@@ -155,7 +155,7 @@ return [
         'links' => [
             [
                 'name' => 'User Levels',
-                'url' => 'admin/levels'
+                'url' => 'admin/levels/user'
             ],
             [
                 'name' => 'Character Levels',
