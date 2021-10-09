@@ -6,8 +6,7 @@
         });
         $('.edit-class').on('click', function(e) {
             e.preventDefault();
-            console.log($(this).data('id'));
-            loadModal("{{ url('character/class/edit') }}/"+$(this).data('id'), 'Edit Class');
+            loadModal("{{ url('characters/class/edit') }}/"+$(this).data('id'), 'Edit Class');
         });
         $('.edit-notes').on('click', function(e) {
             e.preventDefault();

@@ -17,9 +17,9 @@
                     {!! Form::text('slug[]', $character->character->slug, ['class' => 'form-control character-code']) !!}
                 </div>
                 @if(isset($submission))
-                    <div class="form-group">
+                    <div class="form-group col-6">
                         {!! Form::label('is_focus[]', 'Focus Character?', ['class' => 'mr-2']) !!}
-                        {!! Form::checkbox('is_focus[]', 1, $character->is_focus, ['class' => 'form-check-input' , 'data-toggle' => 'toggle']) !!}
+                        {!! Form::select('is_focus[]', [0 => 'No' , 1 => 'Yes' ], $character->is_focus, ['class' => 'form-control']) !!}
                     </div>
                 @endif
                 <div class="character-rewards">

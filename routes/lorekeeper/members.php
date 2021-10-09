@@ -96,6 +96,10 @@ Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
     Route::post('transfer/act/{id}', 'CharacterController@postHandleTransfer');
 
     Route::get('myos', 'CharacterController@getMyos');
+
+    # CLASS
+    Route::get('class/edit/{id}', 'CharacterController@getClassModal');
+    Route::post('class/edit/{id}', 'CharacterController@postClassModal');
 });
 
 Route::group(['prefix' => 'bank', 'namespace' => 'Users'], function() {
@@ -152,10 +156,6 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     # EXP
     Route::post('{slug}/level-area/exp-grant', 'LevelController@postExpGrant');
     Route::post('{slug}/level-area/stat-grant', 'LevelController@postStatGrant');
-
-    # CLASS
-    Route::get('class/edit/{id}', 'CharacterController@getClassModal');
-    Route::post('class/edit/{id}', 'CharacterController@postClassModal');
 });
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
     Route::get('{id}/profile/edit', 'MyoController@getEditCharacterProfile');

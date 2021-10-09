@@ -1,4 +1,4 @@
-{!! Form::open(['url' => 'character/class/edit/'.$character->id]) !!}
+{!! Form::open(['url' => 'characters/class/edit/'.$character->id]) !!}
     <div class="form-group">
         {!! Form::label('Class') !!}
         {!! Form::select('class_id', $classes, $character->class_id, ['class' => 'form-control']) !!}

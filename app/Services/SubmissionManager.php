@@ -53,7 +53,6 @@ class SubmissionManager extends Service
         DB::beginTransaction();
 
         try {
-
             // 1. check that the prompt can be submitted at this time
             // 2. check that the characters selected exist (are visible too)
             // 3. check that the currencies selected can be attached to characters
@@ -185,14 +184,14 @@ class SubmissionManager extends Service
                     'character_id' => $c->id,
                     'submission_id' => $submission->id,
                     'data' => json_encode(getDataReadyAssets($assets)),
-                    'is_focus' => isset($data['is_focus'][$key]) ? 1 : 0
+                    'is_focus' => $data['is_focus'][$key]
                 ]);
 
-                if(isset($data['is_focus'][$key]) && $submission->prompt_id) {
+                if($data['is_focus'][$key] && $submission->prompt_id) {
                     foreach($submission->prompt->skills as $skill) {
                         if($skill->skill->parent) {
                             $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
-                            if(!$charaSkill || $charaSkill->level < $skil->parent_level) throw new \Exception("Skill level too low on one or more characters.");
+                            if(!$charaSkill || $charaSkill->level < $skill->parent_level) throw new \Exception("Skill level too low on one or more characters.");
                         }
                         if($skill->skill->prerequisite) {
                             $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
