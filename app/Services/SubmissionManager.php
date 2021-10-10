@@ -534,13 +534,13 @@ class SubmissionManager extends Service
                     'character_id' => $c->id,
                     'submission_id' => $submission->id,
                     'data' => json_encode(getDataReadyAssets($assets)),
-                    'is_focus' => isset($data['is_focus'][$key]) ? 1 : 0
+                    'is_focus' => $data['is_focus'][$key]
                 ]);
 
                 // here we do da skills
                 $skillManager = new SkillManager;
 
-                if(isset($data['is_focus'][$key]) && $submission->prompt_id) {
+                if($data['is_focus'][$key] && $submission->prompt_id) {
                     foreach($submission->prompt->skills as $skill) {
                         if(!$skillManager->creditSkill($user, $c, $skill->skill, $skill->quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
                     }
