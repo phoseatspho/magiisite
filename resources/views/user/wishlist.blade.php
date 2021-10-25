@@ -24,9 +24,12 @@
             <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
                 <div class="col-5 col-md-6"> @if(isset($item->item->image_url)) <img class="small-icon" src="{{ $item->item->image_url }}" alt="{{ $item->item->name }}"> @endif{!! $item->item->displayName !!} </div>
                 <div class="col-4 col-md-3"> {{ $item->item->category ? $item->item->category->name : '' }} </div>
-                <div class="col-3 col-md">
-                    {{ $item->count }}
-                </div>
+                <div class="col-3 col-md">{{ $item->count }}</div>
+                @if(Auth::check())
+                    <div class="col-1 col-md text-right">
+                        @include('widgets._wishlist_add', ['item' => $item])
+                    </div>
+                @endif
             </div>
         @endforeach
     </div>
