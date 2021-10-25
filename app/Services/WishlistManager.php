@@ -77,6 +77,143 @@ class WishlistManager extends Service
     }
 
     /**
+     * Adds an item to a wishlist.
+     *
+     * @param  \App\Models\User\Wishlist|int $wishlist
+     * @param  \App\Models\Item\Item         $item
+     * @param  \App\Models\User\User         $user
+     * @return bool
+     */
+    public function createWishlistItem($wishlist, $item, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Perform validation if not being added to default wishlist
+            if($wishlist)
+                if($wishlist->user_id != $user->id) throw new \Exception('This wishlist does not belong to you.');
+
+            // Create wishlist item
+            WishlistItem::create([
+                'wishlist_id' => $wishlist ? $wishlist->id : 0,
+                'user_id' => $wishlist ? null : $user->id,
+                'item_id' => $item->id,
+                'count' => 1
+            ]);
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Updates an item in a wishlist.
+     *
+     * @param  \App\Models\User\Wishlist|int $wishlist
+     * @param  \App\Models\Item\Item         $item
+     * @param  \App\Models\User\User         $user
+     * @return bool
+     */
+    public function updateWishlistItem($wishlist, $item, $data, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Perform validation if not being added to default wishlist
+            if($wishlist)
+                if($wishlist->user_id != $user->id) throw new \Exception('This wishlist does not belong to you.');
+
+            // Find wishlist item
+            $wishlistItem = WishlistItem::where('item_id', $item->id)->where('wishlist_id', $wishlist ? $wishlist->id : $wishlist);
+            if(!$wishlist)
+                $wishlistItem = $wishlistItem->where('user_id', $user->id);
+            $wishlistItem = $wishlistItem->first();
+
+            // Double-check that it exists
+            if(!$wishlistItem) throw new \Exception('Invalid wishlist item.');
+
+            if(isset($data['count']) && $data['count'] == 0) {
+                $wishlistItem->delete();
+            }
+            else {
+                // Create wishlist item
+                $wishlistItem->update([
+                    'count' => isset($data['count']) ? $data['count'] : $wishlistItem->count += 1
+                ]);
+            }
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Moves an item between wishlists.
+     *
+     * @param  \App\Models\User\Wishlist|int $wishlist
+     * @param  \App\Models\Item\Item         $item
+     * @param  \App\Models\User\User         $user
+     * @return bool
+     */
+    public function moveWishlistItem($wishlist, $item, $data, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Perform validation if not being added to default wishlist
+            if($wishlist)
+                if($wishlist->user_id != $user->id) throw new \Exception('This wishlist does not belong to you.');
+
+            // As well as validation if not transferring from the default wishlist
+            if($data['source_id'] != 0) {
+                $source = Wishlist::where('id', $data['source_id'])->first();
+                if(!$source) throw new \Exception('Invalid origin wishlist.');
+                if($source->user_id != $user->id) throw new \Exception('The origin wishlist does not belong to you.');
+            }
+
+            // Find source wishlist item
+            $sourceItem = WishlistItem::where('item_id', $item->id)->where('wishlist_id', isset($source) ? $source->id : 0);
+            if(!isset($source))
+                $sourceItem = $sourceItem->where('user_id', $user->id);
+            $sourceItem = $sourceItem->first();
+
+            // Double-check that it exists
+            if(!$sourceItem) throw new \Exception('Invalid wishlist item.');
+
+            // Check if there's an existing wishlist item at the destination
+            $wishlistItem = WishlistItem::where('item_id', $item->id)->where('wishlist_id', $wishlist ? $wishlist->id : $wishlist);
+            if(!$wishlist)
+                $wishlistItem = $wishlistItem->where('user_id', $user->id);
+            $wishlistItem = $wishlistItem->first();
+
+            // Either edit or create a wishlist item at the destination
+            if($wishlistItem) {
+                $wishlistItem->update(['count' => $wishlistItem->count += $sourceItem->count]);
+            }
+            else {
+                WishlistItem::create([
+                    'wishlist_id' => $wishlist ? $wishlist->id : 0,
+                    'user_id' => $wishlist ? null : $user->id,
+                    'item_id' => $item->id,
+                    'count' => $sourceItem->count
+                ]);
+            }
+
+            // And remove it from the source wishlist
+            $sourceItem->delete();
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /**
      * Delete a wishlist.
      *
      * @param  \App\Models\User\Wishlist $wishlist
@@ -93,6 +230,7 @@ class WishlistManager extends Service
             if($wishlist->user_id != $user->id) throw new \Exception('This wishlist does not belong to you.');
 
             // Delete all items in the wishlist
+            $wishlist->items()->delete();
 
             // Then delete the wishlist itself
             $wishlist->delete();

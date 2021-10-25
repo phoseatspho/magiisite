@@ -2,9 +2,9 @@
 
 namespace App\Models\User;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use App\Models\Model;
 
-class WishlistItem extends Pivot
+class WishlistItem extends Model
 {
 
     /**
@@ -13,7 +13,7 @@ class WishlistItem extends Pivot
      * @var array
      */
     protected $fillable = [
-        'wishlist_id', 'item_id', 'count'
+        'wishlist_id', 'user_id', 'item_id', 'count'
     ];
 
     /**

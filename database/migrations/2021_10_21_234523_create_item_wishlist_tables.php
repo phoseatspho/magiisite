@@ -26,6 +26,7 @@ class CreateItemWishlistTables extends Migration
             $table->increments('id');
 
             $table->integer('wishlist_id')->unsigned()->index();
+            $table->integer('user_id')->unsigned()->nullable()->default(null);
             $table->integer('item_id')->unsigned();
 
             $table->integer('count')->default(1);

@@ -12,23 +12,35 @@
     </div>
 </h1>
 
-<p>These are your item wishlists. Click on the name of any wishlist to be taken to its page, where you can view and edit it as well as the items in it.</p>
+<p>These are your item wishlists. Click on the name of any wishlist to be taken to its page, where you can view and edit it as well as the items in it. Note that wishlists <strong>do not automatically update</strong>.</p>
 
-@if($wishlists->count())
-    <div class="row mb-2">
-        @foreach($wishlists as $wishlist)
-            <div class="col-md-4 mb-2">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5><a href="{{ url('wishlists/'.$wishlist->id) }}">{{ $wishlist->name }}</a></h5>
-                    </div>
+{!! $wishlists->render() !!}
+
+<div class="row ml-md-2 mb-4">
+    <div class="d-flex row flex-wrap col-12 pb-1 px-0 ubt-bottom">
+        <div class="col-5 col-md-4 font-weight-bold">Name</div>
+    </div>
+    <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
+        <div class="col-5 col-md-4"> Default</div>
+        <div class="col-3 col-md text-right">
+            <div class="btn btn-primary btn-sm">
+                <a href="{{ url('wishlists/default') }}">Edit</a>
+            </div>
+        </div>
+    </div>
+    @foreach($wishlists as $wishlist)
+        <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
+            <div class="col-5 col-md-4"> {{ $wishlist->name }}</div>
+            <div class="col-3 col-md text-right">
+                <div class="btn btn-primary btn-sm">
+                    <a href="{{ url('wishlists/'.$wishlist->id) }}">Edit</a>
                 </div>
             </div>
-        @endforeach
-    </div>
-@else
-    <p>No wishlists found!</p>
-@endif
+        </div>
+    @endforeach
+</div>
+
+{!! $wishlists->render() !!}
 
 @endsection
 @section('scripts')
