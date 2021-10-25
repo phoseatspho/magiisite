@@ -37,6 +37,15 @@ class WishlistItem extends Model
      */
     public $timestamps = false;
 
+    /**
+     * Validation rules for updating.
+     *
+     * @var array
+     */
+    public static $updateRules = [
+        'count' => 'required|numeric|max:9999'
+    ];
+
     /**********************************************************************************************
 
         RELATIONS

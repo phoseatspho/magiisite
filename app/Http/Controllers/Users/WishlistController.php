@@ -144,6 +144,8 @@ class WishlistController extends Controller
             $count = $wishlist->itemCount($itemId, Auth::user());
         }
 
+        if($count) $request->validate(WishlistItem::$updateRules);
+
         if($count && $service->updateWishlistItem($wishlist, Item::find($itemId), $data, Auth::user())) {
             flash('Wishlist item updated successfully.')->success();
         }

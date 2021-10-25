@@ -138,7 +138,10 @@ class WishlistManager extends Service
                 $wishlistItem->delete();
             }
             else {
-                // Create wishlist item
+                // Check that the maximum would not be exceeded
+                if($wishlistItem->count == 9999) throw new \Exception('Cannot add wishlist item as count would exceed 9999.');
+
+                // Update wishlist item
                 $wishlistItem->update([
                     'count' => isset($data['count']) ? $data['count'] : $wishlistItem->count += 1
                 ]);
@@ -192,6 +195,10 @@ class WishlistManager extends Service
 
             // Either edit or create a wishlist item at the destination
             if($wishlistItem) {
+                // Check that the maximum would not be exceeded
+                if(($wishlistItem->count + $sourceItem->count) > 9999) throw new \Exception('Cannot move wishlist item as count would exceed 9999.');
+
+                // Update destination
                 $wishlistItem->update(['count' => $wishlistItem->count += $sourceItem->count]);
             }
             else {
