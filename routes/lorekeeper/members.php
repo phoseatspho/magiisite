@@ -52,6 +52,17 @@ Route::group(['prefix' => 'inventory', 'namespace' => 'Users'], function() {
     Route::get('selector', 'InventoryController@getSelector');
 });
 
+Route::group(['prefix' => 'wishlists', 'namespace' => 'Users'], function() {
+    Route::get('/', 'WishlistController@getIndex');
+    Route::get('create', 'WishlistController@getCreateWishlist');
+    Route::get('{id}', 'WishlistController@getWishlist')->where('id', '[0-9]+');
+    Route::get('edit/{id}', 'WishlistController@getEditWishlist');
+    Route::get('delete/{id}', 'WishlistController@getDeleteWishlist');
+    Route::post('create', 'WishlistController@postCreateEditWishlist');
+    Route::post('edit/{id}', 'WishlistController@postCreateEditWishlist');
+    Route::post('delete/{id}', 'WishlistController@postDeleteWishlist');
+});
+
 Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
     Route::get('/', 'CharacterController@getIndex');
     Route::post('sort', 'CharacterController@postSortCharacters');
