@@ -23,18 +23,14 @@
     <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
         <div class="col-5 col-md-4"> Default</div>
         <div class="col-3 col-md text-right">
-            <div class="btn btn-primary btn-sm">
-                <a href="{{ url('wishlists/default') }}">Edit</a>
-            </div>
+            <a class="btn btn-primary btn-sm" href="{{ url('wishlists/default') }}">Edit</a>
         </div>
     </div>
     @foreach($wishlists as $wishlist)
         <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
             <div class="col-5 col-md-4"> {{ $wishlist->name }}</div>
             <div class="col-3 col-md text-right">
-                <div class="btn btn-primary btn-sm">
-                    <a href="{{ url('wishlists/'.$wishlist->id) }}">Edit</a>
-                </div>
+                <a class="btn btn-primary btn-sm" href="{{ url('wishlists/'.$wishlist->id) }}">Edit</a>
             </div>
         </div>
     @endforeach
