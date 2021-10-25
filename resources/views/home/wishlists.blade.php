@@ -5,11 +5,12 @@
 @section('home-content')
 {!! breadcrumbs(['Wishlists' => 'wishlists']) !!}
 
-<h1>Wishlists</h1>
-
-<div class="text-right">
-    <a href="#" class="btn btn-success create-wishlist"><i class="fas fa-plus"></i> Create Wishlist</a>
-</div>
+<h1>
+    Wishlists
+    <div class="float-right">
+        <a href="#" class="btn btn-success create-wishlist"><i class="fas fa-plus"></i> Create Wishlist</a>
+    </div>
+</h1>
 
 <p>These are your item wishlists. Click on the name of any wishlist to be taken to its page, where you can view and edit it as well as the items in it.</p>
 
