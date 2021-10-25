@@ -43,7 +43,7 @@ class WishlistItem extends Model
      * @var array
      */
     public static $updateRules = [
-        'count' => 'required|numeric|max:9999'
+        'count' => 'nullable|numeric|max:9999'
     ];
 
     /**********************************************************************************************

@@ -27,7 +27,7 @@
                 <div class="col-3 col-md">{{ $item->count }}</div>
                 @if(Auth::check())
                     <div class="col-1 col-md text-right">
-                        @include('widgets._wishlist_add', ['item' => $item])
+                        @include('widgets._wishlist_add', ['item' => $item->item])
                     </div>
                 @endif
             </div>
