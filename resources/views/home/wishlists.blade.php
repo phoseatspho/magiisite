@@ -14,6 +14,29 @@
 
 <p>These are your item wishlists. Click on the name of any wishlist to be taken to its page, where you can view and edit it as well as the items in it. Note that wishlists <strong>do not automatically update</strong>.</p>
 
+<div>
+    {!! Form::open(['method' => 'GET', 'class' => '']) !!}
+        <div class="form-inline justify-content-end">
+            <div class="form-group ml-3 mb-3">
+                {!! Form::text('name', Request::get('name'), ['class' => 'form-control', 'placeholder' => 'Name']) !!}
+            </div>
+        </div>
+        <div class="form-inline justify-content-end">
+            <div class="form-group ml-3 mb-3">
+                {!! Form::select('sort', [
+                    'alpha'          => 'Sort Alphabetically (A-Z)',
+                    'alpha-reverse'  => 'Sort Alphabetically (Z-A)',
+                    'newest'         => 'Newest First',
+                    'oldest'         => 'Oldest First'
+                ], Request::get('sort') ? : 'category', ['class' => 'form-control']) !!}
+            </div>
+            <div class="form-group ml-3 mb-3">
+                {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
+            </div>
+        </div>
+    {!! Form::close() !!}
+</div>
+
 {!! $wishlists->render() !!}
 
 <div class="row ml-md-2 mb-4">

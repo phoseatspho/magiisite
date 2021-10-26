@@ -33,7 +33,30 @@ class WishlistController extends Controller
      */
     public function getIndex(Request $request)
     {
-        $query = Auth::user()->wishlists;
+        $query = Auth::user()->wishlists();
+        $data = $request->only(['name', 'sort']);
+
+        if(isset($data['name']))
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+
+        if(isset($data['sort']))
+        {
+            switch($data['sort']) {
+                case 'alpha':
+                    $query->orderBy('name', 'ASC');
+                    break;
+                case 'alpha-reverse':
+                    $query->orderBy('name', 'DESC');
+                    break;
+                case 'newest':
+                    $query->orderBy('id', 'DESC');
+                    break;
+                case 'oldest':
+                    $query->orderBy('id', 'ASC');
+                    break;
+            }
+        }
+        else $query->orderBy('name', 'ASC');
 
         return view('home.wishlists', [
             'wishlists' => $query->paginate(20)->appends($request->query())
@@ -57,6 +80,30 @@ class WishlistController extends Controller
             $wishlist = null;
             $query = WishlistItem::where('wishlist_id', 0)->where('user_id', Auth::user()->id);
         }
+
+        $data = $request->only(['name', 'sort']);
+
+        if(isset($data['name']))
+            $query->where(Item::select('name')->whereColumn('items.id', 'user_wishlist_items.item_id'), 'LIKE', '%'.$data['name'].'%');
+
+        if(isset($data['sort']))
+        {
+            switch($data['sort']) {
+                case 'alpha':
+                    $query->orderBy(Item::select('name')->whereColumn('items.id', 'user_wishlist_items.item_id'), 'ASC');
+                    break;
+                case 'alpha-reverse':
+                    $query->orderBy(Item::select('name')->whereColumn('items.id', 'user_wishlist_items.item_id'), 'DESC');
+                    break;
+                case 'newest':
+                    $query->orderBy('id', 'DESC');
+                    break;
+                case 'oldest':
+                    $query->orderBy('id', 'ASC');
+                    break;
+            }
+        }
+        else $query->orderBy(Item::select('name')->whereColumn('items.id', 'user_wishlist_items.item_id'), 'ASC');
 
         return view('home.wishlist', [
             'wishlist' => $wishlist,
