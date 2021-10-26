@@ -240,7 +240,8 @@ class UserController extends Controller
 
         return view('user.wishlists', [
             'user' => $this->user,
-            'wishlists' => $query->paginate(20)->appends($request->query())
+            'wishlists' => $query->paginate(20)->appends($request->query()),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
         ]);
     }
 
@@ -265,7 +266,8 @@ class UserController extends Controller
         return view('user.wishlist', [
             'user' => $this->user,
             'wishlist' => $wishlist,
-            'items' => $query->paginate(20)->appends($request->query())
+            'items' => $query->paginate(20)->appends($request->query()),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
         ]);
     }
 
