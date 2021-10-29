@@ -7,7 +7,7 @@
 
 <h1>Skills</h1>
 
-<p>Skills are ...</p>
+<p>Skills are arbitrary limiters for prompts and any other mechanism you can think to add it to. They are visual only outside of their built-in prompt ties.</p>
 
 <div class="text-right mb-3">
     <a class="btn btn-primary" href="{{ url('admin/data/skill-categories') }}"><i class="fas fa-folder"></i> Skill Categories</a>
