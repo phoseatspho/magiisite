@@ -80,6 +80,21 @@ class Wishlist extends Model
     **********************************************************************************************/
 
     /**
+     * Checks whether or not an item is wishlisted by a given user.
+     *
+     * @param  int                    $id
+     * @param  \App\Models\User\User  $user
+     * @return bool
+     */
+    public function isWishlisted($id, $user)
+    {
+        $item = WishlistItem::where('item_id', $id);
+
+        if($item->count()) return 1;
+        return 0;
+    }
+
+    /**
      * Displays the count of an item in a wishlist.
      *
      * @param  int                    $id
