@@ -88,7 +88,7 @@ class Wishlist extends Model
      */
     public function isWishlisted($id, $user)
     {
-        $item = WishlistItem::where('item_id', $id);
+        $item = WishlistItem::where('user_id', $user->id)->where('item_id', $id);
 
         if($item->count()) return 1;
         return 0;
