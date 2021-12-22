@@ -62,6 +62,8 @@ Route::group(['prefix' => 'pets', 'namespace' => 'Users'], function() {
     Route::post('variant/{id}', 'PetController@postVariant');
 
     Route::get('selector', 'PetController@getSelector');
+
+    Route::post('pet/{id}', 'PetController@postClaimPetDrops');
 });
 
 Route::group(['prefix' => 'gears', 'namespace' => 'Users'], function() {
@@ -158,6 +160,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::post('{slug}/level-area/exp-grant', 'LevelController@postExpGrant');
     Route::post('{slug}/level-area/stat-grant', 'LevelController@postStatGrant');
 });
+
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
     Route::get('{id}/profile/edit', 'MyoController@getEditCharacterProfile');
     Route::post('{id}/profile/edit', 'MyoController@postEditCharacterProfile');

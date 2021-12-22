@@ -146,7 +146,7 @@ class CharacterController extends Controller
     /************************************************************************************
      * CLAYMORE
      ************************************************************************************/
-    
+
     /**
      * Changes / assigns the character class
      * @param  \Illuminate\Http\Request       $request
@@ -169,7 +169,7 @@ class CharacterController extends Controller
         $this->character = Character::find($id);
         if(!$this->character) abort(404);
         if($service->editClass($request->only(['class_id']), $this->character, Auth::user())) {
-            flash('Character class editted successfully.')->success();
+            flash('Character class edited successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();

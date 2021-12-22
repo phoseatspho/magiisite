@@ -63,7 +63,7 @@ class LevelController extends Controller
     {
         $character = $this->character;
         // create a character level if one doesn't exist
-        
+
         //
         $level = $character->level->current_level + 1;
         $next = CharacterLevel::where('level', $level)->first();
@@ -129,7 +129,7 @@ class LevelController extends Controller
     {
         $character = $this->character;
         $stat = CharacterStat::find($id);
-        if($service->levelCharaStat($stat, $character, false)) 
+        if($service->levelCharaStat($stat, $character, false))
         {
             flash('Characters stat levelled successfully!')->success();
         }
@@ -138,7 +138,7 @@ class LevelController extends Controller
         }
         return redirect()->back();
     }
-    
+
     /*
     *  Admin Character stat level up
     */
@@ -146,7 +146,7 @@ class LevelController extends Controller
     {
         $character = $this->character;
         $stat = CharacterStat::find($id);
-        if($service->levelCharaStat($stat, $character, true)) 
+        if($service->levelCharaStat($stat, $character, true))
         {
             flash('Characters stat levelled successfully!')->success();
         }
@@ -164,7 +164,7 @@ class LevelController extends Controller
         $quantity = $request->get('count');
         $character = $this->character;
         $stat = CharacterStat::find($id);
-        if($service->editCharaStat($stat, $character, $quantity)) 
+        if($service->editCharaStat($stat, $character, $quantity))
         {
             flash('Characters stat edited successfully!')->success();
         }
@@ -182,9 +182,9 @@ class LevelController extends Controller
         $quantity = $request->get('count');
         $character = $this->character;
         $stat = CharacterStat::find($id);
-        if($service->editBaseCharaStat($stat, $character, $quantity)) 
+        if($service->editBaseCharaStat($stat, $character, $quantity))
         {
-            flash('Characters stat editted successfully!')->success();
+            flash('Characters stat edited successfully!')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
@@ -241,7 +241,7 @@ class LevelController extends Controller
         $character = $this->character;
         if(!$character) abort(404);
 
-        if($service->characterLevel($character)) 
+        if($service->characterLevel($character))
         {
             flash('Successfully levelled up!')->success();
         }

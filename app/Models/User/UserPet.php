@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Pet\PetDrop;
 
 class UserPet extends Model
 {
@@ -33,7 +34,7 @@ class UserPet extends Model
     protected $table = 'user_pets';
 
     /**********************************************************************************************
-    
+
         RELATIONS
 
     **********************************************************************************************/
@@ -41,7 +42,7 @@ class UserPet extends Model
     /**
      * Get the user who owns the stack.
      */
-    public function user() 
+    public function user()
     {
         return $this->belongsTo('App\Models\User\User');
     }
@@ -49,18 +50,45 @@ class UserPet extends Model
     /**
      * Get the pet associated with this pet stack.
      */
-    public function pet() 
+    public function pet()
     {
         return $this->belongsTo('App\Models\Pet\Pet');
     }
+
+    /**
+     * Get the variant associated with this pet stack.
+     */
+    public function variant()
+    {
+        return $this->belongsTo('App\Models\Pet\PetVariant','variant_id');
+    }
+
 
     public function character()
     {
         return $this->belongsTo('App\Models\Character\Character', 'chara_id');
     }
 
+
+    /**
+     * Get the pet's pet drop data.
+     */
+    public function drops()
+    {
+        if(!PetDrop::where('user_pet_id', $this->id)->first()) {
+            $drop = new PetDrop;
+            $drop->createDrop($this->id);
+        }
+        elseif(!PetDrop::where('user_pet_id', $this->id)->where('drop_id', $this->pet->dropData->id)->first()) {
+            PetDrop::where('user_pet_id', $this->id)->delete;
+            $drop = new PetDrop;
+            $drop->createDrop($this->id);
+        }
+        return $this->hasOne('App\Models\Pet\PetDrop', 'user_pet_id');
+    }
+
     /**********************************************************************************************
-    
+
         ACCESSORS
 
     **********************************************************************************************/
@@ -70,11 +98,11 @@ class UserPet extends Model
      *
      * @return array
      */
-    public function getDataAttribute() 
+    public function getDataAttribute()
     {
         return json_decode($this->attributes['data'], true);
     }
-    
+
     /**
      * Checks if the stack is transferrable.
      *

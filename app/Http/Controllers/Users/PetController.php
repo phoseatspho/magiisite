@@ -73,7 +73,7 @@ class PetController extends Controller
             'splices' => $splices
         ]);
     }
-    
+
     /**
      * Transfers an pet stack to another user.
      *
@@ -92,7 +92,7 @@ class PetController extends Controller
         }
         return redirect()->back();
     }
-    
+
     /**
      * Deletes an pet stack.
      *
@@ -173,16 +173,16 @@ class PetController extends Controller
      * @param  App\Services\CharacterManager  $service
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postVariant(Request $request, PetManager $service, $id) 
+    public function postVariant(Request $request, PetManager $service, $id)
     {
         $pet = UserPet::find($id);
         if($request->input('stack_id')) {
             $item = UserItem::find($request->input('stack_id'));
             $invman = new InventoryManager;
             if(!$invman->debitStack($pet->user, 'Used to change pet variant', ['data' => 'Used to change '.$pet->pet->name.' variant'], $item, 1)) {
-                flash('Could not debit splice.')->error();   
+                flash('Could not debit splice.')->error();
                 return redirect()->back();
-            } 
+            }
         }
         if($service->editVariant($request->input('variant_id'), $pet)) {
             flash('Pet variant changed successfully.')->success();
@@ -205,4 +205,52 @@ class PetController extends Controller
             'user' => Auth::user(),
         ]);
     }
+
+
+    /**
+     * Shows a pet's drops page.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPetDrops($id)
+    {
+        $pet = UserPet::findOrFail($id);
+        $user = $pet->user;
+
+        if(!$pet->pet->hasDrops || (!$pet->drops->dropData->isActive && (!Auth::check() || !Auth::user()->hasPower('manage_inventory')))) abort(404);
+        return view('user.pet_drops', [
+            'pet' => $pet,
+            'drops' => $pet->drops,
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * Claims pet drops.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\InventoryManager  $service
+     * @param  string                         $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postClaimPetDrops(Request $request, InventoryManager $service, $id)
+    {
+        $pet = UserPet::findOrFail($id);
+        $user = $pet->user;
+
+        if(!Auth::check()) abort(404);
+        if($pet->user_id != Auth::user()->id) abort(404);
+        $drops = $pet->drops;
+        if(!$drops) abort(404);
+
+        if($service->claimPetDrops($pet, $pet->user, $pet->drops)) {
+            flash('Drops claimed successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
 }
