@@ -138,7 +138,7 @@ class WeaponController extends Controller
     public function postEditWeaponStats(Request $request, WeaponService $service, $id)
     {
         if ($id && $service->editStats($request->only(['stats']), $id)) {
-            flash('Weapon stats editted successfully.')->success();
+            flash('Weapon stats edited successfully.')->success();
             return redirect()->to('admin/weapon/edit/'.$id);
         }
         else {

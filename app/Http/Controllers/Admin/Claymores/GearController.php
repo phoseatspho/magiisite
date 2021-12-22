@@ -138,7 +138,7 @@ class GearController extends Controller
     public function postEditGearStats(Request $request, GearService $service, $id)
     {
         if ($id && $service->editStats($request->only(['stats']), $id)) {
-            flash('Gear stats editted successfully.')->success();
+            flash('Gear stats edited successfully.')->success();
             return redirect()->to('admin/gear/edit/'.$id);
         }
         else {

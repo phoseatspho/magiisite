@@ -273,7 +273,7 @@ class PetController extends Controller
     public function postEditVariants(Request $request, PetService $service, $id)
     {
         if($id && $service->editVariants($request->only(['variant_names', 'variant_images']), Pet::find($id))) {
-            flash('Variants editted successfully.')->success();
+            flash('Variants edited successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
