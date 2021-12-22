@@ -105,7 +105,7 @@ class GrantController extends Controller
             'users' => User::orderBy('id')->pluck('name', 'id'),
         ]);
     }
-    
+
     /**
      * Grants or removes exp
      */
@@ -134,7 +134,7 @@ class GrantController extends Controller
         ]);
     }
 
-    /** 
+    /**
      * Grants or removes pets from multiple users.
      *
      * @param  \Illuminate\Http\Request        $request
@@ -166,7 +166,7 @@ class GrantController extends Controller
         ]);
     }
 
-    /** 
+    /**
      * Grants or removes gear from multiple users.
      *
      * @param  \Illuminate\Http\Request        $request
@@ -198,7 +198,7 @@ class GrantController extends Controller
         ]);
     }
 
-    /** 
+    /**
      * Grants or removes gear from multiple users.
      *
      * @param  \Illuminate\Http\Request        $request
@@ -216,7 +216,7 @@ class GrantController extends Controller
         }
         return redirect()->back();
     }
-    
+
     /*
      * Show the item search page.
      *

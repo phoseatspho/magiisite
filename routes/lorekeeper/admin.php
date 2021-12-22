@@ -168,6 +168,8 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('pets/edit/{id?}', 'PetController@postCreateEditPet');
     Route::post('pets/delete/{id}', 'PetController@postDeletePet');
 
+    Route::post('pets/variants/{id?}', 'PetController@postEditVariants');
+
     # SHOPS
     Route::get('shops', 'ShopController@getIndex');
     Route::get('shops/create', 'ShopController@getCreateShop');
@@ -319,16 +321,16 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
     Route::get('exp', 'GrantController@getExp');
     Route::post('exp', 'GrantController@postExp');
-    
+
     Route::get('pets', 'GrantController@getPets');
     Route::post('pets', 'GrantController@postPets');
 
     Route::get('weapons', 'GrantController@getWeapons');
     Route::post('weapons', 'GrantController@postWeapons');
-    
+
     Route::get('gear', 'GrantController@getGear');
     Route::post('gear', 'GrantController@postGear');
-    
+
     Route::get('item-search', 'GrantController@getItemSearch');
 });
 
@@ -501,7 +503,7 @@ Route::group(['prefix' => 'stats', 'namespace' => 'Stats', 'middleware' => 'powe
 });
 # STATS - LEVELS
 Route::group(['prefix' => 'levels', 'namespace' => 'Stats', 'middleware' => 'power:edit_levels'], function() {
-    # USER 
+    # USER
     // GET
     Route::get('/user', 'LevelController@getIndex');
     Route::get('/create', 'LevelController@getCreateLevel');
@@ -510,7 +512,7 @@ Route::group(['prefix' => 'levels', 'namespace' => 'Stats', 'middleware' => 'pow
     // POST
     Route::post('/create', 'LevelController@postCreateEditLevel');
     Route::post('/edit/{id}', 'LevelController@postCreateEditLevel');
-    Route::post('/delete/{id}', 'LevelController@postDeleteLevel');    
+    Route::post('/delete/{id}', 'LevelController@postDeleteLevel');
     # ---------------------------------------------
     # CHARACTER
     // GET
@@ -521,7 +523,7 @@ Route::group(['prefix' => 'levels', 'namespace' => 'Stats', 'middleware' => 'pow
         // POST
     Route::post('character/create', 'LevelController@postCharaCreateEditLevel');
     Route::post('character/edit/{id}', 'LevelController@postCharaCreateEditLevel');
-    Route::post('character/delete/{id}', 'LevelController@postCharaDeleteLevel');    
+    Route::post('character/delete/{id}', 'LevelController@postCharaDeleteLevel');
 });
 
 /***********************************************************************************

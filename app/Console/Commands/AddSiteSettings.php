@@ -34,10 +34,10 @@ class AddSiteSettings extends Command
 
     /**
      * Add a site setting.
-     * 
+     *
      * Example usage:
      * $this->addSiteSetting("site_setting_key", 1, "0: does nothing. 1: does something.");
-     * 
+     *
      * @param  string  $key
      * @param  int     $value
      * @param  string  $description
@@ -103,18 +103,7 @@ class AddSiteSettings extends Command
 
         $this->addSiteSetting('group_currency', 1, 'ID of the group currency to award from gallery submissions (if enabled).');
 
-        if(!DB::table('site_settings')->where('key', 'claymore_cooldown')->exists()) {
-            DB::table('site_settings')->insert([
-                [
-                    'key' => 'claymore_cooldown',
-                    'value' => 0,
-                    'description' => 'Number of days to add to the cooldown timer when a pet/weapon/gear is attached.'
-                ]
-
-            ]);
-            $this->info("Added:   claymore_cooldown / Default: 0");
-        }
-        else $this->line("Skipped: claymore_cooldown");
+        $this->addSiteSetting('claymore_cooldown', 0, 'Number of days to add to the cooldown timer when a pet/weapon/gear is attached.');
 
         $this->line("\nSite settings up to date!");
 
