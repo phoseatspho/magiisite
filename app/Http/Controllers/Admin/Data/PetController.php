@@ -8,9 +8,13 @@ use Auth;
 
 use App\Models\Pet\PetCategory;
 use App\Models\Pet\Pet;
+use App\Models\User\UserPet;
+use App\Models\Item\Item;
+use App\Models\Pet\PetVariant;
 use App\Models\Pet\PetDrop;
 use App\Models\Pet\PetDropData;
 use App\Services\PetService;
+use App\Services\PetDropService;
 
 use App\Http\Controllers\Controller;
 
@@ -306,7 +310,6 @@ class PetController extends Controller
 
         if ($drops->update(['parameters' => $request['parameters'], 'drops_available' => $request['drops_available']])) {
             flash('Pet drops updated successfully.')->success();
-            return redirect()->to($this->user_pet->url.'/drops');
         }
         else {
             flash('Failed to update pet drops.')->error();
@@ -343,8 +346,8 @@ class PetController extends Controller
     {
         return view('admin.pets.create_edit_drop', [
             'drop' => new PetDropData,
-            'pets' => Pet::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'variants' => PetVariant::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'pets' => Pet::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'variants' => PetVariant::orderBy('id', 'DESC')->pluck('variant_name', 'id')->toArray(),
         ]);
     }
 
@@ -360,8 +363,8 @@ class PetController extends Controller
         if(!$petDrop) abort(404);
         return view('admin.pets.create_edit_drop', [
             'drop' => $petDrop,
-            'pets' => Pet::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'variants' => PetVariant::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'pets' => Pet::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'variants' => PetVariant::orderBy('id', 'DESC')->pluck('variant_name', 'id')->toArray(),
             'items' => Item::orderBy('name')->pluck('name', 'id')
         ]);
     }

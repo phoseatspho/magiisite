@@ -285,14 +285,14 @@ class PetManager extends Service
 
         try {
 
-            dd('What is $data[parameters]');
 
-            for($i = 0; $i < $quantity; $i++) $pet = UserPet::create(['user_id' => $recipient->id, 'pet_id' => $pet->id, 'data' => json_encode($data)]);
+            for($i = 0; $i < $quantity; $i++) $user_pet = UserPet::create(['user_id' => $recipient->id, 'pet_id' => $pet->id, 'data' => json_encode($data)]);
+
 
             // Create drop information for the character, if relevant
             if($pet->pet && $pet->pet->dropData) {
                 $drop = new PetDrop;
-                if($drop->createDrop($pet->id, null)) throw new \Exception('Failed to create pet drop.');
+                if($drop->createDrop($user_pet->id, null)) throw new \Exception('Failed to create pet drop.');
             }
 
             if($type && !$this->createLog($sender ? $sender->id : null, $recipient->id, null, $type, $data['data'], $pet->id, $quantity)) throw new \Exception("Failed to create log.");

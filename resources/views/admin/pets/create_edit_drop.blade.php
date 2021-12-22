@@ -93,7 +93,7 @@ Select how often drops should occur.
         @endforeach
     </div>
 
-    <h3>Subtypes</h3>
+    <h3>Variants</h3>
     @if($drop->pet->variants->count())
         @foreach($drop->pet->variants as $variant)
             <div class="card card-body mb-2">

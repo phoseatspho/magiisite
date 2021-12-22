@@ -215,10 +215,14 @@ class PetController extends Controller
      */
     public function getPetDrops($id)
     {
-        if(!$this->pet->pet->hasDrops || (!$this->pet->drops->dropData->isActive && (!Auth::check() || !Auth::user()->hasPower('manage_inventory')))) abort(404);
+        $pet = UserPet::findOrFail($id);
+        $user = $pet->user;
+
+        if(!$pet->pet->hasDrops || (!$pet->drops->dropData->isActive && (!Auth::check() || !Auth::user()->hasPower('manage_inventory')))) abort(404);
         return view('user.pet_drops', [
-            'pet' => $this->pet,
-            'drops' => $this->pet->drops
+            'pet' => $pet,
+            'drops' => $pet->drops,
+            'user' => $user
         ]);
     }
 
@@ -232,12 +236,15 @@ class PetController extends Controller
      */
     public function postClaimPetDrops(Request $request, InventoryManager $service, $id)
     {
+        $pet = UserPet::findOrFail($id);
+        $user = $pet->user;
+
         if(!Auth::check()) abort(404);
-        if($this->pet->user_id != Auth::user()->id) abort(404);
-        $drops = $this->pet->drops;
+        if($pet->user_id != Auth::user()->id) abort(404);
+        $drops = $pet->drops;
         if(!$drops) abort(404);
 
-        if($service->claimPetDrops($this->pet, $this->pet->user, $this->pet->drops)) {
+        if($service->claimPetDrops($pet, $pet->user, $pet->drops)) {
             flash('Drops claimed successfully.')->success();
         }
         else {

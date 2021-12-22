@@ -18,7 +18,6 @@ class AddPetDropTables extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('pet_id')->unsigned();
-            $table->integer('variant_id')->unsigned();
 
             // Will hold defined parameters and item data.
             $table->text('parameters')->nullable()->default(null);

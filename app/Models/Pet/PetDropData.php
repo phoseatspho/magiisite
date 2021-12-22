@@ -76,6 +76,14 @@ class PetDropData extends Model
     }
 
     /**
+     * Get the pet to which the data pertains.
+     */
+    public function user_pet()
+    {
+        return $this->belongsTo('App\Models\Pet\Pet', 'pet_id');
+    }
+
+    /**
      * Get any pet drops using this data.
      */
     public function petDrops()

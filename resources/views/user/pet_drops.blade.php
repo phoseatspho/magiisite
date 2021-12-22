@@ -1,23 +1,32 @@
 @extends('user.layout')
 
-@section('profile-title') {{ $user->name }}'s Pets @endsection
+@section('profile-title') {{ $user->name }}'s {{ $pet->pet->name }} {{ isset($pet->drops->dropData->data['drop_name']) ? strtolower($pet->drops->dropData->data['drop_name']).'s' : 'drops' }} @endsection
 
 @section('profile-content')
-{!! breadcrumbs(['Users' => 'users', $user->name => $user->url, 'Pets' => $user->url . '/pets']) !!}
+
+
+@if(!Auth::check()  || (Auth::check() && Auth::user()->id != $pet->user_id))
+    {!! breadcrumbs(['Users' => 'users', $user->name => $user->url, 'Pets' => $user->url . '/pets', $user->name .'\'s '. $pet->pet->name.' '.(isset($pet->drops->dropData->data['drop_name']) ? $pet->drops->dropData->data['drop_name'].'s' : 'drops') => 'pets/pet/'.$pet->id ]) !!}
+@else
+    {!! breadcrumbs(['Pets' => 'pets', $pet->pet->name.' '.(isset($pet->drops->dropData->data['drop_name']) ? $pet->drops->dropData->data['drop_name'].'s' : 'drops') => 'pets/pet/'.$pet->id ]) !!}
+@endif
+
+@if(!$pet->drops->dropData->isActive)
+    <div class="alert alert-warning">This pet's drops are currently inactive. Because you are staff, you can see this page anyways.</div>
+@endif
 
 <h1>
-    Pet Drops
+    {{ $pet->pet_id && $pet->pet->hasDrops ? $pet->drops->group : '' }}
+    {{ $pet->pet->name }}
+    {{ isset($pet->drops->dropData->data['drop_name']) ? strtolower($pet->drops->dropData->data['drop_name']).'s' : 'drops' }}
 </h1>
-
-
-{{ $pet->pet_id && $pet->pet->hasDrops ? $pet->drops->group : 'No Group!' }}
 
 
 <div class="row">
     <div class="col-md-6">
         <div class="text-center">
             <div class="mb-1">
-                <img src="{{ $pet->VariantImage($pet->pivot->variant_id) }}" class="img-fluid"/>
+                <img src="{{ $pet->pet->VariantImage($pet->variant_id) }}" class="img-fluid"/>
             </div>
         </div>
     </div>
@@ -31,11 +40,11 @@
 
         <div class="card card-body mb-4">
             @if($drops->petItem || $drops->variantItem)
-                <p>This pet produces these {{ isset($pet->drops->dropData->data['drop_name']) ? strtolower($pet->drops->dropData->data['drop_name']).'s' : 'drops' }}, based on their pet and/or variant:</p>
+                <p>This pet produces these {{ isset($pet->drops->dropData->data['drop_name']) ? strtolower($pet->drops->dropData->data['drop_name']).'s' : 'drops' }}, based on their type of pet and/or variant:</p>
                 @if($drops->petItem)
                     <div class="row">
                     <div class="col-md align-self-center">
-                            <h5>Species</h5>
+                            <h5>{{ $pet->pet->name }}</h5>
                         </div>
                         <div class="col-md align-self-center">
                             @if($drops->petItem->has_image) <img src="{{ $drops->petItem->imageUrl }}"><br/> @endif
@@ -43,7 +52,7 @@
                         </div>
                     </div>
                 @endif
-                {{ $drops->petItem && $drops->variantItem ? '<hr/>' : null }}
+                {!! $drops->petItem && $drops->variantItem ? '<hr/>' : null !!}
                 @if($drops->variantItem)
                     <div class="row">
                         <div class="col-md align-self-center">
@@ -77,7 +86,7 @@
                 </p>
             </div>
             @if(Auth::check() && Auth::user()->id == $pet->user_id && $drops->drops_available > 0)
-                {!! Form::open(['url' => 'pets/pet/'.$pet->slug]) !!}
+                {!! Form::open(['url' => 'pets/pet/'.$pet->id]) !!}
                     {!! Form::submit('Collect '.(isset($pet->drops->dropData->data['drop_name']) ? $pet->drops->dropData->data['drop_name'] : 'Drop').($drops->drops_available > 1 ? 's' : ''), ['class' => 'btn btn-primary']) !!}
                 {!! Form::close() !!}
             @endif
@@ -94,7 +103,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    {!! Form::open(['url' => 'admin/pets/pets/'.$pet->id]) !!}
+                    {!! Form::open(['url' => 'admin/pets/pet/'.$pet->id]) !!}
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">

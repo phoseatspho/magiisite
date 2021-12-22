@@ -345,7 +345,7 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
 # PETS
 Route::group(['prefix' => 'pets', 'middleware' => 'power:edit_inventories'], function() {
-    Route::post('pet/{id}', 'PetController@postEditPetDrop');
+    Route::post('pet/{id}', 'Data\PetController@postEditPetDrop');
 });
 
 

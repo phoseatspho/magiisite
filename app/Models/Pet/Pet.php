@@ -211,6 +211,12 @@ class Pet extends Model
         else return $this->variants()->where('id', $id)->first()->imageUrl;
     }
 
+    public function VariantName($id = null)
+    {
+        if(!$id || !$this->variants() ) return '';
+        else return $this->variants()->where('id', $id)->first()->variant_name;
+    }
+
     /**
      * Gets whether or not the pet has drops.
      *

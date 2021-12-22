@@ -55,6 +55,15 @@ class UserPet extends Model
         return $this->belongsTo('App\Models\Pet\Pet');
     }
 
+    /**
+     * Get the variant associated with this pet stack.
+     */
+    public function variant()
+    {
+        return $this->belongsTo('App\Models\Pet\PetVariant','variant_id');
+    }
+
+
     public function character()
     {
         return $this->belongsTo('App\Models\Character\Character', 'chara_id');
