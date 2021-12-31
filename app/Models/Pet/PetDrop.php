@@ -77,7 +77,7 @@ class PetDrop extends Model
      */
     public function scopeRequiresUpdate($query)
     {
-        return $query->whereNotIn('user_pet_id', UserPet::pluck('pet_id')->toArray())->whereIn('drop_id', PetDropData::where('is_active', 1)->pluck('id')->toArray())->where('next_day', '<', Carbon::now());
+        return $query->whereIn('drop_id', PetDropData::where('is_active', 1)->pluck('id')->toArray())->where('next_day', '<', Carbon::now());
     }
 
     /**********************************************************************************************
