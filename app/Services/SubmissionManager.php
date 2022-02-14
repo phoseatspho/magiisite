@@ -181,13 +181,13 @@ class SubmissionManager extends Service
                 // Now we have a clean set of assets (redundant data is gone, duplicate entries are merged)
                 // so we can attach the character to the submission
                 SubmissionCharacter::create([
-                    'character_id' => $c->id,
+                    'character_id'  => $c->id,
                     'submission_id' => $submission->id,
-                    'data' => json_encode(getDataReadyAssets($assets)),
-                    'is_focus' => $data['is_focus'][$key]
+                    'data'          => json_encode(getDataReadyAssets($assets)),
+                    'is_focus'      => isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] ? $data['character_is_focus'][$c->id][0] : 0,
                 ]);
 
-                if($data['is_focus'][$key] && $submission->prompt_id) {
+                if($data['is_focus'][$c->id] && $submission->prompt_id) {
                     foreach($submission->prompt->skills as $skill) {
                         if($skill->skill->parent) {
                             $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
