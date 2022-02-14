@@ -18,8 +18,8 @@
                 </div>
                 @if(isset($submission))
                     <div class="form-group col-6">
-                        {!! Form::label('is_focus[]', 'Focus Character?', ['class' => 'mr-2']) !!}
-                        {!! Form::select('is_focus[]', [0 => 'No' , 1 => 'Yes' ], $character->is_focus, ['class' => 'form-control']) !!}
+                        {!! Form::label('character_is_focus['.$character->character->id.']', 'Focus Character?', ['class' => 'mr-2']) !!}
+                        {!! Form::select('character_is_focus['.$character->character->id.']', [0 => 'No' , 1 => 'Yes' ], $character->is_focus, ['class' => 'form-control character-is-focus']) !!}
                     </div>
                 @endif
                 <div class="character-rewards">
