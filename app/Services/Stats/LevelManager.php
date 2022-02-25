@@ -82,7 +82,7 @@ class LevelManager extends Service
 
             foreach($next->limits as $limit)
             {
-                $rewardType = $limit->rewardable_type;
+                $rewardType = $limit->limit_type;
                 $check = NULL;
                 switch($rewardType)
                 {
@@ -169,7 +169,7 @@ class LevelManager extends Service
 
             foreach($next->limits as $limit)
             {
-                $rewardType = $limit->rewardable_type;
+                $rewardType = $limit->limit_type;
                 $check = NULL;
                 switch($rewardType)
                 {
