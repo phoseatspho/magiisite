@@ -33,7 +33,7 @@ use App\Models\Rarity;
 use App\Models\Currency\Currency;
 use App\Models\Feature\Feature;
 
-use App\Models\Stats\Character\CharacterStat;
+use App\Models\Stat\CharacterStat;
 
 class CharacterManager extends Service
 {

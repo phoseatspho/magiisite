@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Stats\Character;
+namespace App\Models\Stat;
 
 use Config;
 use App\Models\Model;
@@ -13,7 +13,7 @@ class Stat extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'abbreviation','base','step','multiplier', 'max_level'
+        'name', 'abbreviation', 'default', 'step', 'multiplier', 'max_level'
     ];
 
     /**

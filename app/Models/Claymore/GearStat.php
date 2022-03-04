@@ -36,7 +36,7 @@ class GearStat extends Model
 
     public function stat() 
     {
-        return $this->belongsTo('App\Models\Stats\Character\Stat');
+        return $this->belongsTo('App\Models\Stat\Stat');
     }
     
 }

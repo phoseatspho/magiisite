@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Stats\Character;
+namespace App\Models\Level;
 
 use Config;
 use App\Models\Model;
 
-class CharacterLevel extends Model
+class Level extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,7 +13,7 @@ class CharacterLevel extends Model
      * @var array
      */
     protected $fillable = [
-        'level', 'exp_required','stat_points', 'description'
+        'level', 'exp_required', 'stat_points', 'description', 'level_type'
     ];
 
     /**
@@ -21,7 +21,7 @@ class CharacterLevel extends Model
      *
      * @var string
      */
-    protected $table = 'level_characters';
+    protected $table = 'levels';
     
     /**
      * Validation rules for creation.
@@ -29,7 +29,7 @@ class CharacterLevel extends Model
      * @var array
      */
     public static $createRules = [
-        'level' => 'required|unique:level_characters',
+        'level' => 'required',
     ];
     
     /**
@@ -46,17 +46,23 @@ class CharacterLevel extends Model
         RELATIONS
 
     **********************************************************************************************/
-    
+
     /**
-     * Get the rewards attached to this prompt.
+     * Get the rewards attached to this level.
      */
     public function rewards()
     {
-        return $this->hasMany('App\Models\Stats\Character\CharacterLevelReward', 'level_id');
+        if($this->level_type == 'User')
+            return $this->hasMany('App\Models\Level\UserLevelReward', 'level_id');
+        else
+        return $this->hasMany('App\Models\Level\CharacterLevelReward', 'level_id');
     }
-
+    
     public function limits()
     {
-        return $this->hasMany('App\Models\Stats\Character\CharacterLevelRequirement', 'level_id');
+        if ($this->level_type == 'User')
+            return $this->hasMany('App\Models\Level\UserLevelRequirement', 'level_id');
+        else
+            return $this->hasMany('App\Models\Level\CharacterLevelRequirement', 'level_id');
     }
 }

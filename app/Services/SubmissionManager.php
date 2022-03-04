@@ -25,8 +25,8 @@ use App\Models\Pet\Pet;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 
-use App\Services\Stats\ExperienceManager;
-use App\Services\Stats\StatManager;
+use App\Services\Stat\ExperienceManager;
+use App\Services\Stat\StatManager;
 use App\Services\SkillManager;
 
 class SubmissionManager extends Service

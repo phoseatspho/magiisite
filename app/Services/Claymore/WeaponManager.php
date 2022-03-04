@@ -18,7 +18,7 @@ use App\Models\Character\Character;
 use App\Models\Currency\Currency;
 
 use App\Services\CurrencyManager;
-use App\Services\Stats\StatManager;
+use App\Services\Stat\StatManager;
 
 class WeaponManager extends Service
 {

@@ -16,7 +16,7 @@ use App\Models\Claymore\Gear;
 use App\Models\Character\CharacterClass;
 
 use App\Services\Claymore\GearService;
-use App\Models\Stats\Character\Stat;
+use App\Models\Stat\Stat;
 use App\Models\Currency\Currency;
 
 class GearController extends Controller

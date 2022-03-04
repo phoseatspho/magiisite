@@ -23,11 +23,10 @@ use App\Models\Prompt\Prompt;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Models\User\User;
-use App\Models\Stats\Character\CharacterLevel;
-use App\Models\Stats\User\Level;
-use App\Models\Stats\Character\CharaLevels;
-use App\Models\Stats\User\UserLevel;
-use App\Models\Stats\Character\Stat;
+use App\Models\Level\Level;
+use App\Models\Level\CharacterLevel;
+use App\Models\Level\UserLevel;
+use App\Models\Stat\Stat;
 
 use App\Models\Claymore\WeaponCategory;
 use App\Models\Claymore\Weapon;
@@ -422,11 +421,11 @@ class WorldController extends Controller
     {
         if($type == 'user')
         {
-            $levels = Level::all();
+            $levels = Level::where('level_type', 'User')->get();
         }
         elseif($type == 'character')
         {
-            $levels = CharacterLevel::all();
+            $levels = Level::where('level_type', 'Character')->get();
         }
         else abort(404);
 
@@ -443,11 +442,11 @@ class WorldController extends Controller
     {
         if($type == 'user')
         {
-            $levels = Level::where('level', $level)->first();
+            $levels = Level::where('level', $level)->where('level_type', 'User')->first();
         }
         elseif($type == 'character')
         {
-            $levels = CharacterLevel::where('level', $level)->first();
+            $levels = Level::where('level', $level)->where('level_type', 'Character')->first();
         }
         else abort(404);
 

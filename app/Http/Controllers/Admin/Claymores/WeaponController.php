@@ -16,7 +16,7 @@ use App\Models\Claymore\Weapon;
 use App\Models\Character\CharacterClass;
 
 use App\Services\Claymore\WeaponService;
-use App\Models\Stats\Character\Stat;
+use App\Models\Stat\Stat;
 use App\Models\Currency\Currency;
 
 class WeaponController extends Controller
