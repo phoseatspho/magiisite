@@ -187,7 +187,7 @@ class SubmissionManager extends Service
                     'is_focus'      => isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] ? $data['character_is_focus'][$c->id] : 0,
                 ]);
 
-                if($data['character_is_focus'][$c->id] && $submission->prompt_id) {
+                if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
                     foreach($submission->prompt->skills as $skill) {
                         if($skill->skill->parent) {
                             $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
@@ -540,7 +540,7 @@ class SubmissionManager extends Service
                 // here we do da skills
                 $skillManager = new SkillManager;
 
-                if($data['character_is_focus'][$c->id] && $submission->prompt_id) {
+                if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
                     foreach($submission->prompt->skills as $skill) {
                         if(!$skillManager->creditSkill($user, $c, $skill->skill, $skill->quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
                     }
