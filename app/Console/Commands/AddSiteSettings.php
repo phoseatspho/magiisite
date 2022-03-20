@@ -78,6 +78,10 @@ class AddSiteSettings extends Command
 
         $this->addSiteSetting('is_maintenance_mode', 0, '0: Site is normal, 1: Users without the Has Maintenance Access power will be redirected to the home page.');
 
+        $this->addSiteSetting('discord_exp_multiplier', 1, '1 = default, anything past this will multiply accordingly.');
+
+        $this->addSiteSetting('discord_notification', 1, '1: Give user a notification of level up in channel, 0: DM notification.');
+
         $this->line("\nSite settings up to date!");
     }
 
