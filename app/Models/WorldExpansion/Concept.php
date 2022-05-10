@@ -79,19 +79,19 @@ class Concept extends Model
     }
 
     /**
-     * Get the items attached to this concept.
+     * Get the attacher attached to the model.
      */
-    public function items()
+    public function attachments()
     {
-        return $this->belongsToMany('App\Models\Item\Item', 'concept_items')->withPivot('id');
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attacher_id')->where('attacher_type',class_basename($this));
     }
 
     /**
-     * Get the locations attached to this concept.
+     * Get the attacher attached to the model.
      */
-    public function locations()
+    public function attachers()
     {
-        return $this->belongsToMany('App\Models\WorldExpansion\Location', 'concept_locations')->visible()->withPivot('id');
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attachment_id')->where('attachment_type',class_basename($this));
     }
 
     /**********************************************************************************************
@@ -278,6 +278,33 @@ class Concept extends Model
     public function scopeSortOldest($query)
     {
         return $query->orderBy('id');
+    }
+
+    public static function getConceptsByCategory()
+    {
+        $sorted_concept_categories = collect(ConceptCategory::all()->sortBy('name')->pluck('name')->toArray());
+        $grouped = self::select('name', 'id', 'category_id')->with('category')->orderBy('name')->get()->keyBy('id')->groupBy('category.name', $preserveKeys = true)->toArray();
+        if (isset($grouped[''])) {
+            if (!$sorted_concept_categories->contains('Miscellaneous')) {
+                $sorted_concept_categories->push('Miscellaneous');
+            }
+            $grouped['Miscellaneous'] = $grouped['Miscellaneous'] ?? [] + $grouped[''];
+        }
+        $sorted_concept_categories = $sorted_concept_categories->filter(function ($value, $key) use ($grouped) {
+            return in_array($value, array_keys($grouped), true);
+        });
+        foreach ($grouped as $category => $concepts) {
+            foreach ($concepts as $id => $concept) {
+                $grouped[$category][$id] = $concept['name'];
+            }
+        }
+        $concepts_by_category = $sorted_concept_categories->map(function ($type) use ($grouped) {
+            return $grouped;
+        });
+        unset($grouped['']);
+        ksort($grouped);
+
+        return $grouped;
     }
 
 

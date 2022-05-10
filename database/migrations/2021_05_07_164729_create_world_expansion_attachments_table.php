@@ -13,15 +13,14 @@ class CreateWorldExpansionAttachmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('world_expansion_attachments', function (Blueprint $table) {
+        Schema::create('world_attachments', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-
-            $table->integer('attacher_id')->unsigned();
+            $table->integer('attacher_id')->unsigned()->index();
             $table->string('attacher_type');
-
-            $table->integer('attachable_id')->unsigned();
-            $table->string('attachable_type');                          // AKA Figure, Items, etc.
+            $table->integer('attachment_id')->unsigned()->index();
+            $table->string('attachment_type');                          // AKA Figure, Items, etc.
+            $table->text('data')->nullable()->default(null);            // In case of specific notes
         });
     }
 
@@ -32,6 +31,6 @@ class CreateWorldExpansionAttachmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('world_expansion_attachments');
+        Schema::dropIfExists('world_attachments');
     }
 }

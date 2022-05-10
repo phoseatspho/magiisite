@@ -119,8 +119,17 @@ class FigureController extends Controller
      */
     public function getFigure($id)
     {
+
         $figure = Figure::find($id);
         if(!$figure || !$figure->is_active && (!Auth::check() || !(Auth::check() && Auth::user()->isStaff))) abort(404);
+
+
+        // dd(
+        //     'TODO:',
+        //     '- Create variable to pass in with only attachments',
+        //     '- Create variable to pass in with only attachers',
+        //     '- Create variable to pass in with both attachments and attachers, for for instance figures'
+        // );
 
         return view('worldexpansion.figure_page', [
             'figure' => $figure,

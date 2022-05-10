@@ -36,28 +36,29 @@
 {!! $events->render() !!}
 <div class="row mx-0">
     @foreach($events as $event)
-        <div class="col-12 col-md-4 mb-3"><div class="card mb-3 p-3 h-100">
-            <div class="world-entry-image">
-            @isset($event->thumb_extension)
-                <a href="{{ $event->thumbUrl }}" data-lightbox="entry" data-title="{{ $event->name }}"><img src="{{ $event->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
-            @endisset
+        <div class="col-12 col-md-4 mb-3"><div class="card h-100">
+            <div class="card-header">
+                <div class="world-entry-image">
+                @isset($event->thumb_extension)
+                    <a href="{{ $event->thumbUrl }}" data-lightbox="entry" data-title="{{ $event->name }}"><img src="{{ $event->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
+                @endisset
+                </div>
+                <h3 class="mb-0 text-center">{!! $event->displayName !!}</h3>
+                <p class="mb-0 text-center">{!! $event->category ? $event->category->displayName : '' !!}</p>
             </div>
-            <h3 class="mb-0 text-center">{!! $event->displayName !!}</h3>
-            <p class="mb-0 text-center">{!! $event->category ? $event->category->displayName : '' !!}</p>
 
-            @if(count($event->locations))
-                <p class="text-center mb-0">Associated with {{ count($event->locations) }} location{{ count($event->locations) == 1 ? '' : 's' }}.</p>
-            @endif
-            @if(count($event->factions))
-                <p class="text-center mb-0">Associated with {{ count($event->factions) }} faction{{ count($event->factions) == 1 ? '' : 's' }}.</p>
-            @endif
-            @if(count($event->figures))
-                <p class="text-center mb-0">Associated with {{ count($event->figures) }} figure{{ count($event->figures) == 1 ? '' : 's' }}.</p>
+            @if(count(allAttachments($event)))
+                <div class="card-body">
+                    @foreach(allAttachments($event) as $type => $attachments)
+                        <p class="text-center mb-0">Associated with {{ count($attachments) }} {{ strtolower($type) }}{{ count($attachments) == 1 ? '' : 's' }}.</p>
+                    @endforeach
+                </div>
             @endif
 
             @isset($event->summary)
-            <hr>
-                <p class="mb-0"> {!! $event->summary !!}</p>
+                <div class="card-footer mt-auto">
+                    <p class="mb-0"> {!! $event->summary !!}</p>
+                </div>
             @endisset
 
         </div></div>

@@ -18,6 +18,9 @@ use App\Models\WorldExpansion\EventItem;
 use App\Models\WorldExpansion\Figure;
 use App\Models\WorldExpansion\FigureItem;
 use App\Models\WorldExpansion\FigureCategory;
+use App\Models\WorldExpansion\WorldAttachment;
+
+use App\Services\WorldExpansion\WorldExpansionService;
 
 use App\Models\WorldExpansion\FactionRankMember;
 
@@ -299,28 +302,7 @@ class FigureService extends Service
             // More specific validation
             if(Figure::where('name', $data['name'])->where('id', '!=', $figure->id)->exists()) throw new \Exception("The name has already been taken.");
 
-            $figure->timestamps = false;
-
-            // Determine if there are items added.
-            if(isset($data['item_id'])) {
-                $data['item_id'] = array_unique($data['item_id']);
-                $items = Item::whereIn('id', $data['item_id'])->get();
-                if(count($items) != count($data['item_id'])) throw new \Exception("One or more of the selected items does not exist.");
-            }
-            else $items = [];
-
-            // Remove all items from the figure so they can be reattached with new data
-            FigureItem::where('figure_id',$figure->id)->delete();
-
-            // Attach any items to the figure
-            foreach($items as $key=>$item) {
-                FigureItem::create([
-                    'item_id' => $item->id,
-                    'figure_id' => $figure->id,
-                ]);
-            }
-
-            $figure->timestamps = true;
+            (new WorldExpansionService)->updateAttachments($figure, $data);
 
             $data = $this->populateFigureData($data, $figure);
 

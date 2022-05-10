@@ -210,7 +210,8 @@ class ConceptController extends Controller
         $id ? $request->validate(Concept::$updateRules) : $request->validate(Concept::$createRules);
 
         $data = $request->only([
-            'name', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'is_active', 'summary', 'category_id', 'item_id', 'location_id', 'scientific_name'
+            'name', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'is_active', 'summary', 'category_id', 'item_id', 'location_id', 'scientific_name',
+            'attachment_type', 'attachment_id', 'attachment_data',
         ]);
 
         if($id && $service->updateConcept(Concept::find($id), $data, Auth::user())) {

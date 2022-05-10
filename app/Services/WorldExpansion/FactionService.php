@@ -18,6 +18,7 @@ use App\Models\WorldExpansion\FactionLocation;
 
 use App\Models\User\User;
 use App\Models\Character\Character;
+use App\Services\WorldExpansion\WorldExpansionService;
 
 class FactionService extends Service
 {
@@ -297,45 +298,7 @@ class FactionService extends Service
             // More specific validation
             if(Faction::where('name', $data['name'])->where('id', '!=', $faction->id)->exists()) throw new \Exception("The name has already been taken.");
 
-            /***************************************************** FACTION FIGURES ***************************************************************/
-            // Determine if there are figures added.
-            if(isset($data['figure_id'])) {
-                $data['figure_id'] = array_unique($data['figure_id']);
-                $figures = Figure::whereIn('id', $data['figure_id'])->get();
-                if(count($figures) != count($data['figure_id'])) throw new \Exception("One or more of the selected figures does not exist.");
-            }
-            else $figures = [];
-
-            // Remove all figures from the event so they can be reattached with new data
-            FactionFigure::where('faction_id', $faction->id)->delete();
-
-            // Attach any figures to the event
-            foreach($figures as $key=>$figure) {
-                FactionFigure::create([
-                    'figure_id' => $figure->id,
-                    'faction_id' => $faction->id,
-                ]);
-            }
-
-            /***************************************************** FACTION LOCATIONS ***************************************************************/
-            // Determine if there are locations added.
-            if(isset($data['location_id'])) {
-                $data['location_id'] = array_unique($data['location_id']);
-                $locations = Location::whereIn('id', $data['location_id'])->get();
-                if(count($locations) != count($data['location_id'])) throw new \Exception("One or more of the selected locations does not exist.");
-            }
-            else $locations = [];
-
-            // Remove all locations from the event so they can be reattached with new data
-            FactionLocation::where('faction_id', $faction->id)->delete();
-
-            // Attach any locations to the event
-            foreach($locations as $key=>$location) {
-                FactionLocation::create([
-                    'location_id' => $location->id,
-                    'faction_id' => $faction->id,
-                ]);
-            }
+            (new WorldExpansionService)->updateAttachments($faction, $data);
 
             /***************************************************** FACTION RANKS ***************************************************************/
 

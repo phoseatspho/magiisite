@@ -22,6 +22,7 @@ use App\Models\WorldExpansion\FloraLocation;
 
 use App\Models\WorldExpansion\LocationType;
 use App\Models\WorldExpansion\Location;
+use App\Services\WorldExpansion\WorldExpansionService;
 
 class ConceptService extends Service
 {
@@ -301,47 +302,7 @@ class ConceptService extends Service
             // More specific validation
             if(Concept::where('name', $data['name'])->where('id', '!=', $concept->id)->exists()) throw new \Exception("The name has already been taken.");
 
-            $concept->timestamps = false;
-
-            // Determine if there are items added.
-            if(isset($data['item_id'])) {
-                $data['item_id'] = array_unique($data['item_id']);
-                $items = Item::whereIn('id', $data['item_id'])->get();
-                if(count($items) != count($data['item_id'])) throw new \Exception("One or more of the selected items does not exist.");
-            }
-            else $items = [];
-
-            // Remove all items from the concept so they can be reattached with new data
-            ConceptItem::where('concept_id',$concept->id)->delete();
-
-            // Attach any items to the concept
-            foreach($items as $key=>$item) {
-                ConceptItem::create([
-                    'item_id' => $item->id,
-                    'concept_id' => $concept->id,
-                ]);
-            }
-
-            // Determine if there are locations added.
-            if(isset($data['location_id'])) {
-                $data['location_id'] = array_unique($data['location_id']);
-                $locations = Location::whereIn('id', $data['location_id'])->get();
-                if(count($locations) != count($data['location_id'])) throw new \Exception("One or more of the selected locations does not exist.");
-            }
-            else $locations = [];
-
-            // Remove all locations from the concept so they can be reattached with new data
-            ConceptLocation::where('concept_id',$concept->id)->delete();
-
-            // Attach any locations to the concept
-            foreach($locations as $key=>$location) {
-                ConceptLocation::create([
-                    'location_id' => $location->id,
-                    'concept_id' => $concept->id,
-                ]);
-            }
-
-            $concept->timestamps = true;
+            (new WorldExpansionService)->updateAttachments($concept, $data);
 
             $data = $this->populateConceptData($data, $concept);
 

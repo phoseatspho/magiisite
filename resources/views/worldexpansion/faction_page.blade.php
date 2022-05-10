@@ -3,8 +3,11 @@
 @section('title') {{ $faction->name }} @endsection
 
 @section('content')
+@if(Auth::check() && Auth::user()->hasPower('manage_world'))
+    <a data-toggle="tooltip" title="[ADMIN] Edit Faction" href="{{ url('admin/world/factions/edit/').'/'.$faction->id }}" class="mb-2 float-right"><i class="fas fa-crown"></i></a>
+@endif
 {!! breadcrumbs(['World' => 'world', 'Factions' => 'world/factions', $faction->style => 'world/factions/'.$faction->id]) !!}
-<h1><img src="{{$faction->thumbUrl}}" style="max-height:25px;vertical-align:inherit;"/>{!! $faction->style !!}</h1>
+<h1 style="clear:both;"><img src="{{$faction->thumbUrl}}" style="max-height:25px;vertical-align:inherit;"/>{!! $faction->style !!}</h1>
 <h5 class="mb-0">{!! ucfirst($faction->type->displayName) !!} {!! $faction->parent ? 'inside '.$faction->parent->displayName : '' !!}</h5>
 
 @if(($user_enabled && $faction->is_user_faction) || ($ch_enabled && $faction->is_character_faction))
@@ -86,86 +89,7 @@
     </div></div>
     @endif
 
-    @if(count($faction->figures))
-    <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Associated Figure{{ count($faction->figures) == 1 ? '' : 's'}}</h5>
 
-        <!-- <hr>
-        <p class="mb-0">
-            @foreach($faction->figures as $key => $figure)
-                @if($figure->thumb_extension)
-                    <a href="{{ $figure->url }}" data-toggle="tooltip" title="{{ $figure->name }}"/><img src="{{$figure->thumbUrl}}" class="m-1" style="max-width:100px"/> </a>
-                @else
-                    {!! $figure->displayName !!}
-                @endif
-            @endforeach
-        </p> -->
-
-        <hr>
-        @foreach($faction->figures->groupBy('category_id') as $key => $figures)
-        <p class="mb-0">
-            <strong>
-                {{ $figure_categories->find($key) ? $figure_categories->find($key)->name : 'Miscellanous' }}:
-            </strong>
-            @foreach($figures as $key => $figure) <strong>{!! $figure->displayName !!}</strong>@if($key != count($figures)-1 && count($figures)>2),@endif @if($key == count($figures)-2) and @endif @endforeach
-        </p>
-        @endforeach
-    </div></div>
-    @endif
-
-    @if(count($faction->events))
-    <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Associated Event{{ count($faction->events) == 1 ? '' : 's'}}</h5>
-
-        <!-- <hr>
-        <p class="mb-0">
-            @foreach($faction->events as $key => $event)
-                @if($event->thumb_extension)
-                    <a href="{{ $event->url }}" data-toggle="tooltip" title="{{ $event->name }}"/><img src="{{$event->thumbUrl}}" class="m-1" style="max-width:100px"/> </a>
-                @else
-                    {!! $event->displayName !!}
-                @endif
-            @endforeach
-        </p> -->
-
-        <hr>
-        @foreach($faction->events->groupBy('category_id') as $key => $events)
-        <p class="mb-0">
-            <strong>
-                {{ $event_categories->find($key) ? $event_categories->find($key)->name : 'Miscellanous' }}:
-            </strong>
-            @foreach($events as $key => $event) <strong>{!! $event->displayName !!}</strong>@if($key != count($events)-1 && count($events)>2),@endif @if($key == count($events)-2) and @endif @endforeach
-        </p>
-        @endforeach
-    </div></div>
-    @endif
-
-    @if(count($faction->locations))
-    <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Associated Location{{ count($faction->locations) == 1 ? '' : 's'}}</h5>
-
-        <!-- <hr>
-        <p class="mb-0">
-            @foreach($faction->locations as $key => $location)
-                @if($location->thumb_extension)
-                    <a href="{{ $location->url }}" data-toggle="tooltip" title="{{ $location->name }}"/><img src="{{$location->thumbUrl}}" class="m-1" style="max-width:100px"/> </a>
-                @else
-                    {!! $location->displayName !!}
-                @endif
-            @endforeach
-        </p> -->
-
-        <hr>
-        @foreach($faction->locations->groupBy('type_id') as $key => $locations)
-        <p class="mb-0">
-            <strong>
-                {{ $location_categories->find($key) ? $location_categories->find($key)->name : 'Miscellanous' }}:
-            </strong>
-            @foreach($locations as $key => $location) <strong>{!! $location->displayName !!}</strong>@if($key != count($locations)-1 && count($locations)>2),@endif @if($key == count($locations)-2) and @endif @endforeach
-        </p>
-        @endforeach
-    </div></div>
-    @endif
 
     @if($faction->ranks()->count())
     <div class="w-100"></div>
@@ -206,4 +130,26 @@
     @endif
 </div>
 
+<div class="row justify-content-center mx-0 px-0 mt-3">
+
+    @if(count(allAttachments($faction)))
+        @foreach(allAttachments($faction) as $type => $attachments)
+            <div class="text-center col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-header h3">
+                        Associated {{ $type }}{{ count($attachments) == 1 ? '' : 's' }}
+                    </div>
+                    <div class="card-body">
+                        @foreach($attachments as $attachment)
+                        <p class="mb-0">
+                            {!! $attachment->displayName !!}
+                        </p>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endif
+
+</div>
 @endsection

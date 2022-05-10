@@ -98,30 +98,6 @@ class Faction extends Model
     }
 
     /**
-     * Get the events attached to this faction.
-     */
-    public function events()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Event', 'event_factions')->withPivot('id');
-    }
-
-    /**
-     * Get the figures associated with this faction.
-     */
-    public function figures()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Figure', 'faction_figures')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the locations associated with this faction.
-     */
-    public function locations()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Location', 'faction_locations')->visible()->withPivot('id');
-    }
-
-    /**
      * Get the member figures associated with this faction.
      */
     public function members()
@@ -135,6 +111,23 @@ class Faction extends Model
     public function ranks()
     {
         return $this->hasMany('App\Models\WorldExpansion\FactionRank', 'faction_id');
+    }
+
+    /**
+     * Get the attacher attached to the model.
+     */
+    public function attachments()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attacher_id')->where('attacher_type',class_basename($this));
+    }
+
+
+    /**
+     * Get the attacher attached to the model.
+     */
+    public function attachers()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attachment_id')->where('attachment_type',class_basename($this));
     }
 
     /**********************************************************************************************
@@ -355,6 +348,33 @@ class Faction extends Model
             elseif(!$characters) return $users;
         }
         else return null;
+    }
+
+    public static function getFactionsByType()
+    {
+        $sorted_faction_types = collect(FactionType::all()->sortBy('name')->pluck('name')->toArray());
+        $grouped = self::select('name', 'id', 'type_id')->with('type')->orderBy('name')->get()->keyBy('id')->groupBy('type.name', $preserveKeys = true)->toArray();
+        if (isset($grouped[''])) {
+            if (!$sorted_faction_types->contains('Miscellaneous')) {
+                $sorted_faction_types->push('Miscellaneous');
+            }
+            $grouped['Miscellaneous'] = $grouped['Miscellaneous'] ?? [] + $grouped[''];
+        }
+        $sorted_faction_types = $sorted_faction_types->filter(function ($value, $key) use ($grouped) {
+            return in_array($value, array_keys($grouped), true);
+        });
+        foreach ($grouped as $type => $factions) {
+            foreach ($factions as $id => $faction) {
+                $grouped[$type][$id] = $faction['name'];
+            }
+        }
+        $factions_by_type = $sorted_faction_types->map(function ($type) use ($grouped) {
+            return $grouped;
+        });
+        unset($grouped['']);
+        ksort($grouped);
+
+        return $grouped;
     }
 
 }

@@ -96,38 +96,6 @@ class Location extends Model
     }
 
     /**
-     * Get the locations attached to this fauna.
-     */
-    public function fauna()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Fauna', 'fauna_locations')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the locations attached to this flora.
-     */
-    public function flora()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Flora', 'flora_locations')->visible()->withPivot('id');
-    }
-
-
-    /**
-     * Get the locations attached to this flora.
-     */
-    public function events()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Event', 'event_locations')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the factions attached to this location.
-     */
-    public function factions()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Faction', 'faction_locations')->visible()->withPivot('id');
-    }
-    /**
      * Get the location attached to this location.
      */
     public function gallerysubmissions()
@@ -135,6 +103,21 @@ class Location extends Model
         return $this->hasMany('App\Models\Gallery\GallerySubmission', 'location_id')->visible();
     }
 
+    /**
+     * Get the attacher attached to the model.
+     */
+    public function attachments()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attacher_id')->where('attacher_type',class_basename($this));
+    }
+
+    /**
+     * Get the attacher attached to the model.
+     */
+    public function attachers()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attachment_id')->where('attachment_type',class_basename($this));
+    }
 
     /**********************************************************************************************
 
@@ -284,6 +267,7 @@ class Location extends Model
                 1 => 'the '.$this->type->name.' of '.$this->name,
                 2 => $this->type->name.' of '.$this->name,
                 3 => $this->name.' '.$this->type->name,
+                4 => $this->type->name.' '.$this->name,
             );
     }
 
@@ -362,6 +346,33 @@ class Location extends Model
         return $query->orderBy('id');
     }
 
+
+    public static function getLocationsByType()
+    {
+        $sorted_location_types = collect(LocationType::all()->sortBy('name')->pluck('name')->toArray());
+        $grouped = self::select('name', 'id', 'type_id')->with('type')->orderBy('name')->get()->keyBy('id')->groupBy('type.name', $preserveKeys = true)->toArray();
+        if (isset($grouped[''])) {
+            if (!$sorted_location_types->contains('Miscellaneous')) {
+                $sorted_location_types->push('Miscellaneous');
+            }
+            $grouped['Miscellaneous'] = $grouped['Miscellaneous'] ?? [] + $grouped[''];
+        }
+        $sorted_location_types = $sorted_location_types->filter(function ($value, $key) use ($grouped) {
+            return in_array($value, array_keys($grouped), true);
+        });
+        foreach ($grouped as $type => $locations) {
+            foreach ($locations as $id => $location) {
+                $grouped[$type][$id] = $location['name'];
+            }
+        }
+        $locations_by_type = $sorted_location_types->map(function ($type) use ($grouped) {
+            return $grouped;
+        });
+        unset($grouped['']);
+        ksort($grouped);
+
+        return $grouped;
+    }
 
 
 }

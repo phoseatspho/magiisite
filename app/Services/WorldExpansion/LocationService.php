@@ -10,6 +10,8 @@ use Notifications;
 use App\Models\WorldExpansion\LocationType;
 use App\Models\WorldExpansion\Location;
 
+use App\Services\WorldExpansion\WorldExpansionService;
+
 class LocationService extends Service
 {
     /*
@@ -290,6 +292,8 @@ class LocationService extends Service
         try {
             // More specific validation
             if(Location::where('name', $data['name'])->where('id', '!=', $location->id)->exists()) throw new \Exception("The name has already been taken.");
+
+            (new WorldExpansionService)->updateAttachments($location, $data);
 
             $data = $this->populateLocationData($data, $location);
 

@@ -86,43 +86,19 @@ class Event extends Model
     }
 
     /**
-     * Get the items attached to this event.
+     * Get the attacher attached to the model.
      */
-    public function figures()
+    public function attachments()
     {
-        return $this->belongsToMany('App\Models\WorldExpansion\Figure', 'event_figures')->visible()->withPivot('id');
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attacher_id')->where('attacher_type',class_basename($this));
     }
 
     /**
-     * Get the locations attached to this event.
+     * Get the attacher attached to the model.
      */
-    public function locations()
+    public function attachers()
     {
-        return $this->belongsToMany('App\Models\WorldExpansion\Location', 'event_locations')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the newses attached to this event.
-     */
-    public function newses()
-    {
-        return $this->belongsToMany('App\Models\News', 'event_newses')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the prompts attached to this event.
-     */
-    public function prompts()
-    {
-        return $this->belongsToMany('App\Models\Prompt\Prompt', 'event_prompts')->withPivot('id');
-    }
-
-    /**
-     * Get the factions attached to this event.
-     */
-    public function factions()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Faction', 'event_factions')->visible()->withPivot('id');
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attachment_id')->where('attachment_type',class_basename($this));
     }
 
     /**********************************************************************************************
@@ -309,6 +285,33 @@ class Event extends Model
     public function scopeSortOldest($query)
     {
         return $query->orderBy('id');
+    }
+
+    public static function getEventsByCategory()
+    {
+        $sorted_event_categories = collect(EventCategory::all()->sortBy('name')->pluck('name')->toArray());
+        $grouped = self::select('name', 'id', 'category_id')->with('category')->orderBy('name')->get()->keyBy('id')->groupBy('category.name', $preserveKeys = true)->toArray();
+        if (isset($grouped[''])) {
+            if (!$sorted_event_categories->contains('Miscellaneous')) {
+                $sorted_event_categories->push('Miscellaneous');
+            }
+            $grouped['Miscellaneous'] = $grouped['Miscellaneous'] ?? [] + $grouped[''];
+        }
+        $sorted_event_categories = $sorted_event_categories->filter(function ($value, $key) use ($grouped) {
+            return in_array($value, array_keys($grouped), true);
+        });
+        foreach ($grouped as $category => $events) {
+            foreach ($events as $id => $event) {
+                $grouped[$category][$id] = $event['name'];
+            }
+        }
+        $events_by_category = $sorted_event_categories->map(function ($type) use ($grouped) {
+            return $grouped;
+        });
+        unset($grouped['']);
+        ksort($grouped);
+
+        return $grouped;
     }
 
 

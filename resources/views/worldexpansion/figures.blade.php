@@ -36,22 +36,29 @@
 {!! $figures->render() !!}
 <div class="row mx-0">
     @foreach($figures as $figure)
-        <div class="col-12 col-md-4 mb-3"><div class="card mb-3 p-3 h-100">
-            <div class="world-entry-image">
-            @isset($figure->thumb_extension)
-                <a href="{{ $figure->thumbUrl }}" data-lightbox="entry" data-title="{{ $figure->name }}"><img src="{{ $figure->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
-            @endisset
+        <div class="col-12 col-md-4 mb-3"><div class="card h-100 text-center">
+            <div class="card-header">
+                <div class="world-entry-image">
+                @isset($figure->thumb_extension)
+                    <a href="{{ $figure->thumbUrl }}" data-lightbox="entry" data-title="{{ $figure->name }}"><img src="{{ $figure->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
+                @endisset
+                </div>
+                <h3 class="mb-0">{!! $figure->displayName !!}</h3>
+                <p class="mb-0">{!! $figure->category ? $figure->category->displayName : '' !!}{!! $figure->faction ? ' ・ '.ucfirst($figure->faction->displayName) : '' !!}</p>
             </div>
-            <h3 class="mb-0 text-center">{!! $figure->displayName !!}</h3>
-            <p class="mb-0 text-center">{!! $figure->category ? $figure->category->displayName : '' !!}{!! $figure->faction ? ' ・ '.ucfirst($figure->faction->displayName) : '' !!}</p>
 
-            @if(count($figure->items))
-                <p class="text-center mb-0">Associated with {{ count($figure->items) }} item{{ count($figure->items) == 1 ? '' : 's' }}.</p>
+            @if(count(allAttachments($figure)))
+                <div class="card-body">
+                    @foreach(allAttachments($figure) as $type => $attachments)
+                        <p class="text-center mb-0">Associated with {{ count($attachments) }} {{ strtolower($type) }}{{ count($attachments) == 1 ? '' : 's' }}.</p>
+                    @endforeach
+                </div>
             @endif
 
             @isset($figure->summary)
-            <hr>
-                <p class="mb-0"> {!! $figure->summary !!}</p>
+                <div class="card-footer mt-auto">
+                    <p class="mb-0"> {!! $figure->summary !!}</p>
+                </div>
             @endisset
 
         </div></div>

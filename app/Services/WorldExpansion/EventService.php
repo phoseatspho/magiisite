@@ -28,6 +28,7 @@ use App\Models\WorldExpansion\LocationType;
 use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\FactionType;
 use App\Models\WorldExpansion\Faction;
+use App\Services\WorldExpansion\WorldExpansionService;
 
 class EventService extends Service
 {
@@ -307,111 +308,7 @@ class EventService extends Service
             // More specific validation
             if(Event::where('name', $data['name'])->where('id', '!=', $event->id)->exists()) throw new \Exception("The name has already been taken.");
 
-            $event->timestamps = false;
-
-            /***************************************************** EVENT FIGURES ***************************************************************/
-            // Determine if there are figures added.
-            if(isset($data['figure_id'])) {
-                $data['figure_id'] = array_unique($data['figure_id']);
-                $figures = Figure::whereIn('id', $data['figure_id'])->get();
-                if(count($figures) != count($data['figure_id'])) throw new \Exception("One or more of the selected figures does not exist.");
-            }
-            else $figures = [];
-
-            // Remove all figures from the event so they can be reattached with new data
-            EventFigure::where('event_id',$event->id)->delete();
-
-            // Attach any figures to the event
-            foreach($figures as $key=>$figure) {
-                EventFigure::create([
-                    'figure_id' => $figure->id,
-                    'event_id' => $event->id,
-                ]);
-            }
-
-            /***************************************************** EVENT LOCATIONS ***************************************************************/
-            // Determine if there are locations added.
-
-            if(isset($data['location_id'])) {
-                $data['location_id'] = array_unique($data['location_id']);
-                $locations = Location::whereIn('id', $data['location_id'])->get();
-                if(count($locations) != count($data['location_id'])) throw new \Exception("One or more of the selected locations does not exist.");
-            }
-            else $locations = [];
-
-            // Remove all locations from the event so they can be reattached with new data
-            EventLocation::where('event_id',$event->id)->delete();
-
-            // Attach any locations to the event
-            foreach($locations as $key=>$location) {
-                EventLocation::create([
-                    'location_id' => $location->id,
-                    'event_id' => $event->id,
-                ]);
-            }
-
-            /***************************************************** EVENT FACTIONS ***************************************************************/
-            // Determine if there are factions added.
-            if(isset($data['faction_id'])) {
-                $data['faction_id'] = array_unique($data['faction_id']);
-                $factions = Faction::whereIn('id', $data['faction_id'])->get();
-                if(count($factions) != count($data['faction_id'])) throw new \Exception("One or more of the selected factions does not exist.");
-            }
-            else $factions = [];
-
-            // Remove all factions from the event so they can be reattached with new data
-            EventFaction::where('event_id',$event->id)->delete();
-
-            // Attach any factions to the event
-            foreach($factions as $key=>$faction) {
-                EventFaction::create([
-                    'faction_id' => $faction->id,
-                    'event_id' => $event->id,
-                ]);
-            }
-
-            /***************************************************** EVENT NEWS ***************************************************************/
-            // Determine if there are newses added.
-            if(isset($data['news_id'])) {
-                $data['news_id'] = array_unique($data['news_id']);
-                $newses = News::whereIn('id', $data['news_id'])->get();
-                if(count($newses) != count($data['news_id'])) throw new \Exception("One or more of the selected newses does not exist.");
-            }
-            else $newses = [];
-
-            // Remove all newses from the event so they can be reattached with new data
-            EventNews::where('event_id',$event->id)->delete();
-
-            // Attach any newses to the event
-            foreach($newses as $key=>$news) {
-                EventNews::create([
-                    'news_id' => $news->id,
-                    'event_id' => $event->id,
-                ]);
-            }
-
-
-            /***************************************************** EVENT PROMPTS ***************************************************************/
-            // Determine if there are prompts added.
-            if(isset($data['prompt_id'])) {
-                $data['prompt_id'] = array_unique($data['prompt_id']);
-                $prompts = Prompt::whereIn('id', $data['prompt_id'])->get();
-                if(count($prompts) != count($data['prompt_id'])) throw new \Exception("One or more of the selected prompts does not exist.");
-            }
-            else $prompts = [];
-
-            // Remove all prompts from the event so they can be reattached with new data
-            EventPrompt::where('event_id',$event->id)->delete();
-
-            // Attach any prompts to the event
-            foreach($prompts as $key=>$prompt) {
-                EventPrompt::create([
-                    'prompt_id' => $prompt->id,
-                    'event_id' => $event->id,
-                ]);
-            }
-
-            $event->timestamps = true;
+            (new WorldExpansionService)->updateAttachments($event, $data);
 
             $data = $this->populateEventData($data, $event);
 

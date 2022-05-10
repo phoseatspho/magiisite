@@ -230,6 +230,7 @@ class FactionController extends Controller
             'parent_id', 'type_id', 'user_faction', 'character_faction', 'style',
             'figure_id', 'location_id',
             'rank_name', 'rank_description', 'rank_sort', 'rank_is_open', 'rank_breakpoint', 'rank_amount', 'rank_member_type', 'rank_figure_id', 'rank_user_id', 'rank_character_id',
+            'attachment_type', 'attachment_id', 'attachment_data',
         ]);
         if($id && $service->updateFaction(Faction::find($id), $data, Auth::user())) {
             flash('Faction updated successfully.')->success();

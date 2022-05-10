@@ -36,25 +36,29 @@
 {!! $concepts->render() !!}
 <div class="row mx-0">
     @foreach($concepts as $concept)
-        <div class="col-12 col-md-4 mb-3"><div class="card mb-3 p-3 h-100">
-            <div class="world-entry-image">
-            @isset($concept->thumb_extension)
-                <a href="{{ $concept->thumbUrl }}" data-lightbox="entry" data-title="{{ $concept->name }}"><img src="{{ $concept->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
-            @endisset
+        <div class="col-12 col-md-4 mb-3"><div class="card h-100">
+            <div class="card-header">
+                <div class="world-entry-image">
+                @isset($concept->thumb_extension)
+                    <a href="{{ $concept->thumbUrl }}" data-lightbox="entry" data-title="{{ $concept->name }}"><img src="{{ $concept->thumbUrl }}" class="world-entry-image mb-3 mw-100" /></a>
+                @endisset
+                </div>
+                <h3 class="mb-0 text-center">{!! $concept->displayName !!}</h3>
+                <p class="mb-0 text-center">{!! $concept->category ? $concept->category->displayName : '' !!}</p>
             </div>
-            <h3 class="mb-0 text-center">{!! $concept->displayName !!}</h3>
-            <p class="mb-0 text-center">{!! $concept->category ? $concept->category->displayName : '' !!}</p>
 
-            @if(count($concept->locations))
-                <p class="text-center mb-0">Found in {{ count($concept->locations) }} location{{ count($concept->locations) == 1 ? '' : 's' }}.</p>
-            @endif
-            @if(count($concept->items))
-                <p class="text-center mb-0">Associated with {{ count($concept->items) }} item{{ count($concept->items) == 1 ? '' : 's' }}.</p>
+            @if(count(allAttachments($concept)))
+                <div class="card-body">
+                    @foreach(allAttachments($concept) as $type => $attachments)
+                        <p class="text-center mb-0">Associated with {{ count($attachments) }} {{ strtolower($type) }}{{ count($attachments) == 1 ? '' : 's' }}.</p>
+                    @endforeach
+                </div>
             @endif
 
             @isset($concept->summary)
-            <hr>
-                <p class="mb-0"> {!! $concept->summary !!}</p>
+                <div class="card-footer mt-auto">
+                    <p class="mb-0"> {!! $concept->summary !!}</p>
+                </div>
             @endisset
 
         </div></div>

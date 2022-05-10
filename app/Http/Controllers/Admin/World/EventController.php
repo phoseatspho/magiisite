@@ -228,7 +228,8 @@ class EventController extends Controller
         $data = $request->only([
             'name', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th',
             'is_active', 'summary', 'category_id', 'figure_id', 'location_id', 'faction_id', 'news_id', 'prompt_id',
-            'occur_start', 'occur_end'
+            'occur_start', 'occur_end',
+            'attachment_type', 'attachment_id', 'attachment_data',
         ]);
         if($id && $service->updateEvent(Event::find($id), $data, Auth::user())) {
             flash('Event updated successfully.')->success();

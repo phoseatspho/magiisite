@@ -224,7 +224,8 @@ class FigureController extends Controller
         $data = $request->only([
             'name', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th',
             'is_active', 'summary', 'category_id', 'item_id', 'location_id',
-            'birth_date', 'death_date', 'faction_id'
+            'birth_date', 'death_date', 'faction_id',
+            'attachment_type', 'attachment_id', 'attachment_data',
         ]);
         if($id && $service->updateFigure(Figure::find($id), $data, Auth::user())) {
             flash('Figure updated successfully.')->success();

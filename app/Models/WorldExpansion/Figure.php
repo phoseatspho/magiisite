@@ -84,6 +84,24 @@ class Figure extends Model
     }
 
     /**
+     * Get the attacher attached to the model.
+     */
+    public function attachments()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attacher_id')->where('attacher_type',class_basename($this));
+    }
+
+
+    /**
+     * Get the attacher attached to the model.
+     */
+    public function attachers()
+    {
+        return $this->hasMany('App\Models\WorldExpansion\WorldAttachment', 'attachment_id')->where('attachment_type',class_basename($this));
+    }
+
+
+    /**
      * Get the figure attached to this figure.
      */
     public function faction()
@@ -91,30 +109,6 @@ class Figure extends Model
         return $this->belongsTo('App\Models\WorldExpansion\Faction', 'faction_id')->visible();
     }
 
-    /**
-     * Get the items attached to this figure.
-     */
-    public function items()
-    {
-        return $this->belongsToMany('App\Models\Item\Item', 'figure_items')->withPivot('id');
-    }
-
-
-    /**
-     * Get the items attached to this figure.
-     */
-    public function events()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Event', 'event_figures')->visible()->withPivot('id');
-    }
-
-    /**
-     * Get the factions attached to this figure.
-     */
-    public function factions()
-    {
-        return $this->belongsToMany('App\Models\WorldExpansion\Faction', 'faction_figures')->visible()->withPivot('id');
-    }
 
     /**********************************************************************************************
 
@@ -315,4 +309,31 @@ class Figure extends Model
         if(FactionRankMember::where('member_type', 'figure')->where('member_id', $this->id)->first()) return FactionRankMember::where('member_type', 'figure')->where('member_id', $this->id)->first()->rank;
     }
 
+
+    public static function getFiguresByCategory()
+    {
+        $sorted_figure_categories = collect(FigureCategory::all()->sortBy('name')->pluck('name')->toArray());
+        $grouped = self::select('name', 'id', 'category_id')->with('category')->orderBy('name')->get()->keyBy('id')->groupBy('category.name', $preserveKeys = true)->toArray();
+        if (isset($grouped[''])) {
+            if (!$sorted_figure_categories->contains('Miscellaneous')) {
+                $sorted_figure_categories->push('Miscellaneous');
+            }
+            $grouped['Miscellaneous'] = $grouped['Miscellaneous'] ?? [] + $grouped[''];
+        }
+        $sorted_figure_categories = $sorted_figure_categories->filter(function ($value, $key) use ($grouped) {
+            return in_array($value, array_keys($grouped), true);
+        });
+        foreach ($grouped as $category => $figures) {
+            foreach ($figures as $id => $figure) {
+                $grouped[$category][$id] = $figure['name'];
+            }
+        }
+        $figures_by_category = $sorted_figure_categories->map(function ($type) use ($grouped) {
+            return $grouped;
+        });
+        unset($grouped['']);
+        ksort($grouped);
+
+        return $grouped;
+    }
 }

@@ -22,6 +22,7 @@ use App\Models\WorldExpansion\FloraLocation;
 
 use App\Models\WorldExpansion\LocationType;
 use App\Models\WorldExpansion\Location;
+use App\Services\WorldExpansion\WorldExpansionService;
 
 class NatureService extends Service
 {
@@ -301,47 +302,7 @@ class NatureService extends Service
             // More specific validation
             if(Fauna::where('name', $data['name'])->where('id', '!=', $fauna->id)->exists()) throw new \Exception("The name has already been taken.");
 
-            $fauna->timestamps = false;
-
-            // Determine if there are items added.
-            if(isset($data['item_id'])) {
-                $data['item_id'] = array_unique($data['item_id']);
-                $items = Item::whereIn('id', $data['item_id'])->get();
-                if(count($items) != count($data['item_id'])) throw new \Exception("One or more of the selected items does not exist.");
-            }
-            else $items = [];
-
-            // Remove all items from the fauna so they can be reattached with new data
-            FaunaItem::where('fauna_id',$fauna->id)->delete();
-
-            // Attach any items to the fauna
-            foreach($items as $key=>$item) {
-                FaunaItem::create([
-                    'item_id' => $item->id,
-                    'fauna_id' => $fauna->id,
-                ]);
-            }
-
-            // Determine if there are locations added.
-            if(isset($data['location_id'])) {
-                $data['location_id'] = array_unique($data['location_id']);
-                $locations = Location::whereIn('id', $data['location_id'])->get();
-                if(count($locations) != count($data['location_id'])) throw new \Exception("One or more of the selected locations does not exist.");
-            }
-            else $locations = [];
-
-            // Remove all locations from the fauna so they can be reattached with new data
-            FaunaLocation::where('fauna_id',$fauna->id)->delete();
-
-            // Attach any locations to the fauna
-            foreach($locations as $key=>$location) {
-                FaunaLocation::create([
-                    'location_id' => $location->id,
-                    'fauna_id' => $fauna->id,
-                ]);
-            }
-
-            $fauna->timestamps = true;
+            (new WorldExpansionService)->updateAttachments($fauna, $data);
 
             $data = $this->populateFaunaData($data, $fauna);
 
@@ -743,48 +704,7 @@ class NatureService extends Service
             // More specific validation
             if(Flora::where('name', $data['name'])->where('id', '!=', $flora->id)->exists()) throw new \Exception("The name has already been taken.");
 
-
-            $flora->timestamps = false;
-
-            // Determine if there are items added.
-            if(isset($data['item_id'])) {
-                $data['item_id'] = array_unique($data['item_id']);
-                $items = Item::whereIn('id', $data['item_id'])->get();
-                if(count($items) != count($data['item_id'])) throw new \Exception("One or more of the selected items does not exist.");
-            }
-            else $items = [];
-
-            // Remove all items from the flora so they can be reattached with new data
-            FloraItem::where('flora_id',$flora->id)->delete();
-
-            // Attach any items to the flora
-            foreach($items as $key=>$item) {
-                FloraItem::create([
-                    'item_id' => $item->id,
-                    'flora_id' => $flora->id,
-                ]);
-            }
-
-            // Determine if there are locations added.
-            if(isset($data['location_id'])) {
-                $data['location_id'] = array_unique($data['location_id']);
-                $locations = Location::whereIn('id', $data['location_id'])->get();
-                if(count($locations) != count($data['location_id'])) throw new \Exception("One or more of the selected locations does not exist.");
-            }
-            else $locations = [];
-
-            // Remove all locations from the flora so they can be reattached with new data
-            FloraLocation::where('flora_id',$flora->id)->delete();
-
-            // Attach any locations to the flora
-            foreach($locations as $key=>$location) {
-                FloraLocation::create([
-                    'location_id' => $location->id,
-                    'flora_id' => $flora->id,
-                ]);
-            }
-
-            $flora->timestamps = true;
+            (new WorldExpansionService)->updateAttachments($flora, $data);
 
             $data = $this->populateFloraData($data, $flora);
 
