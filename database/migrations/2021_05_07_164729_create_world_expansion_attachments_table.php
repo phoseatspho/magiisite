@@ -17,12 +17,11 @@ class CreateWorldExpansionAttachmentsTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
 
-            $table->integer('one_id')->unsigned()->index();
-            $table->string('one_type');
+            $table->integer('attacher_id')->unsigned();
+            $table->string('attacher_type');
 
-            $table->integer('two_id')->unsigned()->index();
-            $table->string('two_type');
-
+            $table->integer('attachable_id')->unsigned();
+            $table->string('attachable_type');                          // AKA Figure, Items, etc.
         });
     }
 
