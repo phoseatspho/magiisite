@@ -105,6 +105,7 @@ class UserService extends Service
 
             if($user->canChangeLocation) {
                 $user->home_id = $id;
+                $user->home_changed = Carbon::now();
                 $user->save();
             }
             else throw new \Exception("You can't change your location yet!");
@@ -129,20 +130,21 @@ class UserService extends Service
         try {
             if($user->faction) $old = $user->faction;
             $faction = Faction::find($id);
-            if(!$faction) throw new \Exception("Not a valid faction.");
-
-            if(!$faction->is_user_faction) throw new \Exception("Not a faction a user can join.");
+            if($id == 0) $id = null;
+            elseif(!$faction) throw new \Exception("Not a valid faction.");
+            else if(!$faction->is_user_faction) throw new \Exception("Not a faction a user can join.");
 
             $limit = Settings::get('WE_change_timelimit');
 
             if($user->canChangeFaction) {
                 $user->faction_id = $id;
+                $user->faction_changed = Carbon::now();
                 $user->save();
             }
             else throw new \Exception("You can't change your faction yet!");
 
             // Reset standing/remove from closed rank
-            if(isset($old) && $faction->id != $old->id) {
+            if(($id == null) || (isset($old) && $faction->id != $old->id)) {
                 $standing = $user->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
                 if($standing && $standing->quantity > 0) if(!$debit = (new CurrencyManager)->debitCurrency($user, null, 'Changed Factions', null, $standing, $standing->quantity))
                     throw new \Exception('Failed to reset standing.');

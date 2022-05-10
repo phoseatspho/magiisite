@@ -24,7 +24,8 @@
 </div>
 
 @if($user_enabled == 1 || (Auth::user()->isStaff && $user_enabled == 2))
-<h3>Home Location <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
+<div class="card p-3 mb-2">
+    <h3>Home Location <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
     @if(Auth::user()->isStaff && $user_enabled == 2)
         <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their own locations freely.</div>
     @endif
@@ -50,14 +51,16 @@
         Home locations can be changed {{ $location_interval }}.
         </div>
     @endif
+</div>
 @endif
 
 @if($user_faction_enabled == 1 || (Auth::user()->isStaff && $user_faction_enabled == 2))
-<h3>Faction <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
-    @if(Auth::user()->isStaff && $user_enabled == 2)
+<div class="card p-3 mb-2">
+    <h3>Faction <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
+    @if(Auth::user()->isStaff && $user_faction_enabled == 2)
         <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their own faction freely.</div>
     @endif
-    @if($char_enabled == 1)
+    @if($char_faction_enabled == 1)
         <div class="alert alert-warning">Your characters will have the same faction as you.</div>
     @endif
     @if(Auth::user()->canChangeFaction)
@@ -80,9 +83,8 @@
         Faction can be changed {{ $location_interval }}.
         </div>
     @endif
+</div>
 @endif
-
-<h3>Email Address</h3>
 
 <div class="card p-3 mb-2">
     <h3>Profile</h3>

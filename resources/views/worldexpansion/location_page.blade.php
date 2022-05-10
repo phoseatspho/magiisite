@@ -1,6 +1,6 @@
 @extends('worldexpansion.layout')
 
-@section('title') {{ $location->name }} @endsection
+@section('title') {{ $location->style }} @endsection
 
 @section('content')
 {!! breadcrumbs(['World' => 'world', 'Locations' => 'world/locations', $location->style => 'world/locations/'.$location->id]) !!}
@@ -34,7 +34,7 @@
 <div class="row mx-0 px-0 mt-3">
     @if(count($location->children))
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Contains the following</h5>
+    <h5 class="mb-0">Contains the following</h5>
 
         <!-- <hr>
         <p class="mb-0">
@@ -61,7 +61,7 @@
 
     @if(count($location->fauna))
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Fauna</h5>
+        <h5 class="mb-0">Fauna</h5>
 
         <!-- <hr>
         <p class="mb-0">
@@ -88,7 +88,7 @@
 
     @if(count($location->flora))
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Flora</h5>
+        <h5 class="mb-0">Flora</h5>
 
         <!-- <hr>
         <p class="mb-0">
@@ -115,7 +115,7 @@
 
     @if(count($location->events))
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Associated Event{{ count($location->events) == 1 ? '' : 's'}}</h5>
+        <h5 class="mb-0">Associated Event{{ count($location->events) == 1 ? '' : 's'}}</h5>
 
         <!-- <hr>
         <p class="mb-0">
@@ -142,7 +142,7 @@
 
     @if(count($location->factions))
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
-     <h5 class="mb-0">Associated Faction{{ count($location->factions) == 1 ? '' : 's'}}</h5>
+        <h5 class="mb-0">Associated Faction{{ count($location->factions) == 1 ? '' : 's'}}</h5>
 
         <!-- <hr>
         <p class="mb-0">
@@ -170,6 +170,19 @@
 
 </div>
 
+    @if(count($location->gallerysubmissions))
+        <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
+            <h5 class="mb-0">Associated Gallery Submission{{ count($location->gallerysubmissions) == 1 ? '' : 's'}}</h5><hr>
+
+        <div class="d-flex align-content-around flex-wrap mb-2">
+            @foreach($location->gallerysubmissions->sortByDesc('created_at')->take(3) as $submission)
+                @include('galleries._thumb', ['submission' => $submission, 'gallery' => true])
+            @endforeach
+        </div>
+        @if(count($location->gallerysubmissions) > 2)
+            <p class="text-right mr-4 mb-0"><a href="{{ url('world/locations/').'/'.$location->id.'/submissions'}}">See All {{count($location->gallerysubmissions)}}</p>
+        @endif
+    @endif
 
 
 @endsection

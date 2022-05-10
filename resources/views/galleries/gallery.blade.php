@@ -16,7 +16,7 @@
         @endif
         {{ $gallery->start_at && $gallery->end_at ? ' ・ ' : '' }}
         @if($gallery->end_at)
-            <strong>Close{{ $gallery->end_at->isFuture() ? 's' : 'ed' }}: </strong>{!! pretty_date($gallery->end_at) !!}
+            <strong>Close{{ $gallery->end_at->isFuture() ? 's' : 'd' }}: </strong>{!! pretty_date($gallery->end_at) !!}
         @endif
     </p>
 @endif
@@ -32,6 +32,9 @@
         </div>
         <div class="form-group mr-3 mb-3">
             {!! Form::select('prompt_id', $prompts, Request::get('prompt_id'), ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group mr-3 mb-3">
+            {!! Form::select('location_id', $locations, Request::get('location_id'), ['class' => 'form-control']) !!}
         </div>
         <div class="form-group mr-3 mb-3">
             {!! Form::select('sort', [

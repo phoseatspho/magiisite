@@ -20,7 +20,7 @@ use Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Services\EventService;
+use App\Services\WorldExpansion\EventService;
 
 class EventController extends Controller
 {
@@ -75,7 +75,7 @@ class EventController extends Controller
      * Creates or edits a category.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @param  int|null                  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -84,7 +84,7 @@ class EventController extends Controller
         $id ? $request->validate(EventCategory::$updateRules) : $request->validate(EventCategory::$createRules);
 
         $data = $request->only([
-            'name', 'names', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'is_active', 'summary'
+            'name', 'names', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'summary'
         ]);
         if($id && $service->updateEventCategory(EventCategory::find($id), $data, Auth::user())) {
             flash('Event category updated successfully.')->success();
@@ -117,7 +117,7 @@ class EventController extends Controller
      * Deletes a category.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @param  int                       $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -136,7 +136,7 @@ class EventController extends Controller
      * Sorts categories.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSortEventCategory(Request $request, EventService $service)
@@ -217,7 +217,7 @@ class EventController extends Controller
      * Creates or edits a event.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @param  int|null                  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -261,7 +261,7 @@ class EventController extends Controller
      * Deletes a event.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @param  int                       $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -280,7 +280,7 @@ class EventController extends Controller
      * Sorts events.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\EventService  $service
+     * @param  App\Services\WorldExpansion\EventService  $service
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSortEvent(Request $request, EventService $service)

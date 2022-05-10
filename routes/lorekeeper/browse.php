@@ -50,6 +50,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/favorites/own-characters', 'UserController@getUserOwnCharacterFavorites');
 
     Route::get('{name}', 'UserController@getUser');
+    Route::get('{name}/aliases', 'UserController@getUserAliases');
     Route::get('{name}/characters', 'UserController@getUserCharacters');
     Route::get('{name}/sublist/{key}', 'UserController@getUserSublist');
     Route::get('{name}/myos', 'UserController@getUserMyoSlots');
@@ -178,6 +179,7 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() 
     Route::get('info', 'LocationController@getWorld');
     Route::get('locations', 'LocationController@getLocations');
     Route::get('locations/{id}', 'LocationController@getLocation');
+    Route::get('locations/{id}/submissions', 'LocationController@getLocationSubmissions');
     Route::get('location-types', 'LocationController@getLocationTypes');
     Route::get('location-types/{id}', 'LocationController@getLocationType');
 
@@ -201,7 +203,6 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() 
     Route::get('figure-categories', 'FigureController@getFigureCategories');
     Route::get('figure-categories/{id}', 'FigureController@getFigureCategory');
 
-    Route::get('info', 'FactionController@getWorld');
     Route::get('factions', 'FactionController@getFactions');
     Route::get('factions/{id}', 'FactionController@getFaction');
     Route::get('faction-types', 'FactionController@getFactionTypes');

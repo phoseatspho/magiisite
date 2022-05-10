@@ -60,11 +60,6 @@
     {!! Form::textarea('description', $category->description, ['class' => 'form-control wysiwyg']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::checkbox('is_active', 1, $category->id ? $category->is_active : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-    {!! Form::label('is_active', 'Set Active', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If turned off, the category will not be visible to regular users.') !!}
-</div>
-
 <div class="text-right">
     {!! Form::submit($category->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
 </div>
@@ -78,11 +73,11 @@
 <script>
 $( document ).ready(function() {
     $('.delete-category-button').on('click', function(e) {
-        e.prfigureDefault();
+        e.preventDefault();
         loadModal("{{ url('admin/world/figure-categories/delete') }}/{{ $category->id }}", 'Delete Figure Category');
     });
     $('.selectize').selectize();
 });
-    
+
 </script>
 @endsection

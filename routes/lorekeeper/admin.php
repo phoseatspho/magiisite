@@ -19,6 +19,8 @@ Route::group(['prefix' => 'users', 'namespace' => 'Users'], function() {
 
         Route::get('{name}/edit', 'UserController@getUser');
         Route::post('{name}/basic', 'UserController@postUserBasicInfo');
+        Route::post('{name}/location', 'UserController@postUserLocation');
+        Route::post('{name}/faction', 'UserController@postUserFaction');
         Route::post('{name}/alias/{id}', 'UserController@postUserAlias');
         Route::post('{name}/account', 'UserController@postUserAccount');
         Route::post('{name}/birthday', 'UserController@postUserBirthday');
@@ -574,6 +576,6 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('concepts/create', 'ConceptController@postCreateEditConcept');
     Route::post('concepts/edit/{id?}', 'ConceptController@postCreateEditConcept');
     Route::post('concepts/delete/{id}', 'ConceptController@postDeleteConcept');
-    Route::post('concepts/sort', 'FaunaController@postSortConcept');
+    Route::post('concepts/sort', 'ConceptController@postSortConcept');
 
 });

@@ -14,14 +14,14 @@ use Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Services\NatureService;
+use App\Services\WorldExpansion\NatureService;
 
 class FloraController extends Controller
 {
 
 
     /**********************************************************************************************
-    
+
         Flora Types
 
     **********************************************************************************************/
@@ -37,7 +37,7 @@ class FloraController extends Controller
             'categories' => FloraCategory::orderBy('sort', 'DESC')->get()
         ]);
     }
-    
+
     /**
      * Shows the create flora category page.
      *
@@ -49,7 +49,7 @@ class FloraController extends Controller
             'category' => new FloraCategory
         ]);
     }
-    
+
     /**
      * Shows the edit flora category page.
      *
@@ -69,7 +69,7 @@ class FloraController extends Controller
      * Creates or edits a category.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @param  int|null                  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -78,7 +78,7 @@ class FloraController extends Controller
         $id ? $request->validate(FloraCategory::$updateRules) : $request->validate(FloraCategory::$createRules);
 
         $data = $request->only([
-            'name', 'names', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'is_active', 'summary'
+            'name', 'names', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'summary'
         ]);
         if($id && $service->updateFloraCategory(FloraCategory::find($id), $data, Auth::user())) {
             flash('Flora category updated successfully.')->success();
@@ -111,7 +111,7 @@ class FloraController extends Controller
      * Deletes a category.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @param  int                       $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -130,7 +130,7 @@ class FloraController extends Controller
      * Sorts categories.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSortFloraCategory(Request $request, NatureService $service)
@@ -149,7 +149,7 @@ class FloraController extends Controller
 
 
     /**********************************************************************************************
-    
+
         FAUNA
 
     **********************************************************************************************/
@@ -165,7 +165,7 @@ class FloraController extends Controller
             'floras' => Flora::orderBy('sort', 'DESC')->get()
         ]);
     }
-    
+
     /**
      * Shows the create flora flora page.
      *
@@ -181,7 +181,7 @@ class FloraController extends Controller
             'locations' => Location::all()->pluck('name','id')->toArray(),
         ]);
     }
-    
+
     /**
      * Shows the edit flora flora page.
      *
@@ -205,7 +205,7 @@ class FloraController extends Controller
      * Creates or edits a flora.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @param  int|null                  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -216,7 +216,7 @@ class FloraController extends Controller
         $data = $request->only([
             'name', 'description', 'image', 'image_th', 'remove_image', 'remove_image_th', 'is_active', 'summary', 'category_id', 'item_id', 'location_id', 'scientific_name'
         ]);
-        
+
         if($id && $service->updateFlora(Flora::find($id), $data, Auth::user())) {
             flash('Flora updated successfully.')->success();
         }
@@ -248,7 +248,7 @@ class FloraController extends Controller
      * Deletes a flora.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @param  int                       $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -267,7 +267,7 @@ class FloraController extends Controller
      * Sorts floras.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\NatureService  $service
+     * @param  App\Services\WorldExpansion\NatureService  $service
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSortFlora(Request $request, NatureService $service)
@@ -282,5 +282,5 @@ class FloraController extends Controller
     }
 
 
-    
+
 }
