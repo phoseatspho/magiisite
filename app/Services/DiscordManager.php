@@ -11,6 +11,9 @@ use App\Models\Currency\Currency;
 use App\Models\Loot\LootTable;
 use App\Models\Discord\DiscordReward;
 
+use App\Models\User\UserAlias;
+use App\Models\User\UserDiscordLevel;
+
 class DiscordManager extends Service
 {
     /**
@@ -19,7 +22,65 @@ class DiscordManager extends Service
     public function showUserInfo($user, $message)
     {
         // we're only returning formatting here since I * refuse * to pass around the $discord variable (not worth the trouble)
-        
+        return [];
+    }
+
+    /**
+     * Check and distribute rewards.
+     */
+    public function checkRewards($id, $message)
+    {
+        try {
+
+            if(UserAlias::where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('extra_data', $id)->first()->user;
+            } else {
+                return;
+            }
+            $level = UserDiscordLevel::where('user_id', $user->id)->first();
+
+            $rewards = DiscordReward::where('level', $level->level)->get();
+
+            if($rewards) {
+
+                $assets = createAssetsArray();
+
+                foreach($rewards as $reward) {
+                    $raws = json_decode($reward->loot, true);
+                    // 
+                    foreach($raws as $raw) {
+                        dd($raw);
+                        $model = getAssetModelString($typeId);
+
+                        if($model)
+                        {
+                            $assets[$typeId][] = [
+                                'asset' => $model::find($result),
+                                'quantity' => $raw[$typeId][$result]['quantity'],
+                            ];
+                        }
+                    }
+                }
+
+
+            }
+                
+            // Logging data
+            $logType = 'Discord Level Up';
+            $data = [
+                'data' => 'Received rewards for levelling up to level '.$level->level.'.'
+            ];
+
+            // Distribute user rewards
+            if(!$assets = fillUserAssets($assets, null, $user, $logType, $data)) throw new \Exception("Failed to distribute rewards to user.");
+
+                return count($rewards);
+            }
+            else return true;
+                        
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -32,15 +93,15 @@ class DiscordManager extends Service
     {
         try {
 
-            if(\App\Models\User\UserAlias::where('extra_data', $id)->exists()) {
-                $user = \App\Models\User\UserAlias::where('extra_data', $id)->first()->user;
+            if(UserAlias::where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('extra_data', $id)->first()->user;
             } else {
                 return;
             }
-            $level = \App\Models\User\UserDiscordLevel::where('user_id', $user->id)->first();
+            $level = UserDiscordLevel::where('user_id', $user->id)->first();
 
             if(!$level) {
-                $level = \App\Models\User\UserDiscordLevel::create([
+                $level = UserDiscordLevel::create([
                     'user_id'         => $user->id,
                     'level'           => 0,
                     'exp'             => 0,

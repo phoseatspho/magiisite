@@ -199,10 +199,6 @@ return [
         'power' => 'manage_discord',
         'links' => [
             [
-                'name' => 'Discord User Levels',
-                'url'  => 'admin/discord/levels',
-            ],
-            [
                 'name' => 'Discord Rewards',
                 'url'  => 'admin/discord/rewards',
             ],

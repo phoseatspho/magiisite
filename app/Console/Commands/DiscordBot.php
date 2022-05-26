@@ -113,10 +113,11 @@ class DiscordBot extends Command
                         throw new \Exception($action);
                     }
                     if(isset($action['action']) && $action['action'] == 'Level') {
-                        if(Settings::get('discord_level_notif')) $message->reply('You leveled up! You are now level '.$action['level'].'!');
-                        // dm user otherwise
-                        else $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!');
                         // check for rewards
+                        $count = $service->checkRewards($message->author->id);
+                        if(Settings::get('discord_level_notif')) $message->reply('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        // dm user otherwise
+                        else $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
                     }
                 
                 } catch (\Exception $e) {
