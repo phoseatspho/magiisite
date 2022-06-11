@@ -126,6 +126,7 @@ class LevelController extends Controller
     */
     public function postStat($slug, $id, StatManager $service)
     {
+        if(!Auth::check() || (Auth::user()->id != $character->user_id && !Auth::user()->hasPower('manage_characters'))) abort(404);
         $character = $this->character;
         $stat = CharacterStat::find($id);
         if($service->levelCharaStat($stat, $character, false))
@@ -143,6 +144,7 @@ class LevelController extends Controller
     */
     public function postAdminStat($slug, $id, StatManager $service)
     {
+        if(!Auth::check() || !Auth::user()->hasPower('manage_characters')) abort(404);
         $character = $this->character;
         $stat = CharacterStat::find($id);
         if($service->levelCharaStat($stat, $character, true))
@@ -160,6 +162,7 @@ class LevelController extends Controller
     */
     public function postEditStat($slug, $id, StatManager $service, Request $request)
     {
+        if(!Auth::check() || (Auth::user()->id != $character->user_id && !Auth::user()->hasPower('manage_characters'))) abort(404);
         $quantity = $request->get('count');
         $character = $this->character;
         $stat = CharacterStat::find($id);
@@ -198,6 +201,7 @@ class LevelController extends Controller
      */
     public function postExpGrant(Request $request, ExperienceManager $service)
     {
+        if(!Auth::check() || !Auth::user()->hasPower('manage_characters')) abort(404);
         $character = $this->character;
         if(!$character) abort(404);
         $logType = 'Admin Grant';
@@ -220,6 +224,7 @@ class LevelController extends Controller
      */
     public function postStatGrant(Request $request, StatManager $service)
     {
+        if(!Auth::check() || !Auth::user()->hasPower('manage_characters')) abort(404);
         $character = $this->character;
         if(!$character) abort(404);
         $logType = 'Admin Grant';
@@ -237,6 +242,7 @@ class LevelController extends Controller
 
     public function postLevel(LevelManager $service)
     {
+        if(!Auth::check() || (Auth::user()->id != $character->user_id && !Auth::user()->hasPower('manage_characters'))) abort(404);
         $character = $this->character;
         if(!$character) abort(404);
 
