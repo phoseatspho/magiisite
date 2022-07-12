@@ -347,7 +347,7 @@ class Faction extends Model
             if(!$users) return $characters;
             elseif(!$characters) return $users;
         }
-        else return null;
+        else return collect();
     }
 
     public static function getFactionsByType()
