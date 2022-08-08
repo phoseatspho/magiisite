@@ -39,12 +39,15 @@ class DiscordBot extends Command
     {
         parent::__construct();
         $this->token = env('DISCORD_BOT_TOKEN');
-        $this->prefix = env('DISCORD_PREFIX') ? env('DISCORD_PREFIX') : '';
-        $this->channel_id = env('DISCORD_ERROR_CHANNEL') ? env('DISCORD_ERROR_CHANNEL') : null;
+        $this->prefix = env('DISCORD_PREFIX') ?? '!';
+        $this->error_channel_id = env('DISCORD_ERROR_CHANNEL') ?? null;
         // set constant for max exp you can gain.
         // multiplier can increase this
         $this->exp = 20;
-        $this->multiplier = Settings::get('discord_exp_multiplier') ? Settings::get('discord_exp_multiplier') : 1;
+        $this->multiplier = Settings::get('discord_exp_multiplier') ?? 1;
+        // webhook related settings - if we should delete webhook messages and post them ourselves etc.
+        $this->webhook_delete = Settings::get('discord_webhook_option') ?? 0;
+        $this->announcement_channel_id = env('DISCORD_ANNOUNCEMENT_CHANNEL') ?? null;
     }
 
     /**
@@ -71,7 +74,7 @@ class DiscordBot extends Command
             echo 'Please set the DISCORD_BOT_TOKEN environment variable.', PHP_EOL;
             exit;
         }
-        if(!$this->channel_id) {
+        if(!$this->error_channel_id) {
             echo 'Please set the DISCORD_ERROR_CHANNEL environment variable.', PHP_EOL;
             exit;
         }
@@ -86,9 +89,12 @@ class DiscordBot extends Command
             echo "Bot is ready!", PHP_EOL;
             // send message to specified channel
             $guild = $discord->guilds->first();
-            $channel = $guild->channels->get('id', $this->channel_id);
+            $channel = $guild->channels->get('id', $this->error_channel_id);
 
             $channel->sendMessage('Bot is ready! Use '.$this->prefix.'ping to check delay.');
+            if(!$this->announcement_channel_id) {
+                $channel->sendMessage('No announcement channel is set! This means I will be unable to announce any new posts etc.');
+            }
             ////////////////////////////////////
         
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
@@ -115,15 +121,19 @@ class DiscordBot extends Command
                     if(isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
                         $count = $service->checkRewards($message->author->id);
-                        if(Settings::get('discord_level_notif')) $message->reply('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        if(Settings::get('discord_level_notif')) {
+                            $message->reply('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        }
                         // dm user otherwise
-                        else $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        else {
+                            $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        }
                     }
                 
                 } catch (\Exception $e) {
                     // this sends the error to the specified channel
                     $guild = $discord->guilds->first();
-                    $channel = $guild->channels->get('id', $this->channel_id);
+                    $channel = $guild->channels->get('id', $this->error_channel_id);
         
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }

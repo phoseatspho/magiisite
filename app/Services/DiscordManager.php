@@ -17,6 +17,45 @@ use App\Models\User\UserDiscordLevel;
 class DiscordManager extends Service
 {
     /**
+     * Handles webhook messages.
+     */
+    public function handleWebhook($content, $title, $embed_content, $author=null, $url=null)
+    {
+        $webhook = env('DISCORD_WEBHOOK_URL');
+        if($webhook) {
+            // format data
+            if($author) {
+                $author_data = [
+                    'name' => $author->name,
+                    'url' => $author->url,
+                    'icon_url' => url('/images/avatars/'.$author->avatar)
+                ];
+            }
+            $data = [];
+            $data['username'] = Config::get('lorekeeper.settings.site_name', 'Lorekeeper');
+            $data['avatar_url'] = url('images/favicon.ico');
+            $data['content'] = $content;
+            $data['embeds'] = [
+                'author' => $author_data,
+                'title' => $title,
+                'description' => $embed_content
+            ];
+
+            // send post to webhook, with $data as json payload
+            $ch = curl_init($webhook);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // get response
+            $response = curl_exec($ch);
+            curl_close($ch);
+        }
+    }
+
+    /**
      * Show the user their EXP and level info.
      */
     public function showUserInfo($user, $message)
@@ -72,11 +111,9 @@ class DiscordManager extends Service
             ];
 
             // Distribute user rewards
-            if(!$assets = fillUserAssets($assets, null, $user, $logType, $data)) throw new \Exception("Failed to distribute rewards to user.");
+            if(!$assets = fillUserAssets($assets, null, $user, $logType, $data)) throw new \Exception("Failed to distribute rewards to user."); 
 
-                return count($rewards);
-            }
-            else return true;
+            return count($rewards);
                         
         } catch (\Exception $e) {
             return $e->getMessage();

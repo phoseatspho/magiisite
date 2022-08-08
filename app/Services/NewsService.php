@@ -42,6 +42,14 @@ class NewsService extends Service
                 $this->alertUsers();
             }
 
+            \App\Services\DiscordManager::handleWebhook(
+                'A new news post has been posted!',
+                $news->title,
+                $news->parsed_text,
+                $user,
+                $news->url
+            );
+
             return $this->commitReturn($news);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
