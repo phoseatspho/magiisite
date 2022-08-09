@@ -8,7 +8,7 @@ use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
-use Settings;
+use App\Facades\Settings;
 
 class DiscordBot extends Command
 {
@@ -73,7 +73,7 @@ class DiscordBot extends Command
 
         $service = new DiscordManager();
 
-        $discord->on('ready', function (Discord $discord) {
+        $discord->on('ready', function (Discord $discord) use ($service) {
             // startup message //////////////////
             echo 'Bot is ready!', PHP_EOL;
             // send message to specified channel
@@ -86,7 +86,7 @@ class DiscordBot extends Command
             }
             ////////////////////////////////////
 
-            $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
+            $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
 
                 // don't reply to ourselves
                 if ($message->author->bot) {
