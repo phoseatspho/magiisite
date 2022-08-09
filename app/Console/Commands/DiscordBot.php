@@ -56,7 +56,7 @@ class DiscordBot extends Command
         // npm pm2 start 'php artisan discord-bot'
 
         // this is pre-emptive 'shutdown' stuff so it doesnt break
-        if (php_sapi_name() !== 'cli' || $this->argument('command') !== $this->signature) {
+        if (php_sapi_name() !== 'cli') {
             exit;
         }
         if (!$this->token) {
