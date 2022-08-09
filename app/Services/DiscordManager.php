@@ -19,7 +19,7 @@ class DiscordManager extends Service
     /**
      * Handles webhook messages.
      */
-    public function handleWebhook($content, $title, $embed_content, $author=null, $url=null)
+    public function handleWebhook($content, $title, $embed_content, $author=null, $url=null, $fields=null)
     {
         $webhook = env('DISCORD_WEBHOOK_URL');
         if($webhook) {
@@ -31,15 +31,18 @@ class DiscordManager extends Service
                     'icon_url' => url('/images/avatars/'.$author->avatar)
                 ];
             }
+            $description = $url ? 'View [Here]('.$url.')' : '_ _';
             $data = [];
             $data['username'] = Config::get('lorekeeper.settings.site_name', 'Lorekeeper');
             $data['avatar_url'] = url('images/favicon.ico');
             $data['content'] = $content;
-            $data['embeds'] = [
-                'author' => $author_data,
+            $data['embeds'] = [[
+                'color' =>  6208428,
+                'author' => $author_data ?? null,
                 'title' => $title,
-                'description' => $embed_content
-            ];
+                'description' => $description
+            ]];
+            if($fields) $data['embeds'][0]['fields'] = [$fields];
 
             // send post to webhook, with $data as json payload
             $ch = curl_init($webhook);
@@ -52,6 +55,9 @@ class DiscordManager extends Service
             // get response
             $response = curl_exec($ch);
             curl_close($ch);
+
+            if($response != '') return ['error' => $response];
+            return true;
         }
     }
 

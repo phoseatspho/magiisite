@@ -42,13 +42,18 @@ class NewsService extends Service
                 $this->alertUsers();
             }
 
-            \App\Services\DiscordManager::handleWebhook(
-                'A new news post has been posted!',
+            $response = \App\Services\DiscordManager::handleWebhook(
+                'A new news post has been made!',
                 $news->title,
                 $news->parsed_text,
                 $user,
                 $news->url
             );
+
+            if(is_array($response)) {
+                flash($response['error'])->error();
+                throw new \Exception('Failed to create webhook.');
+            }
 
             return $this->commitReturn($news);
         } catch (\Exception $e) {
