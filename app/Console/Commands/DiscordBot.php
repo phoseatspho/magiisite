@@ -2,17 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-
-use DB;
-use Settings;
+use App\Services\DiscordManager;
 use Carbon\Carbon;
-
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
-
-use App\Services\DiscordManager;
+use Illuminate\Console\Command;
+use Settings;
 
 class DiscordBot extends Command
 {
@@ -32,8 +28,6 @@ class DiscordBot extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -65,11 +59,11 @@ class DiscordBot extends Command
         if (php_sapi_name() !== 'cli' || $this->argument('command') !== $this->signature) {
             exit;
         }
-        if(!$this->token) {
+        if (!$this->token) {
             echo 'Please set the DISCORD_BOT_TOKEN environment variable.', PHP_EOL;
             exit;
         }
-        if(!$this->error_channel_id) {
+        if (!$this->error_channel_id) {
             echo 'Please set the DISCORD_ERROR_CHANNEL environment variable.', PHP_EOL;
             exit;
         }
@@ -78,22 +72,22 @@ class DiscordBot extends Command
         ]);
 
         $service = new DiscordManager();
-        
+
         $discord->on('ready', function (Discord $discord) {
             // startup message //////////////////
-            echo "Bot is ready!", PHP_EOL;
+            echo 'Bot is ready!', PHP_EOL;
             // send message to specified channel
             $guild = $discord->guilds->first();
             $channel = $guild->channels->get('id', $this->error_channel_id);
 
             $channel->sendMessage('Bot is ready! Use '.$this->prefix.'ping to check delay.');
-            if(!$this->announcement_channel_id) {
+            if (!$this->announcement_channel_id) {
                 $channel->sendMessage('No announcement channel is set! This means I will be unable to announce any new posts etc.');
             }
             ////////////////////////////////////
-        
+
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
-                
+
                 // don't reply to ourselves
                 if ($message->author->bot) {
                     return;
@@ -103,6 +97,7 @@ class DiscordBot extends Command
                     // compare timestamps by milliseconds
                     $now = Carbon::now();
                     $message->reply('Pong! Delay: '.$now->diffInMilliseconds($message->timestamp).'ms');
+
                     return;
                 }
 
@@ -110,26 +105,25 @@ class DiscordBot extends Command
                 try {
                     $action = $service->giveExp($message->author->id, $message->timestamp);
                     // if action is string, throw error
-                    if(is_string($action)) {
+                    if (is_string($action)) {
                         throw new \Exception($action);
                     }
-                    if(isset($action['action']) && $action['action'] == 'Level') {
+                    if (isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
                         $count = $service->checkRewards($message->author->id);
-                        if(Settings::get('discord_level_notif')) {
-                            $message->reply('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                        if (Settings::get('discord_level_notif')) {
+                            $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
                         }
                         // dm user otherwise
                         else {
-                            $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!' . ($count ? ' You have received '.$count.' rewards!' : ''));
+                            $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
                         }
                     }
-                
                 } catch (\Exception $e) {
                     // this sends the error to the specified channel
                     $guild = $discord->guilds->first();
                     $channel = $guild->channels->get('id', $this->error_channel_id);
-        
+
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }
             });

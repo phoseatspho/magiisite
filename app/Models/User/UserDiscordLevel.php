@@ -42,7 +42,7 @@ class UserDiscordLevel extends Model
 
     **********************************************************************************************/
 
-    /**
+    /*
      * Calculates whether or not a user should level up.
      */
 }

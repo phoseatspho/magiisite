@@ -51,23 +51,23 @@ class DiscordReward extends Model
      */
     public function getRewardsAttribute()
     {
-        if($this->loot) {
+        if ($this->loot) {
             $assets = parseDiscordAssetData(json_decode($this->loot));
             $rewards = [];
-            foreach($assets as $type => $a)
-            {
+            foreach ($assets as $type => $a) {
                 $class = getAssetModelString($type, false);
-                foreach($a as $id => $asset)
-                {
-                    $rewards[] = (object)[
+                foreach ($a as $id => $asset) {
+                    $rewards[] = (object) [
                         'rewardable_type' => $class,
-                        'rewardable_id' => $id,
-                        'quantity' => $asset['quantity'],
+                        'rewardable_id'   => $id,
+                        'quantity'        => $asset['quantity'],
                     ];
                 }
             }
+
             return $rewards;
+        } else {
+            return null;
         }
-        else return null;
     }
 }

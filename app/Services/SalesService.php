@@ -70,12 +70,12 @@ class SalesService extends Service
                     $user,
                     $sales->url,
                     [
-                        'name' => ($sales->is_open && !$sales->comments_open_at) ? 'Open' : 'Preview',
-                        'value' => 'Open'.(!$sales->comments_open_at ? ' now.' : 's on '.$sales->comments_open_at->toDayDateTimeString())
+                        'name'  => ($sales->is_open && !$sales->comments_open_at) ? 'Open' : 'Preview',
+                        'value' => 'Open'.(!$sales->comments_open_at ? ' now.' : 's on '.$sales->comments_open_at->toDayDateTimeString()),
                     ]
                 );
-    
-                if(is_array($response)) {
+
+                if (is_array($response)) {
                     flash($response['error'])->error();
                     throw new \Exception('Failed to create webhook.');
                 }
@@ -188,12 +188,12 @@ class SalesService extends Service
                     $user,
                     $sales->url,
                     [
-                        'name' => ($sales->is_open && !$sales->comments_open_at) ? 'Open' : 'Preview',
-                        'value' => 'Open'.(!$sales->comments_open_at ? ' now.' : 's on '.$sales->comments_open_at->toDayDateTimeString())
+                        'name'  => ($sales->is_open && !$sales->comments_open_at) ? 'Open' : 'Preview',
+                        'value' => 'Open'.(!$sales->comments_open_at ? ' now.' : 's on '.$sales->comments_open_at->toDayDateTimeString()),
                     ]
                 );
-    
-                if(is_array($response)) {
+
+                if (is_array($response)) {
                     flash($response['error'])->error();
                     throw new \Exception('Failed to create webhook.');
                 }

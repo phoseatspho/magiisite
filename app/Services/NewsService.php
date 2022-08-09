@@ -50,7 +50,7 @@ class NewsService extends Service
                 $news->url
             );
 
-            if(is_array($response)) {
+            if (is_array($response)) {
                 flash($response['error'])->error();
                 throw new \Exception('Failed to create webhook.');
             }
