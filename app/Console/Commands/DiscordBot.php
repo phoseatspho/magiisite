@@ -53,7 +53,7 @@ class DiscordBot extends Command
         // I've commented somewhat extensively, but there is an expectation you know what you're doing.
 
         // to start the bot run the following:
-        // nohup php artisan discord-bot --run=true --daemon > app/storage/logs/laravel.log &
+        // npm pm2 start 'php artisan discord-bot'
 
         // this is pre-emptive 'shutdown' stuff so it doesnt break
         if (php_sapi_name() !== 'cli' || $this->argument('command') !== $this->signature) {
