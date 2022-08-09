@@ -4,6 +4,7 @@ use App\Services\Service;
 
 use DB;
 use Config;
+use Settings;
 
 use Illuminate\Support\Arr;
 use App\Models\Item\Item;
@@ -150,8 +151,12 @@ class DiscordManager extends Service
                     'exp'             => 0,
                     'last_message_at' => $timestamp,
                 ]);
+                // set constant for max exp you can gain.
+            	// multiplier can increase this
+                $exp = 20;
+                $multiplier = Settings::get('discord_exp_multiplier') ?? 1;
                 // since they've never had a message before, we can just add exp straight away
-                $level->exp += mt_rand($this->exp / 2, $this->exp) * $this->multiplier;
+                $level->exp += mt_rand($exp / 2, $exp) * $multiplier;
                 $level->save();
                 // formula: 5 * (lvl ^ 2) + (50 * lvl) + 100 - xp
                 // lvl is current level
@@ -160,7 +165,7 @@ class DiscordManager extends Service
             else {
                 // check if it's been a minute since the last message
                 if(!$level->last_message_at || 1 <= $timestamp->diffInMinutes($level->last_message_at)) {
-                    $level->exp += mt_rand($this->exp / 2, $this->exp) * $this->multiplier;
+                    $level->exp += mt_rand($exp / 2, $exp) * $multiplier;
                     $level->last_message_at = $timestamp;
                     $level->save();
                 }

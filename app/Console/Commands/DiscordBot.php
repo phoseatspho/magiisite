@@ -41,12 +41,7 @@ class DiscordBot extends Command
         $this->token = env('DISCORD_BOT_TOKEN');
         $this->prefix = env('DISCORD_PREFIX') ?? '!';
         $this->error_channel_id = env('DISCORD_ERROR_CHANNEL') ?? null;
-        // set constant for max exp you can gain.
-        // multiplier can increase this
-        $this->exp = 20;
-        $this->multiplier = Settings::get('discord_exp_multiplier') ?? 1;
         // webhook related settings - if we should delete webhook messages and post them ourselves etc.
-        $this->webhook_delete = Settings::get('discord_webhook_option') ?? 0;
         $this->announcement_channel_id = env('DISCORD_ANNOUNCEMENT_CHANNEL') ?? null;
     }
 
