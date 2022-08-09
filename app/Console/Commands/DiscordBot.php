@@ -82,7 +82,7 @@ class DiscordBot extends Command
 
             $channel->sendMessage('Bot is ready! Use '.$this->prefix.'ping to check delay.');
             if (!$this->announcement_channel_id) {
-                $channel->sendMessage('No announcement channel is set! This means I will be unable to announce any new posts etc.');
+                $channel->sendMessage('No announcement channel is set! This means I will be unable to announce any new posts etc. Webhooks will function as normal.');
             }
             ////////////////////////////////////
 
