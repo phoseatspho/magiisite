@@ -73,7 +73,7 @@ class DiscordManager extends Service
     /**
      * Check and distribute rewards.
      */
-    public function checkRewards($id, $message)
+    public function checkRewards($id)
     {
         try {
 
@@ -87,27 +87,27 @@ class DiscordManager extends Service
             $rewards = DiscordReward::where('level', $level->level)->get();
 
             if($rewards) {
-
                 $assets = createAssetsArray();
+                $count = 0;
 
                 foreach($rewards as $reward) {
-                    $raws = json_decode($reward->loot, true);
+                    $raw_types = json_decode($reward->loot, true);
                     // 
-                    foreach($raws as $raw) {
-                        dd($raw);
-                        $model = getAssetModelString($typeId);
-
+                    foreach($raw_types as $type=>$raws) {
+                        $model = getAssetModelString($type);
                         if($model)
                         {
-                            $assets[$typeId][] = [
-                                'asset' => $model::find($result),
-                                'quantity' => $raw[$typeId][$result]['quantity'],
-                            ];
+                            foreach($raws as $key=>$raw) {
+                                $assets[$type][] = [
+                                    'asset' => $model::find($key),
+                                    'quantity' => $raw['quantity'],
+                                ];
+
+                                $count += 1;
+                            }
                         }
                     }
                 }
-
-
             }
                 
             // Logging data
@@ -119,7 +119,7 @@ class DiscordManager extends Service
             // Distribute user rewards
             if(!$assets = fillUserAssets($assets, null, $user, $logType, $data)) throw new \Exception("Failed to distribute rewards to user."); 
 
-            return count($rewards);
+            return $count;
                         
         } catch (\Exception $e) {
             return $e->getMessage();

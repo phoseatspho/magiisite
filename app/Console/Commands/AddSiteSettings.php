@@ -82,8 +82,6 @@ class AddSiteSettings extends Command
 
         $this->addSiteSetting('discord_notification', 1, '1: Give user a notification of level up in channel, 0: DM notification.');
 
-        $this->addSiteSetting('discord_webhook_option', 0, '0: Standard Discord webhook message for creation instances, 1: Usage of a \'dump\' channel to enable the bot to parse and send the message in the assigned announcement channel.');
-
         $this->line("\nSite settings up to date!");
     }
 
