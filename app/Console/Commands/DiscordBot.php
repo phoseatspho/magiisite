@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Facades\Settings;
 use App\Services\DiscordManager;
 use Carbon\Carbon;
+use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
-use Settings;
 
 class DiscordBot extends Command
 {
@@ -73,7 +74,7 @@ class DiscordBot extends Command
 
         $service = new DiscordManager();
 
-        $discord->on('ready', function (Discord $discord) {
+        $discord->on('ready', function (Discord $discord) use ($service) {
             // startup message //////////////////
             echo 'Bot is ready!', PHP_EOL;
             // send message to specified channel
@@ -86,7 +87,8 @@ class DiscordBot extends Command
             }
             ////////////////////////////////////
 
-            $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
+            $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
+                $builder = MessageBuilder::new();
 
                 // don't reply to ourselves
                 if ($message->author->bot) {
@@ -101,6 +103,22 @@ class DiscordBot extends Command
                     return;
                 }
 
+                // Check rank/level
+                if ($message->content == $this->prefix.'level' || $message->content == $this->prefix.'rank') {
+                    // Attempt to fetch level information
+                    $response = $service->showUserInfo($message);
+                    if (!$response) {
+                        // Error if no corresponding on-site user
+                        $message->reply('You don\'t seem to have a level! Have you linked your Discord account on site?');
+                    }
+                    // Otherwise return the generated rank card
+                    $message->reply($builder->addFile(public_path('images/cards/'.$response)));
+                    // Remove the card file since it is now uploaded to Discord
+                    unlink(public_path('images/cards/'.$response));
+
+                    return;
+                }
+
                 // finally check if we can give exp to this user
                 try {
                     $action = $service->giveExp($message->author->id, $message->timestamp);
@@ -111,12 +129,18 @@ class DiscordBot extends Command
                     if (isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
                         $count = $service->checkRewards($message->author->id);
-                        if (Settings::get('discord_level_notif')) {
-                            $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
-                        }
-                        // dm user otherwise
-                        else {
-                            $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                        switch (Settings::get('discord_level_notif')) {
+                            case 0:
+                                // Send no notification
+                                break;
+                            case 1:
+                                // DM user
+                                $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                break;
+                            case 2:
+                                // Reply directly to message
+                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                break;
                         }
                     }
                 } catch (\Exception $e) {
