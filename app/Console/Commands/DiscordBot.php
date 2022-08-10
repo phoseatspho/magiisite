@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Facades\Settings;
 use App\Services\DiscordManager;
 use Carbon\Carbon;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
-use App\Facades\Settings;
 
 class DiscordBot extends Command
 {

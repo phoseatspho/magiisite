@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Facades\Settings;
 use App\Models\News;
 use App\Models\User\User;
 use DB;
@@ -136,7 +135,7 @@ class NewsService extends Service
                 News::shouldBeVisible()->update(['is_visible' => 1]);
                 $this->alertUsers();
 
-                foreach($newses as $news) {
+                foreach ($newses as $news) {
                     $response = (new DiscordManager)->handleWebhook(
                         'A new news post has been made!',
                         $news->title,
