@@ -153,6 +153,11 @@ class DiscordManager extends Service
             }
             $level = UserDiscordLevel::where('user_id', $user->id)->first();
 
+            // set constant for max exp you can gain.
+            // multiplier can increase this
+            $exp = 20;
+            $multiplier = Settings::get('discord_exp_multiplier') ?? 1;
+
             if (!$level) {
                 $level = UserDiscordLevel::create([
                     'user_id'         => $user->id,
@@ -160,10 +165,6 @@ class DiscordManager extends Service
                     'exp'             => 0,
                     'last_message_at' => $timestamp,
                 ]);
-                // set constant for max exp you can gain.
-                // multiplier can increase this
-                $exp = 20;
-                $multiplier = Settings::get('discord_exp_multiplier') ?? 1;
                 // since they've never had a message before, we can just add exp straight away
                 $level->exp += mt_rand($exp / 2, $exp) * $multiplier;
                 $level->save();
