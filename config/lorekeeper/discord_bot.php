@@ -11,6 +11,9 @@ return [
     |
     */
 
+    // What prefix is used for bot commands.
+    'prefix' => '-',
+
     // These settings pertain to the generation of rank cards.
     'rank_cards' => [
         // Color used for the background of the rank card
@@ -35,4 +38,21 @@ return [
         // Set to null to disable
         'logo_insert' => 'images/meta-image.png',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | env Values
+    |--------------------------------------------------------------------------
+    |
+    | Do not change these! This is used so that values in the env can be cached
+    | for performance.
+    |
+    */
+
+    'env' => [
+        'token'                => env('DISCORD_BOT_TOKEN'),
+        'announcement_channel' => env('DISCORD_ANNOUNCEMENT_CHANNEL'),
+        'error_channel'        => env('DISCORD_ERROR_CHANNEL'),
+    ],
+
 ];

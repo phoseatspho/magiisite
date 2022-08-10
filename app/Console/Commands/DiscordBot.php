@@ -33,11 +33,11 @@ class DiscordBot extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->token = env('DISCORD_BOT_TOKEN');
-        $this->prefix = env('DISCORD_PREFIX') ?? '!';
-        $this->error_channel_id = env('DISCORD_ERROR_CHANNEL') ?? null;
+        $this->token = config('lorekeeper.discord_bot.env.token');
+        $this->prefix = config('lorekeeper.discord_bot.prefix', '!');
+        $this->error_channel_id = config('lorekeeper.discord_bot.env.error_channel');
         // webhook related settings - if we should delete webhook messages and post them ourselves etc.
-        $this->announcement_channel_id = env('DISCORD_ANNOUNCEMENT_CHANNEL') ?? null;
+        $this->announcement_channel_id = config('lorekeeper.discord_bot.env.announcement_channel');
     }
 
     /**
