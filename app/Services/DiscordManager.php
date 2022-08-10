@@ -6,6 +6,7 @@ use App\Models\Discord\DiscordReward;
 use App\Models\User\UserAlias;
 use App\Models\User\UserDiscordLevel;
 use Config;
+use Intervention\Image\Facades\Image;
 use Settings;
 
 class DiscordManager extends Service
@@ -68,15 +69,120 @@ class DiscordManager extends Service
     }
 
     /**
-     * Show the user their EXP and level info.
+     * Generate a rank card for a user on request.
      *
-     * @param mixed $user
-     * @param mixed $message
+     * @param \Discord\Parts\Channel\Message $message
+     *
+     * @return string
      */
-    public function showUserInfo($user, $message)
+    public function showUserInfo($message)
     {
-        // we're only returning formatting here since I * refuse * to pass around the $discord variable (not worth the trouble)
-        return [];
+        // Provided message author, fetch user information
+        if (UserAlias::where('extra_data', $message->author->id)->exists()) {
+            $user = UserAlias::where('extra_data', $message->author->id)->first()->user;
+        } else {
+            return false;
+        }
+
+        // Fetch level information
+        $level = UserDiscordLevel::where('user_id', $user->id)->first();
+        if (!$level) {
+            // Or create it, if necessary
+            $this->giveExp($message->author->id, $message->timestamp);
+            $level = UserDiscordLevel::where('user_id', $user->id)->first();
+        }
+
+        // Fetch config values for convenience
+        $config = [
+            'bg' => config('lorekeeper.discord_bot.rank_cards.background_color'),
+            'accent' => config('lorekeeper.discord_bot.rank_cards.accent_color'),
+            'exp' => config('lorekeeper.discord_bot.rank_cards.exp_bar'),
+            'font' => public_path(config('lorekeeper.discord_bot.rank_cards.font_file')),
+            'text' => config('lorekeeper.discord_bot.rank_cards.text_color'),
+            'expText' => config('lorekeeper.discord_bot.rank_cards.exp_text') ?? config('lorekeeper.discord_bot.rank_cards.text_color'),
+            'opacity' => config('lorekeeper.discord_bot.rank_cards.accent_opacity'),
+            'logo' => config('lorekeeper.discord_bot.rank_cards.logo_insert') ?? null,
+        ];
+
+        // Assemble avatar using circular mask
+        $avatar = Image::canvas(150, 150, $config['accent'])
+            ->insert(public_path('images/avatars/'.$user->avatar), 'center')
+            ->mask(public_path('images/cards/assets/avatar_mask.png'));
+
+        // Assemble a small inset to sit behind the text
+        $inset = Image::canvas(365, 90, $config['accent'])
+            ->opacity($config['opacity'])
+            ->mask(public_path('images/cards/assets/rank_card_mask.png'));
+
+        // Assemble EXP bar
+        $requiredExp = 5 * (pow($level->level, 2)) + (50 * $level->level) + 100;
+        $progress = Image::canvas(365, 20, $config['accent'])
+            ->opacity($config['opacity'])
+            ->rectangle(0, 0, ($level->exp / $requiredExp) * 365, 20, function ($draw) use ($config) {
+                // Fill a portion of the bar relative to the user's
+                // current discord EXP
+                $draw->background($config['exp']);
+            })
+            ->mask(public_path('images/cards/assets/rank_card_mask.png'));
+
+        // Assemble rank card
+        $card = Image::canvas(600, 200, $config['bg'])
+            ->insert(public_path('images/rank_card_background.png'));
+
+        if($config['logo']) {
+            $card
+                ->insert(public_path($config['logo']), 'bottom-right');
+        }
+
+        $card
+            ->mask(public_path('images/cards/assets/rank_card_mask.png'))
+            ->insert($inset, 'bottom-right', 48, 75)
+            ->insert($progress, 'bottom-right', 48, 45)
+            ->insert($avatar, 'left', 20)
+            ->text($user->name, 200, 85, function ($font) use ($config) {
+                // Username
+                $font->file($config['font']);
+                $font->color($config['text']);
+                $font->align('left');
+                $font->size(40);
+            })
+            ->text($user->rank->name, 201, 105, function ($font) use ($user, $config) {
+                // User rank
+                $font->file($config['font']);
+                $font->color($user->rank->color ?? $config['text']);
+                $font->align('left');
+                $font->size(22);
+            })
+            ->text('#'.$level->relativeRank($user), 540, 80, function ($font) use ($config) {
+                // Relative discord rank
+                $font->file($config['font']);
+                $font->color($config['text']);
+                $font->align('right');
+                $font->size(40);
+            })
+            ->text('Level '.$level->level, 540, 105, function ($font) use ($config) {
+                // Discord level
+                $font->file($config['font']);
+                $font->color($config['text']);
+                $font->align('right');
+                $font->size(22);
+            })
+            ->text($level->exp.'/'.$requiredExp.' EXP', 550, 170, function ($font) use ($config) {
+                // Exp info
+                $font->file($config['font']);
+                $font->color($config['expText']);
+                $font->align('right');
+                $font->size(15);
+            });
+
+        // Set dir and filename
+        $dir = public_path('images/cards');
+        $filename = randomString(15).'.png';
+
+        // Save the card itself and return the filename
+        $card->save($dir.'/'.$filename);
+
+        return $filename;
     }
 
     /**
@@ -183,6 +289,7 @@ class DiscordManager extends Service
             $requiredExp = 5 * (pow($level->level, 2)) + (50 * $level->level) + 100 - $level->exp;
             if ($requiredExp <= 0) {
                 $level->level++;
+                $level->exp = 0;
                 $level->save();
 
                 return [

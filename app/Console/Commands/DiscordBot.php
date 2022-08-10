@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Facades\Settings;
 use App\Services\DiscordManager;
 use Carbon\Carbon;
+use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
@@ -87,6 +88,7 @@ class DiscordBot extends Command
             ////////////////////////////////////
 
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
+                $builder = MessageBuilder::new();
 
                 // don't reply to ourselves
                 if ($message->author->bot) {
@@ -97,6 +99,22 @@ class DiscordBot extends Command
                     // compare timestamps by milliseconds
                     $now = Carbon::now();
                     $message->reply('Pong! Delay: '.$now->diffInMilliseconds($message->timestamp).'ms');
+
+                    return;
+                }
+
+                // Check rank/level
+                if ($message->content == $this->prefix.'level' || $message->content == $this->prefix.'rank') {
+                    // Attempt to fetch level information
+                    $response = $service->showUserInfo($message);
+                    if (!$response) {
+                        // Error if no corresponding on-site user
+                        $message->reply('You don\'t seem to have a level! Have you linked your Discord account on site?');
+                    }
+                    // Otherwise return the generated rank card
+                    $message->reply($builder->addFile(public_path('images/cards/'.$response)));
+                    // Remove the card file since it is now uploaded to Discord
+                    unlink(public_path('images/cards/'.$response));
 
                     return;
                 }

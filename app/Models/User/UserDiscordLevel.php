@@ -43,6 +43,19 @@ class UserDiscordLevel extends Model
     **********************************************************************************************/
 
     /*
-     * Calculates whether or not a user should level up.
+     * Calculates a user's relative "rank" among all users on the site.
+     *
+     * @param int $user
+     *
+     * @return int
      */
+    public function relativeRank($user)
+    {
+        $orderedLevels = $this->query()->orderBy('level', 'DESC')->orderBy('exp', 'DESC')->get();
+        $rankIndex = $orderedLevels->search(function ($level) use ($user) {
+            return $user->id == $level->user_id;
+        });
+
+        return $rankIndex + 1;
+    }
 }
