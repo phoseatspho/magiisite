@@ -110,6 +110,7 @@ class DiscordBot extends Command
                     if (!$response) {
                         // Error if no corresponding on-site user
                         $message->reply('You don\'t seem to have a level! Have you linked your Discord account on site?');
+
                         return;
                     }
                     // Otherwise return the generated rank card
