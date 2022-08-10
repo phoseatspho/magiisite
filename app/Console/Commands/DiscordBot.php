@@ -129,12 +129,18 @@ class DiscordBot extends Command
                     if (isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
                         $count = $service->checkRewards($message->author->id);
-                        if (Settings::get('discord_level_notif')) {
-                            $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
-                        }
-                        // dm user otherwise
-                        else {
-                            $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                        switch (Settings::get('discord_level_notif')) {
+                            case 0:
+                                // Send no notification
+                                break;
+                            case 1:
+                                // DM user
+                                $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                break;
+                            case 2:
+                                // Reply directly to message
+                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                break;
                         }
                     }
                 } catch (\Exception $e) {
