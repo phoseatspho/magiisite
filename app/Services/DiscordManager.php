@@ -94,14 +94,14 @@ class DiscordManager extends Service
 
         // Fetch config values for convenience
         $config = [
-            'bg' => config('lorekeeper.discord_bot.rank_cards.background_color'),
-            'accent' => config('lorekeeper.discord_bot.rank_cards.accent_color'),
-            'exp' => config('lorekeeper.discord_bot.rank_cards.exp_bar'),
-            'font' => public_path(config('lorekeeper.discord_bot.rank_cards.font_file')),
-            'text' => config('lorekeeper.discord_bot.rank_cards.text_color'),
+            'bg'      => config('lorekeeper.discord_bot.rank_cards.background_color'),
+            'accent'  => config('lorekeeper.discord_bot.rank_cards.accent_color'),
+            'exp'     => config('lorekeeper.discord_bot.rank_cards.exp_bar'),
+            'font'    => public_path(config('lorekeeper.discord_bot.rank_cards.font_file')),
+            'text'    => config('lorekeeper.discord_bot.rank_cards.text_color'),
             'expText' => config('lorekeeper.discord_bot.rank_cards.exp_text') ?? config('lorekeeper.discord_bot.rank_cards.text_color'),
             'opacity' => config('lorekeeper.discord_bot.rank_cards.accent_opacity'),
-            'logo' => config('lorekeeper.discord_bot.rank_cards.logo_insert') ?? null,
+            'logo'    => config('lorekeeper.discord_bot.rank_cards.logo_insert') ?? null,
         ];
 
         // Assemble avatar using circular mask
@@ -129,7 +129,7 @@ class DiscordManager extends Service
         $card = Image::canvas(600, 200, $config['bg'])
             ->insert(public_path('images/rank_card_background.png'));
 
-        if($config['logo']) {
+        if ($config['logo']) {
             $card
                 ->insert(public_path($config['logo']), 'bottom-right');
         }
