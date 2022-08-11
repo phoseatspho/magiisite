@@ -123,7 +123,7 @@ class DiscordBot extends Command
 
                 // finally check if we can give exp to this user
                 try {
-                    if(in_array($message->channel_id, config('lorekeeper.discord_bot.ignored_channels'))) {
+                    if (in_array($message->channel_id, config('lorekeeper.discord_bot.ignored_channels'))) {
                         return;
                     }
 
