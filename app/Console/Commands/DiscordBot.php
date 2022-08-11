@@ -123,6 +123,10 @@ class DiscordBot extends Command
 
                 // finally check if we can give exp to this user
                 try {
+                    if(in_array($message->channel_id, config('lorekeeper.discord_bot.ignored_channels'))) {
+                        return;
+                    }
+
                     $action = $service->giveExp($message->author->id, $message->timestamp);
                     // if action is string, throw error
                     if (is_string($action)) {

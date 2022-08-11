@@ -11,10 +11,18 @@ return [
     |
     */
 
-    // What prefix is used for bot commands.
+    // What prefix is used for bot commands
     'prefix' => '-',
 
-    // These settings pertain to the generation of rank cards.
+    // Channels to ignore for EXP rewards
+    // Commands will still work in them, however
+    //
+    'ignored_channels' => [
+        // put channel IDs here, e.g.
+        // 0000000000000000000
+    ],
+
+    // These settings pertain to the generation of rank cards
     'rank_cards' => [
         // Color used for the background of the rank card
         'background_color' => '#fff',
