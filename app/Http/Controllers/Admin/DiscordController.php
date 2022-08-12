@@ -57,7 +57,7 @@ class DiscordController extends Controller
     {
         $id ? $request->validate(DiscordReward::$updateRules) : $request->validate(DiscordReward::$createRules);
         $data = $request->only([
-            'level', 'rewardable_type', 'rewardable_id', 'quantity',
+            'level', 'rewardable_type', 'rewardable_id', 'quantity', 'role_reward_id',
         ]);
         if ($id && $service->updateReward(DiscordReward::find($id), $data, Auth::user())) {
             flash('Reward updated successfully.')->success();

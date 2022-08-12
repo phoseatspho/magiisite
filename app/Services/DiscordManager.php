@@ -202,9 +202,17 @@ class DiscordManager extends Service
 
             $rewards = DiscordReward::where('level', $level->level)->get();
 
+            $data = [];
+            // check if there's a role to be given to the user
+            $role = $rewards->where('role_reward_id', '!=', null)->first();
+            if ($role) {
+                $data['role'] = $role->role_reward_id;
+            }
+
+            // on-site reward distribution
             if ($rewards) {
                 $assets = createAssetsArray();
-                $count = 0;
+                $data['count'] = 0;
 
                 foreach ($rewards as $reward) {
                     $raw_types = json_decode($reward->loot, true);
@@ -218,7 +226,7 @@ class DiscordManager extends Service
                                     'quantity' => $raw['quantity'],
                                 ];
 
-                                $count += 1;
+                                $data['count'] += 1;
                             }
                         }
                     }
@@ -227,16 +235,16 @@ class DiscordManager extends Service
 
             // Logging data
             $logType = 'Discord Level Up';
-            $data = [
+            $logData = [
                 'data' => 'Received rewards for levelling up to level '.$level->level.'.',
             ];
 
             // Distribute user rewards
-            if (!$assets = fillUserAssets($assets, null, $user, $logType, $data)) {
+            if (!$assets = fillUserAssets($assets, null, $user, $logType, $logData)) {
                 throw new \Exception('Failed to distribute rewards to user.');
             }
 
-            return $count;
+            return $data;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
