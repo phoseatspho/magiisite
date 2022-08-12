@@ -128,18 +128,25 @@ class DiscordBot extends Command
                     }
                     if (isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
-                        $count = $service->checkRewards($message->author->id);
+                        $data = $service->checkRewards($message->author->id);
+                        
+                        if(isset($data['role']) && $data['role']) {
+                            // give the user the role
+                            $member = $message->guild->members->get('id', $message->author->id);
+                            $member->addRole($data['role']);
+                        }
+
                         switch (Settings::get('discord_level_notif')) {
                             case 0:
                                 // Send no notification
                                 break;
                             case 1:
                                 // DM user
-                                $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 break;
                             case 2:
                                 // Reply directly to message
-                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($count ? ' You have received '.$count.' rewards!' : ''));
+                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 break;
                         }
                     }

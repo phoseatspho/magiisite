@@ -20,6 +20,11 @@
     {!! Form::number('level', $reward->level, ['class' => 'form-control', 'min' => 1]) !!}
 </div>
 
+<div class="form-group">
+    {!! Form::label('Role Reward (Optional)') !!} {!! add_help('When this user reaches this rank, have the role assigned automatically. Must be the role ID.') !!}
+    {!! Form::number('role_reward_id', $reward->role_reward_id, ['class' => 'form-control']) !!}
+</div>
+
 <h3>Rewards</h3>
 @include('widgets._loot_select', ['loots' => $reward->rewards, 'showLootTables' => true, 'showRaffles' => true])
 

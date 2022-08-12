@@ -37,7 +37,7 @@ class DiscordService extends Service
         DB::beginTransaction();
 
         try {
-            $reward = DiscordReward::create(Arr::only($data, ['level']));
+            $reward = DiscordReward::create(Arr::only($data, ['level', 'role_reward_id']));
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $reward);
 
@@ -67,7 +67,7 @@ class DiscordService extends Service
                 throw new \Exception('The level already has rewards.');
             }
 
-            $reward->update(Arr::only($data, ['level']));
+            $reward->update(Arr::only($data, ['level', 'role_reward_id']));
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $reward);
 
