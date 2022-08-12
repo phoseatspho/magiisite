@@ -36,7 +36,7 @@ class DiscordBot extends Command
     {
         parent::__construct();
         $this->token = config('lorekeeper.discord_bot.env.token');
-        $this->prefix = config('lorekeeper.discord_bot.prefix', '!');
+        $this->prefix = '/';
         $this->error_channel_id = config('lorekeeper.discord_bot.env.error_channel');
         // webhook related settings - if we should delete webhook messages and post them ourselves etc.
         $this->announcement_channel_id = config('lorekeeper.discord_bot.env.announcement_channel');
@@ -147,7 +147,7 @@ class DiscordBot extends Command
             $discord->application->commands->save($command);
             $command = new DiscordCommand($discord, [
                 'name'        => 'rank',
-                'description' => 'Displays level, exp, etc. information by generating a rank card.',
+                'description' => 'Displays level, EXP, etc. information by generating a rank card.',
             ]);
             $discord->application->commands->save($command);
 

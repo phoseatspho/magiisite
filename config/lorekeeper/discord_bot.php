@@ -11,9 +11,6 @@ return [
     |
     */
 
-    // What prefix is used for bot commands
-    'prefix' => '/',
-
     // Channels to ignore for EXP rewards
     // Commands will still work in them, however
     //
