@@ -5,7 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Intervention\Image\Facades\Image;
 
-class GenerateRankCardBack extends Command {
+class GenerateRankCardBack extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -25,7 +26,8 @@ class GenerateRankCardBack extends Command {
      *
      * @return int
      */
-    public function handle() {
+    public function handle()
+    {
         // Fetch config values for convenience
         $config = [
             'bg'      => config('lorekeeper.discord_bot.rank_cards.background_color'),
