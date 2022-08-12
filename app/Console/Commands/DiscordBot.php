@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\Interactions\Command\Command as DiscordCommand;
+use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
 
@@ -33,11 +35,11 @@ class DiscordBot extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->token = env('DISCORD_BOT_TOKEN');
-        $this->prefix = env('DISCORD_PREFIX') ?? '!';
-        $this->error_channel_id = env('DISCORD_ERROR_CHANNEL') ?? null;
+        $this->token = config('lorekeeper.discord_bot.env.token');
+        $this->prefix = '/';
+        $this->error_channel_id = config('lorekeeper.discord_bot.env.error_channel');
         // webhook related settings - if we should delete webhook messages and post them ourselves etc.
-        $this->announcement_channel_id = env('DISCORD_ANNOUNCEMENT_CHANNEL') ?? null;
+        $this->announcement_channel_id = config('lorekeeper.discord_bot.env.announcement_channel');
     }
 
     /**
@@ -88,39 +90,17 @@ class DiscordBot extends Command
             ////////////////////////////////////
 
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
-                $builder = MessageBuilder::new();
-
                 // don't reply to ourselves
                 if ($message->author->bot) {
                     return;
                 }
 
-                if ($message->content == $this->prefix.'ping') {
-                    // compare timestamps by milliseconds
-                    $now = Carbon::now();
-                    $message->reply('Pong! Delay: '.$now->diffInMilliseconds($message->timestamp).'ms');
-
-                    return;
-                }
-
-                // Check rank/level
-                if ($message->content == $this->prefix.'level' || $message->content == $this->prefix.'rank') {
-                    // Attempt to fetch level information
-                    $response = $service->showUserInfo($message);
-                    if (!$response) {
-                        // Error if no corresponding on-site user
-                        $message->reply('You don\'t seem to have a level! Have you linked your Discord account on site?');
-                    }
-                    // Otherwise return the generated rank card
-                    $message->reply($builder->addFile(public_path('images/cards/'.$response)));
-                    // Remove the card file since it is now uploaded to Discord
-                    unlink(public_path('images/cards/'.$response));
-
-                    return;
-                }
-
                 // finally check if we can give exp to this user
                 try {
+                    if (in_array($message->channel_id, config('lorekeeper.discord_bot.ignored_channels'))) {
+                        return;
+                    }
+
                     $action = $service->giveExp($message->author->id, $message->timestamp);
                     // if action is string, throw error
                     if (is_string($action)) {
@@ -157,6 +137,42 @@ class DiscordBot extends Command
 
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }
+            });
+
+            // Register commands
+            $command = new DiscordCommand($discord, [
+                'name'        => 'ping',
+                'description' => 'Checks delay.',
+            ]);
+            $discord->application->commands->save($command);
+            $command = new DiscordCommand($discord, [
+                'name'        => 'rank',
+                'description' => 'Displays level, EXP, etc. information by generating a rank card.',
+            ]);
+            $discord->application->commands->save($command);
+
+            // Listen for commands
+            $discord->listenCommand('ping', function (Interaction $interaction) {
+                // Compare timestamps by milliseconds
+                $now = Carbon::now();
+                $interaction->respondWithMessage(
+                    MessageBuilder::new()->setContent('Pong! Delay: '.$now->diffInMilliseconds($interaction->timestamp).'ms')
+                );
+            });
+
+            $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
+                // Attempt to fetch level information
+                $response = $service->showUserInfo($interaction);
+                if (!$response) {
+                    // Error if no corresponding on-site user
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
+
+                    return;
+                }
+                // Otherwise return the generated rank card
+                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
+                // Remove the card file since it is now uploaded to Discord
+                unlink(public_path('images/cards/'.$response));
             });
         });
         // init loop
