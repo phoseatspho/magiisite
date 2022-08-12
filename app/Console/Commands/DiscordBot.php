@@ -90,28 +90,8 @@ class DiscordBot extends Command
             ////////////////////////////////////
 
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
-                $builder = MessageBuilder::new();
-
                 // don't reply to ourselves
                 if ($message->author->bot) {
-                    return;
-                }
-
-                // Check rank/level
-                if ($message->content == $this->prefix.'level' || $message->content == $this->prefix.'rank') {
-                    // Attempt to fetch level information
-                    $response = $service->showUserInfo($message);
-                    if (!$response) {
-                        // Error if no corresponding on-site user
-                        $message->reply('You don\'t seem to have a level! Have you linked your Discord account on site?');
-
-                        return;
-                    }
-                    // Otherwise return the generated rank card
-                    $message->reply($builder->addFile(public_path('images/cards/'.$response)));
-                    // Remove the card file since it is now uploaded to Discord
-                    unlink(public_path('images/cards/'.$response));
-
                     return;
                 }
 
@@ -158,6 +138,11 @@ class DiscordBot extends Command
                 'description' => 'Checks delay.',
             ]);
             $discord->application->commands->save($command);
+            $command = new DiscordCommand($discord, [
+                'name'        => 'rank',
+                'description' => 'Displays level, exp, etc. information by generating a rank card.',
+            ]);
+            $discord->application->commands->save($command);
 
             // Listen for commands
             $discord->listenCommand('ping', function (Interaction $interaction) {
@@ -166,6 +151,21 @@ class DiscordBot extends Command
                 $interaction->respondWithMessage(
                     MessageBuilder::new()->setContent('Pong! Delay: '.$now->diffInMilliseconds($interaction->timestamp).'ms')
                 );
+            });
+
+            $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
+                // Attempt to fetch level information
+                $response = $service->showUserInfo($interaction);
+                if (!$response) {
+                    // Error if no corresponding on-site user
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
+
+                    return;
+                }
+                // Otherwise return the generated rank card
+                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
+                // Remove the card file since it is now uploaded to Discord
+                unlink(public_path('images/cards/'.$response));
             });
         });
         // init loop

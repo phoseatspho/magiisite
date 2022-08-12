@@ -71,15 +71,15 @@ class DiscordManager extends Service
     /**
      * Generate a rank card for a user on request.
      *
-     * @param \Discord\Parts\Channel\Message $message
+     * @param \Discord\Parts\Interactions\Interaction $interaction
      *
      * @return string
      */
-    public function showUserInfo($message)
+    public function showUserInfo($interaction)
     {
         // Provided message author, fetch user information
-        if (UserAlias::where('extra_data', $message->author->id)->exists()) {
-            $user = UserAlias::where('extra_data', $message->author->id)->first()->user;
+        if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
+            $user = UserAlias::where('extra_data', $interaction->user->id)->first()->user;
         } else {
             return false;
         }
@@ -88,7 +88,7 @@ class DiscordManager extends Service
         $level = UserDiscordLevel::where('user_id', $user->id)->first();
         if (!$level) {
             // Or create it, if necessary
-            $this->giveExp($message->author->id, $message->timestamp);
+            $this->giveExp($interaction->user->id, $interaction->timestamp);
             $level = UserDiscordLevel::where('user_id', $user->id)->first();
         }
 
