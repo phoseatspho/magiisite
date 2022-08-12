@@ -94,25 +94,18 @@ class DiscordManager extends Service
 
         // Fetch config values for convenience
         $config = [
-            'bg'      => config('lorekeeper.discord_bot.rank_cards.background_color'),
             'accent'  => config('lorekeeper.discord_bot.rank_cards.accent_color'),
             'exp'     => config('lorekeeper.discord_bot.rank_cards.exp_bar'),
             'font'    => public_path(config('lorekeeper.discord_bot.rank_cards.font_file')),
             'text'    => config('lorekeeper.discord_bot.rank_cards.text_color'),
             'expText' => config('lorekeeper.discord_bot.rank_cards.exp_text') ?? config('lorekeeper.discord_bot.rank_cards.text_color'),
             'opacity' => config('lorekeeper.discord_bot.rank_cards.accent_opacity'),
-            'logo'    => config('lorekeeper.discord_bot.rank_cards.logo_insert') ?? null,
         ];
 
         // Assemble avatar using circular mask
         $avatar = Image::canvas(150, 150, $config['accent'])
             ->insert(public_path('images/avatars/'.$user->avatar), 'center')
             ->mask(public_path('images/cards/assets/avatar_mask.png'));
-
-        // Assemble a small inset to sit behind the text
-        $inset = Image::canvas(365, 90, $config['accent'])
-            ->opacity($config['opacity'])
-            ->mask(public_path('images/cards/assets/rank_card_mask.png'));
 
         // Assemble EXP bar
         $requiredExp = 5 * (pow($level->level, 2)) + (50 * $level->level) + 100;
@@ -125,18 +118,9 @@ class DiscordManager extends Service
             })
             ->mask(public_path('images/cards/assets/rank_card_mask.png'));
 
-        // Assemble rank card
-        $card = Image::canvas(600, 200, $config['bg'])
-            ->insert(public_path('images/rank_card_background.png'));
-
-        if ($config['logo']) {
-            $card
-                ->insert(public_path($config['logo']), 'bottom-right');
-        }
+        $card = Image::make(public_path('images/cards/assets/generated-back.png'));
 
         $card
-            ->mask(public_path('images/cards/assets/rank_card_mask.png'))
-            ->insert($inset, 'bottom-right', 48, 75)
             ->insert($progress, 'bottom-right', 48, 45)
             ->insert($avatar, 'left', 20)
             ->text($user->name, 200, 85, function ($font) use ($config) {

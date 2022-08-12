@@ -172,7 +172,7 @@ class DiscordBot extends Command
                     return;
                 }
                 // Otherwise return the generated rank card
-                $interaction->sendFollowUpMessage(
+                $interaction->updateOriginalResponse(
                     MessageBuilder::new()->addFile(public_path('images/cards/'.$response))
                 );
                 // Remove the card file since it is now uploaded to Discord
