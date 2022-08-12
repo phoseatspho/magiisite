@@ -161,16 +161,20 @@ class DiscordBot extends Command
             });
 
             $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
+                $interaction->acknowledgeWithResponse(false);
+
                 // Attempt to fetch level information
                 $response = $service->showUserInfo($interaction);
                 if (!$response) {
                     // Error if no corresponding on-site user
-                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
+                    $interaction->updateOriginalResponse(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
 
                     return;
                 }
                 // Otherwise return the generated rank card
-                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
+                $interaction->sendFollowUpMessage(
+                    MessageBuilder::new()->addFile(public_path('images/cards/'.$response))
+                );
                 // Remove the card file since it is now uploaded to Discord
                 unlink(public_path('images/cards/'.$response));
             });
