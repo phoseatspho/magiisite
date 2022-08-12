@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\Interactions\Command\Command as DiscordCommand;
+use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
 
@@ -95,14 +97,6 @@ class DiscordBot extends Command
                     return;
                 }
 
-                if ($message->content == $this->prefix.'ping') {
-                    // compare timestamps by milliseconds
-                    $now = Carbon::now();
-                    $message->reply('Pong! Delay: '.$now->diffInMilliseconds($message->timestamp).'ms');
-
-                    return;
-                }
-
                 // Check rank/level
                 if ($message->content == $this->prefix.'level' || $message->content == $this->prefix.'rank') {
                     // Attempt to fetch level information
@@ -156,6 +150,22 @@ class DiscordBot extends Command
 
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }
+            });
+
+            // Register commands
+            $command = new DiscordCommand($discord, [
+                'name'        => 'ping',
+                'description' => 'Checks delay.',
+            ]);
+            $discord->application->commands->save($command);
+
+            // Listen for commands
+            $discord->listenCommand('ping', function (Interaction $interaction) {
+                // Compare timestamps by milliseconds
+                $now = Carbon::now();
+                $interaction->respondWithMessage(
+                    MessageBuilder::new()->setContent('Pong! Delay: '.$now->diffInMilliseconds($interaction->timestamp).'ms')
+                );
             });
         });
         // init loop
