@@ -129,8 +129,8 @@ class DiscordBot extends Command
                     if (isset($action['action']) && $action['action'] == 'Level') {
                         // check for rewards
                         $data = $service->checkRewards($message->author->id);
-                        
-                        if(isset($data['role']) && $data['role']) {
+
+                        if (isset($data['role']) && $data['role']) {
                             // give the user the role
                             $member = $message->guild->members->get('id', $message->author->id);
                             $member->addRole($data['role']);

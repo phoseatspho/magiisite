@@ -205,7 +205,7 @@ class DiscordManager extends Service
             $data = [];
             // check if there's a role to be given to the user
             $role = $rewards->where('role_reward_id', '!=', null)->first();
-            if($role) {
+            if ($role) {
                 $data['role'] = $role->role_reward_id;
             }
 

@@ -12,7 +12,7 @@ class DiscordReward extends Model
      * @var array
      */
     protected $fillable = [
-        'level', 'loot', 'role_reward_id'
+        'level', 'loot', 'role_reward_id',
     ];
 
     /**
