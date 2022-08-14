@@ -89,9 +89,45 @@ class DiscordBot extends Command
             }
             ////////////////////////////////////
 
+            // Register commands
+            foreach (config('lorekeeper.discord_bot.commands') as $command) {
+                $newCommand = new DiscordCommand($discord, $command);
+                $discord->application->commands->save($newCommand);
+            }
+
+            // Listen for commands
+            $discord->listenCommand('ping', function (Interaction $interaction) {
+                // Compare timestamps by milliseconds
+                $now = Carbon::now();
+                $interaction->respondWithMessage(
+                    MessageBuilder::new()->setContent('Pong! Delay: '.$now->diffInMilliseconds($interaction->timestamp).'ms')
+                );
+            });
+
+            $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
+                // Attempt to fetch level information
+                $response = $service->showUserInfo($interaction);
+                if (!$response) {
+                    // Error if no corresponding on-site user
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
+
+                    return;
+                }
+                // Otherwise return the generated rank card
+                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
+                // Remove the card file since it is now uploaded to Discord
+                unlink(public_path('images/cards/'.$response));
+            });
+
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
                 // don't reply to ourselves
                 if ($message->author->bot) {
+                    return;
+                }
+
+                // check if the message is a command
+                // if the command is registered, we should not reach this if statement
+                if (strpos($message->content, $this->prefix) == 0) {
                     return;
                 }
 
@@ -138,18 +174,6 @@ class DiscordBot extends Command
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }
             });
-
-            // Register commands
-            $command = new DiscordCommand($discord, [
-                'name'        => 'ping',
-                'description' => 'Checks delay.',
-            ]);
-            $discord->application->commands->save($command);
-            $command = new DiscordCommand($discord, [
-                'name'        => 'rank',
-                'description' => 'Displays level, EXP, etc. information by generating a rank card.',
-            ]);
-            $discord->application->commands->save($command);
 
             // Listen for commands
             $discord->listenCommand('ping', function (Interaction $interaction) {

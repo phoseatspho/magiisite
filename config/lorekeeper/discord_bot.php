@@ -11,6 +11,18 @@ return [
     |
     */
 
+    // list of registered commands and their descriptions
+    'commands' => [
+        [
+            'name'        => 'ping',
+            'description' => 'Checks delay.',
+        ],
+        [
+            'name'        => 'rank',
+            'description' => 'Displays level, EXP, etc. information by generating a rank card.',
+        ],
+    ],
+
     // Channels to ignore for EXP rewards
     // Commands will still work in them, however
     //
