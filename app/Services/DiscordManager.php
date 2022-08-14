@@ -78,8 +78,8 @@ class DiscordManager extends Service
     public function showUserInfo($interaction)
     {
         // Provided message author, fetch user information
-        if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
-            $user = UserAlias::where('extra_data', $interaction->user->id)->first()->user;
+        if (UserAlias::where('site', 'discord')->where('extra_data', $interaction->user->id)->exists()) {
+            $user = UserAlias::where('site', 'discord')->where('extra_data', $interaction->user->id)->first()->user;
         } else {
             return false;
         }
@@ -177,8 +177,8 @@ class DiscordManager extends Service
     public function checkRewards($id)
     {
         try {
-            if (UserAlias::where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
             } else {
                 return;
             }
@@ -244,8 +244,8 @@ class DiscordManager extends Service
     public function giveExp($id, $timestamp)
     {
         try {
-            if (UserAlias::where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
             } else {
                 return;
             }
