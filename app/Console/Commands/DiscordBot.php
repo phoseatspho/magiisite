@@ -125,12 +125,6 @@ class DiscordBot extends Command
                     return;
                 }
 
-                // check if the message is a command
-                // if the command is registered, we should not reach this if statement
-                if (strpos($message->content, $this->prefix) == 0) {
-                    return;
-                }
-
                 // finally check if we can give exp to this user
                 try {
                     if (in_array($message->channel_id, config('lorekeeper.discord_bot.ignored_channels'))) {
