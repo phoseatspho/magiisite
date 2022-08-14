@@ -89,8 +89,8 @@ class DiscordBot extends Command
             }
             ////////////////////////////////////
 
-             // Register commands
-             foreach (config('lorekeeper.discord_bot.commands') as $command) {
+            // Register commands
+            foreach (config('lorekeeper.discord_bot.commands') as $command) {
                 $newCommand = new DiscordCommand($discord, $command);
                 $discord->application->commands->save($newCommand);
             }
