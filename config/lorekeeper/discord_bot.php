@@ -22,7 +22,7 @@ return [
             'description' => 'Displays level, EXP, etc. information by generating a rank card.',
         ],
         [
-            'name' => 'top',
+            'name'        => 'top',
             'description' => 'Displays the top ranked members in the server.',
         ],
     ],

@@ -76,7 +76,8 @@ class DiscordManager extends Service
      *
      * @return \App\Models\User\UserDiscordLevel
      */
-    public function getUserLevel($context, $timestamp = null) {
+    public function getUserLevel($context, $timestamp = null)
+    {
         try {
             if (is_object($context)) {
                 switch (get_class($context)) {
@@ -125,7 +126,8 @@ class DiscordManager extends Service
      *
      * @return string
      */
-    public function showUserInfo($level) {
+    public function showUserInfo($level)
+    {
         $user = $level->user;
 
         // Fetch config values for convenience

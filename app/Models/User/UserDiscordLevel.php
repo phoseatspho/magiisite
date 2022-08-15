@@ -64,7 +64,8 @@ class UserDiscordLevel extends Model
      *
      * @return int
      */
-    public function topTen() {
+    public function topTen()
+    {
         $orderedLevels = $this->query()->orderBy('level', 'DESC')->orderBy('exp', 'DESC')->take(10)->get();
 
         return $orderedLevels;
