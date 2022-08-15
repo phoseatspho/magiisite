@@ -58,4 +58,15 @@ class UserDiscordLevel extends Model
 
         return $rankIndex + 1;
     }
+
+    /*
+     * Calculates the top ten among users on the site.
+     *
+     * @return int
+     */
+    public function topTen() {
+        $orderedLevels = $this->query()->orderBy('level', 'DESC')->orderBy('exp', 'DESC')->take(10)->get();
+
+        return $orderedLevels;
+    }
 }
