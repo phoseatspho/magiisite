@@ -69,28 +69,64 @@ class DiscordManager extends Service
     }
 
     /**
+     * Fetch user level.
+     *
+     * @param \Discord\Parts\Channel\Message|\Discord\Parts\Interactions\Interaction|\Discord\Parts\User\User|int $context
+     * @param \Carbon\Carbon|null                                                                                 $timestamp
+     *
+     * @return \App\Models\User\UserDiscordLevel
+     */
+    public function getUserLevel($context, $timestamp = null) {
+        try {
+            if (is_object($context)) {
+                switch (get_class($context)) {
+                    case 'Discord\Parts\Interactions\Interaction':
+                        $author = $context->user->id;
+                        break;
+                    case 'Discord\Parts\Channel\Message':
+                        $author = $context->author->id;
+                        break;
+                    case 'Discord\Parts\User\User':
+                        $author = $context->id;
+                        break;
+                }
+            } else {
+                // If a plain string is being passed in, it's liable
+                // to just be a user ID, so there's no need to extract that
+                // information.
+                $author = $context;
+            }
+
+            // Provided message author, fetch user information
+            if (UserAlias::where('site', 'discord')->where('extra_data', $author)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $author)->first()->user;
+            } else {
+                return false;
+            }
+
+            // Fetch level information
+            $level = UserDiscordLevel::where('user_id', $user->id)->first();
+            if (!$level) {
+                // Or create it, if necessary
+                $this->giveExp($author, $timestamp ?? $context->timestamp);
+                $level = UserDiscordLevel::where('user_id', $user->id)->first();
+            }
+
+            return $level;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Generate a rank card for a user on request.
      *
-     * @param \Discord\Parts\Interactions\Interaction $interaction
+     * @param \App\Models\User\UserDiscordLevel $level
      *
      * @return string
      */
-    public function showUserInfo($interaction)
-    {
-        // Provided message author, fetch user information
-        if (UserAlias::where('site', 'discord')->where('extra_data', $interaction->user->id)->exists()) {
-            $user = UserAlias::where('site', 'discord')->where('extra_data', $interaction->user->id)->first()->user;
-        } else {
-            return false;
-        }
-
-        // Fetch level information
-        $level = UserDiscordLevel::where('user_id', $user->id)->first();
-        if (!$level) {
-            // Or create it, if necessary
-            $this->giveExp($interaction->user->id, $interaction->timestamp);
-            $level = UserDiscordLevel::where('user_id', $user->id)->first();
-        }
+    public function showUserInfo($level) {
+        $user = $level->user;
 
         // Fetch config values for convenience
         $config = [
