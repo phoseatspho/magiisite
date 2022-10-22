@@ -577,5 +577,14 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('concepts/edit/{id?}', 'ConceptController@postCreateEditConcept');
     Route::post('concepts/delete/{id}', 'ConceptController@postDeleteConcept');
     Route::post('concepts/sort', 'ConceptController@postSortConcept');
+    
+    
+    Route::get('glossary', 'GlossaryController@getGlossaryIndex');
+    Route::get('glossary/create', 'GlossaryController@getCreateEditTerm');
+    Route::get('glossary/edit/{id}', 'GlossaryController@getCreateEditTerm');
+    Route::post('glossary/create', 'GlossaryController@postCreateEditTerm');
+    Route::post('glossary/edit/{id}', 'GlossaryController@postCreateEditTerm');
+    Route::get('glossary/delete/{id}', 'GlossaryController@getDeleteTerm');
+    Route::post('glossary/delete/{id}', 'GlossaryController@postDeleteTerm');
 
 });

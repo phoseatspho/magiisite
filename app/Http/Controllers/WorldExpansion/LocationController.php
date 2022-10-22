@@ -30,32 +30,6 @@ class LocationController extends Controller
     */
 
     /**
-     * Shows the locations page.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getWorld()
-    {
-        $world = SitePage::where('key','world')->first();
-        if(!$world) abort(404);
-
-        return view('worldexpansion.world', [
-            'world' => $world
-        ]);
-    }
-
-    /**
-     * Shows the index page.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getIndex()
-    {
-        return view('world.index');
-    }
-
-    /**
      * Shows the location types page.
      *
      * @param  \Illuminate\Http\Request  $request

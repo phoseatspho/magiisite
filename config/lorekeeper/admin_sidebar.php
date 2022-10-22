@@ -182,6 +182,10 @@ return [
         'power' => 'manage_world',
         'links' => [
             [
+                'name' => 'Glossary',
+                'url' => 'admin/world/glossary'
+            ],
+            [
                 'name' => 'Locations',
                 'url' => 'admin/world/locations'
             ],
