@@ -3,7 +3,7 @@
 @section('admin-title') Glossary @endsection
 
 @section('admin-content')
-{!! breadcrumbs(['Admin Panel' => 'admin', 'Concept' => 'admin/world/concepts']) !!}
+{!! breadcrumbs(['Admin Panel' => 'admin', 'Glossary Terms' => 'admin/world/glossary']) !!}
 
 <div class="alert {{ Settings::get('WE_glossary') ? 'alert-success' : 'alert-warning'}} d-flex justify-content-between align-items-center">
     <span>
