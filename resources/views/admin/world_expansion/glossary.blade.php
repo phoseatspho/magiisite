@@ -5,6 +5,15 @@
 @section('admin-content')
 {!! breadcrumbs(['Admin Panel' => 'admin', 'Concept' => 'admin/world/concepts']) !!}
 
+<div class="alert {{ Settings::get('WE_glossary') ? 'alert-success' : 'alert-warning'}} d-flex justify-content-between align-items-center">
+    <span>
+        The glossary is currently {{ Settings::get('WE_glossary') ? 'visible' : 'not visible'}}.
+    </span>
+    {!! Form::open(['url' => 'admin/world/glossary/toggle-setting']) !!}
+        {!! Form::submit('Toggle', ['class' => 'btn btn-primary']) !!}
+    {!! Form::close() !!}
+</div>
+
 <h1>Glossary Terms</h1>
 
 <p class="mb-0">These are relatively short definitions of terms that will be displayed together on a searchable page for your users.</p>
