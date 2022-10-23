@@ -3,6 +3,11 @@
     <li class="sidebar-section">
         <div class="sidebar-item"><a href="{{ url('world') }}">Encyclopedia</a></div>
     </li>
+    @if(Settings::get('WE_glossary'))
+    <li class="sidebar-section">
+        <div class="sidebar-item"><a href="{{ url('world/glossary') }}" class="{{ set_active('world/glossary') }}">Glossary</a></div>
+    </li>
+    @endif
     <li class="sidebar-section">
         <div class="sidebar-section-header">Geography</div>
         <div class="sidebar-item"><a href="{{ url('world/location-types') }}" class="{{ set_active('world/location-types*') }}">Location Types</a></div>

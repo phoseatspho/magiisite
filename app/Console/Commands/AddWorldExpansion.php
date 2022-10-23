@@ -111,6 +111,19 @@ class AddWorldExpansion extends Command
             $this->info("Added:   WE_character_factions / Default: 0");
         }
         else $this->line("Skipped: WE_character_factions");
+        
+        if(!DB::table('site_settings')->where('key', 'WE_glossary')->exists()) {
+            DB::table('site_settings')->insert([
+                [
+                    'key' => 'WE_glossary',
+                    'value' => 0,
+                    'description' => '0: Glossary Page is not shown to users. 1: Glossary Page is shown to users.'
+                ]
+
+            ]);
+            $this->info("Added:   WE_user_locations / Default: 0");
+        }
+        else $this->line("Skipped: WE_user_locations");
 
         $this->line("\nWorld Expansion settings up to date!");
 
