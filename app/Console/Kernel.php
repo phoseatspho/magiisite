@@ -31,6 +31,8 @@ class Kernel extends ConsoleKernel
                 ->daily();
         $schedule->command('update-staff-reward-actions')
                 ->daily();
+        $schedule->command('generate-rank-card-back')
+                ->daily();
     }
 
     /**

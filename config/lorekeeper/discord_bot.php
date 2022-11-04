@@ -21,6 +21,10 @@ return [
             'name'        => 'rank',
             'description' => 'Displays level, EXP, etc. information by generating a rank card.',
         ],
+        [
+            'name'        => 'top',
+            'description' => 'Displays the top ranked members in the server.',
+        ],
     ],
 
     // Channels to ignore for EXP rewards

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Facades\Settings;
+use App\Models\User\UserDiscordLevel;
 use App\Services\DiscordManager;
 use Carbon\Carbon;
 use Discord\Builders\MessageBuilder;
@@ -119,15 +120,45 @@ class DiscordBot extends Command
                 unlink(public_path('images/cards/'.$response));
             });
 
+            $discord->listenCommand('top', function (Interaction $interaction) use ($discord, $service) {
+                // See if the user has a level/rank
+                $level = $service->getUserLevel($interaction);
+
+                // Fetch top ten users
+                $topTen = (new UserDiscordLevel)->topTen();
+                $description = '';
+                $i = 1;
+                foreach ($topTen as $top) {
+                    $description = $description.
+                    '**#'.$i.'.** '.$top->user->name.' ・ Level '.$top->level.', '.$top->exp.' EXP'.PHP_EOL;
+                    $i++;
+                }
+
+                // Assemble embed
+                $embed = $discord->factory(Embed::class, [
+                    'color'       => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
+                    'title'       => config('lorekeeper.settings.site_name').' ・ Top Ten',
+                    'description' => $description,
+                ]);
+
+                $builder = MessageBuilder::new()->addEmbed($embed);
+
+                if ($level) {
+                    $levelEmbed = $discord->factory(Embed::class, [
+                        'color'       => hexdec('#e2ab5a'),
+                        'title'       => 'Your Rank',
+                        'description' => 'You are rank **#'.$level->relativeRank($level->user).'** at level '.$level->level.' with '.$level->exp.' EXP!',
+                    ]);
+
+                    $builder->addEmbed($levelEmbed);
+                }
+
+                $interaction->respondWithMessage($builder);
+            });
+
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
                 // don't reply to ourselves
                 if ($message->author->bot) {
-                    return;
-                }
-
-                // check if the message is a command
-                // if the command is registered, we should not reach this if statement
-                if (strpos($message->content, $this->prefix) == 0) {
                     return;
                 }
 
