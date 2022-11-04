@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Facades\Settings;
+use App\Models\User\UserDiscordLevel;
 use App\Services\DiscordManager;
 use Carbon\Carbon;
 use Discord\Builders\MessageBuilder;
@@ -134,17 +135,44 @@ class DiscordBot extends Command
                 unlink(public_path('images/cards/'.$response));
             });
 
-            $discord->listenCommand('leaderboard', function (Interaction $interaction) use ($service) {
-                // Attempt to fetch level information
-                $response = $service->showLeaderboard($interaction);
-                if (!$response) {
-                    // Error if no corresponding on-site user
-                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('Error fetching leaderboard. There may be no users with levels!'));
+            $discord->listenCommand('leaderboard', function (Interaction $interaction) use ($discord, $service) {
+                // See if the user has a level/rank
+                $level = $service->getUserLevel($interaction);
 
-                    return;
+                // Fetch top ten users
+                $topTen = (new UserDiscordLevel)->topTen();
+                $i = 1;
+                $emojis = ['🥇', '🥈', '🥉'];
+                $data = [];
+                foreach ($topTen as $top) {
+                    $data[] = [
+                        'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$level->user->name,
+                        'value' => 'Level '.$level->level.' ('.$level->exp.' EXP)',
+                        'inline' => false
+                    ];
+                    $i++; // increment counter so that rank is correct (index 0 = rank 1)
                 }
-                // Otherwise return embed leaderboard
-                $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($response));
+
+                // Assemble embed
+                $level ? $footer = [
+                    'text' => 'Your position: #'.$level->user->discordLevel->relativeRank($level->user),
+                    'iconUrl' => url('/images/avatars/'.$level->user->avatar)
+                ]
+                : $footer = null;
+                $embed = $discord->factory(Embed::class, [
+                    'color'       => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
+                    'title'       => config('lorekeeper.settings.site_name').' ・ Leaderboard',
+                    'type'        => 'rich',
+                    'avatar_url'   => url('images/favicon.ico'),
+                    'username'    => config('lorekeeper.settings.site_name'),
+                    'description' => $description,
+                    'fields'      => $data,
+                    'footer'      => $footer 
+                ]);
+
+                $builder = MessageBuilder::new()->addEmbed($embed);
+
+                $interaction->respondWithMessage($builder);
             });
 
             $discord->listenCommand('grant', function (Interaction $interaction) use ($service) {
@@ -163,12 +191,6 @@ class DiscordBot extends Command
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
                 // don't reply to ourselves
                 if ($message->author->bot) {
-                    return;
-                }
-
-                // check if the message is a command
-                // if the command is registered, we should not reach this if statement
-                if (strpos($message->content, $this->prefix) == 0) {
                     return;
                 }
 

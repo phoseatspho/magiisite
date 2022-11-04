@@ -92,99 +92,81 @@ class DiscordManager extends Service
     }
 
     /**
-     * Shows the leaderboard for levels, with the invoker's position in the footer.
-     * 
-     * @param \Discord\Parts\Interactions\Interaction $interaction
+     * Fetch user level.
      *
-     * @return array
+     * @param \Discord\Parts\Channel\Message|\Discord\Parts\Interactions\Interaction|\Discord\Parts\User\User|int $context
+     * @param \Carbon\Carbon|null                                                                                 $timestamp
+     *
+     * @return \App\Models\User\UserDiscordLevel
      */
-    public function showLeaderboard($interaction)
+    public function getUserLevel($context, $timestamp = null)
     {
-        $data = [];
-        $data['title'] = 'Leaderboard';
-        $data['type'] = 'rich';
-        $data['username'] = Config::get('lorekeeper.settings.site_name', 'Lorekeeper');
-        $data['avatar_url'] = url('images/favicon.ico');
-        $data['color'] = 6208428;
-
-        $orderedLevels = UserDiscordLevel::query()->orderBy('level', 'DESC')->orderBy('exp', 'DESC')->take(10)->get();
-
-        if($orderedLevels->count() > 0) {
-            $i = 0;
-            $emojis = ['🥇', '🥈', '🥉'];
-            foreach ($orderedLevels as $level) {
-                $i += 1; // increment counter so that rank is correct (index 0 = rank 1)
-                $data['fields'][] = [
-                    'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$level->user->name,
-                    'value' => 'Level '.$level->level.' ('.$level->exp.' EXP)',
-                    'inline' => false
-                ];
+        try {
+            if (is_object($context)) {
+                switch (get_class($context)) {
+                    case 'Discord\Parts\Interactions\Interaction':
+                        $author = $context->user->id;
+                        break;
+                    case 'Discord\Parts\Channel\Message':
+                        $author = $context->author->id;
+                        break;
+                    case 'Discord\Parts\User\User':
+                        $author = $context->id;
+                        break;
+                }
+            } else {
+                // If a plain string is being passed in, it's liable
+                // to just be a user ID, so there's no need to extract that
+                // information.
+                $author = $context;
             }
-            if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
-                $level = UserAlias::where('extra_data', $interaction->user->id)->first();
-                // add them to footer
-                $data['footer'] = [
-                    'text' => 'Your position: #'.$level->user->discordLevel->relativeRank($level->user),
-                    'iconUrl' => url('/images/avatars/'.$level->user->avatar)
-                ];
-            }
-        }
-        else {
-            $data['fields'][] = [
-                'name' => 'No users found.',
-                'value' => '_ _',
-                'inline' => false
-            ];
-        }
 
-        return $data;
+            // Provided message author, fetch user information
+            if (UserAlias::where('site', 'discord')->where('extra_data', $author)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $author)->first()->user;
+            } else {
+                return false;
+            }
+
+            // Fetch level information
+            $level = UserDiscordLevel::where('user_id', $user->id)->first();
+            if (!$level) {
+                // Or create it, if necessary
+                $this->giveExp($author, $timestamp ?? $context->timestamp);
+                $level = UserDiscordLevel::where('user_id', $user->id)->first();
+            }
+
+            return $level;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
      * Generate a rank card for a user on request.
      *
-     * @param \Discord\Parts\Interactions\Interaction $interaction
+     * @param \App\Models\User\UserDiscordLevel $level
      *
      * @return string
      */
-    public function showUserInfo($interaction)
+    public function showUserInfo($level)
     {
-        // Provided message author, fetch user information
-        if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
-            $user = UserAlias::where('extra_data', $interaction->user->id)->first()->user;
-        } else {
-            return false;
-        }
-
-        // Fetch level information
-        $level = UserDiscordLevel::where('user_id', $user->id)->first();
-        if (!$level) {
-            // Or create it, if necessary
-            $this->giveExp($interaction->user->id, $interaction->timestamp);
-            $level = UserDiscordLevel::where('user_id', $user->id)->first();
-        }
+        $user = $level->user;
 
         // Fetch config values for convenience
         $config = [
-            'bg'      => config('lorekeeper.discord_bot.rank_cards.background_color'),
             'accent'  => config('lorekeeper.discord_bot.rank_cards.accent_color'),
             'exp'     => config('lorekeeper.discord_bot.rank_cards.exp_bar'),
             'font'    => public_path(config('lorekeeper.discord_bot.rank_cards.font_file')),
             'text'    => config('lorekeeper.discord_bot.rank_cards.text_color'),
             'expText' => config('lorekeeper.discord_bot.rank_cards.exp_text') ?? config('lorekeeper.discord_bot.rank_cards.text_color'),
             'opacity' => config('lorekeeper.discord_bot.rank_cards.accent_opacity'),
-            'logo'    => config('lorekeeper.discord_bot.rank_cards.logo_insert') ?? null,
         ];
 
         // Assemble avatar using circular mask
         $avatar = Image::canvas(150, 150, $config['accent'])
             ->insert(public_path('images/avatars/'.$user->avatar), 'center')
             ->mask(public_path('images/cards/assets/avatar_mask.png'));
-
-        // Assemble a small inset to sit behind the text
-        $inset = Image::canvas(365, 90, $config['accent'])
-            ->opacity($config['opacity'])
-            ->mask(public_path('images/cards/assets/rank_card_mask.png'));
 
         // Assemble EXP bar
         $requiredExp = 5 * (pow($level->level, 2)) + (50 * $level->level) + 100;
@@ -197,18 +179,9 @@ class DiscordManager extends Service
             })
             ->mask(public_path('images/cards/assets/rank_card_mask.png'));
 
-        // Assemble rank card
-        $card = Image::canvas(600, 200, $config['bg'])
-            ->insert(public_path('images/rank_card_background.png'));
-
-        if ($config['logo']) {
-            $card
-                ->insert(public_path($config['logo']), 'bottom-right');
-        }
+        $card = Image::make(public_path('images/cards/assets/generated-back.png'));
 
         $card
-            ->mask(public_path('images/cards/assets/rank_card_mask.png'))
-            ->insert($inset, 'bottom-right', 48, 75)
             ->insert($progress, 'bottom-right', 48, 45)
             ->insert($avatar, 'left', 20)
             ->text($user->name, 200, 85, function ($font) use ($config) {
@@ -265,8 +238,8 @@ class DiscordManager extends Service
     public function checkRewards($id)
     {
         try {
-            if (UserAlias::where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
             } else {
                 return;
             }
@@ -332,8 +305,8 @@ class DiscordManager extends Service
     public function giveExp($id, $timestamp)
     {
         try {
-            if (UserAlias::where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
             } else {
                 return;
             }
