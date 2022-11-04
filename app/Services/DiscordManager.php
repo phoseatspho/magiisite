@@ -383,9 +383,8 @@ class DiscordManager extends Service
         $options = $interaction->data->options->toArray();
 
         // check if the user exists on the site
-        if (UserAlias::where('extra_data', $options['user']['value'])->exists()) {
-            $recipientInfo = UserAlias::where('extra_data', $options['user']['value'])->first();
-        } else {
+        $recipientInfo = $this->getUserLevel($options['user']['value']);
+        if (!$recipientInfo) {
             return 'Recipient does not have any discord level data. Check that they are correctly linked.';
         }
 
@@ -408,16 +407,16 @@ class DiscordManager extends Service
         if($options['type']['value'] == 'level') {
             // increment the level by the amount specified
             // they wont receive any rewards for this type of level up
-            $recipientInfo->user->discordLevel->level += $options['amount']['value'];
+            $recipientInfo->level += $options['amount']['value'];
         }
         else {
             // increment the exp by the amount specified
-            $recipientInfo->user->discordLevel->exp += $options['amount']['value'];
+            $recipientInfo->exp += $options['amount']['value'];
             // we dont have to worry about checking for a level up since it'll be done automatically next time they send a message
             // they will be notified of the level up when they send a message
         }
 
-        $recipientInfo->user->discordLevel->save();
+        $recipientInfo->save();
 
         return 'Successfully granted '.$options['amount']['value'].' '.$options['type']['value'].' to '.$recipientInfo->user->name.'.';
     }
