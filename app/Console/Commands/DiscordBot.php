@@ -165,7 +165,6 @@ class DiscordBot extends Command
                     'type'        => 'rich',
                     'avatar_url'   => url('images/favicon.ico'),
                     'username'    => config('lorekeeper.settings.site_name'),
-                    'description' => $description,
                     'fields'      => $data,
                     'footer'      => $footer 
                 ]);
