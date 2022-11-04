@@ -120,6 +120,42 @@ class DiscordBot extends Command
                 unlink(public_path('images/cards/'.$response));
             });
 
+            $discord->listenCommand('top', function (Interaction $interaction) use ($discord, $service) {
+                // See if the user has a level/rank
+                $level = $service->getUserLevel($interaction);
+
+                // Fetch top ten users
+                $topTen = (new UserDiscordLevel)->topTen();
+                $description = '';
+                $i = 1;
+                foreach ($topTen as $top) {
+                    $description = $description.
+                    '**#'.$i.'.** '.$top->user->name.' ・ Level '.$top->level.', '.$top->exp.' EXP'.PHP_EOL;
+                    $i++;
+                }
+
+                // Assemble embed
+                $embed = $discord->factory(Embed::class, [
+                    'color'       => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
+                    'title'       => config('lorekeeper.settings.site_name').' ・ Top Ten',
+                    'description' => $description,
+                ]);
+
+                $builder = MessageBuilder::new()->addEmbed($embed);
+
+                if ($level) {
+                    $levelEmbed = $discord->factory(Embed::class, [
+                        'color'       => hexdec('#e2ab5a'),
+                        'title'       => 'Your Rank',
+                        'description' => 'You are rank **#'.$level->relativeRank($level->user).'** at level '.$level->level.' with '.$level->exp.' EXP!',
+                    ]);
+
+                    $builder->addEmbed($levelEmbed);
+                }
+
+                $interaction->respondWithMessage($builder);
+            });
+
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
                 // don't reply to ourselves
                 if ($message->author->bot) {
@@ -168,66 +204,6 @@ class DiscordBot extends Command
 
                     $channel->sendMessage('Error: '.$e->getMessage());
                 }
-            });
-
-            // Listen for commands
-            $discord->listenCommand('ping', function (Interaction $interaction) {
-                // Compare timestamps by milliseconds
-                $now = Carbon::now();
-                $interaction->respondWithMessage(
-                    MessageBuilder::new()->setContent('Pong! Delay: '.$now->diffInMilliseconds($interaction->timestamp).'ms')
-                );
-            });
-
-            $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
-                // Attempt to fetch level information
-                $response = $service->showUserInfo($interaction);
-                if (!$response) {
-                    // Error if no corresponding on-site user
-                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
-
-                    return;
-                }
-                // Otherwise return the generated rank card
-                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
-                // Remove the card file since it is now uploaded to Discord
-                unlink(public_path('images/cards/'.$response));
-            });
-
-            $discord->listenCommand('top', function (Interaction $interaction) use ($discord, $service) {
-                // See if the user has a level/rank
-                $level = $service->getUserLevel($interaction);
-
-                // Fetch top ten users
-                $topTen = (new UserDiscordLevel())->topTen();
-                $description = '';
-                $i = 1;
-                foreach ($topTen as $top) {
-                    $description = $description.
-                    '**#'.$i.'.** '.$top->user->name.' ・ '.$top->server_score.' Server Score'.PHP_EOL;
-                    $i++;
-                }
-
-                // Assemble embed
-                $embed = $discord->factory(Embed::class, [
-                    'color'       => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
-                    'title'       => config('lorekeeper.settings.site_name').' ・ Top Ten',
-                    'description' => $description,
-                ]);
-
-                $builder = MessageBuilder::new()->addEmbed($embed);
-
-                if ($level) {
-                    $levelEmbed = $discord->factory(Embed::class, [
-                        'color'       => hexdec('#e2ab5a'),
-                        'title'       => 'Your Rank',
-                        'description' => 'You are rank **#'.$level->relativeRank($level->user).'** with a total of '.$level->server_score.' server score!',
-                    ]);
-
-                    $builder->addEmbed($levelEmbed);
-                }
-
-                $interaction->respondWithMessage($builder);
             });
         });
         // init loop
