@@ -382,20 +382,20 @@ class DiscordManager extends Service
         $options = $interaction->data->options->toArray();
 
         // check if the user exists on the site
-        if (UserAlias::where('extra_data', $options['user'])->exists()) {
-            $recipientInfo = UserAlias::where('extra_data', $options['user'])->first();
+        if (UserAlias::where('extra_data', $options['user']['value'])->exists()) {
+            $recipientInfo = UserAlias::where('extra_data', $options['user']['value'])->first();
         } else {
             return 'Recipient does not have any discord level data. Check that they are correctly linked.';
         }
 
         // log the action
-        if(!$this->logAdminAction($user, 'Discord Level Grant', 'Granted '.$options['amount'].' '.$options['type'].' to '.$recipientInfo->user->name)) {
+        if(!$this->logAdminAction($user, 'Discord Level Grant', 'Granted '.$options['amount']['value'].' '.$options['type']['value'].' to '.$recipientInfo->user->name)) {
             return 'Failed to log action, grant cancelled.';
         }
         $log = UserUpdateLog::create([
             'staff_id' => $user->id,
             'user_id' => $recipientInfo->user->id,
-            'data' => json_encode(['amount' => $options['amount'], 'type' => $options['type']]),
+            'data' => json_encode(['amount' => $options['amount']['value'], 'type' => $options['type']['value']]),
             'type' => 'Discord Level Granted'
         ]);
         if(!$log)
@@ -404,20 +404,20 @@ class DiscordManager extends Service
         }
 
         // check what type of grant it is
-        if($options['type'] == 'level') {
+        if($options['type']['value'] == 'level') {
             // increment the level by the amount specified
             // they wont receive any rewards for this type of level up
-            $recipientInfo->user->discordLevel->level += $options['amount'];
+            $recipientInfo->user->discordLevel->level += $options['amount']['value'];
         }
         else {
             // increment the exp by the amount specified
-            $recipientInfo->user->discordLevel->exp += $options['amount'];
+            $recipientInfo->user->discordLevel->exp += $options['amount']['value'];
             // we dont have to worry about checking for a level up since it'll be done automatically next time they send a message
             // they will be notified of the level up when they send a message
         }
 
         $recipientInfo->user->discordLevel->save();
 
-        return 'Successfully granted '.$options['amount'].' '.$options['type'].' to '.$recipientInfo->user->name.'.';
+        return 'Successfully granted '.$options['amount']['value'].' '.$options['type']['value'].' to '.$recipientInfo->user->name.'.';
     }
 }
