@@ -117,20 +117,26 @@ class DiscordBot extends Command
             });
 
             $discord->listenCommand('rank', function (Interaction $interaction) use ($service) {
-                // Attempt to fetch level information
-                $response = $service->showUserInfo($interaction);
-                if (!$response) {
+                $interaction->acknowledgeWithResponse(false);
+
+                // Fetch level information
+                $level = $service->getUserLevel($interaction);
+                if (!$level) {
                     // Error if no corresponding on-site user
-                    $interaction->respondWithMessage(MessageBuilder::new()
-                    ->setContent(`You don\'t seem to have a level!
+                    $interaction->updateOriginalResponse(MessageBuilder::new()->setContent(
+                        `You don\'t seem to have a level!
                         Have you linked your Discord account on site?
                         If you have, try remove and relink it.`
-                    ));
+                    ), true);
 
                     return;
                 }
-                // Otherwise return the generated rank card
-                $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
+
+                // Generate and return rank card
+                $response = $service->showUserInfo($level);
+                $interaction->updateOriginalResponse(
+                    MessageBuilder::new()->addFile(public_path('images/cards/'.$response))
+                );
                 // Remove the card file since it is now uploaded to Discord
                 unlink(public_path('images/cards/'.$response));
             });
