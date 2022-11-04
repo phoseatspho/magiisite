@@ -12,6 +12,29 @@ use Settings;
 class DiscordManager extends Service
 {
     /**
+     * Generates a message with all commands and their descriptions.
+     * 
+     */
+    public function showHelpMessage()
+    {
+        $data = [];
+        $data['title'] = 'Loaded Command List';
+        $data['type'] = 'rich';
+        $data['avatar_url'] = url('images/favicon.ico');
+        $data['color'] = 6208428;
+
+        foreach (config('lorekeeper.discord_bot.commands') as $command) {
+            $data['fields'][] = [
+                'name' => $command['name'],
+                'value' => $command['description'],
+                'inline' => false
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * Handles webhook messages.
      *
      * @param mixed      $content
@@ -66,6 +89,55 @@ class DiscordManager extends Service
 
             return true;
         }
+    }
+
+    /**
+     * Shows the leaderboard for levels, with the invoker's position in the footer.
+     * 
+     * @param \Discord\Parts\Interactions\Interaction $interaction
+     *
+     * @return array
+     */
+    public function showLeaderboard($interaction)
+    {
+        $data = [];
+        $data['title'] = 'Leaderboard';
+        $data['type'] = 'rich';
+        $data['username'] = Config::get('lorekeeper.settings.site_name', 'Lorekeeper');
+        $data['avatar_url'] = url('images/favicon.ico');
+        $data['color'] = 6208428;
+
+        $orderedLevels = UserDiscordLevel::query()->orderBy('level', 'DESC')->orderBy('exp', 'DESC')->take(10)->get();
+
+        if($orderedLevels->count() > 0) {
+            $i = 0;
+            $emojis = ['🥇', '🥈', '🥉'];
+            foreach ($orderedLevels as $level) {
+                $i += 1; // increment counter so that rank is correct (index 0 = rank 1)
+                $data['fields'][] = [
+                    'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$level->user->name,
+                    'value' => 'Level '.$level->level.' ('.$level->exp.' EXP)',
+                    'inline' => false
+                ];
+            }
+            if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
+                $level = UserAlias::where('extra_data', $interaction->user->id)->first();
+                // add them to footer
+                $data['footer'] = [
+                    'text' => 'Your position: #'.$level->user->discordLevel->relativeRank($level->user),
+                    'iconUrl' => url('/images/avatars/'.$level->user->avatar)
+                ];
+            }
+        }
+        else {
+            $data['fields'][] = [
+                'name' => 'No users found.',
+                'value' => '_ _',
+                'inline' => false
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -311,5 +383,68 @@ class DiscordManager extends Service
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Grant levels OR exp to a user.
+     *
+     * @param Interaction $interaction
+     *
+     * @return string
+     */
+    public function grant($interaction)
+    {
+        // check if the user has the permission to grant levels (on-site must have manage_discord power)
+        if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
+            $user = UserAlias::where('extra_data', $interaction->user->id)->first()->user;
+        } else {
+            return 'Could not verify user on site.';
+        }
+
+        if (!$user->hasPower('manage_discord')) {
+            return 'You do not have the required permissions to grant levels.';
+        }
+
+        // Get command params from interaction data
+        $options = $interaction->data->options->toArray();
+
+        // check if the user exists on the site
+        if (UserAlias::where('extra_data', $options['user'])->exists()) {
+            $recipientInfo = UserAlias::where('extra_data', $options['user'])->first();
+        } else {
+            return 'Recipient does not have any discord level data. Check that they are correctly linked.';
+        }
+
+        // log the action
+        if(!$this->logAdminAction($user, 'Discord Level Grant', 'Granted '.$options['amount'].' '.$options['type'].' to '.$recipientInfo->user->name)) {
+            return 'Failed to log action, grant cancelled.';
+        }
+        $log = UserUpdateLog::create([
+            'staff_id' => $user->id,
+            'user_id' => $recipientInfo->user->id,
+            'data' => json_encode(['amount' => $options['amount'], 'type' => $options['type']]),
+            'type' => 'Discord Level Granted'
+        ]);
+        if(!$log)
+        {
+            return 'Failed to log action, grant cancelled.';
+        }
+
+        // check what type of grant it is
+        if($options['type'] == 'level') {
+            // increment the level by the amount specified
+            // they wont receive any rewards for this type of level up
+            $recipientInfo->user->discordLevel->level += $options['amount'];
+        }
+        else {
+            // increment the exp by the amount specified
+            $recipientInfo->user->discordLevel->exp += $options['amount'];
+            // we dont have to worry about checking for a level up since it'll be done automatically next time they send a message
+            // they will be notified of the level up when they send a message
+        }
+
+        $recipientInfo->user->discordLevel->save();
+
+        return 'Successfully granted '.$options['amount'].' '.$options['type'].' to '.$recipientInfo->user->name.'.';
     }
 }

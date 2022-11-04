@@ -96,6 +96,17 @@ class DiscordBot extends Command
             }
 
             // Listen for commands
+            $discord->listenCommand('help', function (Interaction $interaction) use ($service) {
+                $response = $service->showHelpMessage();
+                if (!$response) {
+                    // Error
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('Couldn\'t generate help message! Please try again later.'));
+
+                    return;
+                }
+                $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($response));
+            });
+
             $discord->listenCommand('ping', function (Interaction $interaction) {
                 // Compare timestamps by milliseconds
                 $now = Carbon::now();
@@ -109,7 +120,11 @@ class DiscordBot extends Command
                 $response = $service->showUserInfo($interaction);
                 if (!$response) {
                     // Error if no corresponding on-site user
-                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'));
+                    $interaction->respondWithMessage(MessageBuilder::new()
+                    ->setContent(`You don\'t seem to have a level!
+                        Have you linked your Discord account on site?
+                        If you have, try remove and relink it.`
+                    ));
 
                     return;
                 }
@@ -117,6 +132,32 @@ class DiscordBot extends Command
                 $interaction->respondWithMessage(MessageBuilder::new()->addFile(public_path('images/cards/'.$response)));
                 // Remove the card file since it is now uploaded to Discord
                 unlink(public_path('images/cards/'.$response));
+            });
+
+            $discord->listenCommand('leaderboard', function (Interaction $interaction) use ($service) {
+                // Attempt to fetch level information
+                $response = $service->showLeaderboard($interaction);
+                if (!$response) {
+                    // Error if no corresponding on-site user
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('Error fetching leaderboard. There may be no users with levels!'));
+
+                    return;
+                }
+                // Otherwise return embed leaderboard
+                $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($response));
+            });
+
+            $discord->listenCommand('grant', function (Interaction $interaction) use ($service) {
+                // Attempt to grant
+                $response = $service->grant($interaction);
+                if (!$response) {
+                    // Error
+                    $interaction->respondWithMessage(MessageBuilder::new()->setContent('Error granting level. Please check your input and try again.'));
+
+                    return;
+                }
+                // response can still be error response
+                $interaction->respondWithMessage(MessageBuilder::new()->setContent($response));
             });
 
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($service) {
