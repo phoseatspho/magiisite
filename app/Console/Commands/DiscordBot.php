@@ -124,11 +124,7 @@ class DiscordBot extends Command
                 $level = $service->getUserLevel($interaction);
                 if (!$level) {
                     // Error if no corresponding on-site user
-                    $interaction->updateOriginalResponse(MessageBuilder::new()->setContent(
-                        `You don\'t seem to have a level!
-                        Have you linked your Discord account on site?
-                        If you have, try remove and relink it.`
-                    ), true);
+                    $interaction->updateOriginalResponse(MessageBuilder::new()->setContent('You don\'t seem to have a level! Have you linked your Discord account on site?'), true);
 
                     return;
                 }
