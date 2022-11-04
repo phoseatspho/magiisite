@@ -161,7 +161,7 @@ class DiscordBot extends Command
 
                 // Assemble embed
                 $level ? $footer = [
-                    'text' => 'Your position: #'.$level->user->discordLevel->relativeRank($level->user),
+                    'text' => 'Your position: #'.$level->relativeRank($level->user),
                     'iconUrl' => url('/images/avatars/'.$level->user->avatar)
                 ]
                 : $footer = null;
