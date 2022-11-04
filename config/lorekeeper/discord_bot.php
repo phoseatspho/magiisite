@@ -24,6 +24,14 @@ return [
         [
             'name'        => 'rank',
             'description' => 'Displays level, EXP, etc. information by generating a rank card.',
+            'options'     => [
+                [
+                    'name' => 'user',
+                    'description' => 'The user whose rank is to be displayed. By default, it is the invoker.',
+                    'type' => 6,
+                    'required' => false
+                ],
+            ]
         ],
         [
             'name'        => 'leaderboard',

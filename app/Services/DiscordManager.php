@@ -106,7 +106,12 @@ class DiscordManager extends Service
             if (is_object($context)) {
                 switch (get_class($context)) {
                     case 'Discord\Parts\Interactions\Interaction':
-                        $author = $context->user->id;
+                        $options = $context->data->options->toArray();
+                        if(isset($options['user']['value']) && $options['user']['value'] != null && $options['user']['value'] != '') {
+                            $author = $options['user']['value'];
+                        } else {
+                            $author = $context->user->id;
+                        }
                         break;
                     case 'Discord\Parts\Channel\Message':
                         $author = $context->author->id;
