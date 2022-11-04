@@ -152,8 +152,8 @@ class DiscordBot extends Command
                 $data = [];
                 foreach ($topTen as $top) {
                     $data[] = [
-                        'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$level->user->name,
-                        'value' => 'Level '.$level->level.' ('.$level->exp.' EXP)',
+                        'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$top->user->name,
+                        'value' => 'Level '.$top->level.' ('.$top->exp.' EXP)',
                         'inline' => false
                     ];
                     $i++; // increment counter so that rank is correct (index 0 = rank 1)
