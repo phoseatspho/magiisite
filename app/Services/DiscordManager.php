@@ -8,6 +8,7 @@ use App\Models\User\UserDiscordLevel;
 use Config;
 use Intervention\Image\Facades\Image;
 use Settings;
+use App\Models\User\UserUpdateLog;
 
 class DiscordManager extends Service
 {
