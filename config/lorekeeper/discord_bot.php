@@ -26,12 +26,12 @@ return [
             'description' => 'Displays level, EXP, etc. information by generating a rank card.',
             'options'     => [
                 [
-                    'name' => 'user',
+                    'name'        => 'user',
                     'description' => 'The user whose rank is to be displayed. By default, it is the invoker.',
-                    'type' => 6,
-                    'required' => false
+                    'type'        => 6,
+                    'required'    => false,
                 ],
-            ]
+            ],
         ],
         [
             'name'        => 'leaderboard',
@@ -42,34 +42,34 @@ return [
             'description' => 'Grants exp or levels to a user. The invoker must be on-site staff.',
             'options'     => [
                 [
-                    'name' => 'user',
+                    'name'        => 'user',
                     'description' => 'The user to grant exp or levels to.',
-                    'type' => 6,
-                    'required' => true
+                    'type'        => 6,
+                    'required'    => true,
                 ],
                 [
-                    'name' => 'type',
+                    'name'        => 'type',
                     'description' => 'The type of grant. Can be exp or level.',
-                    'type' => 3,
-                    'required' => true,
-                    'choices' => [
+                    'type'        => 3,
+                    'required'    => true,
+                    'choices'     => [
                         [
-                            'name' => 'exp',
-                            'value' => 'exp'
+                            'name'  => 'exp',
+                            'value' => 'exp',
                         ],
                         [
-                            'name' => 'level',
-                            'value' => 'level'
-                        ]
-                    ]
+                            'name'  => 'level',
+                            'value' => 'level',
+                        ],
+                    ],
                 ],
                 [
-                    'name' => 'amount',
+                    'name'        => 'amount',
                     'description' => 'The amount of exp or levels to grant.',
-                    'type' => 4,
-                    'required' => true
+                    'type'        => 4,
+                    'required'    => true,
                 ],
-            ]
+            ],
         ],
     ],
 

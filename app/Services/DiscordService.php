@@ -61,7 +61,6 @@ class DiscordService extends Service
         DB::beginTransaction();
 
         try {
-
             // More specific validation
             if (DiscordReward::where('level', $data['level'])->where('id', '!=', $reward->id)->exists()) {
                 throw new \Exception('The level already has rewards.');

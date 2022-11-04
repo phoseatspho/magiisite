@@ -33,7 +33,6 @@ class SubmissionManager extends Service
         DB::beginTransaction();
 
         try {
-
             // 1. check that the prompt can be submitted at this time
             // 2. check that the characters selected exist (are visible too)
             // 3. check that the currencies selected can be attached to characters
@@ -152,9 +151,12 @@ class SubmissionManager extends Service
                 foreach ($data['character_rewardable_id'] as $ckey => $c) {
                     foreach ($c as $key => $id) {
                         switch ($data['character_rewardable_type'][$ckey][$key]) {
-                            case 'Currency': $currencyIds[] = $id; break;
-                            case 'Item': $itemIds[] = $id; break;
-                            case 'LootTable': $tableIds[] = $id; break;
+                            case 'Currency': $currencyIds[] = $id;
+                            break;
+                            case 'Item': $itemIds[] = $id;
+                            break;
+                            case 'LootTable': $tableIds[] = $id;
+                            break;
                         }
                     }
                 } // Expanded character rewards
@@ -292,7 +294,6 @@ class SubmissionManager extends Service
         DB::beginTransaction();
 
         try {
-
             // 1. check that the submission exists
             // 2. check that the submission is pending
             $submission = Submission::where('status', 'Pending')->where('id', $data['id'])->first();
@@ -394,9 +395,12 @@ class SubmissionManager extends Service
                 foreach ($data['character_rewardable_id'] as $ckey => $c) {
                     foreach ($c as $key => $id) {
                         switch ($data['character_rewardable_type'][$ckey][$key]) {
-                            case 'Currency': $currencyIds[] = $id; break;
-                            case 'Item': $itemIds[] = $id; break;
-                            case 'LootTable': $tableIds[] = $id; break;
+                            case 'Currency': $currencyIds[] = $id;
+                            break;
+                            case 'Item': $itemIds[] = $id;
+                            break;
+                            case 'LootTable': $tableIds[] = $id;
+                            break;
                         }
                     }
                 } // Expanded character rewards

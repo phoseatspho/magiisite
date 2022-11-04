@@ -31,7 +31,6 @@ class LootService extends Service
         DB::beginTransaction();
 
         try {
-
             // More specific validation
             foreach ($data['rewardable_type'] as $key => $type) {
                 if (!$type) {
@@ -81,7 +80,6 @@ class LootService extends Service
         DB::beginTransaction();
 
         try {
-
             // More specific validation
             foreach ($data['rewardable_type'] as $key => $type) {
                 if (!$type) {

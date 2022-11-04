@@ -297,7 +297,6 @@ class TradeManager extends Service
                     ]);
                 }
             } else {
-
                 // Notify the other user
                 Notifications::create('TRADE_UPDATE', $user->id == $trade->sender_id ? $trade->recipient : $trade->sender, [
                     'sender_url'  => $user->url,

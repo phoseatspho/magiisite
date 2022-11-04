@@ -9,11 +9,11 @@ use Carbon\Carbon;
 use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Command as DiscordCommand;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
-use Discord\Parts\Embed\Embed;
 
 class DiscordBot extends Command
 {
@@ -149,27 +149,27 @@ class DiscordBot extends Command
                 $data = [];
                 foreach ($topTen as $top) {
                     $data[] = [
-                        'name' => ($emojis[$i-1] ?? '').' #'.$i.' '.$top->user->name,
-                        'value' => 'Level '.$top->level.' ('.$top->exp.' EXP)',
-                        'inline' => false
+                        'name'   => ($emojis[$i - 1] ?? '').' #'.$i.' '.$top->user->name,
+                        'value'  => 'Level '.$top->level.' ('.$top->exp.' EXP)',
+                        'inline' => false,
                     ];
                     $i++; // increment counter so that rank is correct (index 0 = rank 1)
                 }
 
                 // Assemble embed
                 $level ? $footer = [
-                    'text' => 'Your position: #'.$level->relativeRank($level->user),
-                    'iconUrl' => url('/images/avatars/'.$level->user->avatar)
+                    'text'    => 'Your position: #'.$level->relativeRank($level->user),
+                    'iconUrl' => url('/images/avatars/'.$level->user->avatar),
                 ]
                 : $footer = null;
                 $embed = $discord->factory(Embed::class, [
-                    'color'       => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
-                    'title'       => config('lorekeeper.settings.site_name').' ・ Leaderboard',
-                    'type'        => 'rich',
+                    'color'        => hexdec(config('lorekeeper.discord_bot.rank_cards.exp_bar')),
+                    'title'        => config('lorekeeper.settings.site_name').' ・ Leaderboard',
+                    'type'         => 'rich',
                     'avatar_url'   => url('images/favicon.ico'),
-                    'username'    => config('lorekeeper.settings.site_name'),
-                    'fields'      => $data,
-                    'footer'      => $footer 
+                    'username'     => config('lorekeeper.settings.site_name'),
+                    'fields'       => $data,
+                    'footer'       => $footer,
                 ]);
 
                 $builder = MessageBuilder::new()->addEmbed($embed);

@@ -5,16 +5,15 @@ namespace App\Services;
 use App\Models\Discord\DiscordReward;
 use App\Models\User\UserAlias;
 use App\Models\User\UserDiscordLevel;
+use App\Models\User\UserUpdateLog;
 use Config;
 use Intervention\Image\Facades\Image;
 use Settings;
-use App\Models\User\UserUpdateLog;
 
 class DiscordManager extends Service
 {
     /**
      * Generates a message with all commands and their descriptions.
-     * 
      */
     public function showHelpMessage()
     {
@@ -26,9 +25,9 @@ class DiscordManager extends Service
 
         foreach (config('lorekeeper.discord_bot.commands') as $command) {
             $data['fields'][] = [
-                'name' => $command['name'],
-                'value' => $command['description'],
-                'inline' => false
+                'name'   => $command['name'],
+                'value'  => $command['description'],
+                'inline' => false,
             ];
         }
 
@@ -107,7 +106,7 @@ class DiscordManager extends Service
                 switch (get_class($context)) {
                     case 'Discord\Parts\Interactions\Interaction':
                         $options = $context->data->options->toArray();
-                        if(isset($options['user']['value']) && $options['user']['value'] != null && $options['user']['value'] != '') {
+                        if (isset($options['user']['value']) && $options['user']['value'] != null && $options['user']['value'] != '') {
                             $author = $options['user']['value'];
                         } else {
                             $author = $context->user->id;
@@ -334,8 +333,8 @@ class DiscordManager extends Service
                 $level->exp += mt_rand($exp / 2, $exp) * $multiplier;
                 $level->save();
             // formula: 5 * (lvl ^ 2) + (50 * lvl) + 100 - xp
-                // lvl is current level
-                // xp is how much XP already have towards the next level.
+            // lvl is current level
+            // xp is how much XP already have towards the next level.
             } else {
                 // check if it's been a minute since the last message
                 if (!$level->last_message_at || 1 <= $timestamp->diffInMinutes($level->last_message_at)) {
@@ -394,27 +393,25 @@ class DiscordManager extends Service
         }
 
         // log the action
-        if(!$this->logAdminAction($user, 'Discord Level Grant', 'Granted '.$options['amount']['value'].' '.$options['type']['value'].' to '.$recipientInfo->user->name)) {
+        if (!$this->logAdminAction($user, 'Discord Level Grant', 'Granted '.$options['amount']['value'].' '.$options['type']['value'].' to '.$recipientInfo->user->name)) {
             return 'Failed to log action, grant cancelled.';
         }
         $log = UserUpdateLog::create([
             'staff_id' => $user->id,
-            'user_id' => $recipientInfo->user->id,
-            'data' => json_encode(['amount' => $options['amount']['value'], 'type' => $options['type']['value']]),
-            'type' => 'Discord Level Granted'
+            'user_id'  => $recipientInfo->user->id,
+            'data'     => json_encode(['amount' => $options['amount']['value'], 'type' => $options['type']['value']]),
+            'type'     => 'Discord Level Granted',
         ]);
-        if(!$log)
-        {
+        if (!$log) {
             return 'Failed to log action, grant cancelled.';
         }
 
         // check what type of grant it is
-        if($options['type']['value'] == 'level') {
+        if ($options['type']['value'] == 'level') {
             // increment the level by the amount specified
             // they wont receive any rewards for this type of level up
             $recipientInfo->level += $options['amount']['value'];
-        }
-        else {
+        } else {
             // increment the exp by the amount specified
             $recipientInfo->exp += $options['amount']['value'];
             // we dont have to worry about checking for a level up since it'll be done automatically next time they send a message
