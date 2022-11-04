@@ -13,6 +13,7 @@ use Discord\Parts\Interactions\Command\Command as DiscordCommand;
 use Discord\Parts\Interactions\Interaction;
 use Discord\WebSockets\Event;
 use Illuminate\Console\Command;
+use Discord\Parts\Embed\Embed;
 
 class DiscordBot extends Command
 {
