@@ -82,7 +82,7 @@ class DiscordBot extends Command
             // startup message //////////////////
             echo 'Bot is ready!', PHP_EOL;
             // send message to specified channel
-            $guild = $discord->guilds->first();
+            $guild = $discord->guilds->get('id', config('lorekeeper.discord_bot.env.guild_id'));
             $channel = $guild->channels->get('id', $this->error_channel_id);
 
             $channel->sendMessage('Bot is ready! Use '.$this->prefix.'ping to check delay.');

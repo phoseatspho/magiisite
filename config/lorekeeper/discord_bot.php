@@ -120,6 +120,7 @@ return [
         'token'                => env('DISCORD_BOT_TOKEN'),
         'announcement_channel' => env('DISCORD_ANNOUNCEMENT_CHANNEL'),
         'error_channel'        => env('DISCORD_ERROR_CHANNEL'),
+        'guild_id'             => env('DISCORD_GUILD_ID'),
     ],
 
 ];
