@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\User\User;
  use App\Models\Item\Item;
 use App\Services\InventoryManager;
+use Settings;
 
 class DistributeBirthdayReward extends Command
 {
@@ -51,12 +52,12 @@ class DistributeBirthdayReward extends Command
         //it grants on the first of the month every month, it prevents players from having their exact day given out if they don't want to 
         //may add a setting later where players can opt out of rewards if they don't want even the month to be public
         $birthdayUsers = User::whereRaw('MONTH(birthday) = MONTH(NOW())')->get();
+         //this is what will be granted to EVERY user, there is no tweaking it, so if you want to put some randomness in here, just make the selected ID a box with a loot table
+        $item = Item::where('id', Settings::get('birthday_item'))->first();
+    
         // For each user
         forEach($birthdayUsers as $user) {
-            //We're avoiding making whole new pages, and a model and whatnot, but the cost comes at having to edit this file
-            //make sure you edit everything correctly or things will fail
-            //if you have any questions, be sure to ask me or make a ticket
-            //this is what will be granted to EVERY user, there is no tweaking it, so if you want to put some randomness in here, just make a box with a loot table
+            
 
             try {
                 //this is what the "log type" will be in the logs
@@ -67,16 +68,7 @@ class DistributeBirthdayReward extends Command
                 //usually it is "recieved item from X", "purchased from X by for (X currency)"
                 //you can change this as well, we're setting it to a birthday message as default because it's cute 
                 $data = 'Happy Birthday, '. $user->displayName .'!';
-
-                //here's where we will put the rewards
-                //we're just going to use an item because it's simplest and can contain pretty much whatever you as the mod/admin want
-                //you can still just grant multiple items though, copy paste the grant code
-                //if you copy paste more of the same type make sure that there's no overlap in the $item variables
-                //you'd have to set a new variable like $item2 and change $item to that variable get it to grant a new item or it will just grant the same thing
-
-                //set 'Put your item name here' to the item you want to grant, set 1 to the quantity you want to grant
-                //make sure to change these or at best nothing will happen or at worst something might break
-                    $item = Item::where('name', 'Put your item name here')->first();
+                   
                   (new InventoryManager)->creditItem(null, $user, $logType, [
                    'data' => $data,
                    'notes' => null, ],
