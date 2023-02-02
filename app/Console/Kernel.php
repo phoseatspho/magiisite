@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('check-sales')
                 ->everyMinute();
         $schedule->command('distribute-birthday-rewards')
-                ->everyMonth();
+                ->monthly();
 
     }
 
