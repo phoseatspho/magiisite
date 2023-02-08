@@ -54,7 +54,7 @@ class DistributeBirthdayReward extends Command
         $item = Item::where('id', Settings::get('birthday_item'))->first();
 
         // For each user
-        forEach($birthdayUsers as $user) {
+        foreach($birthdayUsers as $user) {
             try {
                 // Exclude users whose birthdays are fully hidden
                 if ($user->settings->birthday_setting > 0) {
@@ -67,15 +67,17 @@ class DistributeBirthdayReward extends Command
                     // you can change this as well, we're setting it to a birthday message as default because it's cute
                     $data = 'Happy Birthday, '. $user->displayName .'!';
 
-                    (new InventoryManager)->creditItem(null, $user, $logType, [
+                    if(!(new InventoryManager)->creditItem(null, $user, $logType, [
                     'data' => $data,
                     'notes' => null,
-                    ], $item, 1);
+                    ], $item, 1)) {
+                        $this->error('Failed to distribute birthday reward.');
+                    }
                 }
             } catch(\Exception $e) {
                 $this->error('error:'. $e->getMessage());
             }
-    }
+        }
     $this->info('Rewards have been distributed');
 }
 }
