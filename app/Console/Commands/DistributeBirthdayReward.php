@@ -3,13 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Config;
-use DB;
-use Carbon\Carbon;
 use App\Models\User\User;
  use App\Models\Item\Item;
 use App\Services\InventoryManager;
-use Settings;
+use App\Facades\Settings;
 
 class DistributeBirthdayReward extends Command
 {
@@ -49,36 +46,38 @@ class DistributeBirthdayReward extends Command
         $this->info('*******************************');
 
         // Get users with a birthday for the given month
-        //it grants on the first of the month every month, it prevents players from having their exact day given out if they don't want to 
-        //may add a setting later where players can opt out of rewards if they don't want even the month to be public
+        // it grants on the first of the month every month, it prevents players from having their exact day given out if they don't want to
+        // may add a setting later where players can opt out of rewards if they don't want even the month to be public
         $birthdayUsers = User::whereRaw('MONTH(birthday) = MONTH(NOW())')->get();
-         //this is what will be granted to EVERY user, there is no tweaking it, so if you want to put some randomness in here, just make the selected ID a box with a loot table
-        $item = Item::where('id', Settings::get('birthday_item'))->first();
-    
-        // For each user
-        forEach($birthdayUsers as $user) {
-            
 
+        // this is what will be granted to EVERY user, there is no tweaking it, so if you want to put some randomness in here, just make the selected ID a box with a loot table
+        $item = Item::where('id', Settings::get('birthday_item'))->first();
+
+        // For each user
+        foreach($birthdayUsers as $user) {
             try {
-                //this is what the "log type" will be in the logs
-                //it's usually something like "staff grant", "shop purchase" 
-                //you can change this if you want
-                $logType = 'Birthday Reward';
-                //this is what appears after the log type, it will also show up as the source if it's an item, so you can take it out if you really want, just set it to null, don't outright remove it or it will break
-                //usually it is "recieved item from X", "purchased from X by for (X currency)"
-                //you can change this as well, we're setting it to a birthday message as default because it's cute 
-                $data = 'Happy Birthday, '. $user->displayName .'!';
-                   
-                  (new InventoryManager)->creditItem(null, $user, $logType, [
-                   'data' => $data,
-                   'notes' => null, ],
-                  $item, 1);            
-                
-                
+                // Exclude users whose birthdays are fully hidden
+                if ($user->settings->birthday_setting > 0) {
+                    // this is what the "log type" will be in the logs
+                    // it's usually something like "staff grant", "shop purchase"
+                    // you can change this if you want
+                    $logType = 'Birthday Reward';
+                    // this is what appears after the log type, it will also show up as the source if it's an item, so you can take it out if you really want, just set it to null, don't outright remove it or it will break
+                    // usually it is "recieved item from X", "purchased from X by for (X currency)"
+                    // you can change this as well, we're setting it to a birthday message as default because it's cute
+                    $data = 'Happy Birthday, '. $user->displayName .'!';
+
+                    if(!(new InventoryManager)->creditItem(null, $user, $logType, [
+                    'data' => $data,
+                    'notes' => null,
+                    ], $item, 1)) {
+                        $this->error('Failed to distribute birthday reward.');
+                    }
+                }
             } catch(\Exception $e) {
                 $this->error('error:'. $e->getMessage());
             }
-    }
+        }
     $this->info('Rewards have been distributed');
 }
 }
