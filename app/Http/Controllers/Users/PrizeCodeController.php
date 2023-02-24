@@ -32,22 +32,41 @@ class PrizeCodeController extends Controller
     }
 
     /**
-     * redeems code
+     * Get a validator for an incoming registration request.
      *
-     * @param  integer  $id
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function postRedeemPrize(Request $request, PrizeCodeManager $service, $query)
+    protected function validator(array $data)
     {
-        $query = $query ?: $request->get('query');
-        if(!$query) return redirect()->to('redeem-code');
-
-        if($service->craftPrize($request->only(['query']), Auth::user())) {
-            flash('Code redeemed successfully!')->success();
-        }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
-        return redirect()->back();
+        return Validator::make($data, [
+            'code' => ['string', function ($attribute, $value, $fail) {
+                        if(!$value) $fail('Please enter a code.');
+                        $codesuccess = PrizeCode::where('code', $value)->first();
+                        if(!$codesuccess) $fail('Invalid code entered.');
+                        // Check it's not expired 
+                        if(!$codesuccess->active) throw new \Exception("This code is not active"); 
+                        // or user already redeemed it 
+                        if($codesuccess->redeemers()->where('user_id', $user->id)) throw new \Exception('You have already redeemed this code.');
+                        //or if it's limited, make sure the claim wouldn't be exceeded
+                        if ($codesuccess->use_limit >= 0) {
+                        if($codesuccess->use_limit >= $codesuccess->redeemers()->count()) throw new \Exception("This code has reached the maximum number of users");
+                        }
+                }
+            ]
+        ]);
     }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\Models\User\User
+     */
+    protected function postRedeemPrize(array $data)
+    { 
+        $service = new PrizeCodeManager;
+        $user = $service->reedeemPrize(Arr::only($data, ['code']));  
+    }
+    
 }

@@ -11,16 +11,22 @@ Code Redemption
 <p> Here you can redeem a code for prizes. Check in with the site's social media and updates to see if any codes have been posted.</p>
 
 <hr>
-{!! Form::open(['url' => 'redeem-code/redeem']) !!}
-    <div>
-        <div class="form-group mr-3 mb-3 mx-5">
-            {!! Form::text('query', Request::get('query'), ['class' => 'form-control', 'id' => 'query']) !!}
-        </div>
-        <div class="form-group mb-3">
-            {!! Form::submit('Redeem', ['class' => 'btn btn-primary', 'id' => 'search']) !!}
-        </div>
-    </div>
-{!! Form::close() !!}
+<form method="POST" action="{{ 'redeem-code/redeem' }}">
+    @csrf
+            <div class="form-group row">
+                <label for="name" class="col-md-4 col-form-label text-md-right">Enter Key </label>
+
+                <div class="col-md-6">
+                    <input id="code" type="text" class="form-control{{ $errors->has('code') ? ' is-invalid' : '' }}" name="code" value="{{ old('code') }}" required autofocus>
+
+                    @if ($errors->has('code'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('code') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div>
+</form>
 
 
 
