@@ -35,21 +35,20 @@
     </div>
 </div>
 
-<div class="form-group">
-        {!! Form::checkbox('limit_check', 1, $prize->use_limit ? 1 : 0, ['class' => 'is-limit-class form-check-input', 'data-toggle' => 'toggle']) !!}  {!! add_help('The code won\'t be able to be used by users after it hits the cap.') !!}
-        {!! Form::label('limit_check', 'Should this code have a use limit?', ['class' => 'form-check-label ml-3']) !!}
-    </div>
-    <div class="limit-form-group" style="display: none">
-        {!! Form::number('use_limit', $prize->use_limit ? $prize->use_limit : 1, ['class' => 'form-control mb-1', 'min' => 1]) !!}
-    </div>
-
+<div class="row">
     <div class="col-md-6">
-<div class="form-group">
-    {!! Form::checkbox('is_active', 1, $prize->id ? $prize->is_active : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-    {!! Form::label('is_active', 'Is Active', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Codes that are not active will not be redeemable. The start/end time hide settings override this setting, i.e. if this is set to active, it will still be unredeemable outside of the start/end times.') !!}
+        <div class="form-group">
+            {!! Form::label('use_limit', 'Use Limit (Optional)') !!} {!! add_help('How many times a code can be used before it becomes unusable. Leave set to 0 for infinite uses.') !!}
+            {!! Form::number('use_limit', $prize->use_limit ? $prize->use_limit : 0, ['class' => 'form-control mb-1']) !!}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::checkbox('is_active', 1, $prize->id ? $prize->is_active : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+            {!! Form::label('is_active', 'Is Active', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Codes that are not active will not be redeemable. The start/end time hide settings override this setting, i.e. if this is set to active, it will still be unredeemable outside of the start/end times.') !!}
+        </div>
+    </div>
 </div>
-</div>
-
 
 
 <h3>Prize Rewards</h3>

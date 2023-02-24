@@ -49,7 +49,7 @@ class PrizeCodeController extends Controller
                         // or user already redeemed it 
                         if($codesuccess->redeemers()->where('user_id', $user->id)) throw new \Exception('You have already redeemed this code.');
                         //or if it's limited, make sure the claim wouldn't be exceeded
-                        if ($codesuccess->use_limit >= 0) {
+                        if ($codesuccess->use_limit > 0) {
                         if($codesuccess->use_limit >= $codesuccess->redeemers()->count()) throw new \Exception("This code has reached the maximum number of users");
                         }
                 }

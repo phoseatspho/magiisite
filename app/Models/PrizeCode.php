@@ -13,7 +13,7 @@ class PrizeCode extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'user_id', 'use_limit', 'start_at', 'end_at', 'is_active'
+       'name', 'code', 'user_id', 'use_limit', 'start_at', 'end_at', 'is_active'
     ];
 
     /**
@@ -29,6 +29,24 @@ class PrizeCode extends Model
      * @var array
      */
     public $dates = ['start_at', 'end_at'];
+
+    /**
+     * Validation rules for creation.
+     *
+     * @var array
+     */
+    public static $createRules = [
+        'name' => 'required', 
+    ];
+    
+    /**
+     * Validation rules for updating.
+     *
+     * @var array
+     */
+    public static $updateRules = [
+        'name' => 'required', 
+    ];
 
 
     /**********************************************************************************************

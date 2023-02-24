@@ -16,9 +16,10 @@ class AddPrizeCodes extends Migration
         Schema::create('prize_codes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->string('name');
             $table->string('code', 15)->unique()->default(1);
             $table->integer('user_id')->unsigned()->default(1);  
-            $table->integer('use_limit')->default(0); 
+            $table->integer('use_limit')->nullable()->default(0); 
             $table->boolean('is_active')->default(1);
             $table->timestamp('start_at')->nullable()->default(null);
             $table->timestamp('end_at')->nullable()->default(null);

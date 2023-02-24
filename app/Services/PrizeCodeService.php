@@ -30,6 +30,7 @@ class PrizeCodeService extends Service
         DB::beginTransaction();
 
         try { 
+            if(PrizeCode::where('name', $data['name'])->where('id', '!=', $prize->id)->exists()) throw new \Exception("The name has already been taken.");  
             if(!isset($data['rewardable_type'])) throw new \Exception('Please add at least one reward to the prize.');
 
             $data = $this->populateData($data);
@@ -41,9 +42,9 @@ class PrizeCodeService extends Service
                 if(!$data['reward_quantity'][$key] || $data['reward_quantity'][$key] < 1) throw new \Exception("Quantity is required and must be an integer greater than 0.");
             }
 
-            if(!isset($data['limit_check'])) $data['use_limit'] = null;
+            if(!isset($data['use_limit'])) $data['use_limit'] = 0;
 
-            $prize = PrizeCode::create(Arr::only($data, ['start_at', 'end_at', 'is_active', 'use_limit', 'limit_check',]));
+            $prize = PrizeCode::create(Arr::only($data, ['name','start_at', 'end_at', 'is_active', 'use_limit']));
             $prize->code = randomString(15);
             $prize->user_id = $user->id; 
 
@@ -69,17 +70,23 @@ class PrizeCodeService extends Service
     {
         DB::beginTransaction();
 
-        try { 
-
+        try {
             // More specific validation
             if(PrizeCode::where('name', $data['name'])->where('id', '!=', $prize->id)->exists()) throw new \Exception("The name has already been taken.");  
-            if(!isset($data['rewardable_type'])) throw new \Exception('Please add at least one reward to the prize.');
+            if(!isset($data['rewardable_type'])) throw new \Exception('Please add at least one reward to the prize.'); 
 
-            $data = $this->populateData($data); 
+            $data = $this->populateData($data);
 
-            if(!isset($data['limit_check'])) $data['use_limit'] = null;
+            foreach($data['rewardable_type'] as $key => $type)
+            {
+                if(!$type) throw new \Exception("Reward type is required.");
+                if(!$data['rewardable_id'][$key]) throw new \Exception("Reward is required.");
+                if(!$data['reward_quantity'][$key] || $data['reward_quantity'][$key] < 1) throw new \Exception("Quantity is required and must be an integer greater than 0.");
+            }
 
-            $prize = Prize::update(Arr::only($data, ['start_at', 'end_at', 'is_active', 'use_limit', 'limit_check',]));
+            if(!isset($data['use_limit'])) $data['use_limit'] = 0;
+
+            $prize = PrizeCode::update(Arr::only($data, ['name','start_at', 'end_at', 'is_active', 'use_limit']));
             $prize->output = $this->populateRewards($data);
             $prize->save(); 
 

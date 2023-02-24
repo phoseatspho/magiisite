@@ -79,14 +79,14 @@ class PrizeCodeController extends Controller
         
         $data = $request->only([
             'name', 'description', 'image', 'remove_image', 'start_at', 'end_at', 'is_active',
-            'rewardable_type', 'rewardable_id', 'reward_quantity', 'use_limit', 
+            'rewardable_type', 'rewardable_id', 'reward_quantity', 'use_limit' 
         ]);
         if($id && $service->updatePrize(PrizeCode::find($id), $data, Auth::user())) {
             flash('Prize updated successfully.')->success();
         }
         else if (!$id && $prize = $service->createPrize($data, Auth::user())) {
             flash('Prize created successfully.')->success();
-            return redirect()->to('admin/data/prizes/edit/'.$prize->id);
+            return redirect()->to('admin/prizecodes/edit/'.$prize->id);
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
