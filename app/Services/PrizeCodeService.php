@@ -86,7 +86,7 @@ class PrizeCodeService extends Service
 
             if(!isset($data['use_limit'])) $data['use_limit'] = 0;
 
-            $prize->update(Arr::only($data, ['name','start_at', 'end_at', 'is_active', 'use_limit']));
+            $prize->update(Arr::only($data, ['name', 'code', 'start_at', 'end_at', 'is_active', 'use_limit']));
             $prize->output = $this->populateRewards($data);
             $prize->save(); 
 

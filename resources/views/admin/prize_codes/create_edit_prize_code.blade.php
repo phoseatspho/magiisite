@@ -15,10 +15,24 @@
 
 <h3>Basic Information</h3>
 
-<div class="form-group">
-    {!! Form::label('Name') !!}
-    {!! Form::text('name', $prize->name, ['class' => 'form-control']) !!}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('Name') !!}{!! add_help('This name will show up in the user logs and on the admin code page.') !!}
+            {!! Form::text('name', $prize->name, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+    @if($prize->id)
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('Code') !!} {!! add_help('If you would like to, enter your own code here. 15 character limit.') !!}
+            {!! Form::text('code', $prize->code, ['class' => 'form-control', 'maxlength' => "15"]) !!}
+        </div>
+    </div>
+    @endif
 </div>
+
 
 <div class="row">
     <div class="col-md-6">
