@@ -3,32 +3,29 @@
 @section('home-title') Redeem Code @endsection
 
 @section('home-content')
-{!! breadcrumbs(['Code Redemption' => 'coderedeem']) !!}
+{!! breadcrumbs(['Code Redemption' => 'redeem-code']) !!}
 
 <h1>
 Code Redemption
 </h1>
 <p> Here you can redeem a code for prizes. Check in with the site's social media and updates to see if any codes have been posted.</p>
 
-<hr>
-<form method="POST" action="{{ 'redeem-code/redeem' }}">
-    @csrf
-            <div class="form-group row">
-                <label for="name" class="col-md-4 col-form-label text-md-right">Enter Key </label>
+<hr> 
+<div class="text-center">
+{!! Form::open(['url' => 'redeem-code/redeem']) !!}
+{!! Form::text('code') !!} 
+<br>
+<br>
+<div class="text-center">
+    {!! Form::submit( 'Redeem', ['class' => 'btn btn-primary']) !!}
+</div>
 
-                <div class="col-md-6">
-                    <input id="code" type="text" class="form-control{{ $errors->has('code') ? ' is-invalid' : '' }}" name="code" value="{{ old('code') }}" required autofocus>
+{!! Form::close() !!}
+</div>
 
-                    @if ($errors->has('code'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('code') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-</form>
-
-
+<div class="text-right mb-4">
+    <a href="{{ url(Auth::user()->url.'/redeem-logs') }}">View logs...</a>
+</div>
 
 
 @endsection

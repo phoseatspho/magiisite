@@ -30,7 +30,7 @@ class PrizeCodeService extends Service
         DB::beginTransaction();
 
         try { 
-            if(PrizeCode::where('name', $data['name'])->where('id', '!=', $prize->id)->exists()) throw new \Exception("The name has already been taken.");  
+             
             if(!isset($data['rewardable_type'])) throw new \Exception('Please add at least one reward to the prize.');
 
             $data = $this->populateData($data);
@@ -86,7 +86,7 @@ class PrizeCodeService extends Service
 
             if(!isset($data['use_limit'])) $data['use_limit'] = 0;
 
-            $prize = PrizeCode::update(Arr::only($data, ['name','start_at', 'end_at', 'is_active', 'use_limit']));
+            $prize->update(Arr::only($data, ['name','start_at', 'end_at', 'is_active', 'use_limit']));
             $prize->output = $this->populateRewards($data);
             $prize->save(); 
 

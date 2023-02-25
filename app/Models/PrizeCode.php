@@ -54,7 +54,7 @@ class PrizeCode extends Model
         RELATIONS
 
     **********************************************************************************************/
-/**
+    /**
      * Scope a query to only include active codes.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -78,11 +78,10 @@ class PrizeCode extends Model
     /**
      * Get the user logs attached to this code.
      */
-    public function reedeemers()
+    public function redeemers()
     {
-        return $this->hasMany('App\Models\User\UserPrizeLog', 'user_id');
+        return $this->hasMany('App\Models\User\UserPrizeLog', 'prize_id');
     }
-
 
     /**
      * Get the user who generated the invitation code.
@@ -98,7 +97,7 @@ class PrizeCode extends Model
      * @return array
      */
     public function getRewardsAttribute()
-    {
+    { 
         $rewards = [];
         if($this->output) {
             $assets = $this->getRewardItemsAttribute();
@@ -129,6 +128,13 @@ class PrizeCode extends Model
         return parseAssetData(json_decode($this->output, true));
     }
 
-
+    /**
+     * @return string
+     */
+    public function getNameWithCodeAttribute()
+    { 
+        $usedcode = $this->redeemers->count();
+        return $usedcode.'/'.($this->use_limit);
+    }
 
 }

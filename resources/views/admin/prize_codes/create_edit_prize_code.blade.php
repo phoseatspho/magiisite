@@ -63,7 +63,32 @@
 
 @include('widgets._prize_reward_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles])
 
+@if($prize->id)
+    <h3>Log</h3> 
 
+    @if(count($prize->redeemers))
+
+    <div class="row ml-md-2 mb-3">
+        <div class="d-flex row flex-wrap col-12 pb-1 px-0 ubt-bottom">
+            <div class="col-md-2 font-weight-bold">User</div> 
+            <div class="col-md font-weight-bold text-center">Claimed</div>
+        </div>
+        @foreach($redeemers as $redeemer)
+        <div class="d-flex row flex-wrap col-12 mt-1 pt-2 px-0 ubt-top">
+            <div class="col-md-2">
+                {!! $redeemer->user->displayName !!}
+            </div> 
+            <div class="col-md text-center">
+                {!! pretty_date($redeemer->claimed_at) !!}
+            </div>
+        </div>
+        @endforeach
+    </div>
+    @else
+        <p>No redeemers found!</p>
+    @endif
+
+@endif
 
 @endsection
 

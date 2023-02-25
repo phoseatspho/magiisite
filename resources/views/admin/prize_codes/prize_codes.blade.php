@@ -38,8 +38,8 @@
                     <td>{!! $prize->user->displayName !!}</td>
                     <td> {!! $prize->start_at ? pretty_date($prize->start_at) : '-' !!}</td>
                     <td>{!! $prize->end_at ? pretty_date($prize->end_at) : '-' !!}</td>
-                    <td> {{ $prize->use_limit ? $prize->use_limit : 'Unlimited' }}</td> 
-                    <td>{!! $prize->is_active ? '<i class="text-success fas fa-check"></i>' : '' !!}</td>
+                    <td> {{ $prize->use_limit ? $prize->nameWithCode : 'Unlimited' }}</td> 
+                    <td>{!! $prize->active() ? '<i class="text-success fas fa-check"></i>' : '' !!}</td>
                     <td class="text-right">
                       <a href="{{ url('admin/prizecodes/edit/'.$prize->id) }}"  class="btn btn-primary py-0 px-2">Edit</a>
                     </td>

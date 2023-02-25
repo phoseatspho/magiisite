@@ -53,7 +53,7 @@ class UserPrizeLog extends Model
      */
     public function prize()
     {
-        return $this->belongsTo('App\Models\PrizeCode', 'code_id');
+        return $this->belongsTo('App\Models\PrizeCode', 'prize_id');
     }
 
     /**********************************************************************************************
@@ -67,7 +67,7 @@ class UserPrizeLog extends Model
      */
     public function getItemDataAttribute()
     {
-        return .$this->user->displayName.'Redeemed '.$this->prize->name. '.';
+        return $this->user->displayName.'Redeemed '.$this->prize->name. '.';
     }
 
 }
