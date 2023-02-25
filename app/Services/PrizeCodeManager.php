@@ -36,7 +36,7 @@ class PrizeCodeManager extends Service
         try {  
             $user = Auth::user();
                         // check if the input matches any existing codes
-                        $codesuccess = PrizeCode::where('code', $data['code'])->first(); 
+                        $codesuccess = PrizeCode::where('code', 'LIKE BINARY', $data['code'])->first(); 
                         
                         if(!isset($codesuccess)) throw new \Exception('Invalid code entered.');
                         // Check it's not expired 
