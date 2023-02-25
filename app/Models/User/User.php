@@ -575,7 +575,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getRedeemLogs($limit = 10)
     {
         $user = $this;
-        $query = UserPrizeLog::with('prize')->orderBy('id', 'DESC');
+        $query = UserPrizeLog::with('prize')->where('user_id', $user->id)->orderBy('id', 'DESC');
         if($limit) return $query->take($limit)->get();
         else return $query->paginate(30);
     }
