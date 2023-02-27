@@ -72,6 +72,25 @@
                     {!! Form::close() !!}
                 </li>
                 @endif
+                @if(Auth::user()->isStaff)
+                <li class="list-group-item">
+                    <a class="card-title h5 collapse-title"  data-toggle="collapse" href="#imageForm"> [ADMIN] Unique Image to Gear</a>
+                    {!! Form::open(['url' => 'weapons/image/'.$stack->id, 'files' => true, 'id' => 'imageForm', 'class' => 'collapse']) !!}
+                        <p class="alert alert-info my-2">Give this weapon a unique image.</p>
+                        <div>{!! Form::file('image') !!}</div>
+                        <div class="text-muted">Recommended size: 100px x 100px</div>
+                        @if($stack->has_image)
+                            <div class="form-check">
+                                {!! Form::checkbox('remove_image', 1, false, ['class' => 'form-check-input']) !!}
+                                {!! Form::label('remove_image', 'Remove current image', ['class' => 'form-check-label']) !!}
+                            </div>
+                        @endif
+                        <div class="text-right">
+                            {!! Form::submit('Upload', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                    {!! Form::close() !!}
+                </li>
+                @endif
                 @if($stack->isTransferrable || $user->hasPower('edit_inventories'))
                     @if(!$stack->character_id)
                     <li class="list-group-item">
