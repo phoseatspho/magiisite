@@ -7,6 +7,7 @@ use App\Models\User\User;
  use App\Models\Item\Item;
 use App\Services\InventoryManager;
 use App\Facades\Settings;
+use Carbon\Carbon;
 
 class DistributeBirthdayReward extends Command
 {
@@ -48,7 +49,7 @@ class DistributeBirthdayReward extends Command
         // Get users with a birthday for the given month
         // it grants on the first of the month every month, it prevents players from having their exact day given out if they don't want to
         // may add a setting later where players can opt out of rewards if they don't want even the month to be public
-        $birthdayUsers = User::whereRaw('MONTH(birthday) = MONTH(NOW())')->get();
+        $birthdayUsers = User::whereMonth('birthday', Carbon::now()->month)->get();
 
         // this is what will be granted to EVERY user, there is no tweaking it, so if you want to put some randomness in here, just make the selected ID a box with a loot table
         $item = Item::where('id', Settings::get('birthday_item'))->first();
