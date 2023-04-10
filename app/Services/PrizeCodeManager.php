@@ -61,12 +61,36 @@ class PrizeCodeManager extends Service
                 'claimed_at' => Carbon::now()
             ]); 
             //credit reward
-            if(!fillUserAssets($codesuccess->rewardItems, null, $user, $logType, $redeemData)) throw new \Exception("Failed to distribute rewards to user.");
+            if(!$rewards = fillUserAssets($codesuccess->rewardItems, null, $user, $logType, $redeemData)) throw new \Exception("Failed to distribute rewards to user.");
+            flash($this->getRewardsString($rewards));
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
         return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Acts upon the item when used from the inventory.
+     *
+     * @param  array                  $rewards
+     * @return string
+     */
+    private function getRewardsString($rewards)
+    {
+        $results = "You have received: ";
+        $result_elements = [];
+        foreach($rewards as $assetType)
+        {
+            if(isset($assetType))
+            {
+                foreach($assetType as $asset)
+                {
+                    array_push($result_elements, $asset['asset']->displayName.(class_basename($asset['asset']) == 'Raffle' ? ' (Raffle Ticket)' : '')." x".$asset['quantity']);
+                }
+            }
+        }
+        return $results.implode(', ', $result_elements);
     }
 }
