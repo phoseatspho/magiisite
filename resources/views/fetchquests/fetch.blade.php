@@ -23,15 +23,18 @@
         @endif
 
         <h1>Reward Offered</h1>
-        @if(isset($fetchCurrency) && $fetchCurrency)
-        <div>{!! $fetchCurrency->display($fetchReward) !!}</div>
+        @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward)
+        <div>{!! $fetchCurrency->display($fetchReward) !!} - {!! $fetchCurrency->display($fetchRewardmax) !!}</div>
         @else
             <p>There is no reward.</p>
         @endif
-
+        @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward)
             <div class="text-right">
                 <a href="#" class="btn btn-primary" id="submitButton">Lend a hand!</a>
             </div>
+            @else
+            You can't turn in a quest with no reward!
+            @endif
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">

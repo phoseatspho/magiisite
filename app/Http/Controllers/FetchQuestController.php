@@ -34,12 +34,12 @@ class FetchQuestController extends Controller
     public function getIndex()
     {
         if(Settings::get('fetch_item')) {
-            $item = item::find(Settings::get('fetch_item'));
+            $item = Item::find(Settings::get('fetch_item'));
         }
         else $fetchItem = null;
 
         if(Settings::get('fetch_currency_id')) {
-            $currency = currency::find(Settings::get('fetch_currency_id'));
+            $currency = Currency::find(Settings::get('fetch_currency_id'));
         }
         else $fetchCurrency = null;
 
@@ -48,10 +48,16 @@ class FetchQuestController extends Controller
         }
         else $fetchCurrency = null;
 
+        if(Settings::get('fetch_reward_max')) {
+            $fetch_reward_max = Settings::get('fetch_reward_max');
+        }
+        else $fetchCurrencymax = null;
+
         return view('fetchquests.fetch', [
             'fetchItem' => $item,
             'fetchCurrency' => $currency,
             'fetchReward' => $fetch_reward,
+            'fetchRewardmax' => $fetch_reward_max
         ]);
     }
 
