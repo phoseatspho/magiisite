@@ -23,12 +23,14 @@
         @else
             <p>There is no reward.</p>
         @endif
-        @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward)
+            @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward && !Auth::user()->fetchCooldown)
             <div class="text-right">
                 <a href="#" class="btn btn-primary" id="submitButton">Lend a hand!</a>
             </div>
+            @elseif(Auth::user()->fetchCooldown)
+                You can complete another quest {!! pretty_date(Auth::user()->fetchCooldown) !!}!
             @else
-            You can't turn in a quest with no reward!
+                You can't turn in a quest with no reward!
             @endif
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">

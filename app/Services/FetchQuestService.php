@@ -33,6 +33,7 @@ class FetchQuestService extends Service
         DB::beginTransaction();
 
         try {
+            
 
             $fetchItem = Settings::get('fetch_item');
 
@@ -41,6 +42,9 @@ class FetchQuestService extends Service
             $currency = Currency::find(Settings::get('fetch_currency_id'));
 
             $user = Auth::user();
+
+            if($user->fetchCooldown) throw new \Exception("You've already completed this fetch quest!");
+
             $stack = UserItem::where([['user_id', $user->id], ['item_id', $fetchItem], ['count', '>', 0]])->first();
 
             if(!$stack) { throw new \Exception("You don't have the item to complete this quest.");}
