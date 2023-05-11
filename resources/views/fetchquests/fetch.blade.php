@@ -3,28 +3,23 @@
 @section('title') Home @endsection
 
 @section('content')
-<div class="row">
-    <div class="col text-center">
-        <img src="https://media.discordapp.net/attachments/905923832173436958/1090990552243253258/bunny.png?width=312&height=435"/>
-    </div>
-    <div class="col text-center">
-        <h1>Currently looking for</h1>
-        @if(isset($fetchItem) && $fetchItem)
-            @if($fetchItem->imageUrl)
-            <div>
-                <a href="{{ $fetchItem->url }}"><img src="{{ $fetchItem->imageUrl}}"/></a>
-            </div>
-            @endif
-            <div class="mt-1">
-                <a href="{{ $fetchItem->url }}" class="h5 mb-0"> {{ $fetchItem->name }}</a>
-            </div>
+<h1>Currently looking for</h1>
+    @if(isset($fetchItem) && $fetchItem)
+        @if($fetchItem->imageUrl)
+        <div>
+            <a href="{{ $fetchItem->url }}"><img src="{{ $fetchItem->imageUrl}}"/></a>
+        </div>
+        @endif
+        <div class="mt-1">
+            <a href="{{ $fetchItem->url }}" class="h5 mb-0"> {{ $fetchItem->name }}</a>
+        </div>
         @else
             <p>There is no fetch item.</p>
-        @endif
+    @endif
 
-        <h1>Reward Offered</h1>
-        @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward)
-        <div>{!! $fetchCurrency->display($fetchReward) !!} - {!! $fetchCurrency->display($fetchRewardmax) !!}</div>
+<h1>Reward Offered</h1>
+    @if(isset($fetchCurrency) && $fetchCurrency && $fetchRewardmax && $fetchReward)
+    <div>{!! $fetchCurrency->display($fetchReward) !!} - {!! $fetchCurrency->display($fetchRewardmax) !!}</div>
         @else
             <p>There is no reward.</p>
         @endif
@@ -52,9 +47,6 @@
             </div>
         </div>
     </div>
-
-    </div>
-</div>
 @endsection
 
 @section('scripts')
