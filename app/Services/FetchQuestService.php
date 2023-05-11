@@ -37,15 +37,22 @@ class FetchQuestService extends Service
             $fetchItem = Settings::get('fetch_item');
 
             $rewardqty = Settings::get('fetch_reward');
-            $rewardid = Settings::get('fetch_currency_id');
+            $rewardqtymax = Settings::get('fetch_reward_max');
+            $currency = Currency::find(Settings::get('fetch_currency_id'));
 
             $user = Auth::user();
             $stack = UserItem::where([['user_id', $user->id], ['item_id', $fetchItem], ['count', '>', 0]])->first();
 
-            if(!(new InventoryManager)->debitStack($user, 'Turned in for Fetch Quest', ['data' => ''], $stack, 1)) {
+            if(!$stack) { throw new \Exception("You don't have the item to complete this quest.");}
+    
+            if(!(new InventoryManager)->debitStack($user, 'Turned in for Fetch Quest', ['data' => ''], $stack, 1)) { throw new \Exception("Failed to turn in quest.");}
 
-
-            throw new \Exception("Failed to turn in quest.");}
+                //successful turnin, so we credit the reward
+                //first we randomize it though
+                $totalWeight = $rewardqtymax;
+                $roll = mt_rand($rewardqty, $totalWeight - 1);
+                //credit now after the random shenanigans
+                if(!(new CurrencyManager)->creditCurrency(null, $user, 'Fetch Quest Reward', 'Reward for completing fetch quest', $currency, $roll)) throw new \Exception("Failed to credit currency.");   
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {

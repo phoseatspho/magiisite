@@ -41,12 +41,19 @@ class ChangeFetchItem extends Command
      */
     public function handle()
     {
-        $id = Item::all()->random()->id;
+        $items = Item::where('item_category_id', Settings::get('fetch_category_id'))->released()->get();
+        if(!$items->count()) throw new \Exception('There are no items to select from!');
+
+        $totalWeight = $items->count();
+        $roll = mt_rand(0, $totalWeight - 1);
+        $result = $items[$roll]->id;
+
         $setting = Settings::get('fetch_item');
-        while($id == $setting) {
-            $id = Item::all()->random()->id;
+        while($result == $setting) {
+            $roll = mt_rand(0, $totalWeight - 1);
+            $result = $items[$roll]->id;
         }
 
-        DB::table('site_settings')->where('key', 'fetch_item')->update(['value' => $id]);
+        DB::table('site_settings')->where('key', 'fetch_item')->update(['value' => $result]);
     }
 }
