@@ -8,6 +8,7 @@ use App\Models\User\User;
 use App\Services\InventoryManager;
 use App\Facades\Settings;
 use Carbon\Carbon;
+use Notifications;
 
 class DistributeBirthdayReward extends Command
 {
@@ -74,6 +75,11 @@ class DistributeBirthdayReward extends Command
                     ], $item, 1)) {
                         $this->error('Failed to distribute birthday reward.');
                     }
+
+                    //notify the user of the gift
+                    Notifications::create('BIRTHDAY_REWARDED', $user, [
+                        'user_name' => $user->name,
+                    ]);
                 }
             } catch(\Exception $e) {
                 $this->error('error:'. $e->getMessage());
