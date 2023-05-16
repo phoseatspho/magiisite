@@ -6,8 +6,7 @@ use App\Models\SitePage;
 use Config;
 use DB;
 
-class PageService extends Service
-{
+class PageService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Page Service
@@ -25,8 +24,7 @@ class PageService extends Service
      *
      * @return \App\Models\SitePage|bool
      */
-    public function createPage($data, $user)
-    {
+    public function createPage($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -39,6 +37,7 @@ class PageService extends Service
             }
             if (!isset($data['can_comment'])) {
                 $data['can_comment'] = 0;
+                $data['allow_dislikes'] = 0;
             }
 
             $page = SitePage::create($data);
@@ -60,8 +59,7 @@ class PageService extends Service
      *
      * @return \App\Models\SitePage|bool
      */
-    public function updatePage($page, $data, $user)
-    {
+    public function updatePage($page, $data, $user) {
         DB::beginTransaction();
 
         try {
@@ -79,6 +77,7 @@ class PageService extends Service
             }
             if (!isset($data['can_comment'])) {
                 $data['can_comment'] = 0;
+                $data['allow_dislikes'] = 0;
             }
 
             $page->update($data);
@@ -98,8 +97,7 @@ class PageService extends Service
      *
      * @return bool
      */
-    public function deletePage($page)
-    {
+    public function deletePage($page) {
         DB::beginTransaction();
 
         try {

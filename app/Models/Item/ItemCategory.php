@@ -4,8 +4,7 @@ namespace App\Models\Item;
 
 use App\Models\Model;
 
-class ItemCategory extends Model
-{
+class ItemCategory extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +20,7 @@ class ItemCategory extends Model
      * @var string
      */
     protected $table = 'item_categories';
+
     /**
      * Validation rules for creation.
      *
@@ -54,8 +54,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getDisplayNameAttribute()
-    {
+    public function getDisplayNameAttribute() {
         return '<a href="'.$this->url.'" class="display-category">'.$this->name.'</a>';
     }
 
@@ -64,8 +63,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getImageDirectoryAttribute()
-    {
+    public function getImageDirectoryAttribute() {
         return 'images/data/item-categories';
     }
 
@@ -74,8 +72,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getCategoryImageFileNameAttribute()
-    {
+    public function getCategoryImageFileNameAttribute() {
         return $this->id.'-image.png';
     }
 
@@ -84,8 +81,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getCategoryImagePathAttribute()
-    {
+    public function getCategoryImagePathAttribute() {
         return public_path($this->imageDirectory);
     }
 
@@ -94,8 +90,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getCategoryImageUrlAttribute()
-    {
+    public function getCategoryImageUrlAttribute() {
         if (!$this->has_image) {
             return null;
         }
@@ -108,8 +103,7 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getUrlAttribute()
-    {
+    public function getUrlAttribute() {
         return url('world/item-categories?name='.$this->name);
     }
 
@@ -118,8 +112,25 @@ class ItemCategory extends Model
      *
      * @return string
      */
-    public function getSearchUrlAttribute()
-    {
+    public function getSearchUrlAttribute() {
         return url('world/items?item_category_id='.$this->id);
+    }
+
+    /**
+     * Gets the admin edit URL.
+     *
+     * @return string
+     */
+    public function getAdminUrlAttribute() {
+        return url('admin/data/item-categories/edit/'.$this->id);
+    }
+
+    /**
+     * Gets the power required to edit this model.
+     *
+     * @return string
+     */
+    public function getAdminPowerAttribute() {
+        return 'edit_data';
     }
 }

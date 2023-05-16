@@ -17,8 +17,7 @@ use Illuminate\Support\Arr;
 use Notifications;
 use Settings;
 
-class SubmissionManager extends Service
-{
+class SubmissionManager extends Service {
     /**
      * Creates a new submission.
      *
@@ -28,8 +27,7 @@ class SubmissionManager extends Service
      *
      * @return mixed
      */
-    public function createSubmission($data, $user, $isClaim = false)
-    {
+    public function createSubmission($data, $user, $isClaim = false) {
         DB::beginTransaction();
 
         try {
@@ -92,7 +90,7 @@ class SubmissionManager extends Service
 
             // Attach currencies.
             if (isset($data['currency_id'])) {
-                foreach ($data['currency_id'] as $holderKey=>$currencyIds) {
+                foreach ($data['currency_id'] as $holderKey=> $currencyIds) {
                     $holder = explode('-', $holderKey);
                     $holderType = $holder[0];
                     $holderId = $holder[1];
@@ -100,7 +98,7 @@ class SubmissionManager extends Service
                     $holder = User::find($holderId);
 
                     $currencyManager = new CurrencyManager;
-                    foreach ($currencyIds as $key=>$currencyId) {
+                    foreach ($currencyIds as $key=> $currencyId) {
                         $currency = Currency::find($currencyId);
                         if (!$currency) {
                             throw new \Exception('Invalid currency selected.');
@@ -127,13 +125,13 @@ class SubmissionManager extends Service
             $promptRewards = mergeAssetsArrays($promptRewards, $this->processRewards($data, false, null, $isClaim));
             $submission = Submission::create([
                 'user_id'  => $user->id,
-                'url'      => isset($data['url']) ? $data['url'] : null,
+                'url'      => $data['url'] ?? null,
                 'status'   => 'Pending',
                 'comments' => $data['comments'],
                 'data'     => json_encode([
                     'user'    => Arr::only(getDataReadyAssets($userAssets), ['user_items', 'currencies']),
                     'rewards' => getDataReadyAssets($promptRewards),
-                    ]), // list of rewards and addons
+                ]), // list of rewards and addons
             ] + ($isClaim ? [] : ['prompt_id' => $prompt->id]));
 
             // Retrieve all reward IDs for characters
@@ -149,7 +147,7 @@ class SubmissionManager extends Service
             } elseif (isset($data['character_rewardable_id'])) {
                 $data['character_rewardable_id'] = array_map([$this, 'innerNull'], $data['character_rewardable_id']);
                 foreach ($data['character_rewardable_id'] as $ckey => $c) {
-                    foreach ($c as $key => $id) {
+                    foreach ($c as $key                            => $id) {
                         switch ($data['character_rewardable_type'][$ckey][$key]) {
                             case 'Currency': $currencyIds[] = $id;
                                 break;
@@ -198,8 +196,7 @@ class SubmissionManager extends Service
      *
      * @return mixed
      */
-    public function rejectSubmission($data, $user)
-    {
+    public function rejectSubmission($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -235,7 +232,7 @@ class SubmissionManager extends Service
             // And currencies
             $currencyManager = new CurrencyManager;
             if (isset($addonData['currencies']) && $addonData['currencies']) {
-                foreach ($addonData['currencies'] as $currencyId=>$quantity) {
+                foreach ($addonData['currencies'] as $currencyId=> $quantity) {
                     $currency = Currency::find($currencyId);
                     if (!$currency) {
                         throw new \Exception('Cannot return an invalid currency. ('.$currencyId.')');
@@ -289,8 +286,7 @@ class SubmissionManager extends Service
      *
      * @return mixed
      */
-    public function approveSubmission($data, $user)
-    {
+    public function approveSubmission($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -321,7 +317,7 @@ class SubmissionManager extends Service
                 // Workaround for user not being unset after inventory shuffling, preventing proper staff ID assignment
                 $staff = $user;
 
-                foreach ($stacks as $stackId=>$quantity) {
+                foreach ($stacks as $stackId=> $quantity) {
                     $stack = UserItem::find($stackId);
                     $user = User::find($submission->user_id);
                     if (!$inventoryManager->debitStack($user, $submission->prompt_id ? 'Prompt Approved' : 'Claim Approved', ['data' => 'Item used in submission (<a href="'.$submission->viewUrl.'">#'.$submission->id.'</a>)'], $stack, $quantity)) {
@@ -336,7 +332,7 @@ class SubmissionManager extends Service
             // Log currency removal, etc.
             $currencyManager = new CurrencyManager;
             if (isset($addonData['currencies']) && $addonData['currencies']) {
-                foreach ($addonData['currencies'] as $currencyId=>$quantity) {
+                foreach ($addonData['currencies'] as $currencyId=> $quantity) {
                     $currency = Currency::find($currencyId);
                     if (!$currencyManager->createLog(
                         $submission->user_id,
@@ -393,7 +389,7 @@ class SubmissionManager extends Service
             } elseif (isset($data['character_rewardable_id'])) {
                 $data['character_rewardable_id'] = array_map([$this, 'innerNull'], $data['character_rewardable_id']);
                 foreach ($data['character_rewardable_id'] as $ckey => $c) {
-                    foreach ($c as $key => $id) {
+                    foreach ($c as $key                            => $id) {
                         switch ($data['character_rewardable_type'][$ckey][$key]) {
                             case 'Currency': $currencyIds[] = $id;
                                 break;
@@ -456,7 +452,7 @@ class SubmissionManager extends Service
                 'data'                  => json_encode([
                     'user'    => $addonData,
                     'rewards' => getDataReadyAssets($rewards),
-                    ]), // list of rewards
+                ]), // list of rewards
             ]);
 
             Notifications::create($submission->prompt_id ? 'SUBMISSION_APPROVED' : 'CLAIM_APPROVED', $submission->user, [
@@ -492,8 +488,7 @@ class SubmissionManager extends Service
      *
      * @return array
      */
-    private function innerNull($value)
-    {
+    private function innerNull($value) {
         return array_values(array_filter($value));
     }
 
@@ -507,8 +502,7 @@ class SubmissionManager extends Service
      *
      * @return array
      */
-    private function processRewards($data, $isCharacter, $isStaff = false, $isClaim = false)
-    {
+    private function processRewards($data, $isCharacter, $isStaff = false, $isClaim = false) {
         if ($isCharacter) {
             $assets = createAssetsArray(true);
 

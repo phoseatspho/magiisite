@@ -7,8 +7,7 @@ use App\Models\User\UserUpdateLog;
 use DB;
 use Laravel\Socialite\Facades\Socialite;
 
-class LinkService extends Service
-{
+class LinkService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Link Service
@@ -25,8 +24,7 @@ class LinkService extends Service
      *
      * @return string
      */
-    public function getAuthRedirect($provider)
-    {
+    public function getAuthRedirect($provider) {
         if ($provider == 'deviantart') {
             return Socialite::driver($provider)->setScopes(['user'])->redirect();
         } else {
@@ -41,8 +39,7 @@ class LinkService extends Service
      * @param mixed                 $provider
      * @param mixed                 $result
      */
-    public function saveProvider($provider, $result, $user)
-    {
+    public function saveProvider($provider, $result, $user) {
         DB::beginTransaction();
 
         try {
@@ -84,8 +81,7 @@ class LinkService extends Service
      * @param \App\Models\User\User $user
      * @param mixed                 $aliasId
      */
-    public function makePrimary($aliasId, $user)
-    {
+    public function makePrimary($aliasId, $user) {
         DB::beginTransaction();
 
         try {
@@ -122,12 +118,16 @@ class LinkService extends Service
      * @param \App\Models\User\User $user
      * @param mixed                 $aliasId
      */
-    public function hideAlias($aliasId, $user)
-    {
+    public function hideAlias($aliasId, $user) {
         DB::beginTransaction();
 
         try {
-            $alias = UserAlias::where('id', $aliasId)->where('user_id', $user->id)->where('is_primary_alias', 0)->first();
+            $alias = UserAlias::where('id', $aliasId)->where('user_id', $user->id);
+            if (config('lorekeeper.settings.require_alias')) {
+                $alias = $alias->where('is_primary_alias', 0)->first();
+            } else {
+                $alias = $alias->first();
+            }
 
             if (!$alias) {
                 throw new \Exception('Invalid alias selected.');
@@ -153,12 +153,16 @@ class LinkService extends Service
      * @param \App\Models\User\User $user
      * @param mixed                 $aliasId
      */
-    public function removeAlias($aliasId, $user)
-    {
+    public function removeAlias($aliasId, $user) {
         DB::beginTransaction();
 
         try {
-            $alias = UserAlias::where('id', $aliasId)->where('user_id', $user->id)->where('is_primary_alias', 0)->first();
+            $alias = UserAlias::where('id', $aliasId)->where('user_id', $user->id);
+            if (config('lorekeeper.settings.require_alias')) {
+                $alias = $alias->where('is_primary_alias', 0)->first();
+            } else {
+                $alias = $alias->first();
+            }
 
             if (!$alias) {
                 throw new \Exception('Invalid alias selected.');
@@ -168,6 +172,12 @@ class LinkService extends Service
 
             // Delete the alias
             $alias->delete();
+
+            if (!config('lorekeeper.settings.require_alias') && $user->aliases->count() == 0) {
+                $user->update([
+                    'has_alias' => 0,
+                ]);
+            }
 
             return $this->commitReturn(true);
         } catch (\Exception $e) {

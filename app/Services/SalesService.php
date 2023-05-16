@@ -9,8 +9,7 @@ use App\Models\User\User;
 use DB;
 use Validator;
 
-class SalesService extends Service
-{
+class SalesService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Sales Service
@@ -28,8 +27,7 @@ class SalesService extends Service
      *
      * @return \App\Models\Sales\Sales|bool
      */
-    public function createSales($data, $user)
-    {
+    public function createSales($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -98,8 +96,7 @@ class SalesService extends Service
      *
      * @return \App\Models\Sales\Sales|bool
      */
-    public function updateSales($sales, $data, $user)
-    {
+    public function updateSales($sales, $data, $user) {
         DB::beginTransaction();
 
         try {
@@ -150,8 +147,7 @@ class SalesService extends Service
      *
      * @return bool
      */
-    public function deleteSales($sales)
-    {
+    public function deleteSales($sales) {
         DB::beginTransaction();
 
         try {
@@ -171,8 +167,7 @@ class SalesService extends Service
      *
      * @return bool
      */
-    public function updateQueue()
-    {
+    public function updateQueue() {
         $count = Sales::shouldBeVisible()->count();
         if ($count) {
             DB::beginTransaction();
@@ -218,9 +213,8 @@ class SalesService extends Service
      *
      * @return bool
      */
-    private function processCharacters($sales, $data)
-    {
-        foreach ($data['slug'] as $key=>$slug) {
+    private function processCharacters($sales, $data) {
+        foreach ($data['slug'] as $key=> $slug) {
             $character = Character::myo(0)->visible()->where('slug', $slug)->first();
 
             // Assemble data
@@ -278,9 +272,9 @@ class SalesService extends Service
                 'sales_id'     => $sales->id,
                 'type'         => $charData[$key]['type'],
                 'data'         => json_encode($charData[$key]),
-                'description'  => isset($data['description'][$key]) ? $data['description'][$key] : null,
-                'link'         => isset($data['link'][$key]) ? $data['link'][$key] : null,
-                'is_open'      => isset($data['character_is_open'][$character->slug]) ? $data['character_is_open'][$character->slug] : ($data['new_entry'][$key] ? 1 : 0),
+                'description'  => $data['description'][$key] ?? null,
+                'link'         => $data['link'][$key] ?? null,
+                'is_open'      => $data['character_is_open'][$character->slug] ?? ($data['new_entry'][$key] ? 1 : 0),
             ]);
         }
     }
@@ -291,8 +285,7 @@ class SalesService extends Service
      *
      * @return bool
      */
-    private function alertUsers()
-    {
+    private function alertUsers() {
         User::query()->update(['is_sales_unread' => 1]);
 
         return true;

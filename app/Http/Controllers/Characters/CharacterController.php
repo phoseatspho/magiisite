@@ -17,14 +17,16 @@ use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
+use App\Services\DesignUpdateManager;
 use App\Services\InventoryManager;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\View;
 use Route;
 use Settings;
 
-class CharacterController extends Controller
-{
+class CharacterController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | Character Controller
@@ -37,8 +39,7 @@ class CharacterController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware(function ($request, $next) {
             $slug = Route::current()->parameter('slug');
             $query = Character::myo(0)->where('slug', $slug);
@@ -52,6 +53,57 @@ class CharacterController extends Controller
 
             $this->character->updateOwner();
 
+            if (Config::get('lorekeeper.extensions.previous_and_next_characters.display')) {
+                $query = Character::myo(0);
+                // Get only characters of this category if pull number is limited to category
+                if (Config::get('lorekeeper.settings.character_pull_number') === 'category') {
+                    $query->where('character_category_id', $this->character->character_category_id);
+                }
+
+                if (!(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
+                    $query->where('is_visible', 1);
+                }
+
+                // Get the previous and next characters, if they exist
+                $prevCharName = null;
+                $prevCharUrl = null;
+                $nextCharName = null;
+                $nextCharUrl = null;
+
+                if ($query->count()) {
+                    $characters = $query->orderBy('number', 'DESC')->get();
+
+                    // Filter
+                    $lowerChar = $characters->where('number', '<', $this->character->number)->first();
+                    $higherChar = $characters->where('number', '>', $this->character->number)->last();
+                }
+
+                if (Config::get('lorekeeper.extensions.previous_and_next_characters.reverse') == 0) {
+                    $nextCharacter = $lowerChar;
+                    $previousCharacter = $higherChar;
+                } else {
+                    $previousCharacter = $lowerChar;
+                    $nextCharacter = $higherChar;
+                }
+
+                if (!$previousCharacter || $previousCharacter->id == $this->character->id) {
+                    $previousCharacter = null;
+                } else {
+                    $prevCharName = $previousCharacter->fullName;
+                    $prevCharUrl = $previousCharacter->url;
+                }
+
+                if (!$nextCharacter || $nextCharacter->id == $this->character->id) {
+                    $nextCharacter = null;
+                } else {
+                    $nextCharName = $nextCharacter->fullName;
+                    $nextCharUrl = $nextCharacter->url;
+                }
+
+                $extPrevAndNextBtns = ['prevCharName' => $prevCharName, 'prevCharUrl' => $prevCharUrl, 'nextCharName' => $nextCharName, 'nextCharUrl' => $nextCharUrl];
+                View::share('extPrevAndNextBtns', $extPrevAndNextBtns);
+            }
+
             return $next($request);
         });
     }
@@ -63,10 +115,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacter($slug)
-    {
+    public function getCharacter($slug) {
         return view('character.character', [
-            'character' => $this->character,
+            'character'             => $this->character,
+            'showMention'           => true,
+            'extPrevAndNextBtnsUrl' => '',
         ]);
     }
 
@@ -77,10 +130,10 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterProfile($slug)
-    {
+    public function getCharacterProfile($slug) {
         return view('character.profile', [
-            'character' => $this->character,
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/profile',
         ]);
     }
 
@@ -91,8 +144,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getEditCharacterProfile($slug)
-    {
+    public function getEditCharacterProfile($slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -116,8 +168,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postEditCharacterProfile(Request $request, CharacterManager $service, $slug)
-    {
+    public function postEditCharacterProfile(Request $request, CharacterManager $service, $slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -148,11 +199,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterGallery(Request $request, $slug)
-    {
+    public function getCharacterGallery(Request $request, $slug) {
         return view('character.gallery', [
-            'character'   => $this->character,
-            'submissions' => GallerySubmission::whereIn('id', $this->character->gallerySubmissions->pluck('gallery_submission_id')->toArray())->visible()->accepted()->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/gallery',
+            'submissions'           => GallerySubmission::whereIn('id', $this->character->gallerySubmissions->pluck('gallery_submission_id')->toArray())->visible()->accepted()->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
 
@@ -163,11 +214,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterImages($slug)
-    {
+    public function getCharacterImages($slug) {
         return view('character.images', [
-            'user'      => Auth::check() ? Auth::user() : null,
-            'character' => $this->character,
+            'user'                  => Auth::check() ? Auth::user() : null,
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/images',
         ]);
     }
 
@@ -178,8 +229,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterInventory($slug)
-    {
+    public function getCharacterInventory($slug) {
         $categories = ItemCategory::where('is_character_owned', '1')->orderBy('sort', 'DESC')->get();
         $itemOptions = Item::whereIn('item_category_id', $categories->pluck('id'));
 
@@ -199,17 +249,18 @@ class CharacterController extends Controller
                 ->groupBy(['item_category_id', 'id']);
 
         return view('character.inventory', [
-            'character'  => $this->character,
-            'categories' => $categories->keyBy('id'),
-            'items'      => $items,
-            'logs'       => $this->character->getItemLogs(),
-            ] + (Auth::check() && (Auth::user()->hasPower('edit_inventories') || Auth::user()->id == $this->character->user_id) ? [
-                'itemOptions'   => $itemOptions->pluck('name', 'id'),
-                'userInventory' => UserItem::with('item')->whereIn('item_id', $itemOptions->pluck('id'))->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get()->filter(function ($userItem) {
-                    return $userItem->isTransferrable == true;
-                })->sortBy('item.name'),
-                'page' => 'character',
-            ] : []));
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/inventory',
+            'categories'            => $categories->keyBy('id'),
+            'items'                 => $items,
+            'logs'                  => $this->character->getItemLogs(),
+        ] + (Auth::check() && (Auth::user()->hasPower('edit_inventories') || Auth::user()->id == $this->character->user_id) ? [
+            'itemOptions'   => $itemOptions->pluck('name', 'id'),
+            'userInventory' => UserItem::with('item')->whereIn('item_id', $itemOptions->pluck('id'))->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get()->filter(function ($userItem) {
+                return $userItem->isTransferrable == true;
+            })->sortBy('item.name'),
+            'page'          => 'character',
+        ] : []));
     }
 
     /**
@@ -219,14 +270,14 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterBank($slug)
-    {
+    public function getCharacterBank($slug) {
         $character = $this->character;
 
         return view('character.bank', [
-            'character'  => $this->character,
-            'currencies' => $character->getCurrencies(true),
-            'logs'       => $this->character->getCurrencyLogs(),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/bank',
+            'currencies'            => $character->getCurrencies(true),
+            'logs'                  => $this->character->getCurrencyLogs(),
         ] + (Auth::check() && Auth::user()->id == $this->character->user_id ? [
             'takeCurrencyOptions' => Currency::where('allow_character_to_user', 1)->where('is_user_owned', 1)->where('is_character_owned', 1)->whereIn('id', CharacterCurrency::where('character_id', $this->character->id)->pluck('currency_id')->toArray())->orderBy('sort_character', 'DESC')->pluck('name', 'id')->toArray(),
             'giveCurrencyOptions' => Currency::where('allow_user_to_character', 1)->where('is_user_owned', 1)->where('is_character_owned', 1)->whereIn('id', UserCurrency::where('user_id', Auth::user()->id)->pluck('currency_id')->toArray())->orderBy('sort_user', 'DESC')->pluck('name', 'id')->toArray(),
@@ -244,8 +295,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCurrencyTransfer(Request $request, CurrencyManager $service, $slug)
-    {
+    public function postCurrencyTransfer(Request $request, CurrencyManager $service, $slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -273,8 +323,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postInventoryEdit(Request $request, InventoryManager $service, $slug)
-    {
+    public function postInventoryEdit(Request $request, InventoryManager $service, $slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -315,11 +364,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterCurrencyLogs($slug)
-    {
+    public function getCharacterCurrencyLogs($slug) {
         return view('character.currency_logs', [
-            'character' => $this->character,
-            'logs'      => $this->character->getCurrencyLogs(0),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/currency-logs',
+            'logs'                  => $this->character->getCurrencyLogs(0),
         ]);
     }
 
@@ -330,11 +379,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterItemLogs($slug)
-    {
+    public function getCharacterItemLogs($slug) {
         return view('character.item_logs', [
-            'character' => $this->character,
-            'logs'      => $this->character->getItemLogs(0),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/item-logs',
+            'logs'                  => $this->character->getItemLogs(0),
         ]);
     }
 
@@ -345,11 +394,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterOwnershipLogs($slug)
-    {
+    public function getCharacterOwnershipLogs($slug) {
         return view('character.ownership_logs', [
-            'character' => $this->character,
-            'logs'      => $this->character->getOwnershipLogs(0),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/ownership',
+            'logs'                  => $this->character->getOwnershipLogs(0),
         ]);
     }
 
@@ -360,11 +409,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterLogs($slug)
-    {
+    public function getCharacterLogs($slug) {
         return view('character.character_logs', [
-            'character' => $this->character,
-            'logs'      => $this->character->getCharacterLogs(),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/change-log',
+            'logs'                  => $this->character->getCharacterLogs(),
         ]);
     }
 
@@ -375,11 +424,11 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterSubmissions($slug)
-    {
+    public function getCharacterSubmissions($slug) {
         return view('character.submission_logs', [
-            'character' => $this->character,
-            'logs'      => $this->character->getSubmissions(),
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/submissions',
+            'logs'                  => $this->character->getSubmissions(),
         ]);
     }
 
@@ -390,8 +439,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getTransfer($slug)
-    {
+    public function getTransfer($slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -419,8 +467,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postTransfer(Request $request, CharacterManager $service, $slug)
-    {
+    public function postTransfer(Request $request, CharacterManager $service, $slug) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -445,8 +492,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCancelTransfer(Request $request, CharacterManager $service, $slug, $id)
-    {
+    public function postCancelTransfer(Request $request, CharacterManager $service, $slug, $id) {
         if (!Auth::check()) {
             abort(404);
         }
@@ -469,8 +515,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterApproval($slug)
-    {
+    public function getCharacterApproval($slug) {
         if (!Auth::check() || $this->character->user_id != Auth::user()->id) {
             abort(404);
         }
@@ -490,8 +535,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCharacterApproval($slug, DesignUpdateManager $service)
-    {
+    public function postCharacterApproval($slug, DesignUpdateManager $service) {
         if (!Auth::check() || $this->character->user_id != Auth::user()->id) {
             abort(404);
         }
@@ -516,8 +560,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function postItemTransfer(Request $request, InventoryManager $service)
-    {
+    private function postItemTransfer(Request $request, InventoryManager $service) {
         if ($service->transferCharacterStack($this->character, $this->character->user, CharacterItem::find($request->get('ids')), $request->get('quantities'), Auth::user())) {
             flash('Item transferred successfully.')->success();
         } else {
@@ -536,8 +579,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function postName(Request $request, InventoryManager $service)
-    {
+    private function postName(Request $request, InventoryManager $service) {
         if ($service->nameStack($this->character, CharacterItem::find($request->get('ids')), $request->get('stack_name'), Auth::user())) {
             flash('Item named successfully.')->success();
         } else {
@@ -556,8 +598,7 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function postDelete(Request $request, InventoryManager $service)
-    {
+    private function postDelete(Request $request, InventoryManager $service) {
         if ($service->deleteStack($this->character, CharacterItem::find($request->get('ids')), $request->get('quantities'), Auth::user())) {
             flash('Item deleted successfully.')->success();
         } else {

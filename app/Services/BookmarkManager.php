@@ -6,8 +6,7 @@ use App\Models\Character\Character;
 use App\Models\Character\CharacterBookmark;
 use DB;
 
-class BookmarkManager extends Service
-{
+class BookmarkManager extends Service {
     /*
     |--------------------------------------------------------------------------
     | Bookmark Manager
@@ -25,8 +24,7 @@ class BookmarkManager extends Service
      *
      * @return \App\Models\Character\CharacterBookmark|bool
      */
-    public function createBookmark($data, $user)
-    {
+    public function createBookmark($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -47,11 +45,11 @@ class BookmarkManager extends Service
                 'character_id'                  => $character->id,
                 'user_id'                       => $user->id,
                 'sort'                          => 0,
-                'notify_on_trade_status'        => isset($data['notify_on_trade_status']) ? $data['notify_on_trade_status'] : 0,
-                'notify_on_gift_art_status'     => isset($data['notify_on_gift_art_status']) ? $data['notify_on_gift_art_status'] : 0,
-                'notify_on_gift_writing_status' => isset($data['notify_on_gift_writing_status']) ? $data['notify_on_gift_writing_status'] : 0,
-                'notify_on_transfer'            => isset($data['notify_on_transfer']) ? $data['notify_on_transfer'] : 0,
-                'notify_on_image'               => isset($data['notify_on_image']) ? $data['notify_on_image'] : 0,
+                'notify_on_trade_status'        => $data['notify_on_trade_status'] ?? 0,
+                'notify_on_gift_art_status'     => $data['notify_on_gift_art_status'] ?? 0,
+                'notify_on_gift_writing_status' => $data['notify_on_gift_writing_status'] ?? 0,
+                'notify_on_transfer'            => $data['notify_on_transfer'] ?? 0,
+                'notify_on_image'               => $data['notify_on_image'] ?? 0,
                 'comment'                       => $data['comment'],
             ]);
 
@@ -71,8 +69,7 @@ class BookmarkManager extends Service
      *
      * @return \App\Models\Character\CharacterBookmark|bool
      */
-    public function updateBookmark($data, $user)
-    {
+    public function updateBookmark($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -85,11 +82,11 @@ class BookmarkManager extends Service
             }
 
             $bookmark->update([
-                'notify_on_trade_status'        => isset($data['notify_on_trade_status']) ? $data['notify_on_trade_status'] : 0,
-                'notify_on_gift_art_status'     => isset($data['notify_on_gift_art_status']) ? $data['notify_on_gift_art_status'] : 0,
-                'notify_on_gift_writing_status' => isset($data['notify_on_gift_writing_status']) ? $data['notify_on_gift_writing_status'] : 0,
-                'notify_on_transfer'            => isset($data['notify_on_transfer']) ? $data['notify_on_transfer'] : 0,
-                'notify_on_image'               => isset($data['notify_on_image']) ? $data['notify_on_image'] : 0,
+                'notify_on_trade_status'        => $data['notify_on_trade_status'] ?? 0,
+                'notify_on_gift_art_status'     => $data['notify_on_gift_art_status'] ?? 0,
+                'notify_on_gift_writing_status' => $data['notify_on_gift_writing_status'] ?? 0,
+                'notify_on_transfer'            => $data['notify_on_transfer'] ?? 0,
+                'notify_on_image'               => $data['notify_on_image'] ?? 0,
                 'comment'                       => $data['comment'],
             ]);
 
@@ -109,8 +106,7 @@ class BookmarkManager extends Service
      *
      * @return bool
      */
-    public function deleteBookmark($data, $user)
-    {
+    public function deleteBookmark($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -140,8 +136,7 @@ class BookmarkManager extends Service
      *
      * @return bool
      */
-    public function deleteBookmarks($character)
-    {
+    public function deleteBookmarks($character) {
         DB::beginTransaction();
 
         try {

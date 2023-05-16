@@ -12,8 +12,7 @@ use App\Services\InventoryManager;
 use App\Services\Service;
 use DB;
 
-class SlotService extends Service
-{
+class SlotService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Slot Service
@@ -28,8 +27,7 @@ class SlotService extends Service
      *
      * @return array
      */
-    public function getEditData()
-    {
+    public function getEditData() {
         return [
             'rarities'  => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses' => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
@@ -45,16 +43,15 @@ class SlotService extends Service
      *
      * @return mixed
      */
-    public function getTagData($tag)
-    {
+    public function getTagData($tag) {
         //fetch data from DB, if there is no data then set to NULL instead
-        $characterData['name'] = isset($tag->data['name']) ? $tag->data['name'] : null;
+        $characterData['name'] = $tag->data['name'] ?? null;
         $characterData['species_id'] = isset($tag->data['species_id']) && $tag->data['species_id'] ? $tag->data['species_id'] : null;
         $characterData['subtype_id'] = isset($tag->data['subtype_id']) && $tag->data['subtype_id'] ? $tag->data['subtype_id'] : null;
         $characterData['rarity_id'] = isset($tag->data['rarity_id']) && $tag->data['rarity_id'] ? $tag->data['rarity_id'] : null;
         $characterData['description'] = isset($tag->data['description']) && $tag->data['description'] ? $tag->data['description'] : null;
         $characterData['parsed_description'] = parse($characterData['description']);
-        $characterData['sale_value'] = isset($tag->data['sale_value']) ? $tag->data['sale_value'] : 0;
+        $characterData['sale_value'] = $tag->data['sale_value'] ?? 0;
         //the switches hate true/false, need to convert boolean to binary
         if (isset($tag->data['is_sellable']) && $tag->data['is_sellable'] == 'true') {
             $characterData['is_sellable'] = 1;
@@ -88,16 +85,15 @@ class SlotService extends Service
      *
      * @return bool
      */
-    public function updateData($tag, $data)
-    {
+    public function updateData($tag, $data) {
         //put inputs into an array to transfer to the DB
-        $characterData['name'] = isset($data['name']) ? $data['name'] : null;
+        $characterData['name'] = $data['name'] ?? null;
         $characterData['species_id'] = isset($data['species_id']) && $data['species_id'] ? $data['species_id'] : null;
         $characterData['subtype_id'] = isset($data['subtype_id']) && $data['subtype_id'] ? $data['subtype_id'] : null;
         $characterData['rarity_id'] = isset($data['rarity_id']) && $data['rarity_id'] ? $data['rarity_id'] : null;
         $characterData['description'] = isset($data['description']) && $data['description'] ? $data['description'] : null;
         $characterData['parsed_description'] = parse($characterData['description']);
-        $characterData['sale_value'] = isset($data['sale_value']) ? $data['sale_value'] : 0;
+        $characterData['sale_value'] = $data['sale_value'] ?? 0;
         //if the switch was toggled, set true, if null, set false
         $characterData['is_sellable'] = isset($data['is_sellable']);
         $characterData['is_tradeable'] = isset($data['is_tradeable']);
@@ -127,12 +123,11 @@ class SlotService extends Service
      *
      * @return bool
      */
-    public function act($stacks, $user, $data)
-    {
+    public function act($stacks, $user, $data) {
         DB::beginTransaction();
 
         try {
-            foreach ($stacks as $key=>$stack) {
+            foreach ($stacks as $key=> $stack) {
                 // We don't want to let anyone who isn't the owner of the slot to use it,
                 // so do some validation...
                 if ($stack->user_id != $user->id) {
@@ -147,7 +142,7 @@ class SlotService extends Service
                         //set user who is opening the item
                         $characterData['user_id'] = $user->id;
                         //other vital data that is default
-                        $characterData['name'] = isset($characterData['name']) ? $characterData['name'] : 'Slot';
+                        $characterData['name'] ??= 'Slot';
                         $characterData['transferrable_at'] = null;
                         $characterData['is_myo_slot'] = 1;
                         //this uses your default MYO slot image from the CharacterManager

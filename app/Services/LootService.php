@@ -8,8 +8,7 @@ use App\Models\Prompt\PromptReward;
 use DB;
 use Illuminate\Support\Arr;
 
-class LootService extends Service
-{
+class LootService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Loot Service
@@ -26,8 +25,7 @@ class LootService extends Service
      *
      * @return \App\Models\Loot\LootTable|bool
      */
-    public function createLootTable($data)
-    {
+    public function createLootTable($data) {
         DB::beginTransaction();
 
         try {
@@ -75,8 +73,7 @@ class LootService extends Service
      *
      * @return \App\Models\Loot\LootTable|bool
      */
-    public function updateLootTable($table, $data)
-    {
+    public function updateLootTable($table, $data) {
         DB::beginTransaction();
 
         try {
@@ -123,8 +120,7 @@ class LootService extends Service
      *
      * @return bool
      */
-    public function deleteLootTable($table)
-    {
+    public function deleteLootTable($table) {
         DB::beginTransaction();
 
         try {
@@ -152,8 +148,7 @@ class LootService extends Service
      * @param \App\Models\Loot\LootTable $table
      * @param array                      $data
      */
-    private function populateLootTable($table, $data)
-    {
+    private function populateLootTable($table, $data) {
         // Clear the old loot...
         $table->loot()->delete();
 
@@ -168,7 +163,7 @@ class LootService extends Service
             Loot::create([
                 'loot_table_id'   => $table->id,
                 'rewardable_type' => $type,
-                'rewardable_id'   => isset($data['rewardable_id'][$key]) ? $data['rewardable_id'][$key] : 1,
+                'rewardable_id'   => $data['rewardable_id'][$key] ?? 1,
                 'quantity'        => $data['quantity'][$key],
                 'weight'          => $data['weight'][$key],
                 'data'            => isset($lootData) ? json_encode($lootData) : null,

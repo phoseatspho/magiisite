@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use DB;
 use Illuminate\Console\Command;
 
-class AddSiteSettings extends Command
-{
+class AddSiteSettings extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -24,8 +23,7 @@ class AddSiteSettings extends Command
     /**
      * Create a new command instance.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -34,8 +32,7 @@ class AddSiteSettings extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         $this->info('*********************');
         $this->info('* ADD SITE SETTINGS *');
         $this->info('*********************'."\n");
@@ -81,6 +78,14 @@ class AddSiteSettings extends Command
         $this->addSiteSetting('discord_exp_multiplier', 1, '1 = default, anything past this will multiply accordingly.');
 
         $this->addSiteSetting('discord_level_notif', 1, '0: No level up notification, 1: DM notification, 2: Give user a notification of level up in channel.');
+        
+        $this->addSiteSetting('deactivated_privacy', 0, 'Who can view the deactivated list? 0: Admin only, 1: Staff only, 2: Members only, 3: Public.');
+
+        $this->addSiteSetting('deactivated_link', 0, '0: No link to the deactivated list is displayed anywhere, 1: Link to the deactivated list is shown on the user list.');
+
+        $this->addSiteSetting('deactivated_key', 0, 'Optional key to view the deactivated list. Enter "0" to not require one.');
+
+        $this->addSiteSetting('comment_dislikes_enabled', 0, '0: Dislikes disabled, 1: Dislikes enabled.');
 
         $this->line("\nSite settings up to date!");
     }
@@ -95,8 +100,7 @@ class AddSiteSettings extends Command
      * @param int    $value
      * @param string $description
      */
-    private function addSiteSetting($key, $value, $description)
-    {
+    private function addSiteSetting($key, $value, $description) {
         if (!DB::table('site_settings')->where('key', $key)->exists()) {
             DB::table('site_settings')->insert([
                 [
