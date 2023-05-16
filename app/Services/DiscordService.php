@@ -83,12 +83,14 @@ class DiscordService extends Service
      *
      * @param mixed $reward
      */
-    public function deleteReward($reward)
+    public function deleteReward($reward, $user)
     {
         DB::beginTransaction();
 
         try {
             $reward->delete();
+
+            $this->logAdminAction($user, 'Deleted a discord reward.', '#'.$reward->id);
 
             return $this->commitReturn(true);
         } catch (\Exception $e) {

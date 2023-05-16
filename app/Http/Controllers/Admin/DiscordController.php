@@ -74,6 +74,33 @@ class DiscordController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Get delete reward modal
+     */
+    public function getDeleteReward($id)
+    {
+        return view('admin.discord._delete_reward', [
+            'reward' => DiscordReward::findOrFail($id),
+        ]);
+    }
+
+    /**
+     * Deletes a reward.
+     */
+    public function postDeleteReward(Request $request, DiscordService $service, $id)
+    {
+        $reward = DiscordReward::findOrFail($id);
+        if ($service->deleteReward($reward, Auth::user())) {
+            flash('Reward deleted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->to('admin/discord/rewards');
+    }
+
     /*****************************************************************************
      * LEVEL SECTION
      *****************************************************************************/

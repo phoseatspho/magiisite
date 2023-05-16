@@ -453,4 +453,6 @@ Route::group(['prefix' => 'discord', 'middleware' => 'power:manage_discord'], fu
     Route::post('rewards', 'DiscordController@postCreateReward');
     Route::post('rewards/create', 'DiscordController@postCreateEditReward');
     Route::post('rewards/edit/{id?}', 'DiscordController@postCreateEditReward');
+    Route::get('rewards/delete/{id}', 'DiscordController@getDeleteReward');
+    Route::post('rewards/delete/{id}', 'DiscordController@postDeleteReward');
 });

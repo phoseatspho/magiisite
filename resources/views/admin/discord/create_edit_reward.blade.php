@@ -47,7 +47,7 @@
 $( document ).ready(function() {
     $('.delete-reward-button').on('click', function(e) {
         e.preventDefault();
-        loadModal("{{ url('admin/discord/reward/delete') }}/{{ $reward->id }}", 'Delete Discord Reward');
+        loadModal("{{ url('admin/discord/rewards/delete') }}/{{ $reward->id }}", 'Delete Discord Reward');
     });
 });
 
