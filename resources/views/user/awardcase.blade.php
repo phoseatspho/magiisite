@@ -61,7 +61,7 @@ $( document ).ready(function() {
     $('.awardcase-stack').on('click', function(e) {
         e.preventDefault();
         var $parent = $(this).parent().parent();
-        loadModal("{{ url('awards') }}/" + $parent.data('id'), $parent.data('name'));
+        loadModal("{{ url(__('awards.awardcase')) }}/" + $parent.data('id'), $parent.data('name'));
     });
 });
 
