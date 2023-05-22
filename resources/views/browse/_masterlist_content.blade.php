@@ -24,6 +24,15 @@
                         {!! Form::label('subtype_id', 'Species Subtype: ') !!}
                         {!! Form::select('subtype_id', $subtypes, Request::get('subtype_id'), ['class' => 'form-control']) !!}
                     </div>
+                    <div class="masterlist-search-field">
+                    {!! Form::label('transformation_id', 'Transformation: ') !!}
+                    {!! Form::select('transformation_id', $transformations, Request::get('transformation_id'), ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="masterlist-search-field">
+                        {!! Form::label('has_transformation', 'Has a Transformation: ') !!}
+                        {!! Form::select('has_transformation', ['1' => 'Has a transformation.'], Request::get('has_transformation'), ['class' => 'form-control', 'placeholder' => 'Any']) !!}
+                    </div>
+                    <hr />
                 @endif
                 <hr/>
                 <div class="masterlist-search-field">
