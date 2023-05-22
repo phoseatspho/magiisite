@@ -5,15 +5,15 @@
 @endsection
 
 @section('admin-content')
-    {!! breadcrumbs(['Admin Panel' => 'admin', 'Transformations' => 'admin/data/transformations']) !!}
+    {!! breadcrumbs(['Admin Panel' => 'admin', ucfirst(__('transformations.transformation')) => 'admin/data/transformations']) !!}
 
-    <h1>Transformations</h1>
+    <h1>{{ucfirst(__('transformations.transformations'))}}</h1>
 
-    <p>Transformations are alternate forms that can be applied to characters. They can be quite varied. When a character has an image with a transformation, it will display as a separate image tab on the character's profile.</p>
+    <p>{{ucfirst(__('transformations.transformations'))}} are alternate forms that can be applied to characters. They can be quite varied. When a character has an image with a {{__('transformations.transformation')}}, it will display as a separate image tab on the character's profile.</p>
 
-    <div class="text-right mb-3"><a class="btn btn-primary" href="{{ url('admin/data/transformations/create') }}"><i class="fas fa-plus"></i> Create New Transformation</a></div>
+    <div class="text-right mb-3"><a class="btn btn-primary" href="{{ url('admin/data/transformations/create') }}"><i class="fas fa-plus"></i> Create New {{ucfirst(__('transformations.transformation'))}}</a></div>
     @if (!count($transformations))
-        <p>No transformations found.</p>
+        <p>No {{__('transformations.transformations')}} found.</p>
     @else
         <table class="table table-sm transformations-table">
             <tbody id="sortable" class="sortable">

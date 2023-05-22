@@ -110,7 +110,7 @@
         @if($request->transformation_id)
                 <div class="row">
                     <div class="col-md-2 col-4">
-                        <h5>Transformation</h5>
+                        <h5>{{ ucfirst(__('transformations.transformation')) }}</h5>
                     </div>
                     <div class="col-md-10 col-8">
                         @if ($request->character->is_myo_slot && $request->character->image->transformation_id)

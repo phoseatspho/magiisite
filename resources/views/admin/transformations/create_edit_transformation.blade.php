@@ -7,13 +7,13 @@
 @section('admin-content')
     {!! breadcrumbs([
         'Admin Panel' => 'admin',
-        'Transformations' => 'admin/data/transformations',
-        ($transformation->id ? 'Edit' : 'Create') . ' Transformation' => $transformation->id ? 'admin/data/transformations/edit/' . $transformation->id : 'admin/data/transformations/create',
+        ucfirst(__('transformations.transformation')) => 'admin/data/transformations',
+        ($transformation->id ? 'Edit ' : 'Create ') .  ucfirst(__('transformations.transformation'))=> $transformation->id ? 'admin/data/transformations/edit/' . $transformation->id : 'admin/data/transformations/create',
     ]) !!}
 
-    <h1>{{ $transformation->id ? 'Edit' : 'Create' }} Transformation
+    <h1>{{ $transformation->id ? 'Edit' : 'Create' }} {{ucfirst(__('transformations.transformation'))}}
         @if ($transformation->id)
-            <a href="#" class="btn btn-danger float-right delete-transformation-button">Delete Transformation</a>
+            <a href="#" class="btn btn-danger float-right delete-transformation-button">Delete {{ucfirst(__('transformations.transformation'))}}</a>
         @endif
     </h1>
 
@@ -67,7 +67,7 @@
         $(document).ready(function() {
             $('.delete-transformation-button').on('click', function(e) {
                 e.preventDefault();
-                loadModal("{{ url('admin/data/transformations/delete') }}/{{ $transformation->id }}", 'Delete Transformation');
+                loadModal("{{ url('admin/data/transformations/delete') }}/{{ $transformation->id }}", 'Delete {{ucfirst(__('transformations.transformation'))}}');
             });
         });
     </script>

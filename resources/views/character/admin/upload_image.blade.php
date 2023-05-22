@@ -116,7 +116,7 @@ Traits
 </div>
 
 <div class="form-group" id="transformations">
-    {!! Form::label('Transformation (Optional)') !!}
+    {!! Form::label(ucfirst(__('transformations.transformation')).' (Optional)') !!}
     {!! Form::select('transformation_id', $transformations, null, ['class' => 'form-control', 'id' => 'transformation']) !!}
 </div>
 

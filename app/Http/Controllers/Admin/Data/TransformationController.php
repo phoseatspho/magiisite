@@ -63,9 +63,9 @@ class TransformationController extends Controller {
             'name', 'description', 'image', 'remove_image',
         ]);
         if ($id && $service->updateTransformation(Transformation::find($id), $data, Auth::user())) {
-            flash('Transformation updated successfully.')->success();
+            flash(ucfirst(__('transformations.transformation')).' updated successfully.')->success();
         } elseif (!$id && $transformation = $service->createTransformation($data, Auth::user())) {
-            flash('Transformation created successfully.')->success();
+            flash(ucfirst(__('transformations.transformation')).' created successfully.')->success();
 
             return redirect()->to('admin/data/transformations/edit/'.$transformation->id);
         } else {
@@ -102,7 +102,7 @@ class TransformationController extends Controller {
      */
     public function postDeleteTransformation(Request $request, TransformationService $service, $id) {
         if ($id && $service->deleteTransformation(Transformation::find($id))) {
-            flash('Transformation deleted successfully.')->success();
+            flash(ucfirst(__('transformations.transformation')).' deleted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
@@ -121,7 +121,7 @@ class TransformationController extends Controller {
      */
     public function postSortTransformations(Request $request, TransformationService $service) {
         if ($service->sortTransformations($request->get('sort'))) {
-            flash('Transformation order updated successfully.')->success();
+            flash(ucfirst(__('transformations.transformation')).' order updated successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

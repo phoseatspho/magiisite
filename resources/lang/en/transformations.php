@@ -17,17 +17,11 @@ return [
     /
     */
 
-    'transformation' => 'sdgdssdg',                         // use __
-    'transformations' => 'sdgdssdgplural',                       // use __
-    'transformations_' => 'sdgdssdg|sdgdssdgplural',                // Use trans_choice instead of __
+    'transformation' => 'transformation',                         // use __
+    'transformations' => 'transformations',                       // use __
+    'transformations_' => 'transformation|transformations',                // Use trans_choice instead of __
 
 
-    'form' => 'formdjsnjd',                         // use __
-    'volumes' => 'volumes',                       // use __
-    'volumes_' => 'volume|volumes',                // Use trans_choice instead of __
-
-    'library' => 'library',                 // use __
-    'libraries' => 'libraries',               // use __
-    'libraries_' => 'library|libraries',    // Use trans_choice instead of __
+    'form' => 'form',                         // use __
 
 ];
