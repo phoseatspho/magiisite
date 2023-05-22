@@ -18,6 +18,7 @@ use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\Rarity;
 use App\Models\Feature\Feature;
+use App\Models\Character\CharacterTransformation as Transformation;
 
 class BrowseController extends Controller
 {
