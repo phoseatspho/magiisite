@@ -9,7 +9,7 @@
 <div class="form-group">
     {!! Form::label('Description (Optional)') !!}
     @if($isMyo)
-        {!! add_help('This section is for making additional notes about the '.{{ __('lorekeeper.myo') }}.'. If there are restrictions for the '.__('lorekeeper.character').' that can be created by this slot that cannot be expressed with the options below, use this section to describe them.') !!}
+        {!! add_help('This section is for making additional notes about the '.__('lorekeeper.myo').'. If there are restrictions for the '.__('lorekeeper.character').' that can be created by this slot that cannot be expressed with the options below, use this section to describe them.') !!}
     @else
         {!! add_help('This section is for making additional notes about the '.__('lorekeeper.character').' and is separate from the '.__('lorekeeper.character').'\'s profile (this is not editable by the user).') !!}
     @endif
@@ -18,7 +18,7 @@
 
 <div class="form-group">
     {!! Form::checkbox('is_visible', 1, $tag->getData()['is_visible'], ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-    {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turn this off to hide the '.($isMyo ? {{ __('lorekeeper.myo') }} : {{ __('lorekeeper.character') }}).'. Only mods with the Manage Masterlist power (that\'s you!) can view it - the owner will also not be able to see the '.($isMyo ? __('lorekeeper.myo') : __('lorekeeper.character')).'\'s page.') !!}
+    {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turn this off to hide the '.($isMyo ? __('lorekeeper.myo')  :  __('lorekeeper.character') ).'. Only mods with the Manage Masterlist power (that\'s you!) can view it - the owner will also not be able to see the '.($isMyo ? __('lorekeeper.myo') : __('lorekeeper.character')).'\'s page.') !!}
 </div>
 
 <h3>Transfer Information</h3>
@@ -44,7 +44,7 @@
 </div>
 <div class="card mb-3" id="resellOptions">
     <div class="card-body">
-        {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the '.{{ __('lorekeeper.myo') }}.'\'s page.') !!}
+        {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the '.__('lorekeeper.myo').'\'s page.') !!}
         {!! Form::text('sale_value', $tag->getData()['sale_value'], ['class' => 'form-control']) !!}
     </div>
 </div>
