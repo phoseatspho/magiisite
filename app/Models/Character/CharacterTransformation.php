@@ -104,7 +104,7 @@ class CharacterTransformation extends Model {
      * @return string
      */
     public function getUrlAttribute() {
-        return url('world/transformations?name='.$this->name);
+        return url('world/'.__('transformations.transformations').'?name='.$this->name);
     }
 
     /**
