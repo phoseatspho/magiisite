@@ -146,7 +146,7 @@
 @include('widgets._loot_select', ['loots' => $prompt->rewards, 'showLootTables' => true, 'showRaffles' => true])
 <hr class="w-70">
 <h3>Skill Rewards</h3>
-<p>Skills are rewarded to focus characters</p>
+<p>Skills are rewarded to focus characters. These are the default rewards, however, they can be modified on approval.</p>
 <div class="form-group">
     <div id="skillList">
         @foreach($prompt->skills as $skill)
@@ -199,7 +199,8 @@ $( document ).ready(function() {
     $('.remove-skill').on('click', function(e) {
         e.preventDefault();
         removeSkillRow($(this));
-    })
+    });
+
     function addSkillRow() {
         var $clone = $('.skill-row').clone();
         $('#skillList').append($clone);
@@ -211,6 +212,7 @@ $( document ).ready(function() {
         })
         $clone.find('.skill-select').selectize();
     }
+
     function removeSkillRow($trigger) {
         $trigger.parent().remove();
     }

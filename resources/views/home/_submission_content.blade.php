@@ -63,27 +63,37 @@
 </table>
 <hr>
 @if($submission->prompt_id)
-<h2>Skills</h2>
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th width="70%">Skill</th>
-            <th width="30%">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($submission->prompt->skills as $skill)
+    <h2>Skills</h2>
+    <table class="table table-sm">
+        <thead>
             <tr>
-                <td>{!! $skill->skill->name !!}</td>
-                <td>{{ $skill->quantity }}</td>
+                <th width="70%">Skill</th>
+                <th width="30%">Amount</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{-- check if data['skills'] exists --}}
+            @if (isset($submission->data['skills']))
+                @foreach($submission->data['skills'] as $data)
+                    <tr>
+                        <td>{{ \App\Models\Skill\Skill::find($data['skill'])->name }}</td>
+                        <td>{{ $data['quantity'] }}</td>
+                    </tr>
+                @endforeach
+            @else
+                @foreach($submission->prompt->skills as $skill)
+                    <tr>
+                        <td>{!! $skill->skill->name !!}</td>
+                        <td>{{ $skill->quantity }}</td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
 @endif
 @if($submission->prompt_id && $submission->prompt->expreward)
-<h2>Stat & Level Rewards</h2>
-<hr>
+    <h2>Stat & Level Rewards</h2>
+    <hr>
     <div class="row m-2">
         <div class="col-md">
             <h5>User Rewards</h5>
@@ -107,27 +117,27 @@
         </div>
     </div>
     @if($submission->bonus)
-    <hr>
-    @php
-        $bonus = json_decode($submission->bonus, true);
-    @endphp
+        <hr>
+        @php
+            $bonus = json_decode($submission->bonus, true);
+        @endphp
 
-    <h4 class=" mx-2">Bonus Rewards</h4>
-    <div class="row m-2">
-        <div class="col-md">
-            <h5>User Rewards</h5>
-            {{ $bonus[0]['User_Bonus']['exp'] ? $bonus[0]['User_Bonus']['exp'] : 'No bonus'}} user EXP
-                <br>
-            {{ $bonus[0]['User_Bonus']['points'] ? $bonus[0]['User_Bonus']['points'] : 'No bonus'}} user points
+        <h4 class=" mx-2">Bonus Rewards</h4>
+        <div class="row m-2">
+            <div class="col-md">
+                <h5>User Rewards</h5>
+                {{ $bonus[0]['User_Bonus']['exp'] ? $bonus[0]['User_Bonus']['exp'] : 'No bonus'}} user EXP
+                    <br>
+                {{ $bonus[0]['User_Bonus']['points'] ? $bonus[0]['User_Bonus']['points'] : 'No bonus'}} user points
+            </div>
+            <div class="col-md">
+                <h5>Character Rewards</h5>
+                {{ $bonus[0]['Character_Bonus']['exp'] ? $bonus[0]['Character_Bonus']['exp'] : 'No bonus'}} character EXP
+                    <br>
+                {{ $bonus[0]['Character_Bonus']['points'] ? $bonus[0]['Character_Bonus']['points'] : 'No bonus'}} character points
+            </div>
         </div>
-        <div class="col-md">
-            <h5>Character Rewards</h5>
-            {{ $bonus[0]['Character_Bonus']['exp'] ? $bonus[0]['Character_Bonus']['exp'] : 'No bonus'}} character EXP
-                <br>
-            {{ $bonus[0]['Character_Bonus']['points'] ? $bonus[0]['Character_Bonus']['points'] : 'No bonus'}} character points
-        </div>
-    </div>
-    <hr>
+        <hr>
     @endif
 @endif
 
@@ -176,12 +186,21 @@
 
                             --}}
                             @if($character->is_focus && $submission->prompt_id)
-                                @foreach($submission->prompt->skills as $skill)
-                                    <tr>
-                                        <td>{!! $skill->skill->name !!} Skill</td>
-                                        <td>{{ $skill->quantity }}</td>
-                                    </tr>
-                                @endforeach
+                                @if (isset($submission->data['skills']))
+                                    @foreach($submission->data['skills'] as $data)
+                                        <tr>
+                                            <td>{{ \App\Models\Skill\Skill::find($data['skill'])->name }}</td>
+                                            <td>{{ $data['quantity'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    @foreach($submission->prompt->skills as $skill)
+                                        <tr>
+                                            <td>{!! $skill->skill->name !!}</td>
+                                            <td>{{ $skill->quantity }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 <tr>
                                     <td>{{ $submission->prompt->expreward->chara_exp ? $submission->prompt->expreward->chara_exp : 0 }} EXP
                                     <br>
@@ -200,28 +219,28 @@
 @endforeach
 
 @if(isset($inventory['user_items']))
-<h2>Add-Ons</h2>
-<p>These items have been removed from the {{ $submission->prompt_id ? 'submitter' : 'claimant' }}'s inventory and will be refunded if the request is rejected or consumed if it is approved.</p>
-            <table class="table table-sm">
-                <thead class="thead-light">
-                        <tr class="d-flex">
-                            <th class="col-2">Item</th>
-                            <th class="col-4">Source</th>
-                            <th class="col-4">Notes</th>
-                            <th class="col-2">Quantity</th>
-                        </tr>
-                </thead>
-                <tbody>
-                    @foreach($inventory['user_items'] as $itemRow)
-                        <tr class="d-flex">
-                            <td class="col-2">@if(isset($itemsrow[$itemRow['asset']->item_id]->image_url)) <img class="small-icon" src="{{ $itemsrow[$itemRow['asset']->item_id]->image_url }}" alt="{{ $itemsrow[$itemRow['asset']->item_id]->name }}"> @endif {!! $itemsrow[$itemRow['asset']->item_id]->name !!}
-                            <td class="col-4">{!! array_key_exists('data', $itemRow['asset']->data) ? ($itemRow['asset']->data['data'] ? $itemRow['asset']->data['data'] : 'N/A') : 'N/A' !!}</td>
-                            <td class="col-4">{!! array_key_exists('notes', $itemRow['asset']->data) ? ($itemRow['asset']->data['notes'] ? $itemRow['asset']->data['notes'] : 'N/A') : 'N/A' !!}</td>
-                            <td class="col-2">{!! $itemRow['quantity'] !!}
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+     <h2>Add-Ons</h2>
+    <p>These items have been removed from the {{ $submission->prompt_id ? 'submitter' : 'claimant' }}'s inventory and will be refunded if the request is rejected or consumed if it is approved.</p>
+    <table class="table table-sm">
+        <thead class="thead-light">
+                <tr class="d-flex">
+                    <th class="col-2">Item</th>
+                    <th class="col-4">Source</th>
+                    <th class="col-4">Notes</th>
+                    <th class="col-2">Quantity</th>
+                </tr>
+        </thead>
+        <tbody>
+            @foreach($inventory['user_items'] as $itemRow)
+                <tr class="d-flex">
+                    <td class="col-2">@if(isset($itemsrow[$itemRow['asset']->item_id]->image_url)) <img class="small-icon" src="{{ $itemsrow[$itemRow['asset']->item_id]->image_url }}" alt="{{ $itemsrow[$itemRow['asset']->item_id]->name }}"> @endif {!! $itemsrow[$itemRow['asset']->item_id]->name !!}
+                    <td class="col-4">{!! array_key_exists('data', $itemRow['asset']->data) ? ($itemRow['asset']->data['data'] ? $itemRow['asset']->data['data'] : 'N/A') : 'N/A' !!}</td>
+                    <td class="col-4">{!! array_key_exists('notes', $itemRow['asset']->data) ? ($itemRow['asset']->data['notes'] ? $itemRow['asset']->data['notes'] : 'N/A') : 'N/A' !!}</td>
+                    <td class="col-2">{!! $itemRow['quantity'] !!}
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endif
 
 @if(isset($inventory['currencies']))

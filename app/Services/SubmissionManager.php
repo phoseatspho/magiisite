@@ -22,6 +22,7 @@ use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
 use App\Models\Prompt\Prompt;
 use App\Models\Pet\Pet;
+use App\Models\Skill\Skill;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 
@@ -543,10 +544,19 @@ class SubmissionManager extends Service
 
                 // here we do da skills
                 $skillManager = new SkillManager;
-
+                $skills = [];
                 if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
-                    foreach($submission->prompt->skills as $skill) {
-                        if(!$skillManager->creditSkill($user, $c, $skill->skill, $skill->quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
+                    foreach($data['skill_id'] as $key => $skill_id) {
+                        // find skill
+                        $skill = Skill::find($skill_id);
+                        if (!$skill) continue;
+                        $quantity = $data['skill_quantity'][$key];
+                        // add info to $skills
+                        $skills[] = [
+                            'skill' => $skill->id,
+                            'quantity' => $quantity
+                        ];
+                        if(!$skillManager->creditSkill($user, $c, $skill, $quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
                     }
                     // if there's exp rewards
                     if($submission->prompt->expreward) {
@@ -616,7 +626,8 @@ class SubmissionManager extends Service
                 'status' => 'Approved',
                 'data' => json_encode([
                     'user' => $addonData,
-                    'rewards' => getDataReadyAssets($rewards)
+                    'rewards' => getDataReadyAssets($rewards),
+                    'skills' => $skills ?? null,
                     ]), // list of rewards
                 'bonus' => isset($bonus) ? $bonus : null,
             ]);
