@@ -42,7 +42,7 @@ class ShopController extends Controller
     {
         return view('shops.index', [
             'shops' => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get()
-            ]);
+        ]);
     }
 
     /**
@@ -53,8 +53,6 @@ class ShopController extends Controller
      */
     public function getShop($id)
     {
-        $categories = ItemCategory::orderBy('sort', 'DESC')->get();
-        $petCategories = PetCategory::orderBy('sort', 'DESC')->get();
         $shop = Shop::where('id', $id)->where('is_active', 1)->first();
 
         if(!$shop) abort(404);
@@ -87,15 +85,26 @@ class ShopController extends Controller
                 return redirect()->to('/shops');
             }
         }
-        $items = count($categories) ? $shop->displayStock()->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('item_category_id') : $shop->displayStock()->orderBy('name')->get()->groupBy('item_category_id');
-        $pets = count($petCategories) ? $shop->displayPetStock()->orderByRaw('FIELD(pet_category_id,'.implode(',', $petCategories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('pet_category_id') : $shop->displayPetStock()->orderBy('name')->get()->groupBy('pet_category_id');
+        // get all types of stock in the shop
+        $stock_types = ShopStock::where('shop_id', $shop->id)->pluck('stock_type')->unique();
+        $stocks = [];
+        $stock_categories = [];
+        foreach($stock_types as $type) {
+            // get the model for the stock type (item, pet, etc)
+            $model = getAssetModelString(strtolower($type));
+            // get the category of the stock
+            $stock_category = ($model.'Category')::get();
+            $stock_categories[$type] = $stock_category;
+            // order the stock
+            $stock = count($stock_category) ? $shop->displayStock($model, $type)->where('stock_type', $type)->orderByRaw('FIELD('.$model.'_category_id,'.implode(',', $stock_category->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy($model.'_category_id') : $shop->displayStock($model, $type)->where('stock_type', $type)->orderBy('name')->get()->groupBy($model.'_category_id');
+            
+            $stocks[$type] = $stock;
+        }
 
         return view('shops.shop', [
             'shop' => $shop,
-            'categories' => $categories->keyBy('id'),
-            'petCategories' => $petCategories->keyBy('id'),
-            'items' => $items,
-            'pets' => $pets,
+            'stocks' => $stocks,
+            'stock_categories' => $stock_categories,
             'shops' => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
             'currencies' => Currency::whereIn('id', ShopStock::where('shop_id', $shop->id)->pluck('currency_id')->toArray())->get()->keyBy('id')
         ]);

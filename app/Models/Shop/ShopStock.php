@@ -34,8 +34,8 @@ class ShopStock extends Model
      */
     public function item() 
     {
-        if($this->stock_type == 'Item') return $this->belongsTo('App\Models\Item\Item');
-        elseif($this->stock_type == 'Pet') return $this->belongsTo('App\Models\Pet\Pet');
+        $model = getAssetModelString(strtolower($this->stock_type));
+        return $this->belongsTo($model);
     }
     
     /**

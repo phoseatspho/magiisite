@@ -62,17 +62,12 @@ class Shop extends Model
     /**
      * Get the shop stock as items for display purposes.
      */
-    public function displayStock()
+    public function displayStock($model=null, $type=null)
     {
-        return $this->belongsToMany('App\Models\Item\Item', 'shop_stock')->where('stock_type', 'Item')->withPivot('item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'id');
-    }
-
-    /**
-     * Get the shop stock as items for display purposes.
-     */
-    public function displayPetStock()
-    {
-        return $this->belongsToMany('App\Models\Pet\Pet', 'shop_stock', 'shop_id', 'item_id')->where('stock_type', 'Pet')->withPivot('item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'id');
+        if (!$model || !$type) {
+            return $this->belongsToMany('App\Models\Item\Item', 'shop_stock')->where('stock_type', 'Item')->withPivot('item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'id');
+        }
+        return $this->belongsToMany($model, 'shop_stock', 'shop_id', 'item_id')->where('stock_type', $type)->withPivot('item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'id');
     }
 
     public function limits()

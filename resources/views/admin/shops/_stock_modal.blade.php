@@ -9,15 +9,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 {!! Form::label('stock_type', 'Type') !!}
-                {!! Form::select('stock_type', ['Item' => 'Item', 'Pet' => 'Pet'], $stock->stock_type ?? null, ['class' => 'form-control stock-field', 'placeholder' => 'Select Stock Type', 'id' => 'type']) !!}
+                {!! Form::select('stock_type', ['Item' => 'Item', 'Pet' => 'Pet', 'Gear' => 'Gear', 'Weapon' => 'Weapon'], $stock->stock_type ?? null, ['class' => 'form-control stock-field', 'placeholder' => 'Select Stock Type', 'id' => 'type']) !!}
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group" id="stock">
-                @if($stock->stock_type == 'Item')
-                    @include('admin.shops.stock._stock_item', ['items' => $items, 'stock' => $stock])
-                @elseif($stock->stock_type == 'Pet')
-                    @include('admin.shops.stock._stock_pet', ['pets' => $items, 'stock' => $stock])
+                @if($stock->id)
+                    @include('admin.shops._stock_item', ['items' => $items, 'stock' => $stock])
                 @endif
             </div>
         </div>

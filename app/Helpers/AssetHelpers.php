@@ -93,17 +93,17 @@ function getAssetModelString($type, $namespaced = true)
             else return 'Currency';
             break;
 
-        case 'pets':
+        case 'pets': case 'pet':
             if($namespaced) return '\App\Models\Pet\Pet';
             else return 'Pet';
             break;
 
-        case 'weapons':
+        case 'weapons': case 'weapon': 
             if($namespaced) return '\App\Models\Claymore\Weapon';
             else return 'Weapon';
             break;
 
-        case 'gears':
+        case 'gears': case 'gear':
             if($namespaced) return '\App\Models\Claymore\Gear';
             else return 'Gear';
             break;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Data;
 use Illuminate\Http\Request;
 
 use Auth;
-
+use Log;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Models\Item\Item;
@@ -96,6 +96,9 @@ class ShopController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Creates or edits a shop stock.
+     */
     public function getCreateShopStock($id)
     {
         $shop = Shop::find($id);
@@ -108,6 +111,9 @@ class ShopController extends Controller
         ]);
     }
 
+    /**
+     * Creates or edits a shop stock.
+     */
     public function getEditShopStock($id)
     {
         $stock = ShopStock::find($id);
@@ -122,20 +128,20 @@ class ShopController extends Controller
         ]);
     }
 
+    /**
+     * gets stock of a certain type.
+     */
     public function getShopStockType(Request $request)
     {
         $type = $request->input('type');
-        if($type == 'Item') {
-            return view('admin.shops.stock._stock_item', [
-                'items' => Item::orderBy('name')->pluck('name', 'id')
-            ]);
-        }
-        else if($type == 'Pet') {
-            return view('admin.shops.stock._stock_pet', [
-                'pets' => Pet::orderBy('name')->pluck('name', 'id')
-            ]);
-        }
+        // get base modal from type using asset helper
+        $model = getAssetModelString(strtolower($type));
+        log::info([$model, $type]);
+        return view('admin.shops._stock_item', [
+            'items' => $model::orderBy('name')->pluck('name', 'id')
+        ]);
     }
+
     /**
      * Edits a shop's stock.
      *
