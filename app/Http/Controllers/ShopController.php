@@ -63,6 +63,10 @@ class ShopController extends Controller
         }
 
         if($shop->is_restricted) {
+            if(!Auth::check()) {
+                flash('You must be logged in to enter this shop.')->error();
+                return redirect()->to('/shops');
+            }
             foreach($shop->limits as $limit)
             {
                 $item = $limit->item_id;
@@ -85,18 +89,31 @@ class ShopController extends Controller
                 return redirect()->to('/shops');
             }
         }
+        
         // get all types of stock in the shop
         $stock_types = ShopStock::where('shop_id', $shop->id)->pluck('stock_type')->unique();
         $stocks = [];
-        $stock_categories = [];
         foreach($stock_types as $type) {
             // get the model for the stock type (item, pet, etc)
-            $model = getAssetModelString(strtolower($type));
+            $type = strtolower($type);
+            $model = getAssetModelString($type);
             // get the category of the stock
-            $stock_category = ($model.'Category')::get();
-            $stock_categories[$type] = $stock_category;
+            if (!class_exists($model.'Category')) {
+                $stock = $shop->displayStock($model, $type)->where('stock_type', $type)->orderBy('name')->get()->groupBy($type.'_category_id');
+                $stocks[$type] = $stock;
+                continue; // If the category model doesn't exist, skip it
+            }
+            $stock_category = ($model.'Category')::orderBy('sort', 'DESC')->get();
             // order the stock
-            $stock = count($stock_category) ? $shop->displayStock($model, $type)->where('stock_type', $type)->orderByRaw('FIELD('.$model.'_category_id,'.implode(',', $stock_category->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy($model.'_category_id') : $shop->displayStock($model, $type)->where('stock_type', $type)->orderBy('name')->get()->groupBy($model.'_category_id');
+            $stock = count($stock_category) ? $shop->displayStock($model, $type)->where('stock_type', $type)
+                ->orderByRaw('FIELD('.$type.'_category_id,'.implode(',', $stock_category->pluck('id')->toArray()).')')
+                ->orderBy('name')->get()->groupBy($type.'_category_id') 
+            : $shop->displayStock($model, $type)->where('stock_type', $type)->orderBy('name')->get()->groupBy($type.'_category_id');
+
+            // make it so key "" appears last
+            $stock = $stock->sortBy(function ($item, $key) {
+                return $key == '' ? 1 : 0;
+            });
             
             $stocks[$type] = $stock;
         }
@@ -104,7 +121,6 @@ class ShopController extends Controller
         return view('shops.shop', [
             'shop' => $shop,
             'stocks' => $stocks,
-            'stock_categories' => $stock_categories,
             'shops' => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
             'currencies' => Currency::whereIn('id', ShopStock::where('shop_id', $shop->id)->pluck('currency_id')->toArray())->get()->keyBy('id')
         ]);
@@ -136,6 +152,12 @@ class ShopController extends Controller
         if($shop->use_coupons) {
             $couponId = ItemTag::where('tag', 'coupon')->where('is_active', 1); // Removed get()
             $itemIds = $couponId->pluck('item_id'); // Could be combined with above
+            // get rid of any itemIds that are not in allowed_coupons
+            if($shop->allowed_coupons && count(json_decode($shop->allowed_coupons, 1))) {
+                $itemIds = $itemIds->filter(function($itemId) use ($shop) {
+                    return in_array($itemId, json_decode($shop->allowed_coupons, 1));
+                });
+            }
             $check = UserItem::with('item')->whereIn('item_id', $itemIds)->where('user_id', auth::user()->id)->where('count', '>', 0)->get()->pluck('item.name', 'id');
         }
         else {

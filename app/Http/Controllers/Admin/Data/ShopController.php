@@ -37,7 +37,7 @@ class ShopController extends Controller
             'shops' => Shop::orderBy('sort', 'DESC')->get()
         ]);
     }
-    
+
     /**
      * Shows the create shop page.
      *
@@ -45,12 +45,17 @@ class ShopController extends Controller
      */
     public function getCreateShop()
     {
+        // get all items where they have a tag 'coupon'
+        $coupons = Item::whereHas('tags', function($query) {
+            $query->where('tag', 'coupon')->where('is_active', 1);
+        })->orderBy('name')->pluck('name', 'id');
         return view('admin.shops.create_edit_shop', [
             'shop' => new Shop,
             'items' => Item::orderBy('name')->pluck('name', 'id'),
+            'coupons' => $coupons,
         ]);
     }
-    
+
     /**
      * Shows the edit shop page.
      *
@@ -61,11 +66,18 @@ class ShopController extends Controller
     {
         $shop = Shop::find($id);
         if(!$shop) abort(404);
+
+        // get all items where they have a tag 'coupon'
+        $coupons = Item::released()->whereHas('tags', function($query) {
+            $query->where('tag', 'coupon');
+        })->orderBy('name')->pluck('name', 'id');
+
         return view('admin.shops.create_edit_shop', [
             'shop' => $shop,
             'items' => Item::orderBy('name')->pluck('name', 'id'),
             'pets' => Pet::orderBy('name')->pluck('name', 'id'),
             'currencies' => Currency::orderBy('name')->pluck('name', 'id'),
+            'coupons' => $coupons,
         ]);
     }
 
@@ -81,7 +93,7 @@ class ShopController extends Controller
     {
         $id ? $request->validate(Shop::$updateRules) : $request->validate(Shop::$createRules);
         $data = $request->only([
-            'name', 'description', 'image', 'remove_image', 'is_active', 'is_staff', 'use_coupons', 'is_fto'
+            'name', 'description', 'image', 'remove_image', 'is_active', 'is_staff', 'use_coupons', 'is_fto', 'allowed_coupons', 'is_timed_shop', 'start_at', 'end_at'
         ]);
         if($id && $service->updateShop(Shop::find($id), $data, Auth::user())) {
             flash('Shop updated successfully.')->success();
@@ -134,6 +146,7 @@ class ShopController extends Controller
     public function getShopStockType(Request $request)
     {
         $type = $request->input('type');
+        if (!$type) return null;
         // get base modal from type using asset helper
         $model = getAssetModelString(strtolower($type));
         log::info([$model, $type]);
@@ -151,9 +164,10 @@ class ShopController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postEditShopStock(Request $request, ShopService $service, $id)
-    {
+    { 
         $data = $request->only([
-            'shop_id', 'item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'is_fto', 'stock_type'
+            'shop_id', 'item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'purchase_limit_timeframe', 'is_fto', 'stock_type', 'is_visible',
+            'restock', 'restock_quantity', 'restock_interval', 'range', 'disallow_transfer', 'is_timed_stock', 'start_at', 'end_at'
         ]);
         if($service->editShopStock(ShopStock::find($id), $data, Auth::user())) {
             flash('Shop stock updated successfully.')->success();
@@ -176,7 +190,8 @@ class ShopController extends Controller
     public function postCreateShopStock(Request $request, ShopService $service, $id)
     {
         $data = $request->only([
-            'shop_id', 'item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'is_fto', 'stock_type'
+            'shop_id', 'item_id', 'currency_id', 'cost', 'use_user_bank', 'use_character_bank', 'is_limited_stock', 'quantity', 'purchase_limit', 'purchase_limit_timeframe', 'is_fto', 'stock_type', 'is_visible',
+            'restock', 'restock_quantity', 'restock_interval', 'range', 'is_timed_stock', 'start_at', 'end_at'
         ]);
         if($service->updateShopStock(Shop::find($id), $data, Auth::user())) {
             flash('Shop stock updated successfully.')->success();
