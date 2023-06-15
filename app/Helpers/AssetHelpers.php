@@ -158,8 +158,6 @@ function mergeAssetsArrays($first, $second)
     foreach($keys as $key)
         foreach($second[$key] as $item)
             addAsset($first, $item['asset'], $item['quantity']);
-        foreach($second[$key] as $award)
-            addAsset($first, $award['asset'], $award['quantity']);
     return $first;
 }
 
