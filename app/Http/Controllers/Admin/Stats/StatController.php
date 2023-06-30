@@ -9,7 +9,8 @@ use Settings;
 use Illuminate\Http\Request;
 
 use App\Models\Stat\Stat;
-
+use App\Models\Species\Species;
+use App\Models\Species\Subtype;
 use App\Services\Stat\StatService;
 use App\Services\CharacterManager;
 
@@ -22,13 +23,13 @@ class StatController extends Controller
     {
         $query = Stat::query();
         $data = $request->only(['name']);
-        if(isset($data['name'])) 
+        if(isset($data['name']))
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
         return view('admin.stats.character.stats', [
             'stats' => $query->paginate(20)->appends($request->query()),
         ]);
     }
-    
+
     /**
      * Shows the create stat page.
      */
@@ -38,7 +39,7 @@ class StatController extends Controller
             'stat' => new Stat,
         ]);
     }
-    
+
     /**
      * Shows the edit stat page.
      */
@@ -48,6 +49,8 @@ class StatController extends Controller
         if(!$stat) abort(404);
         return view('admin.stats.character.create_edit_stat', [
             'stat' => $stat,
+            'specieses' => Species::orderBy('specieses.sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes' => Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -58,7 +61,7 @@ class StatController extends Controller
     {
         $id ? $request->validate(Stat::$updateRules) : $request->validate(Stat::$createRules);
         $data = $request->only([
-            'name', 'abbreviation', 'base', 'step', 'multiplier', 'max_level'
+            'name', 'abbreviation', 'base', 'step', 'multiplier', 'max_level', 'types', 'type_ids'
         ]);
         if($id && $service->updateStat(Stat::find($id), $data)) {
             flash('Stat updated successfully.')->success();

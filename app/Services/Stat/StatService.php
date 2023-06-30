@@ -26,7 +26,7 @@ class StatService extends Service
             $stat = Stat::create($data);
 
             return $this->commitReturn($stat);
-        } catch(\Exception $e) { 
+        } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
         return $this->rollbackReturn(false);
@@ -42,15 +42,44 @@ class StatService extends Service
 
         try {
 
+            // check species_ids
+            if(isset($data['types']) && $data['types'])
+            {
+                if ($stat->species) $stat->species()->delete();
+                foreach($data['types'] as $key=>$type)
+                {
+                    if($type == 'species')
+                    {
+                        if(!isset($data['type_ids'][$key]) || !$data['type_ids'][$key]) throw new \Exception("Please select at least one species.");
+                        $stat->species()->create([
+                            'species_id' => $data['type_ids'][$key],
+                            'type' => 'stat',
+                            'type_id' => $stat->id,
+                            'is_subtype' => 0
+                        ]);
+                    }
+                    else if($type == 'subtype')
+                    {
+                        if(!isset($data['type_ids'][$key]) || !$data['type_ids'][$key]) throw new \Exception("Please select at least one subtype.");
+                        $stat->species()->create([
+                            'species_id' => $data['type_ids'][$key],
+                            'type' => 'stat',
+                            'type_id' => $stat->id,
+                            'is_subtype' => 1
+                        ]);
+                    }
+                }
+            }
+
             $stat->update($data);
 
             return $this->commitReturn($stat);
-        } catch(\Exception $e) { 
+        } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
         return $this->rollbackReturn(false);
     }
-    
+
     /**
      * Deletes a stat.
      *
@@ -62,11 +91,11 @@ class StatService extends Service
         try {
             // Check first if the stat is currently owned or if some other site feature uses it
             if(DB::table('character_stats')->where('stat_id', $stat->id)->exists()) throw new \Exception("A character currently has this stat.");
-           
+
             $stat->delete();
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) { 
+        } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
         return $this->rollbackReturn(false);

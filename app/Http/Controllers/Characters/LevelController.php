@@ -93,7 +93,12 @@ class LevelController extends Controller
     public function getStatsIndex($slug)
     {
         $character = $this->character;
-        $stats = Stat::all();
+        // get all stats where the species limit is the species of the character
+        $stats = Stat::whereHas('species', function($query) use ($character) {
+            $query->where('species_id', $character->image->species_id)->where('is_subtype', 0);
+        })->orWhereHas('species', function($query) use ($character) {
+            $query->where('species_id', $character->image->subtype_id)->where('is_subtype', 1);
+        })->orWhereDoesntHave('species')->orderBy('name', 'ASC')->get();
 
         // prevents running it when unneeded. if there's an error idk lol
         if($character->stats->count() != $stats->count())

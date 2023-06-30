@@ -12,6 +12,7 @@ use App\Models\Pet\Pet;
 use App\Models\Currency\Currency;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
+use App\Models\Skill\Skill;
 
 use App\Models\User\UserItem;
 use App\Models\Character\CharacterItem;
@@ -26,6 +27,7 @@ use App\Services\Stat\ExperienceManager;
 use App\Services\PetManager;
 use App\Services\Claymore\GearManager;
 use App\Services\Claymore\WeaponManager;
+use App\Services\SkillManager;
 
 use App\Http\Controllers\Controller;
 
@@ -210,6 +212,39 @@ class GrantController extends Controller
         $data = $request->only(['names', 'weapon_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
         if($service->grantWeapons($data, Auth::user())) {
             flash('Weapons granted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Show the skill grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getSkills()
+    {
+        return view('admin.grants.skills', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'characters' => Character::orderBy('name')->get()->pluck('fullName', 'id'),
+            'skills' => Skill::orderBy('name')->pluck('name', 'id')
+        ]);
+    }
+
+    /**
+     * Grants or removes skill levels to characters.
+     *
+     * @param  \Illuminate\Http\Request        $request
+     * @param  App\Services\SkillManager       $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postSkills(Request $request, SkillManager $service)
+    {
+        $data = $request->only(['character_ids', 'skill_ids', 'quantities', 'data']);
+        if($service->grantSkills($data, Auth::user())) {
+            flash('Skills granted successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();

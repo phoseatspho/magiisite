@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Stat;
+namespace App\Models\Species;
 
 use Config;
 use App\Models\Model;
 
-class CharacterStat extends Model
+class SpeciesLimit extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,7 +13,7 @@ class CharacterStat extends Model
      * @var array
      */
     protected $fillable = [
-        'character_id', 'stat_id', 'stat_level', 'count', 'current_count', 'count'
+        'species_id', 'type', 'type_id', 'is_subtype'
     ];
 
     /**
@@ -21,7 +21,7 @@ class CharacterStat extends Model
      *
      * @var string
      */
-    protected $table = 'character_stats';
+    protected $table = 'species_limits';
 
     /**********************************************************************************************
 
@@ -29,13 +29,17 @@ class CharacterStat extends Model
 
     **********************************************************************************************/
 
-    public function character()
+    /**
+     * Get the type of limit
+     */
+    public function type()
     {
-        return $this->belongsTo('App\Models\Character\Character');
+        switch($this->type) {
+            case 'stat':
+                return $this->belongsTo('App\Models\Stat\Stat', 'type_id');
+            case 'skill':
+                return $this->belongsTo('App\Models\Skill\Skill', 'type_id');
+        }
     }
 
-    public function stat()
-    {
-        return $this->belongsTo('App\Models\Stat\Stat');
-    }
 }

@@ -64,11 +64,57 @@
     <p>A prerequisite is required to have at least level 1 in to enter any prompts with this skill reward.</p>
 </div>
 
+<hr />
+
+@if ($skill->id)
+    <div class="form-group">
+        {!! Form::label('Species / Subtypes') !!} {!! add_help('Allow only the selected species / subtypes to have this skill.') !!}
+        <div id="featureList">
+            @foreach($skill->species as $species)
+                <div class="d-flex mb-2">
+                    <div class="col-md-5">
+                        {!! Form::select('types[]', ['species' => 'Species', 'subtype' => 'Subtype'], !$species->is_subtype ? 'species' : 'subtype', ['class' => 'form-control mr-2 type', 'placeholder' => 'Select Type']) !!}
+                    </div>
+                    <div class="col-md-6 typeid">
+                        @if($species->type == 'species')
+                            {!! Form::select('type_ids[]', !$species->is_subtype ? $specieses : $subtypes, $species->species_id, ['class' => 'form-control mr-2 feature-select species', 'placeholder' => 'Select Species']) !!}
+                        @else
+                            {!! Form::select('type_ids[]', !$species->is_subtype ? $specieses : $subtypes, $species->species_id, ['class' => 'form-control mr-2 feature-select subtype', 'placeholder' => 'Select Subtype']) !!}
+                        @endif
+                    </div>
+                    <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
+                </div>
+            @endforeach
+        </div>
+        <div><a href="#" class="btn btn-primary" id="add-feature">Add Species</a></div>
+    </div>
+@endif
+
 <div class="text-right">
     {!! Form::submit($skill->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
 </div>
 
 {!! Form::close() !!}
+
+@if ($skill->id)
+    <div class="feature-row hide mb-2">
+        <div class="col-md-5">
+            {!! Form::select('types[]', ['species' => 'Species', 'subtype' => 'Subtype'], null, ['class' => 'form-control mr-2 type', 'placeholder' => 'Select Type']) !!}
+        </div>
+        <div class="col-md-6 typeid">
+        </div>
+        <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
+    </div>
+
+    <div class="hide">
+        <div class="original species">
+            {!! Form::select('type_ids[]', $specieses, null, ['class' => 'form-control mr-2 feature-select species', 'placeholder' => 'Select Species']) !!}
+        </div>
+        <div class="original subtype">
+            {!! Form::select('type_ids[]', $subtypes, null, ['class' => 'form-control mr-2 feature-select subtype', 'placeholder' => 'Select Subtype']) !!}
+        </div>
+    </div>
+@endif
 
 @if($skill->id)
 <h3>Preview</h3>
@@ -86,6 +132,46 @@
 <script>
 $( document ).ready(function() {
     $('.selectize').selectize();
+
+    $('.original.feature-select').selectize();
+    $('#add-feature').on('click', function(e) {
+        e.preventDefault();
+        addFeatureRow();
+    });
+    $('.remove-feature').on('click', function(e) {
+        e.preventDefault();
+        removeFeatureRow($(this));
+    })
+    function addFeatureRow() {
+        var $clone = $('.feature-row').clone();
+        $('#featureList').append($clone);
+        $clone.removeClass('hide feature-row');
+        $clone.addClass('d-flex');
+        $clone.find('.remove-feature').on('click', function(e) {
+            e.preventDefault();
+            removeFeatureRow($(this));
+        })
+        $clone.find('.feature-select').selectize();
+        attachTypeChangeListener($clone.find('.type'));
+    }
+    function removeFeatureRow($trigger) {
+        $trigger.parent().remove();
+    }
+    function attachTypeChangeListener(node) {
+        node.on('change', function(e) {
+            e.preventDefault();
+            var val = $(this).val();
+            var $cell = $(this).parent().parent().find('.typeid');
+            var $clone = null;
+            if(val == 'species') {
+                $clone = $('.original.species').clone();
+            } else if(val == 'subtype') {
+                $clone = $('.original.subtype').clone();
+            }
+            $cell.html($clone);
+            $clone.removeClass('hide original');
+        });
+    }
 
     $('.delete-skill-button').on('click', function(e) {
         e.preventDefault();

@@ -72,7 +72,10 @@
             </tr>
         </thead>
         <tbody>
-            {{-- check if data['skills'] exists --}}
+            {{--
+                check if data['skills'] exists,
+                if it does all the prompt default skills are included in the array so just check for 'lack of' skills
+             --}}
             @if (isset($submission->data['skills']))
                 @foreach($submission->data['skills'] as $data)
                     <tr>
@@ -81,12 +84,9 @@
                     </tr>
                 @endforeach
             @else
-                @foreach($submission->prompt->skills as $skill)
-                    <tr>
-                        <td>{!! $skill->skill->name !!}</td>
-                        <td>{{ $skill->quantity }}</td>
-                    </tr>
-                @endforeach
+                <tr>
+                    <td>No skills were rewarded.</td>
+                </tr>
             @endif
         </tbody>
     </table>

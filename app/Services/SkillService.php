@@ -7,6 +7,8 @@ use Config;
 
 use App\Models\Skill\SkillCategory;
 use App\Models\Skill\Skill;
+use App\Models\Species\Species;
+use App\Models\Species\SpeciesLimit;
 
 class SkillService extends Service
 {
@@ -193,7 +195,7 @@ class SkillService extends Service
             if(isset($data['skill_category_id']) && $data['skill_category_id'] == 'none') $data['skill_category_id'] = null;
             if(isset($data['parent_id']) && $data['parent_id'] == 'none') $data['parent_id'] = null;
             if(isset($data['prerequisite_id']) && $data['prerequisite_id'] == 'none') $data['prerequisite_id'] = null;
-            
+
             if((isset($data['skill_category_id']) && $data['skill_category_id']) && !SkillCategory::where('id', $data['skill_category_id'])->exists()) throw new \Exception("The selected skill category is invalid.");
 
             $data = $this->populateData($data);
@@ -238,7 +240,7 @@ class SkillService extends Service
             if(Skill::where('name', $data['name'])->where('id', '!=', $skill->id)->exists()) throw new \Exception("The name has already been taken.");
             if((isset($data['skill_category_id']) && $data['skill_category_id']) && !SkillCategory::where('id', $data['skill_category_id'])->exists()) throw new \Exception("The selected skill category is invalid.");
 
-            $data = $this->populateData($data);
+            $data = $this->populateData($data, $skill);
 
             $image = null;
             if(isset($data['image']) && $data['image']) {
@@ -248,7 +250,6 @@ class SkillService extends Service
             }
 
             $skill->update($data);
-
             if ($skill) $this->handleImage($image, $skill->imagePath, $skill->imageFileName);
 
             return $this->commitReturn($skill);
@@ -267,6 +268,34 @@ class SkillService extends Service
      */
     private function populateData($data, $skill = null)
     {
+        // check species_ids
+        if(isset($data['types']) && $data['types'])
+        {
+            if ($skill->species) $skill->species()->delete();
+            foreach($data['types'] as $key=>$type)
+            {
+                if($type == 'species')
+                {
+                    if(!isset($data['type_ids'][$key]) || !$data['type_ids'][$key]) throw new \Exception("Please select at least one species.");
+                    $skill->species()->create([
+                        'species_id' => $data['type_ids'][$key],
+                        'type' => 'skill',
+                        'type_id' => $skill->id,
+                        'is_subtype' => 0
+                    ]);
+                }
+                else if($type == 'subtype')
+                {
+                    if(!isset($data['type_ids'][$key]) || !$data['type_ids'][$key]) throw new \Exception("Please select at least one subtype.");
+                    $skill->species()->create([
+                        'species_id' => $data['type_ids'][$key],
+                        'type' => 'skill',
+                        'type_id' => $skill->id,
+                        'is_subtype' => 1
+                    ]);
+                }
+            }
+        }
 
         if(isset($data['remove_image']))
         {

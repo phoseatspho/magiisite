@@ -113,7 +113,7 @@ class SubmissionManager extends Service
                     }
                 }
             }
-            if(!$isClaim) 
+            if(!$isClaim)
             {
                 //level req
                 if($prompt->level_req)
@@ -498,7 +498,7 @@ class SubmissionManager extends Service
                 $level = $submission->user->level;
                 $levelUser = $submission->user;
                 if(!$level) throw new \Exception('This user does not have a level log.');
-                
+
                 // exp
                 if($submission->prompt->expreward->user_exp || isset($data['bonus_user_exp']))
                 {
@@ -509,7 +509,7 @@ class SubmissionManager extends Service
                             // add bonus
                             $quantity += $data['bonus_user_exp'];
                         }
-                        else $data['bonus_user_exp'] = 0; 
+                        else $data['bonus_user_exp'] = 0;
                         $user_exp += $data['bonus_user_exp'];
                     if(!$levelLog->creditExp(null, $levelUser, $promptLogType, $levelData, $quantity)) throw new \Exception('Could not grant user exp');
                 }
@@ -521,7 +521,7 @@ class SubmissionManager extends Service
                         {
                             $quantity += $data['bonus_user_points'];
                         }
-                        else $data['bonus_user_points'] = 0; 
+                        else $data['bonus_user_points'] = 0;
                         $user_points +=  $data['bonus_user_points'];
                     if(!$statLog->creditStat(null, $levelUser, $promptLogType, $levelData, $quantity)) throw new \Exception('Could not grant user points');
                 }
@@ -546,17 +546,19 @@ class SubmissionManager extends Service
                 $skillManager = new SkillManager;
                 $skills = [];
                 if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
-                    foreach($data['skill_id'] as $key => $skill_id) {
-                        // find skill
-                        $skill = Skill::find($skill_id);
-                        if (!$skill) continue;
-                        $quantity = $data['skill_quantity'][$key];
-                        // add info to $skills
-                        $skills[] = [
-                            'skill' => $skill->id,
-                            'quantity' => $quantity
-                        ];
-                        if(!$skillManager->creditSkill($user, $c, $skill, $quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
+                    if(isset($data['skill_id'])) {
+                        foreach($data['skill_id'] as $key => $skill_id) {
+                            // find skill
+                            $skill = Skill::find($skill_id);
+                            if (!$skill) continue;
+                            $quantity = $data['skill_quantity'][$key];
+                            // add info to $skills
+                            $skills[] = [
+                                'skill' => $skill->id,
+                                'quantity' => $quantity
+                            ];
+                            if(!$skillManager->creditSkill($user, $c, $skill, $quantity, 'Prompt Reward')) throw new \Exception("Failed to credit skill.");
+                        }
                     }
                     // if there's exp rewards
                     if($submission->prompt->expreward) {
@@ -570,7 +572,7 @@ class SubmissionManager extends Service
                             {
                                 $quantity += $data['bonus_exp'];
                             }
-                            else $data['bonus_exp'] = 0; 
+                            else $data['bonus_exp'] = 0;
                             $character_exp += $data['bonus_exp'];
                             if(!$levelLog->creditExp(null, $c, $promptLogType, $levelData, $quantity)) throw new \Exception('Could not grant character exp');
                         }
@@ -582,7 +584,7 @@ class SubmissionManager extends Service
                             {
                                 $quantity += $data['bonus_points'];
                             }
-                            else $data['bonus_points'] = 0; 
+                            else $data['bonus_points'] = 0;
                             $character_points += $data['bonus_points'];
                             if(!$statLog->creditStat(null, $c, $promptLogType, $levelData, $quantity)) throw new \Exception('Could not grant character points');
                         }

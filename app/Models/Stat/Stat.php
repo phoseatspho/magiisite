@@ -13,7 +13,7 @@ class Stat extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'abbreviation', 'base', 'step', 'multiplier', 'max_level'
+        'name', 'abbreviation', 'base', 'step', 'multiplier', 'max_level', 'species_ids'
     ];
 
     /**
@@ -22,7 +22,7 @@ class Stat extends Model
      * @var string
      */
     protected $table = 'stats';
-    
+
     /**
      * Validation rules for creation.
      *
@@ -31,7 +31,7 @@ class Stat extends Model
     public static $createRules = [
         'name' => 'required|unique:stats|between:3,25',
     ];
-    
+
     /**
      * Validation rules for updating.
      *
@@ -42,17 +42,16 @@ class Stat extends Model
     ];
 
     /**********************************************************************************************
-    
+
         RELATIONS
 
     **********************************************************************************************/
 
     /**
-     * Get the shop stock.
+     * get the species limits for the stat
      */
-    public function stock() 
+    public function species()
     {
-        return $this->hasMany('App\Models\Shop\ShopStock');
+        return $this->hasMany('App\Models\Species\SpeciesLimit', 'type_id')->where('type', 'stat');
     }
-    
 }

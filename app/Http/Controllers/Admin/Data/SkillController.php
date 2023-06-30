@@ -11,6 +11,8 @@ use App\Models\Skill\SkillCategory;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterSkill;
 use App\Models\Prompt\Prompt;
+use App\Models\Species\Species;
+use App\Models\Species\Subtype;
 
 use App\Services\SkillService;
 
@@ -56,7 +58,9 @@ class SkillController extends Controller
             'skill' => $skill,
             'prompts' => Prompt::where('is_active', 1)->orderBy('id')->pluck('name', 'id'),
             'skills' => ['none' => 'No Parent/Prerequisite'] + Skill::where('id', '!=', $skill->id)->orderBy('name', 'ASC')->pluck('name', 'id')->toArray(),
-            'categories' => ['none' => 'Any Category'] + SkillCategory::pluck('name', 'id')->toArray()
+            'categories' => ['none' => 'Any Category'] + SkillCategory::pluck('name', 'id')->toArray(),
+            'specieses' => Species::orderBy('specieses.sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes' => Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -72,7 +76,7 @@ class SkillController extends Controller
     {
         $id ? $request->validate(Skill::$updateRules) : $request->validate(Skill::$createRules);
         $data = $request->only([
-            'name', 'skill_category_id', 'description', 'image', 'remove_image', 'parent_id', 'parent_level', 'prerequisite_id' 
+            'name', 'skill_category_id', 'description', 'image', 'remove_image', 'parent_id', 'parent_level', 'prerequisite_id', 'types', 'type_ids'
         ]);
         if($id && $service->updateSkill(Skill::find($id), $data, Auth::user())) {
             flash('Skill updated successfully.')->success();

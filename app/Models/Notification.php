@@ -159,6 +159,7 @@ class Notification extends Model
     const GEAR_REMOVAL                      = 255;
     const GEAR_TRANSFER                     = 256;
     const FORCED_GEAR_TRANSFER              = 257;
+    const SKILL_GRANT                       = 258;
     const CHARACTER_ITEM_GRANT              = 501;
     const CHARACTER_ITEM_REMOVAL            = 502;
     const GALLERY_SUBMISSION_COLLABORATOR   = 505;

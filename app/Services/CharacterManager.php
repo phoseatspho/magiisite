@@ -139,7 +139,7 @@ class CharacterManager extends Service
             $character->level()->create([
                 'character_id' => $character->id
             ]);
-            
+
             if(isset($data['stats']))
             {
                 foreach($data['stats'] as $key=>$stat)
@@ -151,7 +151,7 @@ class CharacterManager extends Service
                     ]);
                 }
             }
-            
+
             // Add a log for the character
             // This logs all the updates made to the character
             $this->createLog($user->id, null, $recipientId, $url, $character->id, $isMyo ? 'MYO Slot Created' : 'Character Created', 'Initial upload', 'character');

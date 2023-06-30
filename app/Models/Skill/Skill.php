@@ -13,7 +13,7 @@ class Skill extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'skill_category_id', 'parent_id', 'parent_level', 'prerequisite_id', 'has_image'
+        'name', 'description', 'skill_category_id', 'parent_id', 'parent_level', 'prerequisite_id', 'has_image', 'species_ids'
     ];
 
     /**
@@ -22,7 +22,7 @@ class Skill extends Model
      * @var string
      */
     protected $table = 'skills';
-    
+
     /**
      * Validation rules for creation.
      *
@@ -32,7 +32,7 @@ class Skill extends Model
         'name' => 'required|unique:rarities|between:3,100',
         'description' => 'nullable',
     ];
-    
+
     /**
      * Validation rules for updating.
      *
@@ -81,8 +81,16 @@ class Skill extends Model
         return $this->belongsTo('App\Models\Skill\Skill', 'prerequisite_id');
     }
 
+    /**
+     * get the species limits for the skill
+     */
+    public function species()
+    {
+        return $this->hasMany('App\Models\Species\SpeciesLimit', 'type_id')->where('type', 'skill');
+    }
+
     /**********************************************************************************************
-    
+
         ACCESSORS
 
     **********************************************************************************************/

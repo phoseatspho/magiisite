@@ -395,6 +395,12 @@ return [
         'message' => '{gear_name} (×{gear_quantity}) was transferred out of your armoury by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Armoury</a>)',
         'url' => 'gears'
     ],
+    // SKILL_GRANT
+    258 => [
+        'name' => 'Skill Grant',
+        'message' => 'You have received a staff grant of the skill {skill_name} x{skill_quantity} from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Skills</a>)',
+        'url' => 'skills'
+    ],
     // CHARACTER_ITEM_GRANT
     501 => [
         'name' => 'Character Item Grant',

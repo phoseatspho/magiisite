@@ -102,6 +102,28 @@ class CharacterController extends Controller
     }
 
     /**
+     * Shows the edit image subtype portion of the modal
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacterMyoStats(Request $request) {
+        $species = $request->input('species');
+        $subtype = $request->input('subtype');
+        if($species == 0) $species = null;
+        if($subtype == 0) $subtype = null;
+
+        $stats = Stat::whereHas('species', function($query) use ($species) {
+            $query->where('species_id', $species)->where('is_subtype', 0);
+        })->orWhereHas('species', function($query) use ($subtype) {
+            $query->where('species_id', $subtype)->where('is_subtype', 1);
+        })->orWhereDoesntHave('species')->orderBy('name', 'ASC')->get();
+        return view('admin.masterlist._create_character_stats', [
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
      * Creates a character.
      *
      * @param  \Illuminate\Http\Request       $request

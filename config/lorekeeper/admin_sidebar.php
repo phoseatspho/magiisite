@@ -110,6 +110,10 @@ return [
                 'name' => 'Weapon Grants',
                 'url' => 'admin/grants/weapons'
             ],
+            [
+                'name' => 'Skill Grants',
+                'url' => 'admin/grants/skills'
+            ]
         ]
     ],
     'Masterlist' => [
