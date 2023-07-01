@@ -65,7 +65,7 @@
 $( document ).ready(function() {
     $('.delete-species-button').on('click', function(e) {
         e.preventDefault();
-        loadModal("{{ url('admin/data/species/delete') }}/{{ $species->id }}", 'Delete '.ucfirst(__('lorekeeper.species')));
+        loadModal("{{ url('admin/data/species/delete') }}/{{ $species->id }}", "{{'Delete '.ucfirst(__('lorekeeper.species'))}}");
     });
 });
 
