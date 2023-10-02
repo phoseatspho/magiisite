@@ -336,7 +336,7 @@ class AwardService extends Service
         $data['allow_reclaim'] = ((isset($data['allow_reclaim']) && $data['allow_reclaim']) ? 1 : 0);
 
         $data['credits'] = [];
-        if(isset($data['credit-name']))
+        if((isset($data['credit-name']) && count(array_filter($data['credit-name'])) > 0) || ( isset($data['credit-id']) && count(array_filter($data['credit-id'])) > 0))
             foreach($data['credit-name'] as $key => $name) {
                 $data['credits'][] = [
                     'name'  => $name,
