@@ -228,3 +228,12 @@ Route::group(['prefix' => 'foraging', 'namespace' => 'Users'], function() {
     Route::post('/claim', 'ForagingController@postClaim');
     Route::post('edit/character', 'ForagingController@postEditCharacter');
 });
+
+/**************************************************************************************************	
+   Collections
+**************************************************************************************************/	
+Route::group(['prefix' => 'collection', 'namespace' => 'Users'], function() {
+    Route::get('/', 'CollectionController@getIndex');
+    Route::get('complete/{id}', 'CollectionController@getCompleteCollection');
+    Route::post('complete/{id}', 'CollectionController@postCompleteCollection');
+});
