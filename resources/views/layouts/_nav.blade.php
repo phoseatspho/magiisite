@@ -114,6 +114,8 @@
                         </a>
                         <a class="dropdown-item" href="{{ url('foraging') }}">
                             Foraging
+                        <a class="dropdown-item" href="{{ url(__('dailies.dailies')) }}">
+                        Daily Check In 
                         </a>
                     </div>
                 </li>
