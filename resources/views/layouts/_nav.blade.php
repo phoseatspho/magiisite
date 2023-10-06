@@ -116,6 +116,8 @@
                             Foraging
                         <a class="dropdown-item" href="{{ url(__('dailies.dailies')) }}">
                         Daily Check In 
+                        <a class="dropdown-item" href="{{ url('activities') }}">
+                            Activities
                         </a>
                     </div>
                 </li>

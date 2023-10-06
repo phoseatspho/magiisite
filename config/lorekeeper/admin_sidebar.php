@@ -172,6 +172,8 @@ return [
             [
                 'name' => 'Dailies',
                 'url' => 'admin/data/dailies'
+                'name' => 'Activities',
+                'url' => 'admin/data/activities'
             ],
             [
                 'name' => 'Currencies',

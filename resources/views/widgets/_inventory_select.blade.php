@@ -1,9 +1,11 @@
 @php
     if(old('stack_id')) $old_selection = array_combine(old('stack_id'), old('stack_quantity'));
 @endphp
+@if(!isset($hideCollapse))
 <h3>Your Inventory <a class="small inventory-collapse-toggle collapse-toggle collapsed" href="#userInventory" data-toggle="collapse">Show</a></h3>
 <hr>
-<div class="collapse" id="userInventory">
+@endif
+<div @if(!isset($hideCollapse)) class="collapse" @endif id="userInventory">
     <div class="card mb-3">
         <div class="card-body">
             <div class="text-left mb-3">
@@ -33,6 +35,7 @@
                 </div>
             </div>
             <div id="userItems" class="user-items">
+                <div class="d-flex"><div id="selected">0</div>&nbsp;currently selected</div> 
                 <table class="table table-sm">
                     <thead class="thead-light">
                         <tr class="d-flex">

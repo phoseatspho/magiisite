@@ -145,9 +145,12 @@ function createAssetsArray($isCharacter = false)
 function mergeAssetsArrays($first, $second)
 {
     $keys = getAssetKeys();
-    foreach($keys as $key)
-        foreach($second[$key] as $item)
-            addAsset($first, $item['asset'], $item['quantity']);
+    foreach ($keys as $key) {
+        if (isset($second[$key])) {
+            foreach ($second[$key] as $item)
+                addAsset($first, $item['asset'], $item['quantity']);
+        }
+    }
     return $first;
 }
 
@@ -428,3 +431,20 @@ function rollRarityItem($quantity = 1, $criteria, $rarity)
     return $rewards;
 }
 
+ * Rewards list for user notification
+ *
+ * @param  array                  $rewards
+ * @return string
+ */
+function getRewardsString($rewards) {
+    $results = "You have received: ";
+    $result_elements = [];
+    foreach ($rewards as $assetType) {
+        if (isset($assetType)) {
+            foreach ($assetType as $asset) {
+                array_push($result_elements, $asset['asset']->name . (class_basename($asset['asset']) == 'Raffle' ? ' (Raffle Ticket)' : '') . " x" . $asset['quantity']);
+            }
+        }
+    }
+    return $results . implode(', ', $result_elements);
+}
