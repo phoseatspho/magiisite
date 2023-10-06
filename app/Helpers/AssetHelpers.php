@@ -430,7 +430,7 @@ function rollRarityItem($quantity = 1, $criteria, $rarity)
     }
     return $rewards;
 }
-
+/** 
  * Rewards list for user notification
  *
  * @param  array                  $rewards
