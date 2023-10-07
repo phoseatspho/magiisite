@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Config;
-use Auth;
+
 
 use App\Models\Currency\Currency;
 use App\Models\Rarity;
@@ -1016,4 +1016,5 @@ class WorldController extends Controller
             'description' => $recipe->parsed_description,
         ]);
 
+}
 }
