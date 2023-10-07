@@ -46,6 +46,7 @@ use App\Models\User\UserGear;
 use App\Models\Claymore\WeaponCategory;
 use App\Models\Claymore\Weapon;
 use App\Models\User\UserWeapon;
+use App\Models\User\UserPrizeLog;
 
 use App\Http\Controllers\Controller;
 
@@ -612,4 +613,19 @@ class UserController extends Controller
         ]);
     }
 
+  /**
+     * Shows a user's redeem logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserRedeemLogs($name)
+    {
+        $user = $this->user;
+        return view('home._redeem_logs', [
+            'user' => $this->user,
+            'logs' => $this->user->getRedeemLogs(0),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+        ]);
+    }    
 }

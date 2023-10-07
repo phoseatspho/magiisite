@@ -255,6 +255,12 @@ return [
                 'name' => 'Pets',
                 'url' => 'admin/data/pets'
             ],
+            
+            [
+            'name' => 'Codes',
+            'url' => 'admin/prizecodes'
+            ],
+        
         ]
     ],
     'Claymores' => [
@@ -275,7 +281,8 @@ return [
             [
                 'name' => 'Character Skills',
                 'url' => 'admin/data/skills'
-            ]
+            ],
+        
         ]
     ],
     'Raffles' => [

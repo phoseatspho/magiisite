@@ -313,3 +313,8 @@ Route::group(['prefix' => 'collection', 'namespace' => 'Users'], function() {
     Route::get('complete/{id}', 'CollectionController@getCompleteCollection');
     Route::post('complete/{id}', 'CollectionController@postCompleteCollection');
 });
+    
+    Route::group(['prefix' => 'redeem-code', 'namespace' => 'Users'], function() {
+        Route::get('/', 'PrizeCodeController@getIndex');
+        Route::post('/redeem', 'PrizeCodeController@postRedeemPrize');
+});
