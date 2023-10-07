@@ -90,6 +90,10 @@ class UserController extends Controller
     {
         $characters = $this->user->characters();
         if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) $characters->visible();
+        $gears = $this->user->gears()->orderBy('user_gears.updated_at', 'DESC')->take(4)->get();
+        $weapons = $this->user->weapons()->orderBy('user_weapons.updated_at', 'DESC')->take(4)->get();
+        $armours = $gears->union($weapons);
+
 
         return view('user.profile', [
             'user' => $this->user,
