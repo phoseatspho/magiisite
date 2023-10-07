@@ -36,3 +36,7 @@
         <div class="sidebar-item"><a href="{{ url('world/gear') }}" class="{{ set_active('world/gear*') }}">All Gear</a></div>
     </li>
 </ul>
+        <div class="sidebar-section-header">Recipes</div>
+        <div class="sidebar-item"><a href="{{ url('world/recipes') }}" class="{{ set_active('world/recipes*') }}">All Recipes</a></div>
+    </li>
+</ul>

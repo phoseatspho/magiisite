@@ -46,6 +46,7 @@
                 <li class="list-group-item"><a href="{{ url('world/weapons') }}">All Weapons</a></li>
                 <li class="list-group-item"><a href="{{ url('world/gear-categories') }}">Gear Categories</a></li>
                 <li class="list-group-item"><a href="{{ url('world/gear') }}">All Gear</a></li>
+                <li class="list-group-item"><a href="{{ url('world/recipes') }}">All Recipes</a></li>
             </ul>
         </div>
     </div>

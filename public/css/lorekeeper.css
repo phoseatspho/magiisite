@@ -778,3 +778,7 @@ tr.accountbound {
 .member-image{
     position: relative;
 }
+/* RECIPES ***************************************************************************************/
+.recipe-image {
+    width: 150px;
+}

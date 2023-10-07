@@ -95,6 +95,11 @@ return [
                 'url' => 'admin/grants/items'
             ],
             [
+            'name' => 'Recipe Grants',
+            'url' => 'admin/grants/recipes'
+        ],
+        
+            [
                 'name' => 'Award Grants',
                 'url' => 'admin/grants/awards'
             ],
@@ -260,6 +265,10 @@ return [
             'name' => 'Codes',
             'url' => 'admin/prizecodes'
             ],
+            [
+            'name' => 'Recipes',
+            'url' => 'admin/data/recipes'
+        ],
         
         ]
     ],

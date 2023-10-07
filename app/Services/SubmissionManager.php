@@ -31,6 +31,7 @@ use App\Models\Claymore\Weapon;
 use App\Services\Stat\ExperienceManager;
 use App\Services\Stat\StatManager;
 use App\Services\SkillManager;
+use App\Models\Recipe\Recipe;
 
 class SubmissionManager extends Service
 {
@@ -298,6 +299,11 @@ class SubmissionManager extends Service
                         case 'Weapon':
                             if (!$isStaff) break;
                             $reward = Weapon::find($data['rewardable_id'][$key]);
+                            break;
+                        case 'Recipe':
+                            if (!$isStaff) break;
+                            $reward = Recipe::find($data['rewardable_id'][$key]);
+                            if(!$reward->needs_unlocking) throw new \Exception("Invalid recipe selected.");
                             break;
                     }
                     if(!$reward) continue;
