@@ -49,6 +49,9 @@
                             <a class="dropdown-item" href="{{ url('awardcase') }}">
                                 Awards 
                             </a>
+                            <a class="dropdown-item" href="{{ url('level') }}">
+                                Level Area
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">

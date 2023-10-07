@@ -10,6 +10,7 @@ use Settings;
 
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterClass;
 use App\Models\Rarity;
 use App\Models\User\User;
 use App\Models\Species\Species;
@@ -18,6 +19,7 @@ use App\Models\Feature\Feature;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Trade;
 use App\Models\User\UserItem;
+use App\Models\Stat\Stat;
 
 use App\Services\AwardCaseManager;
 use App\Services\CharacterManager;
@@ -63,7 +65,8 @@ class CharacterController extends Controller
             'specieses' => ['0' => 'Select '.ucfirst(__('lorekeeper.species'))] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes' => ['0' => 'Pick a '.ucfirst(__('lorekeeper.species')).' First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
-            'isMyo' => false
+            'isMyo' => false,
+            'stats' => Stat::orderBy('name')->get(),
         ]);
     }
 
@@ -80,7 +83,8 @@ class CharacterController extends Controller
             'specieses' => ['0' => 'Select '.ucfirst(__('lorekeeper.species'))] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes' => ['0' => 'Pick a '.ucfirst(__('lorekeeper.species')).' First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
-            'isMyo' => true
+            'isMyo' => true,
+            'stats' => Stat::orderBy('name')->get(),
         ]);
     }
 
@@ -96,6 +100,28 @@ class CharacterController extends Controller
           'subtypes' => ['0' => 'Select '.ucfirst(__('lorekeeper.subtype'))] + Subtype::where('species_id','=',$species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
           'isMyo' => $request->input('myo')
       ]);
+    }
+
+    /**
+     * Shows the edit image subtype portion of the modal
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacterMyoStats(Request $request) {
+        $species = $request->input('species');
+        $subtype = $request->input('subtype');
+        if($species == 0) $species = null;
+        if($subtype == 0) $subtype = null;
+
+        $stats = Stat::whereHas('species', function($query) use ($species) {
+            $query->where('species_id', $species)->where('is_subtype', 0);
+        })->orWhereHas('species', function($query) use ($subtype) {
+            $query->where('species_id', $subtype)->where('is_subtype', 1);
+        })->orWhereDoesntHave('species')->orderBy('name', 'ASC')->get();
+        return view('admin.masterlist._create_character_stats', [
+            'stats' => $stats,
+        ]);
     }
 
     /**
@@ -116,7 +142,7 @@ class CharacterController extends Controller
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'image_description'
+            'image', 'thumbnail', 'image_description', 'stats'
         ]);
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash(ucfirst(__('lorekeeper.character')).' created successfully.')->success();
@@ -146,7 +172,7 @@ class CharacterController extends Controller
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail'
+            'image', 'thumbnail', 'stats'
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();

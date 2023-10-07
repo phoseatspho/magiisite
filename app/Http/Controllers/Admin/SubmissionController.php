@@ -15,7 +15,10 @@ use App\Models\Item\ItemCategory;
 use App\Models\Currency\Currency;
 use App\Models\Loot\LootTable;
 use App\Models\Raffle\Raffle;
-
+use App\Models\Pet\Pet;
+use App\Models\Skill\Skill;
+use App\Models\Claymore\Gear;
+use App\Models\Claymore\Weapon;
 use App\Services\SubmissionManager;
 
 use App\Http\Controllers\Controller;
@@ -80,8 +83,12 @@ class SubmissionController extends Controller
             'awards' => Award::orderBy('name')->released()->where('is_user_owned',1)->pluck('name', 'id'),
             'characterAwards' => Award::orderBy('name')->released()->where('is_character_owned',1)->pluck('name', 'id'),
             'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'pets' => Pet::orderBy('name')->pluck('name', 'id'),
+            'gears' => Gear::orderBy('name')->pluck('name', 'id'),
+            'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'tables' => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'skills' => Skill::pluck('name', 'id')->toArray(),
             'count' => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count()
         ] : []));
     }
@@ -137,6 +144,9 @@ class SubmissionController extends Controller
             'awards' => Award::orderBy('name')->released()->where('is_user_owned',1)->pluck('name', 'id'),
             'characterAwards' => Award::orderBy('name')->released()->where('is_character_owned',1)->pluck('name', 'id'),
             'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'pets' => Pet::orderBy('name')->pluck('name', 'id'),
+            'gears' => Gear::orderBy('name')->pluck('name', 'id'),
+            'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'tables' => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'count' => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
@@ -155,7 +165,8 @@ class SubmissionController extends Controller
      */
     public function postSubmission(Request $request, SubmissionManager $service, $id, $action)
     {
-        $data = $request->only(['slug',  'character_rewardable_quantity', 'character_rewardable_id',  'character_rewardable_type', 'character_currency_id', 'rewardable_type', 'rewardable_id', 'quantity', 'staff_comments' ]);
+        $data = $request->only(['slug',  'character_rewardable_quantity', 'character_rewardable_id',  'character_rewardable_type', 'character_currency_id', 'rewardable_type', 'rewardable_id', 'quantity', 'staff_comments', 'character_is_focus', 'bonus_exp', 'bonus_points', 'bonus_user_exp', 'bonus_user_points',
+        'skill_id', 'skill_quantity']);
         if($action == 'reject' && $service->rejectSubmission($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
             flash('Submission rejected successfully.')->success();
         }

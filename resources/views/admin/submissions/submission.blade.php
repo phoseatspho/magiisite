@@ -59,14 +59,48 @@
         @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true])
         @if($submission->prompt_id)
             <div class="mb-3">
+                <h2>Skill Rewards</h2>
+                <div class="form-group">
+                    <div id="skillList">
+                        @foreach($submission->prompt->skills as $skill)
+                            <div class="d-flex mb-2">
+                                {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
+                                {!! Form::text('skill_quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+                                <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div><a href="#" class="btn btn-primary" id="add-skill">Add Skill Reward</a></div>
+                </div>
+
+                <hr />
+            </div>
+
+            <div class="mb-3">
                 @include('home._prompt', ['prompt' => $submission->prompt, 'staffView' => true])
             </div>
         @endif
-
+        
         <h2>Characters</h2>
+        <p>Focus characters will receive skill rewards and EXP/stat rewards.</p>
+        <div class="alert alert-warning">Only input values here if the focus characters in the submission is supposed to get more than the above value points</div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {!! Form::label('bonus_exp', 'Bonus Character Exp Reward', ['class' => 'form-control-label ml-3']) !!}
+                    {!! Form::number('bonus_exp', null, ['class' => 'form-control',]) !!}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {!! Form::label('bonus_points', 'Bonus Character Stat Point Reward', ['class' => 'form-control-label ml-3']) !!}
+                    {!! Form::number('bonus_points', null, ['class' => 'form-control',]) !!}
+                </div>
+            </div>
+        </div>
         <div id="characters" class="mb-3">
             @foreach($submission->characters as $character)
-                @include('widgets._character_select_entry', ['characterCurrencies' => $characterCurrencies, 'items' => $items, 'tables' => $tables, 'character' => $character, 'characterAwards' => $characterAwards,'expanded_rewards' => $expanded_rewards])
+                @include('widgets._character_select_entry', ['characterCurrencies' => $characterCurrencies, 'items' => $items, 'tables' => $tables, 'character' => $character, 'characterAwards' => $characterAwards,'expanded_rewards' => $expanded_rewards, 'submission' => true])
             @endforeach
         </div>
         <div class="text-right mb-3">
@@ -130,6 +164,12 @@
 
     {!! Form::close() !!}
 
+    <div class="skill-row hide mb-2">
+        {!! Form::select('skill_id[]', $skills, null, ['class' => 'form-control mr-2 skill-select', 'placeholder' => 'Select Skill']) !!}
+        {!! Form::text('skill_quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
+        <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
+    </div>
+
     <div id="characterComponents" class="hide">
         <div class="submission-character mb-3 card">
             <div class="card-body">
@@ -146,6 +186,10 @@
                         <div class="form-group">
                             {!! Form::label('slug[]', 'Character Code') !!}
                             {!! Form::text('slug[]', null, ['class' => 'form-control character-code']) !!}
+                        </div>
+                        <div class="form-group col-6">
+                            {!! Form::label('character-is-focus[]', 'Focus Character?', ['class' => 'form-check-label '] ) !!}
+                            {!! Form::select('character-is-focus[]', [0 => 'No' , 1 => 'Yes' ], 0, ['class' => 'form-control character-is-focus']) !!}
                         </div>
                         <div class="character-rewards hide">
                             <h4>Character Rewards</h4>
@@ -199,7 +243,7 @@
             </tr>
         </table>
     </div>
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'awards' => $awards, 'showLootTables' => true, 'showRaffles' => true])
+    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true])
 
     <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -243,6 +287,33 @@
     @include('js._character_select_js')
 
     <script>
+
+        $('.original.skill-select').selectize();
+
+        $('#add-skill').on('click', function(e) {
+            e.preventDefault();
+            addSkillRow();
+        });
+        $('.remove-skill').on('click', function(e) {
+            e.preventDefault();
+            removeSkillRow($(this));
+        });
+
+        function addSkillRow() {
+            var $clone = $('.skill-row').clone();
+            $('#skillList').append($clone);
+            $clone.removeClass('hide skill-row');
+            $clone.addClass('d-flex');
+            $clone.find('.remove-skill').on('click', function(e) {
+                e.preventDefault();
+                removeSkillRow($(this));
+            })
+            $clone.find('.skill-select').selectize();
+        }
+
+        function removeSkillRow($trigger) {
+            $trigger.parent().remove();
+        }
 
         $(document).ready(function() {
             var $confirmationModal = $('#confirmationModal');

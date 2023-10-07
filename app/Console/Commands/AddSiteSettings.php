@@ -34,10 +34,10 @@ class AddSiteSettings extends Command
 
     /**
      * Add a site setting.
-     * 
+     *
      * Example usage:
      * $this->addSiteSetting("site_setting_key", 1, "0: does nothing. 1: does something.");
-     * 
+     *
      * @param  string  $key
      * @param  int     $value
      * @param  string  $description
@@ -106,6 +106,12 @@ class AddSiteSettings extends Command
         $this->addSiteSetting('foraging_stamina', 1, 'How many times a user can forage a day.');
 
         $this->line("\nSite settings up to date!");
+        $this->addSiteSetting('claymore_cooldown', 0, 'Number of days to add to the cooldown timer when a pet/weapon/gear is attached.');
 
+        $this->addSiteSetting('shop_type', 0, '0: Default, 1: Collapsible.');
+
+        $this->addSiteSetting('coupon_settings', 0, '0: Percentage is taken from total (e.g 20% from 2 items costing a total of 100 = 80), 1: Percentage is taken from item (e.g 20% from 2 items costing a total of 100 = 90)');
+        
+        $this->addSiteSetting('limited_stock_coupon_settings', 0, '0: Does not allow coupons to be used on limited stock items, 1: Allows coupons to be used on limited stock items');
     }
 }
