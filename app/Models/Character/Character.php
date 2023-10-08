@@ -4,6 +4,7 @@ namespace App\Models\Character;
 
 use Config;
 use DB;
+use Settings;
 use Carbon\Carbon;
 use Notifications;
 use App\Models\Model;
@@ -34,6 +35,9 @@ use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\WorldExpansion\FactionRank;
+use App\Models\WorldExpansion\FactionRankMember;
+
 class Character extends Model
 {
     use SoftDeletes;
@@ -49,7 +53,7 @@ class Character extends Model
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'class_id'
+        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'class_id', 'home_id', 'home_changed', 'faction_id', 'faction_changed'
     ];
 
     /**
@@ -71,7 +75,7 @@ class Character extends Model
      *
      * @var array
      */
-    public $dates = ['transferrable_at'];
+    protected $dates = ['transferrable_at','home_changed', 'faction_changed'];
 
     /**
      * Accessors to append to the model.
@@ -204,6 +208,22 @@ class Character extends Model
     public function trade()
     {
         return $this->belongsTo('App\Models\Trade', 'trade_id');
+    }
+
+    /**
+     * Get the trade this character is attached to.
+     */
+    public function home()
+    {
+        return $this->belongsTo('App\Models\WorldExpansion\Location', 'home_id');
+    }
+
+    /**
+     * Get the faction this character is attached to.
+     */
+    public function faction()
+    {
+        return $this->belongsTo('App\Models\WorldExpansion\Faction', 'faction_id');
     }
 
     /**
@@ -417,6 +437,77 @@ class Character extends Model
     public function getLogTypeAttribute()
     {
         return 'Character';
+    }
+
+    public function getHomeSettingAttribute()
+    {
+        return intval(Settings::get('WE_character_locations'));
+    }
+
+    public function getLocationAttribute()
+    {
+        $setting = $this->homeSetting;
+
+
+        switch($setting) {
+            case 1:
+                if(!$this->user) return null;
+                elseif(!$this->user->home) return null;
+                else return $this->user->home->fullDisplayName;
+
+            case 2:
+                if(!$this->home) return null;
+                else return $this->home->fullDisplayName;
+
+            case 3:
+                if(!$this->home) return null;
+                else return $this->home->fullDisplayName;
+
+            default:
+                return null;
+        }
+    }
+
+    public function getFactionSettingAttribute()
+    {
+        return intval(Settings::get('WE_character_factions'));
+    }
+
+    public function getCurrentFactionAttribute()
+    {
+        $setting = $this->factionSetting;
+
+        switch($setting) {
+            case 1:
+                if(!$this->user) return null;
+                elseif(!$this->user->faction) return null;
+                else return $this->user->faction->fullDisplayName;
+
+            case 2:
+                if(!$this->faction) return null;
+                else return $this->faction->fullDisplayName;
+
+            case 3:
+                if(!$this->faction) return null;
+                else return $this->faction->fullDisplayName;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Get character's faction rank.
+     */
+    public function getFactionRankAttribute()
+    {
+        if(!isset($this->faction_id) || !$this->faction->ranks()->count()) return null;
+        if(FactionRankMember::where('member_type', 'character')->where('member_id', $this->id)->first()) return FactionRankMember::where('member_type', 'character')->where('member_id', $this->id)->first()->rank;
+        if($this->faction->ranks()->where('is_open', 1)->count()) {
+            $standing = $this->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
+            if(!$standing) return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', 0)->first();
+            return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', '<=', $standing->quantity)->orderBy('breakpoint', 'DESC')->first();
+        }
     }
 
     /**********************************************************************************************

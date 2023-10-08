@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use Route;
+use Settings;
+
 use App\Models\User\User;
 
 use App\Models\User\UserCurrency;
@@ -107,6 +109,8 @@ class UserController extends Controller
             'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
             'characters' => $characters,
             'armours' => $armours,
+            'user_enabled' => Settings::get('WE_user_locations'),
+            'user_factions_enabled' => Settings::get('WE_user_factions')
         ]);
     }
 
