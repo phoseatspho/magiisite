@@ -44,6 +44,8 @@ class Kernel extends ConsoleKernel
                 ->monthly();
         $schedule->command('change-feature')
                 ->monthly();
+        $schedule->command('change-fetch-item')
+                ->hourly();
     }
 
     /**

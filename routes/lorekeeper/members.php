@@ -354,3 +354,10 @@ Route::group(['prefix' => 'collection', 'namespace' => 'Users'], function() {
         Route::get('/', 'PrizeCodeController@getIndex');
         Route::post('/redeem', 'PrizeCodeController@postRedeemPrize');
 });
+/**************************************************************************************************
+    Fetch Quests
+**************************************************************************************************/
+Route::group(['prefix' => 'fetch'], function() {
+    Route::get('/', 'FetchQuestController@getIndex');
+    Route::post('/new', 'FetchQuestController@postFetchQuest');
+});

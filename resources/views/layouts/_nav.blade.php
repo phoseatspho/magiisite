@@ -135,10 +135,15 @@
                         </a>
                         <a class="dropdown-item" href="{{ url('foraging') }}">
                             Foraging
+                        </a>
                         <a class="dropdown-item" href="{{ url(__('dailies.dailies')) }}">
-                        Daily Check In 
+                        Daily Check In
+                    </a>
                         <a class="dropdown-item" href="{{ url('activities') }}">
                             Activities
+                        </a>
+                        <a class="dropdown-item" href="{{ url('fetch') }}">
+                            Fetch Quests
                         </a>
                     </div>
                 </li>

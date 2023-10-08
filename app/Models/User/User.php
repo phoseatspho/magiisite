@@ -1045,4 +1045,21 @@ class User extends Authenticatable implements MustVerifyEmail
         else return $query->paginate(30);
     }
 
+    /**
+     * Check if user completed the fetch
+     *
+     * @return int
+     */
+    public function getFetchCooldownAttribute()
+    {
+        // Fetch log for most recent collection
+        $log = ItemLog::where('sender_id', $this->id)->where('log_type', 'Turned in for Fetch Quest')->orderBy('id', 'DESC')->first();
+        // If there is no log, by default, the cooldown is null
+        if(!$log) return null;
+        // If the cooldown would already be up, it is null
+        if($log->created_at->addMinutes(60) <= Carbon::now()) return null;
+        // Otherwise, calculate the remaining time
+        return $log->created_at->addMinutes(60);
+        return null;
+    }
 }
