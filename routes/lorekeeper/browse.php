@@ -63,6 +63,9 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/pets', 'UserController@getUserPets');
     Route::get('{name}/bank', 'UserController@getUserBank');
     Route::get('{name}/'.__('awards.awardcase'), 'UserController@getUserAwardCase');
+    Route::get('{name}/wishlists', 'UserController@getUserWishlists');
+    Route::get('{name}/wishlists/{id}', 'UserController@getUserWishlist')->where(['id' => '[0-9]+']);
+    Route::get('{name}/wishlists/default', 'UserController@getUserWishlist');
 
     Route::get('{name}/currency-logs', 'UserController@getUserCurrencyLogs');
     Route::get('{name}/item-logs', 'UserController@getUserItemLogs');

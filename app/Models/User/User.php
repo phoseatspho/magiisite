@@ -264,6 +264,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Models\Character\CharacterBookmark')->where('user_id', $this->id);
     }
 
+    /**
+     * Get all of the user's wishlists.
+     */
+    public function wishlists()
+    {
+        return $this->hasMany('App\Models\User\Wishlist')->where('user_id', $this->id);
+    }
+
     /**********************************************************************************************
 
         SCOPES
