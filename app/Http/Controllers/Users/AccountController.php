@@ -71,9 +71,12 @@ class AccountController extends Controller
             'char_faction_enabled' => Settings::get('WE_character_factions'),
             'location_interval' => $interval[Settings::get('WE_change_timelimit')]
 
-            $links = StaffProfile::where('user_id', Auth::user()->id)->first();
-            return view('account.settings', [
-                'links' => $links ? $links : null
+           
+        ]);
+
+        $links = StaffProfile::where('user_id', Auth::user()->id)->first();
+        return view('account.settings', [
+            'links' => $links ? $links : null
         ]);
     }
 
