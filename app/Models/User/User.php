@@ -132,7 +132,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne('App\Models\Level\UserLevel');
     }
 
-    /*
+    /** 
+     * Get user staff profile data.
+     */
+    public function staffProfile()
+    {
+        return $this->hasOne('App\Models\User\StaffProfile');
+    }
+
+    /**
      * Get the user's aliases.
      */
     public function aliases()

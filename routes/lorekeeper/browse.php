@@ -91,6 +91,11 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/recipe-logs', 'UserController@getUserRecipeLogs');
 });
 
+# STAFF TEAM
+Route::group(['prefix' => 'team'], function () {
+    Route::get('/', 'BrowseController@getTeamIndex');
+});
+
 /**************************************************************************************************
     Characters
 **************************************************************************************************/
