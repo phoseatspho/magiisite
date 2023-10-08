@@ -106,6 +106,7 @@ class AddSiteSettings extends Command
         $this->addSiteSetting('foraging_stamina', 1, 'How many times a user can forage a day.');
         
         $this->addSiteSetting('birthday_item', 1, 'ID of item to be granted to a user on their birth month. Suggestion is to set this to a box type item.');
+        $this->addSiteSetting('featured_character', 1, 'ID of the currently featured character.');
 
         $this->line("\nSite settings up to date!");
 
