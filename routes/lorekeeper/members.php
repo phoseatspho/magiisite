@@ -191,6 +191,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::post('{slug}/stats-area/admin/{id}', 'LevelController@postAdminStat');
     Route::post('{slug}/stats-area/edit/{id}', 'LevelController@postEditStat');
     Route::post('{slug}/stats-area/edit/base/{id}', 'LevelController@postEditBaseStat');
+    Route::post('{slug}/approval/{id}', 'CharacterController@postCharacterApprovalSpecificImage');
 
     # EXP
     Route::post('{slug}/level-area/exp-grant', 'LevelController@postExpGrant');
@@ -207,6 +208,8 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
 
     Route::post('{id}/approval', 'MyoController@postCharacterApproval');
     Route::get('{id}/approval', 'MyoController@getCharacterApproval');
+    //this is useless but im not sure if we dont include it things will get weird or not
+    Route::post('{slug}/approval/{id}', 'CharacterController@postCharacterApprovalSpecificImage');
 });
 
 Route::group(['prefix' => 'level', 'namespace' => 'Users'], function() {

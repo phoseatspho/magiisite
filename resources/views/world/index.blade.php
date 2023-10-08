@@ -21,6 +21,7 @@
                 <li class="list-group-item"><a href="{{ url('world/traits') }}">All Traits</a></li>
                 <li class="list-group-item"><a href="{{ url('world/character-categories') }}">Character Categories</a></li>
                 <li class="list-group-item"><a href="{{ url('world/character-classes') }}">Character Classes</a></li>
+                <li class="list-group-item"><a href="{{ url('world/'.__('transformations.transformations')) }}">{{ ucfirst(__('transformations.transformations')) }}</a></li>
             </ul>
         </div>
     </div>

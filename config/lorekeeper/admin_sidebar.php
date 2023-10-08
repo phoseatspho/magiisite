@@ -161,6 +161,10 @@ return [
                 'name' => 'MYO Approvals',
                 'url' => 'admin/myo-approvals/pending'
             ],
+            [
+             'name' => 'Transformations',
+             'url'  => 'admin/data/transformations',
+            ],
         ]
     ],
     'Stats' => [
