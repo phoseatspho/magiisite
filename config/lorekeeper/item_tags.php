@@ -42,4 +42,9 @@ return [
         'text_color' => '#ffffff',
         'background_color' => '#6D18A7'
     ],
+    'choicebox' => [
+        'name' => 'Choice Box',
+        'text_color' => '#ffffff',
+        'background_color' => '#56639E'
+    ],
 ];
