@@ -60,12 +60,18 @@ class SubmissionManager extends Service
             // 1. check that the prompt can be submitted at this time
             // 2. check that the characters selected exist (are visible too)
             // 3. check that the currencies selected can be attached to characters
+            // 4. If there is a parent, check the user has completed the prompt
             if(!$isClaim && !Settings::get('is_prompts_open')) throw new \Exception("The prompt queue is closed for submissions.");
             else if($isClaim && !Settings::get('is_claims_open')) throw new \Exception("The claim queue is closed for submissions.");
             if(!$isClaim && !isset($data['prompt_id'])) throw new \Exception("Please select a prompt.");
             if(!$isClaim) {
                 $prompt = Prompt::active()->where('id', $data['prompt_id'])->with('rewards')->first();
                 if(!$prompt) throw new \Exception("Invalid prompt selected.");
+                if($prompt->parent_id)
+                {
+                    $submission = Submission::where('user_id', $user->id)->where('prompt_id', $prompt->parent_id)->where('status', 'Approved')->count();    
+                    if($submission < $prompt->parent_quantity) throw new \Exception('Please complete the prerequisite.');
+                }
             }
             else $prompt = null;
 

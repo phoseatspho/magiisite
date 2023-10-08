@@ -187,6 +187,7 @@ class PromptController extends Controller
     {
         return view('admin.prompts.create_edit_prompt', [
             'prompt' => new Prompt,
+            'prompts' => ['none' => 'No parent'] + Prompt::active()->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'items' => Item::orderBy('name')->pluck('name', 'id'),
             'awards' => Award::orderBy('name')->pluck('name', 'id'),
@@ -213,6 +214,7 @@ class PromptController extends Controller
         if(!$prompt) abort(404);
         return view('admin.prompts.create_edit_prompt', [
             'prompt' => $prompt,
+            'prompts' => ['none' => 'No parent'] + Prompt::active()->where('id', '!=', $prompt->id)->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'items' => Item::orderBy('name')->pluck('name', 'id'),
             'awards' => Award::orderBy('name')->pluck('name', 'id'),
@@ -240,7 +242,7 @@ class PromptController extends Controller
         $id ? $request->validate(Prompt::$updateRules) : $request->validate(Prompt::$createRules);
         $data = $request->only([
             'name', 'prompt_category_id', 'summary', 'description', 'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'is_active', 'rewardable_type',
-             'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions',
+             'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions', 'parent_id', 'parent_quantity',
              'chara_exp', 'chara_points', 'user_exp', 'user_points', 'level_req', 'level_check', 'skill_id', 'skill_quantity'
         ]);
         if($id && $service->updatePrompt(Prompt::find($id), $data, Auth::user())) {

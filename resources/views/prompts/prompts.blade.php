@@ -40,8 +40,21 @@
 {!! $prompts->render() !!}
 @foreach($prompts as $prompt)
     <div class="card mb-3">
+        @if($prompt->parent_id)
+            @php 
+                if(Auth::check()) $submission = DB::table('submissions')->where('user_id', Auth::user()->id)->where('prompt_id', $prompt->parent_id)->where('status', 'Approved')->count();    
+            @endphp
+            @if(!Auth::check() || $submission < $prompt->parent_quantity)
+        <div class="card-body" style="background-color:#ddd;">
+            @include('prompts._prompt_denied_entry', ['prompt' => $prompt])
+            @else
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
+            @endif
+        @else
+        <div class="card-body">
+            @include('prompts._prompt_entry', ['prompt' => $prompt])
+        @endif
         </div>
     </div>
 @endforeach
