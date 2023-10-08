@@ -17,6 +17,7 @@
         @endif
     @else
         @include('shops._shop')
+        @endif
     @endforeach
 </div>
 
