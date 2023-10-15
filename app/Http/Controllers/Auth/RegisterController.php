@@ -56,7 +56,10 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('auth.register', ['userCount' => User::count()]);
+        return view('auth.register', [
+            'userCount' => User::count(),
+            'users' => User::orderBy('name')->pluck('name', 'id')->toArray(),
+        ]);
     }
 
     /**
@@ -104,7 +107,7 @@ class RegisterController extends Controller
     {
         DB::beginTransaction();
         $service = new UserService;
-        $user = $service->createUser(Arr::only($data, ['name', 'email', 'password', 'dob']));
+        $user = $service->createUser(Arr::only($data, ['name', 'email', 'password', 'dob', 'referred_by']));
         if(!Settings::get('is_registration_open')) {
             (new InvitationService)->useInvitation(Invitation::where('code', $data['code'])->first(), $user);
         }

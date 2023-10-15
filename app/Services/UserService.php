@@ -55,6 +55,7 @@ class UserService extends Service
             'rank_id' => $data['rank_id'],
             'password' => Hash::make($data['password']),
             'birthday' => $formatDate,
+            'referred_by' => $data['referred_by']
         ]);
         $user->settings()->create([
             'user_id' => $user->id,

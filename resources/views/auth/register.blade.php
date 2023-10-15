@@ -94,6 +94,13 @@
                 </span>
             @endif
         </div>
+        
+        <div class="form-group row">
+            <label for="referred_by" class="col-md-4 col-form-label text-md-right">Referred By</label>
+            <div class="col-md-6">
+                {!! Form::select('referred_by', $users, old('referred'), ['class' => 'form-control selectize', 'placeholder' => 'Select User']) !!}
+            </div>
+        </div>
 
         <div class="form-group row">
             <div class="col-md-6 offset-md-4">

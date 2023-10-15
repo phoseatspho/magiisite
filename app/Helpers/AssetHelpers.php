@@ -321,3 +321,42 @@ function fillCharacterAssets($assets, $sender, $recipient, $logType, $data, $sub
     }
     return $assets;
 }
+
+function encodeForDataColumn($data) {
+    // The data will be stored as an asset table, json_encode()d. 
+    // First build the asset table, then prepare it for storage.
+    $assets = createAssetsArray();
+    foreach ($data['rewardable_type'] as $key => $r) {
+        switch ($r) {
+            case 'Item':
+                $type = 'App\Models\Item\Item';
+                break;
+            case 'Currency':
+                $type = 'App\Models\Currency\Currency';
+                break;
+            case 'LootTable':
+                $type = 'App\Models\Loot\LootTable';
+                break;
+            case 'Raffle':
+                $type = 'App\Models\Raffle\Raffle';
+                break;
+        }
+        $asset = $type::find($data['rewardable_id'][$key]);
+        addAsset($assets, $asset, $data['quantity'][$key]);
+    }
+    $assets = getDataReadyAssets($assets);
+
+    return json_encode($assets);
+}
+
+function getRewardsString($rewards) {
+    $result_elements = [];
+    foreach ($rewards as $assetType) {
+        if (isset($assetType)) {
+            foreach ($assetType as $asset) {
+                array_push($result_elements, $asset['asset']->name . (class_basename($asset['asset']) == 'Raffle' ? ' (Raffle Ticket)' : '') . " x" . $asset['quantity']);
+            }
+        }
+    }
+    return implode(', ', $result_elements);
+}

@@ -1,5 +1,8 @@
 <?php namespace App\Services;
 
+use App\Facades\Notifications;
+use App\Models\Referral;
+use App\Models\User\User;
 use DB;
 use Laravel\Socialite\Facades\Socialite;
 use App\Services\Service;
@@ -48,6 +51,29 @@ class LinkService extends Service
                 'is_visible' => !$user->has_alias,
                 'is_primary_alias' => !$user->has_alias,
             ]);
+
+            // If this is the users first alias, then we want to act on referral data
+            if ($user->has_alias === 0) {
+                $referralCount = User::where('referred_by', $user->referred_by)->count();
+                $userReferred = User::find($user->referred_by);
+                $referralConditions = Referral::where('is_active', 1)->get()->filter(function ($query) use ($referralCount) {
+                    // On every needs to be modded to see if it's been x referrals since the last time it was rewarded.
+                    return ($query->on_every && $referralCount % $query->referral_count === 0) || $referralCount = $query->referral_count;
+                });
+                $rewards = '';
+                if (count($referralConditions) > 0) {
+                    foreach ($referralConditions as $referralCondition) {
+                        $rewards = $rewards . getRewardsString(fillUserAssets(parseAssetData($referralCondition->parsedData), null, $userReferred, 'Referral Rewards', [
+                            'data' => 'Received rewards for referral of ' . $user->name
+                        ]));
+                    }
+                }
+
+                Notifications::create('REFERRAL', $userReferred, [
+                    'count' => $referralCount,
+                    'rewards' => $rewards
+                ]);
+            }
 
             // Save that the user has an alias
             $user->has_alias = 1;
