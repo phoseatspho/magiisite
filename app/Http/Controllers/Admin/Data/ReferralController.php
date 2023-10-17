@@ -95,7 +95,7 @@ class ReferralController extends Controller {
       DB::commit();
 
       flash('Referral saved successfully.')->success();
-      return redirect()->to('admin/data/referrals/edit/' . $id ?? $referral->id);
+      return redirect()->to('admin/data/referrals/edit/' . ($id ?? $referral->id));
     } catch (\Exception $e) {
       DB::rollback();
       flash($e->getMessage())->error();
@@ -112,7 +112,7 @@ class ReferralController extends Controller {
   public function getDelete($id) {
     $referral = Referral::find($id);
     return view('admin.referrals._delete', [
-      'prompt' => $referral,
+      'referral' => $referral,
     ]);
   }
 
