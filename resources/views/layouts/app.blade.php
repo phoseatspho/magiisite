@@ -55,6 +55,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lorekeeper.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/magii.css') }}" rel="stylesheet">
 
     {{-- Font Awesome --}}
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
@@ -80,19 +81,20 @@
 <body>
     <div id="app">
         <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}');"></div>
-        @include('layouts._nav')
-        @if ( View::hasSection('sidebar') )
-			<div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
-		@endif
 
         <main class="container-fluid">
             <div class="row">
-
                 <div class="sidebar col-lg-2" id="sidebar">
-                    @yield('sidebar')
+                    @include('layouts._left')
                 </div>
-                <div class="main-content col-lg-8 p-4">
-                    <div>
+
+                <div class="main-content col-lg-8 px-0">
+                    @include('layouts._nav')
+                    @if ( View::hasSection('sidebar') )
+                        <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
+                    @endif
+
+                    <div class="p-4">
                         @if(Auth::check() && !Config::get('lorekeeper.extensions.navbar_news_notif'))
                             @if(Auth::user()->is_news_unread)
                                 <div class="alert alert-info"><a href="{{ url('news') }}">There is a new news post!</a></div>
@@ -104,15 +106,17 @@
                         @include('flash::message')
                         @yield('content')
                     </div>
+                </div>
 
-                    <div class="site-footer mt-4" id="footer">
-                            @include('layouts._footer')
-                    </div>
+                <div class="sidebar col-lg-2" id="rightSidebar">
+                    @include('layouts._right')
                 </div>
             </div>
-
         </main>
 
+        <div class="site-footer mt-4" id="footer">
+            @include('layouts._footer')
+        </div>
 
         <div class="modal fade" id="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">

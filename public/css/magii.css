@@ -1,0 +1,296 @@
+@charset "UTF-8";
+/** MAGII CUSTOM THEME by min **/
+@font-face {
+  font-family: "Niramit";
+  src: url("../webfonts/Niramit-Regular.woff2") format("woff2"), url("../webfonts/Niramit-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Niramit";
+  src: url("../webfonts/Niramit-Italic.woff2") format("woff2"), url("../webfonts/Niramit-Italic.woff") format("woff");
+  font-style: italic;
+}
+@font-face {
+  font-family: "Niramit";
+  src: url("../webfonts/Niramit-Bold.woff2") format("woff2"), url("../webfonts/Niramit-Bold.woff") format("woff");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Niramit";
+  src: url("../webfonts/Niramit-BoldItalic.woff2") format("woff2"), url("../webfonts/Niramit-BoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Font Awesome 5 Solid";
+  src: url("../webfonts/fa-solid-900.ttf") format("truetype"), url("../webfonts/fa-solid-900.svg") format("svg"), url("../webfonts/fa-solid-900.woff") format("woff"), url("../webfonts/fa-solid-900.woff2") format("woff2"), url("../webfonts/fa-solid-900.eot") format("embedded-opentype");
+}
+/* LAYOUT */
+#app {
+  background-image: url("https://cdn.discordapp.com/attachments/957321549625577543/1120693545758642300/Untitled_Artwork.png"), linear-gradient(to bottom, #3777be, #4a92ca, #8cdae5);
+  color: #245fbc;
+  font-family: "Niramit", serif;
+}
+
+.site-header-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 350px;
+}
+
+#headerNav {
+  background-color: #194479 !important;
+}
+#headerNav .navbar-brand {
+  color: #d2edf8;
+  font-family: "Niramit", serif;
+  text-transform: none;
+}
+#headerNav .navbar-brand:hover {
+  text-shadow: 0px 0px 0.5rem #00d7f6;
+}
+#headerNav a {
+  color: #affdff;
+  transition: all 150ms linear;
+}
+#headerNav a:hover {
+  color: #00d7f6;
+}
+
+.main-content {
+  background-color: #d2edf8;
+  box-shadow: none;
+}
+
+.sidebar {
+  text-align: center;
+  padding-left: 0px;
+}
+.sidebar ul {
+  padding-top: 0px;
+  padding-left: 0px;
+  width: 100%;
+}
+.sidebar ul li {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0.4em 0;
+}
+.sidebar .sidebar-header {
+  background-color: #0075CA;
+  font-weight: bold;
+  padding: 0.25rem;
+}
+.sidebar .sidebar-header a {
+  color: #affdff;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+.sidebar .sidebar-header a:hover {
+  background-color: transparent;
+  color: #2ae4ff;
+}
+.sidebar .sidebar-section .sidebar-section-header {
+  font-family: "Niramit", serif;
+  font-size: 1.15em;
+  letter-spacing: 1px;
+  text-transform: none;
+}
+.sidebar-section-header {
+  border-bottom: 1px solid #00d7f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-section-header::after {
+  content: "";
+  display: inline-block;
+  font-family: "Font Awesome 5 Solid";
+  transition: transform 150ms linear;
+}
+.sidebar-section-header[aria-expanded=true]::after {
+  transform: rotate(90deg);
+}
+.sidebar-item {
+  text-align: left;
+  transition: background-color 150ms linear;
+}
+.sidebar-item:hover {
+  background-color: #0075CA;
+}
+.sidebar-item a:hover {
+  padding-left: 1.25rem;
+}
+.sidebar-item a.active {
+  padding-left: 1.25rem;
+}
+.sidebar a {
+  color: #affdff;
+  font-family: "Niramit", serif;
+  font-weight: normal;
+  text-transform: none;
+  transition: all 150ms linear;
+}
+.sidebar a:hover {
+  background-color: transparent;
+  color: #affdff;
+}
+.sidebar a.active {
+  background-color: #245fbc;
+}
+.sidebar a.active:hover {
+  background-color: #0075CA;
+}
+
+.scroll {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  padding-top: 0.5rem;
+  position: sticky;
+  top: 1rem;
+}
+.scroll-header, .scroll-footer {
+  background-color: #00B8F1;
+  border: 1px solid #0075CA;
+  height: 15px;
+  position: relative;
+}
+.scroll-header::after, .scroll-header::before, .scroll-footer::after, .scroll-footer::before {
+  content: "";
+  background-color: #00B8F1;
+  border: 1px solid #0075CA;
+  border-radius: 3px;
+  height: 25px;
+  width: 17.5px;
+  position: absolute;
+  top: -5px;
+}
+.scroll-header::after, .scroll-footer::after {
+  left: -17.5px;
+}
+.scroll-header::before, .scroll-footer::before {
+  right: -17.5px;
+}
+.scroll-body {
+  background-color: #00B8F1;
+  border: 1px solid #0075CA;
+  color: #affdff;
+}
+.scroll-heading {
+  color: #194479;
+  font-family: "Niramit", serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.scroll-featured {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.scroll-featured .img-thumbnail {
+  background-color: #00d7f6;
+  border: 0;
+  border-radius: 3px;
+}
+.scroll-featured-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.scroll-nav a.nav-link {
+  background-color: transparent;
+  border-radius: 50%;
+  color: #245fbc;
+  font-size: 1.15rem;
+  padding: 0;
+  transition: all 150ms linear;
+  margin: 0.1rem;
+}
+.scroll-nav a.nav-link:hover {
+  background-color: #286ad1;
+  color: #affdff;
+}
+.scroll-nav a.nav-link.active {
+  background-color: #245fbc;
+  color: #affdff;
+}
+.scroll-nav a.nav-link.active:hover {
+  background-color: #2054a7;
+}
+.scroll-list {
+  font-size: 1rem;
+}
+.scroll-list a {
+  border-top: 1px dashed #00d7f6;
+  border-bottom: 1px dashed #00d7f6;
+}
+.scroll-list a:hover {
+  background-color: #245fbc;
+}
+.scroll hr {
+  border-color: #00d7f6;
+  border-width: 2px;
+  margin: 0 auto;
+  width: 90%;
+}
+.scroll p.dark {
+  color: #194479;
+}
+
+.site-footer-image {
+  pointer-events: none;
+}
+.site-footer .copyright {
+  color: #affdff;
+}
+.site-footer a {
+  color: rgba(175, 253, 255, 0.65) !important;
+}
+.site-footer a:hover {
+  color: #affdff !important;
+}
+
+@media (max-width: 991px) {
+  .site-mobile-header {
+    top: 68px;
+  }
+
+  .sidebar {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, #5CC7DF, rgba(31, 63, 125, 0.4));
+    text-align: center;
+  }
+
+  .sidebar ul {
+    list-style-type: none;
+    display: block;
+    padding-top: 30px;
+    padding-left: 0px;
+  }
+
+  .sidebar ul li {
+    background-color: white;
+    border-radius: 0;
+    margin-bottom: 1em;
+    padding: 0.4em 0;
+    box-shadow: none;
+  }
+}
+/* TEXT STYLES */
+h1 a, h2 a, h3 a, h4 a, h5 a,
+a.h1, a.h2, a.h3, a.h4, a.h5 {
+  color: #4f86dd;
+}
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover,
+a.h1:hover, a.h2:hover, a.h3:hover, a.h4:hover, a.h5:hover {
+  color: #245fbc;
+}
+
+a {
+  color: #4f86dd;
+}
+a:hover {
+  color: #245fbc;
+}
+
+/*# sourceMappingURL=magii.css.map */
