@@ -46,6 +46,8 @@ use App\Models\Character\CharacterImage;
 
 use App\Http\Controllers\Controller;
 
+use View;
+
 use App\Models\Skill\Skill;
 class CharacterController extends Controller
 {
@@ -80,6 +82,13 @@ class CharacterController extends Controller
             }
             return $next($request);
         });
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**
@@ -285,7 +294,7 @@ class CharacterController extends Controller
     }
 
 
-    /** 
+    /**
     * Shows a character's levels
      *
      * @param  string  $name
@@ -301,7 +310,7 @@ class CharacterController extends Controller
             'counts' => $this->character->getCountLogs(),
         ]);
     }
-    
+
     /**
      * Transfers currency between the user and character.
      *

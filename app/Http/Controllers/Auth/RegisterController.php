@@ -17,6 +17,9 @@ use App\Models\Invitation;
 use App\Services\UserService;
 use App\Services\InvitationService;
 
+use App\Models\Character\Character;
+use View;
+
 class RegisterController extends Controller
 {
     /*
@@ -47,6 +50,13 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**

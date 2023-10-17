@@ -20,6 +20,9 @@ use App\Services\Stat\ExperienceManager;
 use App\Services\Stat\LevelManager;
 use App\Services\Stat\StatManager;
 
+use Settings;
+use View;
+
 class LevelController extends Controller
 {
     /* ----------------------------------------
@@ -51,6 +54,13 @@ class LevelController extends Controller
             $this->character->updateOwner();
             return $next($request);
         });
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**

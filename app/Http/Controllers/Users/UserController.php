@@ -52,6 +52,8 @@ use App\Models\Claymore\Weapon;
 use App\Models\User\UserWeapon;
 use App\Models\User\UserPrizeLog;
 
+use View;
+
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -83,6 +85,13 @@ class UserController extends Controller
                 'user_id' => $this->user->id
             ]);
         }
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**
@@ -739,5 +748,5 @@ class UserController extends Controller
             'logs' => $this->user->getRedeemLogs(0),
             'sublists' => Sublist::orderBy('sort', 'DESC')->get()
         ]);
-    }    
+    }
 }
