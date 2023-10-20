@@ -7,12 +7,13 @@
     <h3>Typings</h3>
 
     <p>You can add typings to this object by selecting an element from the dropdown below and clicking "Add Typing".
-    <br><b>You can have a maximum of 2 typings on an object.</b></p>
+        <br><b>You can have a maximum of 2 typings on an object.</b>
+    </p>
 
     <div class="typing">
         <div id="elements">
-            @if($object->type || $type)
-                @foreach($object->type->element_ids as $id)
+            @if ($object->type || $type)
+                @foreach ($object->type->element_ids as $id)
                     <div class="form-group">
                         {!! Form::label('Element') !!}
                         {!! Form::select('element_ids[]', $elements, $id, ['class' => 'form-control selectize', 'placeholder' => 'Select Element']) !!}
@@ -34,11 +35,11 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.selectize').selectize();
 
         // add element
-        $('#add-element').on('click', function (e) {
+        $('#add-element').on('click', function(e) {
             e.preventDefault();
             // make sure there are less than 2 elements
             if ($('#elements').find('.form-group').length >= 2) {
@@ -51,7 +52,7 @@
         });
 
         // ajax on add typing
-        $('#submit-typing').on('click', function (e) {
+        $('#submit-typing').on('click', function(e) {
             e.preventDefault();
             var $typing = $('.typing');
             var $submit = $typing.find('#submit-typing');
@@ -69,18 +70,18 @@
                     _token: '{{ csrf_token() }}',
                     typing_model: '{{ json_encode(get_class($object)) }}',
                     typing_id: '{{ $object->id }}',
-                    element_ids: $('#elements').find('select').map(function () {
+                    element_ids: $('#elements').find('select').map(function() {
                         return $(this).val();
                     }).get()
                 },
-                success: function (data) {
+                success: function(data) {
                     console.log('success');
                     console.log(data);
                     $success.removeClass('d-none');
                     $success.html('Typing added.');
                     $('#typing-card').html(data);
                 },
-                error: function (data) {
+                error: function(data) {
                     console.log('error');
                     console.log(data);
                     $('#typing-card').html(data);
