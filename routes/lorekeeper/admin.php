@@ -453,4 +453,6 @@ Route::get('{type}/{status}', 'DesignController@getDesignIndex')->where('type', 
 
 Route::group(['prefix' => 'typing', 'middleware' => 'power:edit_data', 'namespace' => 'Data'], function () {
     Route::post('/', 'ElementController@postTyping');
+    Route::get('/delete/{id}', 'ElementController@getDeleteTyping');
+    Route::post('/delete/{id}', 'ElementController@postDeleteTyping');
 });

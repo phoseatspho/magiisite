@@ -152,8 +152,14 @@ class ElementService extends Service {
         DB::beginTransaction();
 
         try {
-            if (Typing::where('element_id', $element->id)->exists()) {
-                throw new \Exception('This element is currently in use and cannot be deleted.');
+            // check if typing exists
+            $types = Typing::where('element_ids', 'like', '%'.$element->id.'%')->get();
+            if ($types->count()) {
+                $typeNames = [];
+                foreach ($types as $type) {
+                    $typeNames[] = $type->object->displayName;
+                }
+                throw new \Exception('Cannot delete element. It is used in the following typings: '.implode(', ', $typeNames));
             }
 
             if (!$this->logAdminAction($user, 'Deleted Element', 'Deleted '.$element->name)) {

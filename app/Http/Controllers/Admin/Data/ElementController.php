@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Element\Element;
+use App\Models\Element\Typing;
 use App\Services\ElementService;
 use App\Services\TypingManager;
 use Log;
@@ -132,6 +133,7 @@ class ElementController extends Controller {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
+            return redirect()->back();
         }
 
         return redirect()->to('admin/data/elements');
@@ -147,18 +149,63 @@ class ElementController extends Controller {
      * Adds typing row for a model.
      */
     public function postTyping(Request $request, TypingManager $service) {
-        Log::info($request->all());
-        $data = $request->only(['typing_model', 'typing_id', 'element_ids']);
-        if (!$type = $service->createTyping($data['typing_model'], $data['typing_id'], $data['element_ids'] ?? null, Auth::user())) {
+        $data = $request->only(['type', 'typing_model', 'typing_id', 'element_ids']);
+        if (isset($data['type']) && $data['type']) {
+            $type = Typing::find($data['type']);
+            if (!$type) {
+                flash('Invalid typing.')->error();
+                return response()->json([
+                    'error'   => 'Invalid typing.',
+                ], 400);
+            }
+            if (!$service->editTyping($type, $data['element_ids'] ?? null, Auth::user())) {
+                flash('Failed to edit typing.')->error();
+                return response()->json([
+                    'error'   => $service->errors()->getMessages()['error'][0],
+                ], 400);
+            }
+        }
+
+        else if (!$type = $service->createTyping(urldecode($data['typing_model']), $data['typing_id'], $data['element_ids'] ?? null, Auth::user())) {
+            flash('Failed to create typing.')->error();
             return response()->json([
                 'error'   => $service->errors()->getMessages()['error'][0],
             ], 400);
         }
-        else {
-            return view('widgets._add_typing', [
-                'type'   => $type,
-                'object' => $type->object
-            ]);
+
+        flash('Typing ' . ($type ? 'edited' : 'created') . ' successfully.')->success();
+        return response()->json([
+            'success' => 'Typing added successfully.',
+        ]);
+
+    }
+
+    /**
+     * gets the delete typing modal.
+     */
+    public function getDeleteTyping($id) {
+        $typing = Typing::find($id);
+        if (!$typing) {
+            abort(404);
         }
+
+        return view('admin.elements._delete_typing', [
+            'typing' => $typing,
+        ]);
+    }
+
+    /**
+     * deletes a typing.
+     */
+    public function postDeleteTyping(Request $request, TypingManager $service, $id) {
+        if ($id && $service->deleteTyping(Typing::find($id), Auth::user())) {
+            flash('Typing deleted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
     }
 }

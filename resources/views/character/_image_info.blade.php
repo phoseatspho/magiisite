@@ -56,6 +56,25 @@
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
+                @php
+                    // check if there is a type for this object if not passed
+                    // for characters first check subtype (since it takes precedence)
+                    if ($image->subtype_id) {
+                        $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Species\Subtype')->where('typing_id', $image->subtype_id)->first();
+                    }
+                    if (!isset($type)) {
+                        $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Species\Species')->where('typing_id', $image->species_id)->first();
+                    }
+                    $type = $type ?? null;
+                @endphp
+                @if($type)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4">
+                            <h5>Typing</h5>
+                        </div>
+                        <div class="col-lg-8 col-md-6 col-8 row"><h5>{!! $type->displayElements !!}</h5></div>
+                    </div>
+                @endif
 
                 <div class="mb-3">
                     <div>
