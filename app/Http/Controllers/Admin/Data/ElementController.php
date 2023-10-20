@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Data;
 use App\Http\Controllers\Controller;
 use App\Models\Element\Element;
 use App\Services\ElementService;
+use App\Services\TypingManager;
+use Log;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -137,131 +139,26 @@ class ElementController extends Controller {
 
     /**********************************************************************************************
 
-        ELEMENT TAGS
+        TYPING
 
     **********************************************************************************************/
 
     /**
-     * Gets the tag addition page.
-     *
-     * @param App\Services\ElementService $service
-     * @param int                         $id
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * Adds typing row for a model.
      */
-    public function getAddElementTag(ElementService $service, $id) {
-        $element = Element::find($id);
-
-        return view('admin.elements.add_tag', [
-            'element' => $element,
-            'tags'    => array_diff($service->getElementTags(), $element->tags()->pluck('tag')->toArray()),
-        ]);
-    }
-
-    /**
-     * Adds a tag to an element.
-     *
-     * @param App\Services\ElementService $service
-     * @param int                         $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postAddElementTag(Request $request, ElementService $service, $id) {
-        $element = Element::find($id);
-        $tag = $request->get('tag');
-        if ($tag = $service->addElementTag($element, $tag, Auth::user())) {
-            flash('Tag added successfully.')->success();
-
-            return redirect()->to($tag->adminUrl);
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+    public function postTyping(Request $request, TypingManager $service) {
+        Log::info($request->all());
+        $data = $request->only(['typing_model', 'typing_id', 'element_ids']);
+        if (!$type = $service->createTyping($data['typing_model'], $data['typing_id'], $data['element_ids'] ?? null, Auth::user())) {
+            return response()->json([
+                'error'   => $service->errors()->getMessages()['error'][0],
+            ], 400);
         }
-
-        return redirect()->back();
-    }
-
-    /**
-     * Gets the tag editing page.
-     *
-     * @param int   $id
-     * @param mixed $tag
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getEditElementTag(ElementService $service, $id, $tag) {
-        $element = Element::find($id);
-        $tag = $element->tags()->where('tag', $tag)->first();
-        if (!$element || !$tag) {
-            abort(404);
+        else {
+            return view('widgets._add_typing', [
+                'type'   => $type,
+                'object' => $type->object
+            ]);
         }
-
-        return view('admin.elements.edit_tag', [
-            'element' => $element,
-            'tag'     => $tag,
-        ] + $tag->getEditData());
-    }
-
-    /**
-     * Edits tag data for an element.
-     *
-     * @param App\Services\ElementService $service
-     * @param int                         $id
-     * @param string                      $tag
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postEditElementTag(Request $request, ElementService $service, $id, $tag) {
-        $element = Element::find($id);
-        if ($service->editElementTag($element, $tag, $request->all(), Auth::user())) {
-            flash('Tag edited successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
-
-        return redirect()->back();
-    }
-
-    /**
-     * Gets the element tag deletion modal.
-     *
-     * @param int    $id
-     * @param string $tag
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getDeleteElementTag($id, $tag) {
-        $element = Element::find($id);
-        $tag = $element->tags()->where('tag', $tag)->first();
-
-        return view('admin.elements._delete_element_tag', [
-            'element' => $element,
-            'tag'     => $tag,
-        ]);
-    }
-
-    /**
-     * Deletes a tag from an element.
-     *
-     * @param App\Services\ElementService $service
-     * @param int                         $id
-     * @param string                      $tag
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postDeleteElementTag(Request $request, ElementService $service, $id, $tag) {
-        $element = Element::find($id);
-        if ($service->deleteElementTag($element, $tag, Auth::user())) {
-            flash('Tag deleted successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
-
-        return redirect()->to('admin/data/elements/edit/'.$element->id);
     }
 }

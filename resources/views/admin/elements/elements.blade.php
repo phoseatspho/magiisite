@@ -10,6 +10,7 @@
     <h1>Elements</h1>
 
     <p>This is a list of elements in the game.</p>
+    <p>Elements that are applied to an object are called "typings". You can add typings on existing objects by clicking the "Add Typing" button on the object's page.</p>
 
     <div class="text-right mb-3">
         <a class="btn btn-primary" href="{{ url('admin/data/elements/create') }}"><i class="fas fa-plus"></i> Create New Element</a>

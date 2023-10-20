@@ -36,7 +36,7 @@ class CreateElementTypingTables extends Migration {
             $table->id();
             $table->string('typing_model'); // character, pet, gear, weapon etc
             $table->integer('typing_id'); // the id of the character, pet, gear, weapon etc
-            $table->integer('element_id'); // the element id
+            $table->string('element_ids'); // comma separated list of element ids
         });
     }
 

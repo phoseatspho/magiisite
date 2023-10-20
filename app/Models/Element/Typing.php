@@ -11,7 +11,7 @@ class Typing extends Model {
      * @var array
      */
     protected $fillable = [
-        'typing_model', 'typing_id', 'element_id',
+        'typing_model', 'typing_id', 'element_ids',
     ];
 
     /**
@@ -26,13 +26,6 @@ class Typing extends Model {
         RELATIONS
 
     **********************************************************************************************/
-
-    /**
-     * get the element of this type.
-     */
-    public function element() {
-        return $this->belongsTo('App\Models\Element\Element', 'element_id');
-    }
 
     /**
      * get the object of this type.

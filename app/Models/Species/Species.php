@@ -69,6 +69,13 @@ class Species extends Model {
         return $this->hasMany('App\Models\Feature\Feature');
     }
 
+    /**
+     * Get the species typing
+     */
+    public function typing() {
+        return $this->hasMany('App\Models\Element\Typing', 'typing_id')->where('typing_model', '\App\Models\Species\Species');
+    }
+
     /**********************************************************************************************
 
         SCOPES
