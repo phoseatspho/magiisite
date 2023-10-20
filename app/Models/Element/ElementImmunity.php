@@ -11,7 +11,7 @@ class ElementImmunity extends Model {
      * @var array
      */
     protected $fillable = [
-        'element_id', 'immunity_id'
+        'element_id', 'immunity_id',
     ];
 
     /**
@@ -28,14 +28,14 @@ class ElementImmunity extends Model {
     **********************************************************************************************/
 
     /**
-     * Get the element that this immunity is of
+     * Get the element that this immunity is of.
      */
     public function element() {
         return $this->belongsTo('App\Models\Element\Element', 'element_id');
     }
 
     /**
-     * Get the element that this immunity is of
+     * Get the element that this immunity is of.
      */
     public function immunity() {
         return $this->belongsTo('App\Models\Element\Element', 'immunity_id');

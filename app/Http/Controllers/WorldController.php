@@ -441,6 +441,8 @@ class WorldController extends Controller {
 
     /**
      * Shows a single element's page.
+     *
+     * @param mixed $id
      */
     public function getElement($id) {
         $element = Element::where('id', $id)->first();

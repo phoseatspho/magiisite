@@ -11,7 +11,7 @@ class ElementWeakness extends Model {
      * @var array
      */
     protected $fillable = [
-        'element_id', 'weakness_id', 'multiplier'
+        'element_id', 'weakness_id', 'multiplier',
     ];
 
     /**
@@ -28,14 +28,14 @@ class ElementWeakness extends Model {
     **********************************************************************************************/
 
     /**
-     * Get the element that this weakness is of
+     * Get the element that this weakness is of.
      */
     public function element() {
         return $this->belongsTo('App\Models\Element\Element', 'element_id');
     }
 
     /**
-     * Get the element that this weakness is of
+     * Get the element that this weakness is of.
      */
     public function weakness() {
         return $this->belongsTo('App\Models\Element\Element', 'weakness_id');

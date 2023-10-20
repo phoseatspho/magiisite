@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Element\Element;
-use App\Models\Element\ElementWeakness;
-use App\Models\Element\ElementImmunity;
 use App\Services\ElementService;
 use Auth;
 use Illuminate\Http\Request;
@@ -78,7 +76,7 @@ class ElementController extends Controller {
      * Creates or edits an element.
      *
      * @param App\Services\ElementService $service
-     * @param int|null                 $id
+     * @param int|null                    $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -121,7 +119,7 @@ class ElementController extends Controller {
      * Creates or edits an element.
      *
      * @param App\Services\ElementService $service
-     * @param int                      $id
+     * @param int                         $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -147,7 +145,7 @@ class ElementController extends Controller {
      * Gets the tag addition page.
      *
      * @param App\Services\ElementService $service
-     * @param int                      $id
+     * @param int                         $id
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -156,7 +154,7 @@ class ElementController extends Controller {
 
         return view('admin.elements.add_tag', [
             'element' => $element,
-            'tags' => array_diff($service->getElementTags(), $element->tags()->pluck('tag')->toArray()),
+            'tags'    => array_diff($service->getElementTags(), $element->tags()->pluck('tag')->toArray()),
         ]);
     }
 
@@ -164,7 +162,7 @@ class ElementController extends Controller {
      * Adds a tag to an element.
      *
      * @param App\Services\ElementService $service
-     * @param int                      $id
+     * @param int                         $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -201,7 +199,7 @@ class ElementController extends Controller {
 
         return view('admin.elements.edit_tag', [
             'element' => $element,
-            'tag'  => $tag,
+            'tag'     => $tag,
         ] + $tag->getEditData());
     }
 
@@ -209,8 +207,8 @@ class ElementController extends Controller {
      * Edits tag data for an element.
      *
      * @param App\Services\ElementService $service
-     * @param int                      $id
-     * @param string                   $tag
+     * @param int                         $id
+     * @param string                      $tag
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -241,7 +239,7 @@ class ElementController extends Controller {
 
         return view('admin.elements._delete_element_tag', [
             'element' => $element,
-            'tag'  => $tag,
+            'tag'     => $tag,
         ]);
     }
 
@@ -249,8 +247,8 @@ class ElementController extends Controller {
      * Deletes a tag from an element.
      *
      * @param App\Services\ElementService $service
-     * @param int                      $id
-     * @param string                   $tag
+     * @param int                         $id
+     * @param string                      $tag
      *
      * @return \Illuminate\Http\RedirectResponse
      */

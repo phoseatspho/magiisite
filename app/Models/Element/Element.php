@@ -11,7 +11,7 @@ class Element extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'parsed_description', 'has_image', 'colour'
+        'name', 'description', 'parsed_description', 'has_image', 'colour',
     ];
 
     protected $appends = ['image_url'];
@@ -49,21 +49,21 @@ class Element extends Model {
     **********************************************************************************************/
 
     /**
-     * get the element strengths
+     * get the element strengths.
      */
     public function strengths() {
         return $this->hasMany('App\Models\Element\ElementWeakness', 'weakness_id');
     }
 
     /**
-     * Get the weaknesses of this element
+     * Get the weaknesses of this element.
      */
     public function weaknesses() {
         return $this->hasMany('App\Models\Element\ElementWeakness', 'element_id');
     }
 
     /**
-     * Get the element's immunities
+     * Get the element's immunities.
      */
     public function immunities() {
         return $this->hasMany('App\Models\Element\ElementImmunity', 'element_id');

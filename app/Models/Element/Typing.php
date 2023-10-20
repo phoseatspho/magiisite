@@ -28,14 +28,14 @@ class Typing extends Model {
     **********************************************************************************************/
 
     /**
-     * get the element of this type
+     * get the element of this type.
      */
     public function element() {
         return $this->belongsTo('App\Models\Element\Element', 'element_id');
     }
 
     /**
-     * get the object of this type
+     * get the object of this type.
      */
     public function object() {
         return $this->morphTo('typing_model', 'typing_id');

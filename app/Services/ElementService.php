@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use App\Models\Element\Element;
-use App\Models\Element\ElementWeakness;
 use App\Models\Element\ElementImmunity;
+use App\Models\Element\ElementWeakness;
 use App\Models\Element\Typing;
-use Config;
 use DB;
 
 class ElementService extends Service {
@@ -37,7 +36,6 @@ class ElementService extends Service {
         DB::beginTransaction();
 
         try {
-
             $data = $this->populateData($data);
 
             $image = null;
@@ -71,8 +69,8 @@ class ElementService extends Service {
      * Updates an element.
      *
      * @param \App\Models\Element\Element $element
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array                       $data
+     * @param \App\Models\User\User       $user
      *
      * @return \App\Models\Element\Element|bool
      */
@@ -80,7 +78,6 @@ class ElementService extends Service {
         DB::beginTransaction();
 
         try {
-
             if (Element::where('name', $data['name'])->where('id', '!=', $element->id)->exists()) {
                 throw new \Exception('The name has already been taken.');
             }
@@ -98,7 +95,7 @@ class ElementService extends Service {
 
             // create weaknesses and immunities
             if (isset($data['weakness_id']) && $data['weakness_id']) {
-                foreach($data['weakness_id'] as $key => $id) {
+                foreach ($data['weakness_id'] as $key => $id) {
                     $weakness = ElementWeakness::where('element_id', $element->id)->where('weakness_id', $id)->first();
                     if ($weakness) {
                         $weakness->update([
@@ -107,20 +104,20 @@ class ElementService extends Service {
                         $weakness->save();
                     } else {
                         ElementWeakness::create([
-                            'element_id' => $element->id,
+                            'element_id'  => $element->id,
                             'weakness_id' => $id,
-                            'multiplier' => $data['weakness_multiplier'][$key],
+                            'multiplier'  => $data['weakness_multiplier'][$key],
                         ]);
                     }
                 }
             }
 
             if (isset($data['immunity_id']) && $data['immunity_id']) {
-                foreach($data['immunity_id'] as $id) {
+                foreach ($data['immunity_id'] as $id) {
                     $immunity = ElementImmunity::where('element_id', $element->id)->where('immunity_id', $id)->first();
                     if (!$immunity) {
                         ElementImmunity::create([
-                            'element_id' => $element->id,
+                            'element_id'  => $element->id,
                             'immunity_id' => $id,
                         ]);
                     }
@@ -147,7 +144,7 @@ class ElementService extends Service {
      * Deletes an element.
      *
      * @param \App\Models\Element\Element $element
-     * @param mixed                 $user
+     * @param mixed                       $user
      *
      * @return bool
      */
@@ -181,7 +178,7 @@ class ElementService extends Service {
     /**
      * Processes user input for creating/updating an element.
      *
-     * @param array                 $data
+     * @param array                       $data
      * @param \App\Models\Element\Element $element
      *
      * @return array
