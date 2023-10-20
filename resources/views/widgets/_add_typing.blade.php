@@ -2,7 +2,9 @@
     $elements = \App\Models\Element\Element::orderBy('name')->pluck('name', 'id');
     // check if there is a type for this object if not passed
     if (!isset($type)) {
-        $type = \App\Models\Element\Typing::where('typing_model', get_class($object))->where('typing_id', $object->id)->first();
+        $type = \App\Models\Element\Typing::where('typing_model', get_class($object))
+            ->where('typing_id', $object->id)
+            ->first();
     }
     $type = $type ?? null;
 @endphp
@@ -32,7 +34,7 @@
         @if ($type)
             <div class="btn btn-danger float-right ml-2" id="delete-typing">Delete Typing</div>
         @endif
-        <div class="btn btn-primary float-right" id="submit-typing">{{ $type ? 'Edit' : 'Create'}} Typing</div>
+        <div class="btn btn-primary float-right" id="submit-typing">{{ $type ? 'Edit' : 'Create' }} Typing</div>
     </div>
 </div>
 
