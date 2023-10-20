@@ -415,6 +415,25 @@ class WorldController extends Controller {
             $query->where('name', 'LIKE', '%'.$name.'%');
         }
 
+        if (isset($data['sort'])) {
+            switch ($data['sort']) {
+                case 'alpha':
+                    $query->sortAlphabetical();
+                    break;
+                case 'alpha-reverse':
+                    $query->sortAlphabetical(true);
+                    break;
+                case 'newest':
+                    $query->sortNewest();
+                    break;
+                case 'oldest':
+                    $query->sortOldest();
+                    break;
+            }
+        } else {
+            $query->sortAlphabetical();
+        }
+
         return view('world.elements', [
             'elements' => $query->orderBy('name', 'DESC')->paginate(20)->appends($request->query()),
         ]);
