@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Character\CharacterCategory;
 use App\Models\Currency\Currency;
+use App\Models\Element\Element;
 use App\Models\Feature\Feature;
 use App\Models\Feature\FeatureCategory;
 use App\Models\Item\Item;
@@ -399,6 +400,37 @@ class WorldController extends Controller {
 
         return view('world.character_categories', [
             'categories' => $query->visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
+     * Shows the elements page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getElements(Request $request) {
+        $query = Element::query();
+        $name = $request->get('name');
+        if ($name) {
+            $query->where('name', 'LIKE', '%'.$name.'%');
+        }
+
+        return view('world.elements', [
+            'elements' => $query->orderBy('name', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
+     * Shows a single element's page.
+     */
+    public function getElement($id) {
+        $element = Element::where('id', $id)->first();
+        if (!$element) {
+            abort(404);
+        }
+
+        return view('world.element_page', [
+            'element' => $element,
         ]);
     }
 }
