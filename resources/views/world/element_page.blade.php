@@ -21,7 +21,7 @@
                     <div class="row world-entry">
                         @if ($element->imageUrl)
                             <div class="col-md-3 world-entry-image"><a href="{{ $element->imageUrl }}" data-lightbox="entry" data-title="{{ $element->name }}">
-                                <img src="{{ $element->imageUrl }}" class="world-entry-image" alt="{{ $element->name }}" /></a>
+                                    <img src="{{ $element->imageUrl }}" class="world-entry-image" alt="{{ $element->name }}" /></a>
                             </div>
                         @endif
                         <div class="{{ $element->imageUrl ? 'col-md-9' : 'col-12' }}">
