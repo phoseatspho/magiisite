@@ -59,7 +59,10 @@
                 @php
                     // check if there is a type for this object if not passed
                     // for characters first check subtype (since it takes precedence)
-                    if ($image->subtype_id) {
+                    $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Character\CharacterImage')
+                            ->where('typing_id', $image->id)
+                            ->first();
+                    if (!isset($type) && $image->subtype_id) {
                         $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Species\Subtype')
                             ->where('typing_id', $image->subtype_id)
                             ->first();
@@ -78,6 +81,12 @@
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
                             <h5>{!! $type->displayElements !!}</h5>
+                            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                                {!! add_help('Typing is assigned on an image basis') !!}
+                                <div class="ml-auto">
+                                    <a href="#" class="btn btn-outline-info btn-sm edit-typing" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endif

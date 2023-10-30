@@ -355,6 +355,9 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
 
     Route::post('{slug}/images/sort', 'CharacterImageController@postSortImages');
 
+    Route::get('{slug}/typing', 'CharacterImageController@getTyping');
+    Route::post('{slug}/typing', 'CharacterImageController@postTyping');
+
     // CHARACTER
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
     Route::post('{slug}/stats', 'CharacterController@postEditCharacterStats');
@@ -453,6 +456,6 @@ Route::get('{type}/{status}', 'DesignController@getDesignIndex')->where('type', 
 
 Route::group(['prefix' => 'typing', 'middleware' => 'power:edit_data', 'namespace' => 'Data'], function () {
     Route::post('/', 'ElementController@postTyping');
-    Route::get('/delete/{id}', 'ElementController@getDeleteTyping');
-    Route::post('/delete/{id}', 'ElementController@postDeleteTyping');
+    Route::get('delete/{id}', 'ElementController@getDeleteTyping');
+    Route::post('delete/{id}', 'ElementController@postDeleteTyping');
 });

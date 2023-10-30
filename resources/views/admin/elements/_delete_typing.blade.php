@@ -1,5 +1,5 @@
 @if ($typing)
-    {!! Form::open(['url' => 'admin/data/typing/delete/' . $typing->id]) !!}
+    {!! Form::open(['url' => 'admin/typing/delete/' . $typing->id]) !!}
 
     <p>You are about to delete the typing for <strong>{!! $typing->object->displayName !!}</strong>. This is not reversible.</p>
     <p>Are you sure you want to delete <strong>{!! $typing->object->displayName !!}</strong>?</p>

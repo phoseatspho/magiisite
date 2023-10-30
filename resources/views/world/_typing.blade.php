@@ -6,4 +6,4 @@
     $type = $type ?? null;
 @endphp
 
-{!! $type->displayElements !!}
+{!! $type ? $type->displayElements : '' !!}
