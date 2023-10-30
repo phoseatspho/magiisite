@@ -31,10 +31,10 @@
             @endif
         </div>
         <div class="btn btn-secondary" id="add-element">Add Element</div>
-        @if ($type)
-            <div class="btn btn-danger float-right ml-2" id="delete-typing">Delete Typing</div>
-        @endif
         <div class="btn btn-primary float-right" id="submit-typing">{{ $type ? 'Edit' : 'Create' }} Typing</div>
+        @if ($type)
+            <div class="btn btn-danger float-right mr-2" id="delete-typing">Delete Typing</div>
+        @endif
     </div>
 </div>
 
