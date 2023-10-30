@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Element\Typing;
-use DB;
 use Auth;
+use DB;
 
 class TypingManager extends Service {
     /*
@@ -24,12 +24,15 @@ class TypingManager extends Service {
 
     /**
      * Creates a new typing for an object.
+     *
+     * @param mixed      $typing_model
+     * @param mixed      $typing_id
+     * @param mixed|null $element_ids
      */
     public function createTyping($typing_model, $typing_id, $element_ids = null) {
         DB::beginTransaction();
 
         try {
-
             if (!$element_ids) {
                 throw new \Exception('No elements provided.');
             }
@@ -38,7 +41,7 @@ class TypingManager extends Service {
                 throw new \Exception('Too many elements provided.');
             }
             // check that a typing with this model and id doesn't already exist
-            if(Typing::where('typing_model', $typing_model)->where('typing_id', $typing_id)->exists()) {
+            if (Typing::where('typing_model', $typing_model)->where('typing_id', $typing_id)->exists()) {
                 throw new \Exception('A typing with this model and id already exists.');
             }
 
@@ -50,7 +53,7 @@ class TypingManager extends Service {
             ]);
 
             // log the action
-            if (!$this->logAdminAction(Auth::user(), 'Created Typing', 'Created '. $typing->object->displayName . ' typing')) {
+            if (!$this->logAdminAction(Auth::user(), 'Created Typing', 'Created '.$typing->object->displayName.' typing')) {
                 throw new \Exception('Failed to log admin action.');
             }
 
@@ -58,17 +61,20 @@ class TypingManager extends Service {
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
-     * edits an existing typing on a model
+     * edits an existing typing on a model.
+     *
+     * @param mixed      $typing
+     * @param mixed|null $element_ids
      */
     public function editTyping($typing, $element_ids = null) {
         DB::beginTransaction();
 
         try {
-
             if (!$element_ids) {
                 throw new \Exception('No elements provided.');
             }
@@ -77,7 +83,7 @@ class TypingManager extends Service {
                 throw new \Exception('Too many elements provided.');
             }
             // check that a typing with this model and id doesn't already exist
-            if(Typing::where('typing_model', $typing->typing_model)->where('typing_id', $typing->typing_id)->where('id', '!=', $typing->id)->exists()) {
+            if (Typing::where('typing_model', $typing->typing_model)->where('typing_id', $typing->typing_id)->where('id', '!=', $typing->id)->exists()) {
                 throw new \Exception('A typing with this model and id already exists.');
             }
 
@@ -87,7 +93,7 @@ class TypingManager extends Service {
             ]);
 
             // log the action
-            if (!$this->logAdminAction(Auth::user(), 'Edited Typing', 'Edited '. $typing->object->displayName . ' typing')) {
+            if (!$this->logAdminAction(Auth::user(), 'Edited Typing', 'Edited '.$typing->object->displayName.' typing')) {
                 throw new \Exception('Failed to log admin action.');
             }
 
@@ -95,22 +101,24 @@ class TypingManager extends Service {
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
-     * deletes a typing
+     * deletes a typing.
+     *
+     * @param mixed $typing
      */
     public function deleteTyping($typing) {
         DB::beginTransaction();
 
         try {
-
             // delete the typing
             $typing->delete();
 
             // log the action
-            if (!$this->logAdminAction(Auth::user(), 'Deleted Typing', 'Deleted '. $typing->object->displayName . ' typing')) {
+            if (!$this->logAdminAction(Auth::user(), 'Deleted Typing', 'Deleted '.$typing->object->displayName.' typing')) {
                 throw new \Exception('Failed to log admin action.');
             }
 
@@ -118,6 +126,7 @@ class TypingManager extends Service {
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 }

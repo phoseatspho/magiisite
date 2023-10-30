@@ -394,7 +394,7 @@ class CharacterImageController extends Controller {
     /**
      * Gets the typing widget for a character image.
      *
-     * @param string $slug
+     * @param mixed $id
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */

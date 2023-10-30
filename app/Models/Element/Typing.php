@@ -42,9 +42,11 @@ class Typing extends Model {
 
     /**
      * checks if a certain object has a typing.
+     *
+     * @param mixed $object
      */
     public static function hasTyping($object) {
-        return Typing::where('typing_model', get_class($object))->where('typing_id', $object->id)->exists();
+        return self::where('typing_model', get_class($object))->where('typing_id', $object->id)->exists();
     }
 
     /**
@@ -62,17 +64,19 @@ class Typing extends Model {
         $names = $this->elements()->map(function ($element) {
             return $element->displayName;
         });
+
         return implode(', ', $names->toArray());
     }
 
     /**
-     * displays the elements as pill badges
+     * displays the elements as pill badges.
      */
     public function getDisplayElementsAttribute() {
         // get the displayName attribute from each element
         $elements = $this->elements()->map(function ($element) {
             return '<a href="'.$element->idUrl.'"><span class="badge ml-1" style="color: white; background-color: '.$element->colour.';">'.$element->name.'</span></a>';
         });
+
         return implode(' ', $elements->toArray());
     }
 }

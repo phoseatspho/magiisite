@@ -70,7 +70,7 @@ class Species extends Model {
     }
 
     /**
-     * Get the species typing
+     * Get the species typing.
      */
     public function typing() {
         return $this->hasMany('App\Models\Element\Typing', 'typing_id')->where('typing_model', '\App\Models\Species\Species');
