@@ -1,3 +1,7 @@
+<div class="d-block d-lg-none my-3">
+    <a href="#" class="btn" id="rightCloseButton"><i class="fas fa-times-circle fa-2x"></i></a>
+</div>
+
 <div class="scroll">
     <div class="scroll-header"></div>
     <div class="scroll-body">

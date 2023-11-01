@@ -1,3 +1,7 @@
+<div class="d-block d-lg-none my-3">
+    <a href="#" class="btn" id="leftCloseButton"><i class="fas fa-times-circle fa-2x"></i></a>
+</div>
+
 <div class="scroll">
     <div class="scroll-header"></div>
     <div class="scroll-body">
@@ -108,7 +112,6 @@
 
         @if(Request::is('/'))
             <hr>
-
             <div class="my-3 px-3">
                 <a class="btn btn-primary my-1" href="{{ url('/') }}">
                     Button 1
