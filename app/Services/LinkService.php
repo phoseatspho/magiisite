@@ -53,7 +53,7 @@ class LinkService extends Service
             ]);
 
             // If this is the users first alias, then we want to act on referral data
-            if ($user->has_alias === 0) {
+            if ($user->has_alias == 0) {
                 $referralCount = User::where('referred_by', $user->referred_by)->count();
                 $userReferred = User::find($user->referred_by);
                 $referralConditions = Referral::where('is_active', 1)->get()->filter(function ($query) use ($referralCount) {
