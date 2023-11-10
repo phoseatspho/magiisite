@@ -40,6 +40,10 @@ class TypingManager extends Service {
             if (count($element_ids) > 2) {
                 throw new \Exception('Too many elements provided.');
             }
+            // check that there is not duplicate element ids
+            if (count($element_ids) != count(array_unique($element_ids))) {
+                throw new \Exception('Duplicate elements provided.');
+            }
             // check that a typing with this model and id doesn't already exist
             if (Typing::where('typing_model', $typing_model)->where('typing_id', $typing_id)->exists()) {
                 throw new \Exception('A typing with this model and id already exists.');
@@ -81,6 +85,10 @@ class TypingManager extends Service {
             // check that there is not more than two element ids
             if (count($element_ids) > 2) {
                 throw new \Exception('Too many elements provided.');
+            }
+            // check that there is not duplicate element ids
+            if (count($element_ids) != count(array_unique($element_ids))) {
+                throw new \Exception('Duplicate elements provided.');
             }
             // check that a typing with this model and id doesn't already exist
             if (Typing::where('typing_model', $typing->typing_model)->where('typing_id', $typing->typing_id)->where('id', '!=', $typing->id)->exists()) {

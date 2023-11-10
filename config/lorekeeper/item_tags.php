@@ -24,4 +24,10 @@ return [
         'text_color'       => '#ffffff',
         'background_color' => '#1fd1a7',
     ],
+
+    'elemental_potion' => [
+        'name'             => 'Elemental Potion',
+        'text_color'       => '#f5f3d3',
+        'background_color' => '#468a82',
+    ],
 ];
