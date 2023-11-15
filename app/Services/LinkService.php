@@ -58,7 +58,7 @@ class LinkService extends Service
                 $userReferred = User::find($user->referred_by);
                 $referralConditions = Referral::where('is_active', 1)->get()->filter(function ($query) use ($referralCount) {
                     // On every needs to be modded to see if it's been x referrals since the last time it was rewarded.
-                    return ($query->on_every && $referralCount % $query->referral_count === 0) || $referralCount = $query->referral_count;
+                    return ($query->on_every && $referralCount % $query->referral_count === 0) || $referralCount == $query->referral_count;
                 });
                 $rewards = '';
                 if (count($referralConditions) > 0) {
