@@ -102,7 +102,7 @@ class SubmissionController extends Controller {
             'inventory'           => $inventory,
             'page'                => 'submission',
             'expanded_rewards'    => Config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
-            'elements'            => Element::orderBy('name')->pluck('name', 'id')
+            'elements'            => Element::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 

@@ -422,10 +422,10 @@ class SubmissionManager extends Service {
                 // Users might not pass in clean arrays (may contain redundant data) so we need to clean that up
                 $assets = $this->processRewards($data + [
                     'character_id' => $c->id,
-                    'currencies' => $currencies,
-                    'items' => $items,
-                    'tables' => $tables,
-                    'elements' => $elements,
+                    'currencies'   => $currencies,
+                    'items'        => $items,
+                    'tables'       => $tables,
+                    'elements'     => $elements,
                 ], true);
 
                 if (!$assets = fillCharacterAssets($assets, $user, $c, $promptLogType, $promptData, $submission->user)) {
@@ -540,7 +540,7 @@ class SubmissionManager extends Service {
                         } break;
                         case 'Element': // we don't check for quanity here
                             addAsset($assets, $data['elements'][$reward], 1);
-                        break;
+                            break;
                     }
                 }
             }
