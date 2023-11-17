@@ -165,6 +165,15 @@ class Element extends Model {
     }
 
     /**
+     * Gets the currency's asset type for asset management.
+     *
+     * @return string
+     */
+    public function getAssetTypeAttribute() {
+        return 'elements';
+    }
+
+    /**
      * Gets the URL of the model's encyclopedia page.
      *
      * @return string

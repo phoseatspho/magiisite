@@ -74,7 +74,7 @@ function getAssetKeys($isCharacter = false) {
     if (!$isCharacter) {
         return ['items', 'currencies', 'raffle_tickets', 'loot_tables', 'user_items', 'characters'];
     } else {
-        return ['currencies', 'items', 'character_items', 'loot_tables'];
+        return ['currencies', 'items', 'character_items', 'loot_tables', 'elements'];
     }
 }
 
@@ -142,6 +142,14 @@ function getAssetModelString($type, $namespaced = true) {
                 return '\App\Models\Character\CharacterItem';
             } else {
                 return 'CharacterItem';
+            }
+            break;
+
+        case 'elements':
+            if ($namespaced) {
+                return '\App\Models\Element\Element';
+            } else {
+                return 'Element';
             }
             break;
     }
@@ -300,7 +308,7 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
         } elseif ($key == 'user_items' && count($contents)) {
             $service = new \App\Services\InventoryManager;
             foreach ($contents as $asset) {
-                if (!$service->moveStack($sender, $recipient, $logType, $data, $asset['asset'])) {
+                if (!$service->moveStack($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) {
                     return false;
                 }
             }
@@ -357,6 +365,13 @@ function fillCharacterAssets($assets, $sender, $recipient, $logType, $data, $sub
             $service = new \App\Services\InventoryManager;
             foreach ($contents as $asset) {
                 if (!$service->creditItem($sender, (($asset['asset']->category && $asset['asset']->category->is_character_owned) ? $recipient : $item_recipient), $logType, $data, $asset['asset'], $asset['quantity'])) {
+                    return false;
+                }
+            }
+        } elseif ($key == 'elements' && count($contents)) {
+            $service = new \App\Services\TypingManager;
+            foreach ($contents as $asset) {
+                if (!$service->creditTyping($recipient, $asset['asset'], $sender, $logType)) {
                     return false;
                 }
             }

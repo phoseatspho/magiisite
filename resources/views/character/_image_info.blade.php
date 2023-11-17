@@ -74,17 +74,19 @@
                     }
                     $type = $type ?? null;
                 @endphp
-                @if ($type)
+                @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
                             <h5>Typing</h5>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
-                            <h5>{!! $type->displayElements !!}</h5>
+                            <h5>{!! $type?->displayElements !!}</h5>
                             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                                 {!! add_help('Typing is assigned on an image basis') !!}
                                 <div class="ml-auto">
-                                    <a href="#" class="btn btn-outline-info btn-sm edit-typing" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                                    <a href="#" class="btn btn-outline-info btn-sm edit-typing" data-id="{{ $image->id }}">
+                                        <i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Create' }}
+                                    </a>
                                 </div>
                             @endif
                         </div>

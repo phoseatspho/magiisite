@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Currency\Currency;
+use App\Models\Element\Element;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Prompt\Prompt;
@@ -101,6 +102,7 @@ class SubmissionController extends Controller {
             'inventory'           => $inventory,
             'page'                => 'submission',
             'expanded_rewards'    => Config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
+            'elements'            => Element::orderBy('name')->pluck('name', 'id')
         ]));
     }
 

@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Element\Typing;
 use Auth;
 use DB;
-
+use Log;
 class TypingManager extends Service {
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ class TypingManager extends Service {
      * @param mixed      $typing_id
      * @param mixed|null $element_ids
      */
-    public function createTyping($typing_model, $typing_id, $element_ids = null) {
+    public function createTyping($typing_model, $typing_id, $element_ids = null, $log = true) {
         DB::beginTransaction();
 
         try {
@@ -57,7 +57,7 @@ class TypingManager extends Service {
             ]);
 
             // log the action
-            if (!$this->logAdminAction(Auth::user(), 'Created Typing', 'Created '.$typing->object->displayName.' typing')) {
+            if ($log && !$this->logAdminAction(Auth::user(), 'Created Typing', 'Created '.$typing->object->displayName.' typing')) {
                 throw new \Exception('Failed to log admin action.');
             }
 
@@ -75,7 +75,7 @@ class TypingManager extends Service {
      * @param mixed      $typing
      * @param mixed|null $element_ids
      */
-    public function editTyping($typing, $element_ids = null) {
+    public function editTyping($typing, $element_ids = null, $log = true) {
         DB::beginTransaction();
 
         try {
@@ -101,7 +101,7 @@ class TypingManager extends Service {
             ]);
 
             // log the action
-            if (!$this->logAdminAction(Auth::user(), 'Edited Typing', 'Edited '.$typing->object->displayName.' typing')) {
+            if ($log && !$this->logAdminAction(Auth::user(), 'Edited Typing', 'Edited '.$typing->object->displayName.' typing')) {
                 throw new \Exception('Failed to log admin action.');
             }
 
@@ -131,6 +131,48 @@ class TypingManager extends Service {
             }
 
             return $this->commitReturn($typing);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Credits an element, for usage with the asset helper vs widget.
+     *
+     * @param mixed $element
+     */
+    public function creditTyping($recipient, $element, $sender = null, $origin = null)
+    {
+        DB::beginTransaction();
+
+        try {
+                $model = get_class($recipient->image);
+                $id = $recipient->image->id;
+
+                // log the action
+                if (!$this->logAdminAction(Auth::user(), 'Credited Typing', 'Credited '.$element->displayName.' to '.$recipient->displayName.''.
+                    ($sender ? ' from '.$sender->displayName : '') .
+                    ($origin ? ' ('.$origin.')' : '')
+                )) {
+                    throw new \Exception('Failed to log admin action.');
+                }
+
+                $typing = Typing::where('typing_model', $model)->where('typing_id', $id)->first();
+
+                if ($typing) {
+                    if (!$this->editTyping($typing, [$element->id], false)) {
+                        throw new \Exception('Failed to edit typing.');
+                    }
+                }
+                else {
+                    if (!$this->createTyping($model, $id, [$element->id], false)) {
+                        throw new \Exception('Failed to create typing.');
+                    }
+                }
+
+            return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
