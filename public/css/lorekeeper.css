@@ -1,6 +1,6 @@
 /**************************************************************************************************
-    
-    Font definitions 
+
+    Font definitions
 
 **************************************************************************************************/
 
@@ -14,22 +14,28 @@
 }
 
 /**************************************************************************************************
-    
+
     Base styles
-    
+
 **************************************************************************************************/
 
-h1, h2, h3, h4, h5,
-.h1, .h2, .h3, .h4, .h5 {
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
     text-transform: uppercase;
-    font-family: Roboto Condensed, serif; 
+    font-family: Roboto Condensed, serif;
     font-weight: bold;
+}
+
+h6,
+.h6 {
+    text-transform: unset;
 }
 
 h1 a, h2 a, h3 a, h4 a, h5 a,
 a.h1, a.h2, a.h3, a.h4, a.h5 {
     color: rgba(0,0,0,0.7);
 }
+
 h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover,
 a.h1:hover, a.h2:hover, a.h3:hover, a.h4:hover, a.h5:hover {
     color: inherit;
@@ -46,15 +52,15 @@ a:hover {
 
 body {
     background-color: transparent;
-    font-family: Lato, sans-serif; 
+    font-family: Lato, sans-serif;
     min-height: 100vh;
     font-size: 80%;
 }
 
 /**************************************************************************************************
-    
+
     Helpers
-    
+
 **************************************************************************************************/
 
 .hide {
@@ -69,9 +75,9 @@ body {
 }
 
 /**************************************************************************************************
-    
+
     Layout
-    
+
 **************************************************************************************************/
 
 #app {
@@ -107,7 +113,7 @@ main > .row {
 
 .navbar .navbar-brand, .navbar .nav-item {
     text-transform: uppercase;
-    font-family: Roboto Condensed, serif; 
+    font-family: Roboto Condensed, serif;
 }
 
 .navbar .row { width: 100%; }
@@ -131,14 +137,14 @@ main > .row {
     border-bottom-left-radius: .25rem;
     margin-bottom: 1em;
     padding: 0.4em 0;
-    
+
     box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.1);
 }
 
 .sidebar .sidebar-header,
 .sidebar .sidebar-section .sidebar-section-header {
     text-transform: uppercase;
-    font-family: Roboto Condensed, serif; 
+    font-family: Roboto Condensed, serif;
     font-weight: bold;
 }
 
@@ -188,7 +194,7 @@ main > .row {
 	.site-mobile-header {
 		top: 54px !important;
     }
-    
+
     .timestamp {
 		margin-left: 1rem!important;
 		margin-right: 1rem!important;
@@ -236,7 +242,7 @@ main > .row {
     }
     .sidebar.active {
         left: 0%;
-    } 
+    }
 
     .sidebar > ul {
         padding-top: 0px;
@@ -254,19 +260,19 @@ main > .row {
         border-radius: 0;
         margin-bottom: 1em;
         padding: 0.4em 0;
-        
+
         box-shadow: none;
     }
-	
+
 	/*fix for screen being over-wide on mobile*/
 	.row {
 		margin:0; max-width:100%;
 	}
-    
+
 	.container-fluid {
 		padding:0px;
 	}
-    
+
 	.site-footer .navbar .navbar-nav {
 		flex-wrap: wrap; justify-content: center;
 	}
@@ -299,9 +305,9 @@ main > .row {
 }
 
 /**************************************************************************************************
-    
+
     Content
-    
+
 **************************************************************************************************/
 .modal-header {
     border-bottom: 0px;
@@ -311,7 +317,7 @@ main > .row {
 }
 
 .tooltip-inner {
-    max-width: 350px !important; 
+    max-width: 350px !important;
 }
 
 .nav-tabs .nav-link.active {
@@ -714,6 +720,11 @@ tr.accountbound {
     width: 100px;
 }
 
+
+@media (min-width: 768px) {
+    .fb-md-50 { flex-basis:50%; }
+}
+
 /* BOOTSTRAP TABLES *************************************************************************************/
 .ubt-bottom {
   border-bottom:1px solid #dee2e6;
@@ -746,4 +757,153 @@ tr.accountbound {
 
 @media only screen and (max-width: 600px) {
     .comment_replies { padding-left:1rem;}
+}
+
+.collectionnotunlocked {               
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    zoom: 1;  /* needed to trigger "hasLayout" in IE if no width or height is set */ 
+ }
+ 
+ .greyscale {
+    filter: grayscale(40%);
+    opacity: 0.5;
+ }
+ 
+
+.square-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.square-grid > div {
+    flex: 0 0 15%;
+}
+.square-grid .square-column {
+    aspect-ratio: 1;
+}
+
+.square-grid .square-column img {
+    max-width: 100%;
+    height: 100%;
+}
+
+.square-grid .square-column .img-thumbnail {
+    height: 100%;
+}
+ 
+/*
+    Credit to Preimpression for all of this code. You can find their github here:
+    https://github.com/preimpression
+
+    Branch where the code is from:
+    https://github.com/preimpression/lorekeeper/tree/extension/research_trees
+*/
+
+.children-scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+}
+.children-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #e4e4e4;
+}
+.children-scroll::-webkit-scrollbar-thumb {
+    background: #212121;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+.children-scroll::-webkit-scrollbar-thumb:hover {
+    background: #d5b14c;
+    transition: 0.5s;
+}
+
+
+/*----------------children-skill----------*/
+.children-body{
+    white-space: nowrap;
+    overflow-y: hidden; 
+}
+.children-skill ul {
+    padding-top: 20px; 
+    position: relative;
+    padding-left: 0px;
+    display: flex;
+}
+.children-skill li {
+    float: left; text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+}
+.children-skill li::before, .children-skill li::after{
+    content: '';
+    position: absolute; 
+    top: 0; 
+    right: 50%;
+    border-top: 2px solid #ccc;
+    width: 50%; 
+    height: 18px;
+}
+.children-skill li::after{
+    right: auto; left: 50%;
+    border-left: 2px solid #ccc;
+}
+.children-skill li:only-child::after, .children-skill li:only-child::before {
+    display: none;
+}
+.children-skill li:only-child{ 
+    padding-top: 0;
+}
+.children-skill li:first-child::before, .children-skill li:last-child::after{
+    border: 0 none;
+}
+.children-skill li:last-child::before{
+    border-right: 2px solid #ccc;
+    border-radius: 0 5px 0 0;
+    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+}
+.children-skill li:first-child::after{
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+}
+.children-skill ul ul::before{
+    content: '';
+    position: absolute; top: 0; left: 50%;
+    border-left: 2px solid #ccc;
+    width: 0; height: 20px;
+}
+.children-skill li a{
+    text-decoration: none;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    display: inline-block;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.children-skill li a:hover+ul li::after, 
+.children-skill li a:hover+ul li::before, 
+.children-skill li a:hover+ul::before, 
+.children-skill li a:hover+ul ul::before{
+    border-color:  #fbba00;
+}
+
+/*--------------memeber-card-design----------*/
+.member-view-box{
+    padding:0px 20px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+}
+.member-image{
+    position: relative;
+}
+/* RECIPES ***************************************************************************************/
+.recipe-image {
+    width: 150px;
 }

@@ -115,6 +115,30 @@ class FeatureService extends Service {
     }
 
     /**
+     * Handle category data.
+     *
+     * @param  array                                     $data
+     * @param  \App\Models\Feature\FeatureCategory|null  $category
+     * @return array
+     */
+    private function populateCategoryData($data, $category = null)
+    {
+        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
+
+        if(isset($data['remove_image']))
+        {
+            if($category && $category->has_image && $data['remove_image'])
+            {
+                $data['has_image'] = 0;
+                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+            }
+            unset($data['remove_image']);
+        }
+
+        return $data;
+    }
+
+    /**
      * Delete a category.
      *
      * @param \App\Models\Feature\FeatureCategory $category
@@ -357,21 +381,20 @@ class FeatureService extends Service {
      * @param array                                    $data
      * @param \App\Models\Feature\FeatureCategory|null $category
      *
+     * @param  \App\Models\Feature\Feature  $feature
      * @return array
      */
-    private function populateCategoryData($data, $category = null) {
-        if (isset($data['description']) && $data['description']) {
-            $data['parsed_description'] = parse($data['description']);
-        }
-
-        if (!isset($data['is_visible'])) {
-            $data['is_visible'] = 0;
-        }
-
-        if (isset($data['remove_image'])) {
-            if ($category && $category->has_image && $data['remove_image']) {
+    private function populateData($data, $feature = null)
+    {
+        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
+        if(isset($data['species_id']) && $data['species_id'] == 'none') $data['species_id'] = null;
+        if(isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') $data['feature_category_id'] = null;
+        if(isset($data['remove_image']))
+        {
+            if($feature && $feature->has_image && $data['remove_image'])
+            {
                 $data['has_image'] = 0;
-                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+                $this->deleteImage($feature->imagePath, $feature->imageFileName);
             }
             unset($data['remove_image']);
         }
@@ -391,6 +414,23 @@ class FeatureService extends Service {
         if (isset($data['description']) && $data['description']) {
             $data['parsed_description'] = parse($data['description']);
         }
+
+        public function deleteFeature($feature)
+        {
+            DB::beginTransaction();
+    
+            try {
+                // Check first if the feature is currently in use
+                if(DB::table('character_features')->where('feature_id', $feature->id)->exists()) throw new \Exception("A character with this trait exists. Please remove the trait first.");
+    
+                if($feature->has_image) $this->deleteImage($feature->imagePath, $feature->imageFileName);
+                $feature->delete();
+    
+                return $this->commitReturn(true);
+            } catch(\Exception $e) {
+                $this->setError('error', $e->getMessage());
+            }}
+
         if (isset($data['species_id']) && $data['species_id'] == 'none') {
             $data['species_id'] = null;
         }

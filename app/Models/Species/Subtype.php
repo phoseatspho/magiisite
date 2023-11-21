@@ -21,6 +21,32 @@ class Subtype extends Model {
      */
     protected $table = 'subtypes';
 
+
+    /**
+     * Validation rules for creation.
+     *
+     * @var array
+     */
+    public static $createRules = [
+        'species_id' => 'required',
+        'name' => 'required|between:3,100',
+        'description' => 'nullable',
+        'image' => 'mimes:png',
+    ];
+
+
+    /**
+     * Validation rules for updating.
+     *
+     * @var array
+     */
+    public static $updateRules = [
+        'species_id' => 'required',
+        'name' => 'required|between:3,100',
+        'description' => 'nullable',
+        'image' => 'mimes:png',
+    ];
+
     /**
      * Accessors to append to the model.
      *
@@ -29,29 +55,7 @@ class Subtype extends Model {
     protected $appends = [
         'name_with_species',
     ];
-    /**
-     * Validation rules for creation.
-     *
-     * @var array
-     */
-    public static $createRules = [
-        'species_id'  => 'required',
-        'name'        => 'required|between:3,100',
-        'description' => 'nullable',
-        'image'       => 'mimes:png',
-    ];
-
-    /**
-     * Validation rules for updating.
-     *
-     * @var array
-     */
-    public static $updateRules = [
-        'species_id'  => 'required',
-        'name'        => 'required|between:3,100',
-        'description' => 'nullable',
-        'image'       => 'mimes:png',
-    ];
+ 
 
     /**********************************************************************************************
 
@@ -100,7 +104,7 @@ class Subtype extends Model {
      * @return string
      */
     public function getNameWithSpeciesAttribute() {
-        return $this->name.' ['.$this->species->name.' Subtype]';
+        return $this->name . ' [' . $this->species->name . ' ' . ucfirst(__('lorekeeper.subtype')) . ']';
     }
 
     /**
@@ -157,8 +161,9 @@ class Subtype extends Model {
      *
      * @return string
      */
-    public function getUrlAttribute() {
-        return url('world/subtypes?name='.$this->name);
+    public function getUrlAttribute()
+    {
+        return url('world/'.__('lorekeeper.subtypes').'?name='.$this->name);
     }
 
     /**
@@ -166,8 +171,9 @@ class Subtype extends Model {
      *
      * @return string
      */
-    public function getSearchUrlAttribute() {
-        return url('masterlist?subtype_id='.$this->id);
+    public function getSearchUrlAttribute()
+    {
+        return url('masterlist?'.__('lorekeeper.subtype').'_id='.$this->id);
     }
 
     /**

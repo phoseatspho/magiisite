@@ -2,23 +2,50 @@
 
 namespace App\Models\User;
 
+use Settings;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Auth;
+use Config;
+use Carbon\Carbon;
+
 use App\Models\Character\Character;
 use App\Models\Character\CharacterBookmark;
 use App\Models\Character\CharacterImageCreator;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCollaborator;
-use App\Models\Item\ItemLog;
 use App\Models\Rank\RankPower;
-use App\Models\Shop\ShopLog;
-use App\Models\Submission\Submission;
 use App\Traits\Commenter;
-use Auth;
-use Carbon\Carbon;
-use Config;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Item\ItemLog;
+use App\Models\Stat\ExpLog;
+use App\Models\Stat\StatTransferLog;
+use App\Models\Level\LevelLog;
+use App\Models\Pet\PetLog;
+use App\Models\Claymore\GearLog;
+use App\Models\Claymore\WeaponLog;
+use App\Models\Shop\ShopLog;
+use App\Models\Award\AwardLog;
+use App\Models\User\UserCharacterLog;
+use App\Models\Submission\Submission;
+use App\Models\Submission\SubmissionCharacter;
+use App\Models\Gallery\GallerySubmission;
+use App\Models\Gallery\GalleryFavorite;
+use App\Models\WorldExpansion\FactionRank;
+use App\Models\WorldExpansion\FactionRankMember;
+use App\Models\Item\Item;
+
+use App\Models\Collection\Collection;
+use App\Models\User\UserCollection;
+use App\Models\User\UserCollectionLog;
+
+use App\Models\Character\CharacterDesignUpdate;
+use App\Models\Character\CharacterTransfer;
+use App\Models\Trade;
+use App\Models\Recipe\Recipe;
+use App\Models\User\UserRecipeLog;
 
 class User extends Authenticatable implements MustVerifyEmail {
     use Commenter, Notifiable;
@@ -30,7 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      */
     protected $fillable = [
         'name', 'alias', 'rank_id', 'email', 'email_verified_at', 'password', 'is_news_unread', 'is_banned', 'has_alias', 'avatar', 'is_sales_unread', 'birthday',
-        'is_deactivated', 'deactivater_id',
+        'is_deactivated', 'deactivater_id', 'home_id', 'home_changed', 'faction_id', 'faction_changed', 
     ];
 
     /**
@@ -56,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @var array
      */
-    protected $dates = ['birthday'];
+    protected $dates = ['birthday', 'home_changed', 'faction_changed'];
 
     /**
      * Accessors to append to the model.
@@ -73,6 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @var string
      */
     public $timestamps = true;
+
 
     /**********************************************************************************************
 
@@ -100,6 +128,23 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function deactivater() {
         return $this->belongsTo('App\Models\User\User', 'deactivater_id');
     }
+
+    /**
+     * Get user settings.
+     */
+    public function level()
+    {
+        return $this->hasOne('App\Models\Level\UserLevel');
+    }
+
+    /** 
+     * Get user staff profile data.
+     */
+    public function staffProfile()
+    {
+        return $this->hasOne('App\Models\User\StaffProfile');
+    }
+
 
     /**
      * Get the user's aliases.
@@ -151,10 +196,51 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
     /**
+     * Get the user's rank data.
+     */
+    public function home()
+    {
+        return $this->belongsTo('App\Models\WorldExpansion\Location', 'home_id');
+    }
+
+    /**
+     * Get the user's rank data.
+     */
+    public function faction()
+    {
+        return $this->belongsTo('App\Models\WorldExpansion\Faction', 'faction_id');
+    }
+
+    /**
      * Get the user's items.
      */
     public function items() {
         return $this->belongsToMany('App\Models\Item\Item', 'user_items')->withPivot('count', 'data', 'updated_at', 'id')->whereNull('user_items.deleted_at');
+    }
+
+    /**
+     * Get the user's items.
+     */
+    public function recipes()
+    {
+        return $this->belongsToMany('App\Models\Recipe\Recipe', 'user_recipes')->withPivot('id');
+    }
+
+
+    /**
+     * Returns user's foraging stats
+     */
+    public function foraging()
+    {
+        return $this->hasOne('App\Models\User\UserForaging');
+    }
+    
+    /** 
+     * Get the user's awards.
+     */
+    public function awards()
+    {
+        return $this->belongsToMany('App\Models\Award\Award', 'user_awards')->withPivot('count', 'data', 'updated_at', 'id')->whereNull('user_awards.deleted_at');
     }
 
     /**
@@ -171,6 +257,30 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->hasMany('App\Models\Gallery\GalleryFavorite')->where('user_id', $this->id);
     }
 
+     /**
+     * Get the user's pets.
+     */
+    public function pets()
+    {
+        return $this->belongsToMany('App\Models\Pet\Pet', 'user_pets')->withPivot('data', 'updated_at', 'id', 'variant_id', 'chara_id', 'pet_name')->whereNull('user_pets.deleted_at');
+    }
+
+    /**
+     * Get the user's weapons.
+     */
+    public function weapons()
+    {
+        return $this->belongsToMany('App\Models\Claymore\Weapon', 'user_weapons')->withPivot('data', 'updated_at', 'id', 'character_id', 'has_image')->whereNull('user_weapons.deleted_at');
+    }
+
+    /**
+     * Get the user's gears.
+     */
+    public function gears()
+    {
+        return $this->belongsToMany('App\Models\Claymore\Gear', 'user_gears')->withPivot('data', 'updated_at', 'id', 'character_id', 'has_image')->whereNull('user_gears.deleted_at');
+    }
+    
     /**
      * Get all of the user's character bookmarks.
      */
@@ -183,6 +293,14 @@ class User extends Authenticatable implements MustVerifyEmail {
      */
     public function commentLikes() {
         return $this->hasMany('App\Models\CommentLike');
+    }
+
+     /**
+     * Get all of the user's wishlists.
+     */
+    public function wishlists()
+    {
+        return $this->hasMany('App\Models\User\Wishlist')->where('user_id', $this->id);
     }
 
     /**********************************************************************************************
@@ -371,6 +489,53 @@ class User extends Authenticatable implements MustVerifyEmail {
         return 'User';
     }
 
+     /**
+     * Checks if the user can change location.
+     *
+     * @return string
+     */
+    public function getCanChangeLocationAttribute()
+    {
+        if(!isset($this->home_changed)) return true;
+        $limit = Settings::get('WE_change_timelimit');
+        switch($limit){
+            case 0:
+                return true;
+            case 1:
+                // Yearly
+                if(now()->year == $this->home_changed->year) return false;
+                else return true;
+
+            case 2:
+                // Quarterly
+                if(now()->year != $this->home_changed->year) return true;
+                if(now()->quarter != $this->home_changed->quarter) return true;
+                else return false;
+
+            case 3:
+                // Monthly
+                if(now()->year != $this->home_changed->year) return true;
+                if(now()->month != $this->home_changed->month) return true;
+                else return false;
+
+            case 4:
+                // Weekly
+                if(now()->year != $this->home_changed->year) return true;
+                if(now()->week != $this->home_changed->week) return true;
+                else return false;
+
+            case 5:
+                // Daily
+                if(now()->year != $this->home_changed->year) return true;
+                if(now()->month != $this->home_changed->month) return true;
+                if(now()->day != $this->home_changed->day) return true;
+                else return false;
+
+            default:
+                return true;
+        }
+    }
+
     /**
      * Get's user birthday setting.
      */
@@ -415,6 +580,85 @@ class User extends Authenticatable implements MustVerifyEmail {
             return true;
         }
     }
+
+     /**
+     * Get the user's completed collections.
+     */
+    public function collections()
+    {
+        return $this->belongsToMany('App\Models\Collection\Collection', 'user_collections')->withPivot('id');
+    }
+
+    public function getIncompletedCollectionsAttribute()
+    { 
+        return Collection::visible()->whereNotIn('id', UserCollection::where('user_id',$this->id)->pluck('collection_id')->unique());
+
+    }
+
+     /**
+     * Checks if the user can change faction.
+     *
+     * @return string
+     */
+    public function getCanChangeFactionAttribute()
+    {
+        if(!isset($this->faction_changed)) return true;
+        $limit = Settings::get('WE_change_timelimit');
+        switch($limit){
+            case 0:
+                return true;
+            case 1:
+                // Yearly
+                if(now()->year == $this->faction_changed->year) return false;
+                else return true;
+
+            case 2:
+                // Quarterly
+                if(now()->year != $this->faction_changed->year) return true;
+                if(now()->quarter != $this->faction_changed->quarter) return true;
+                else return false;
+
+            case 3:
+                // Monthly
+                if(now()->year != $this->faction_changed->year) return true;
+                if(now()->month != $this->faction_changed->month) return true;
+                else return false;
+
+            case 4:
+                // Weekly
+                if(now()->year != $this->faction_changed->year) return true;
+                if(now()->week != $this->faction_changed->week) return true;
+                else return false;
+
+            case 5:
+                // Daily
+                if(now()->year != $this->faction_changed->year) return true;
+                if(now()->month != $this->faction_changed->month) return true;
+                if(now()->day != $this->faction_changed->day) return true;
+                else return false;
+
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Get user's faction rank.
+     */
+    public function getFactionRankAttribute()
+    {
+        if(!isset($this->faction_id) || !$this->faction->ranks()->count()) return null;
+        if(FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()) return FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()->rank;
+        if($this->faction->ranks()->where('is_open', 1)->count()) {
+            $standing = $this->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
+            if(!$standing) return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', 0)->first();
+            return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', '<=', $standing->quantity)->orderBy('breakpoint', 'DESC')->first();
+        }
+    }
+
+
+
+ 
     /**********************************************************************************************
 
         OTHER FUNCTIONS
@@ -502,6 +746,58 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
     /**
+     * Get the user's exp logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getExpLogs($limit = 10)
+    {
+        $user = $this;
+        $query = ExpLog::where(function($query) use ($user) {
+            $query->with('sender')->where('sender_type', 'User')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+        })->orWhere(function($query) use ($user) {
+            $query->with('recipient')->where('recipient_type', 'User')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's stat logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getStatLogs($limit = 10)
+    {
+        $user = $this;
+        $query = StatTransferLog::where(function($query) use ($user) {
+            $query->with('sender')->where('sender_type', 'User')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+        })->orWhere(function($query) use ($user) {
+            $query->with('recipient')->where('recipient_type', 'User')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's level logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getLevelLogs($limit = 10)
+    {
+        $user = $this;
+        $query = LevelLog::where(function($query) use ($user) {
+            $query->with('recipient')->where('leveller_type', 'User')->where('recipient_id', $user->id);
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
      * Get the user's item logs.
      *
      * @param int $limit
@@ -520,6 +816,95 @@ class User extends Authenticatable implements MustVerifyEmail {
         } else {
             return $query->paginate(30);
         }
+    }
+        /**
+     * Get the user's award logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getAwardLogs($limit = 10)
+    {
+        $user = $this;
+        $query = AwardLog::with('award')->where(function($query) use ($user) {
+            $query->with('sender')->where('sender_type', 'User')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+        })->orWhere(function($query) use ($user) {
+            $query->with('recipient')->where('recipient_type', 'User')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's pet logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPetLogs($limit = 10)
+    {
+        $user = $this;
+        $query = PetLog::with('sender')->with('recipient')->with('pet')->where(function($query) use ($user) {
+            $query->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Staff Removal']);
+        })->orWhere(function($query) use ($user) {
+            $query->where('recipient_id', $user->id);
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's weapon logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getWeaponLogs($limit = 10)
+    {
+        $user = $this;
+        $query = WeaponLog::with('sender')->with('recipient')->with('weapon')->where(function($query) use ($user) {
+            $query->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Staff Removal']);
+        })->orWhere(function($query) use ($user) {
+            $query->where('recipient_id', $user->id);
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's gear logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getGearLogs($limit = 10)
+    {
+        $user = $this;
+        $query = GearLog::with('sender')->with('recipient')->with('gear')->where(function($query) use ($user) {
+            $query->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Staff Removal']);
+        })->orWhere(function($query) use ($user) {
+            $query->where('recipient_id', $user->id);
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's recipe logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getRecipeLogs($limit = 10)
+    {
+        $user = $this;
+        $query = UserRecipeLog::with('recipe')->where(function($query) use ($user) {
+            $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+        })->orWhere(function($query) use ($user) {
+            $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
     }
 
     /**
@@ -634,5 +1019,125 @@ class User extends Authenticatable implements MustVerifyEmail {
      */
     public function hasBookmarked($character) {
         return CharacterBookmark::where('user_id', $this->id)->where('character_id', $character->id)->first();
+    }
+
+     /**
+     * Checks if the user has the named recipe
+     *
+     * @return bool
+     */
+    public function hasRecipe($recipe_id)
+    {
+        $recipe = Recipe::find($recipe_id);
+        $user_has = $this->recipes->contains($recipe);
+        $default = !$recipe->needs_unlocking;
+        return $default ? true : $user_has;
+    }
+
+
+    /**
+     * Returned recipes listed that are owned
+     * Reversal simply
+     *
+     * @return object
+     */
+    public function ownedRecipes($ids, $reverse = false)
+    {
+        $recipes = Recipe::find($ids); $recipeCollection = [];
+        foreach($recipes as $recipe)
+        {
+            if($reverse) {
+                if(!$this->recipes->contains($recipe)) $recipeCollection[] = $recipe;
+            }
+            else {
+                if($this->recipes->contains($recipe)) $recipeCollection[] = $recipe;
+            }
+        }
+        return $recipeCollection;
+    }
+
+
+    /**
+     * Get the user's collection logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getCollectionLogs($limit = 10)
+    {
+        $user = $this;
+        $query = UserCollectionLog::with('collection')->where(function($query) use ($user) {
+            $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+        })->orWhere(function($query) use ($user) {
+            $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+        })->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+     /**
+     * Checks if the user has the named collection
+     *
+     * @return bool
+     */
+    public function hasCollection($collection_id)
+    {
+        $collection = Collection::find($collection_id);
+        $user_has = $this->collections->contains($collection);
+        return $user_has;
+    }
+    
+
+    /**
+     * Returned collections listed that are completed
+     * Reversal simply
+     *
+     * @return object
+     */
+    public function ownedCollections($ids, $reverse = false)
+    {
+        $collections = Collection::find($ids); $collectionCollection = [];
+        foreach($collections as $collection)
+        {
+            if($reverse) {
+                if(!$this->collections->contains($collection)) $collectionCollection[] = $collection;
+            }
+            else {
+                if($this->collections->contains($collection)) $collectionCollection[] = $collection;
+            }
+        }
+        return $collectionCollection;
+    }
+
+ /**
+     * Get the user's redeem logs.
+     *
+     * @param  int  $limit
+     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getRedeemLogs($limit = 10)
+    {
+        $user = $this;
+        $query = UserPrizeLog::with('prize')->where('user_id', $user->id)->orderBy('id', 'DESC');
+        if($limit) return $query->take($limit)->get();
+        else return $query->paginate(30);
+    }
+
+    /**
+     * Check if user completed the fetch
+     *
+     * @return int
+     */
+    public function getFetchCooldownAttribute()
+    {
+        // Fetch log for most recent collection
+        $log = ItemLog::where('sender_id', $this->id)->where('log_type', 'Turned in for Fetch Quest')->orderBy('id', 'DESC')->first();
+        // If there is no log, by default, the cooldown is null
+        if(!$log) return null;
+        // If the cooldown would already be up, it is null
+        if($log->created_at->addMinutes(60) <= Carbon::now()) return null;
+        // Otherwise, calculate the remaining time
+        return $log->created_at->addMinutes(60);
+        return null;
     }
 }

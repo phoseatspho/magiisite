@@ -24,4 +24,27 @@ return [
         'text_color'       => '#ffffff',
         'background_color' => '#1fd1a7',
     ],
+
+    'splice' => [
+        'name' => 'Splice',
+        'text_color' => '#ffffff',
+        'background_color' => '#a69bc6'
+    ],
+
+    'coupon' => [
+        'name' => 'Coupon',
+        'text_color' => '#ffffff',
+        'background_color' => '#ff5ca8'
+    ],
+    
+    'recipe' => [
+        'name' => 'Recipe',
+        'text_color' => '#ffffff',
+        'background_color' => '#6D18A7'
+    ],
+    'choicebox' => [
+        'name' => 'Choice Box',
+        'text_color' => '#ffffff',
+        'background_color' => '#56639E'
+    ],
 ];

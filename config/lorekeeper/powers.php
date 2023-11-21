@@ -55,5 +55,25 @@ return [
         'name'        => 'Has Maintenance Access',
         'description' => 'Allow rank to browse the site normally during maintenance mode.',
     ],
+    'manage_world' => [
+        'name' => 'Manage World',
+        'description' => 'Allow rank to edit world information related to the World Expansion extension.'
+    ],
+    'manage_reports' => [
+        'name' => 'Manage Reports',
+        'description' => 'Allow rank to view the reports queue.'
+    ],
+    'edit_stats' => [
+        'name' => 'Edit Stats',
+        'description' => 'Allow rank to edit stats.'
+    ],
+    'edit_levels' => [
+        'name' => 'Edit Levels',
+        'description' => 'Allow rank to edit levels.'
+    ],
+    'edit_claymores' => [
+        'name' => 'Edit Claymores & Companions',
+        'description' => 'Allow rank to edit claymore & companions data.'
+    ]
 
 ];

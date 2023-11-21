@@ -6,6 +6,14 @@ use App\Models\Item\Item;
 use App\Services\InventoryManager;
 use App\Services\Service;
 use DB;
+use App\Models\Currency\Currency;
+use App\Models\Award\Award;
+use App\Models\Loot\LootTable;
+use App\Models\Raffle\Raffle;
+use App\Models\Pet\Pet;
+use App\Models\Claymore\Gear;
+use App\Models\Claymore\Weapon;
+use App\Models\Recipe\Recipe;
 
 class BoxService extends Service {
     /*
@@ -22,8 +30,20 @@ class BoxService extends Service {
      *
      * @return array
      */
-    public function getEditData() {
-        return [];
+    public function getEditData()
+    {
+        return [
+            'characterCurrencies' => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
+            'items' => Item::orderBy('name')->pluck('name', 'id'),
+            'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'awards' => Award::orderBy('name')->pluck('name', 'id'),
+            'pets' => Pet::orderBy('name')->pluck('name', 'id'),
+            'tables' => LootTable::orderBy('name')->pluck('name', 'id'),
+            'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'gears' => Gear::orderBy('name')->pluck('name', 'id'),
+            'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
+            'recipes'=> Recipe::orderBy('name')->pluck('name', 'id'),
+        ];
     }
 
     /**
@@ -80,11 +100,26 @@ class BoxService extends Service {
                     case 'Currency':
                         $type = 'App\Models\Currency\Currency';
                         break;
+                    case 'Award':
+                        $type = 'App\Models\Award\Award';
+                        break;
+                    case 'Pet':
+                        $type = 'App\Models\Pet\Pet';
+                        break;
+                    case 'Gear':
+                        $type = 'App\Models\Claymore\Gear';
+                        break;
+                    case 'Weapon':
+                        $type = 'App\Models\Claymore\Weapon';
+                        break;
                     case 'LootTable':
                         $type = 'App\Models\Loot\LootTable';
                         break;
                     case 'Raffle':
                         $type = 'App\Models\Raffle\Raffle';
+                        break;
+                    case 'Recipe':
+                        $type = 'App\Models\Recipe\Recipe';
                         break;
                 }
                 $asset = $type::find($data['rewardable_id'][$key]);

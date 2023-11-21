@@ -2,21 +2,33 @@
 
 namespace App\Services;
 
+use DB;
+use Settings;
+use Auth;
+use File;
+use Image;
+use Carbon\Carbon;
+
+use App\Models\User\StaffProfile;
+use App\Models\WorldExpansion\Location;
+use App\Models\WorldExpansion\Faction;
+use App\Models\WorldExpansion\FactionRankMember;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Rank\Rank;
 use App\Models\Submission\Submission;
+use App\Models\User\UserUpdateLog;
+use Illuminate\Support\Facades\Storage;
+
+use App\Services\SubmissionManager;
+use App\Services\GalleryManager;
+use App\Services\CharacterManager;
+use App\Services\CurrencyManager;
 use App\Models\Trade;
 use App\Models\User\User;
-use App\Models\User\UserUpdateLog;
-use Carbon\Carbon;
-use DB;
-use File;
 use Illuminate\Support\Facades\Hash;
-use Image;
 use Notifications;
-use Settings;
 
 class UserService extends Service {
     /*
@@ -61,6 +73,9 @@ class UserService extends Service {
         $user->profile()->create([
             'user_id' => $user->id,
         ]);
+        $user->level()->create([
+            'user_id' => $user->id
+        ]);
 
         return $user;
     }
@@ -82,6 +97,79 @@ class UserService extends Service {
         }
 
         return $user;
+    }
+
+     /**
+     * Updates a user. Used in modifying the admin user on the command line.
+     *
+     * @param  array  $data
+     * @return \App\Models\User\User
+     */
+    public function updateLocation($id, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            $location = Location::find($id);
+            if(!$location) throw new \Exception("Not a valid location.");
+            if(!$location->is_user_home) throw new \Exception("Not a location a user can have as their home.");
+
+            $limit = Settings::get('WE_change_timelimit');
+
+            if($user->canChangeLocation) {
+                $user->home_id = $id;
+                $user->home_changed = Carbon::now();
+                $user->save();
+            }
+            else throw new \Exception("You can't change your location yet!");
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Updates a user. Used in modifying the admin user on the command line.
+     *
+     * @param  array  $data
+     * @return \App\Models\User\User
+     */
+    public function updateFaction($id, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            if($user->faction) $old = $user->faction;
+            $faction = Faction::find($id);
+            if($id == 0) $id = null;
+            elseif(!$faction) throw new \Exception("Not a valid faction.");
+            else if(!$faction->is_user_faction) throw new \Exception("Not a faction a user can join.");
+
+            $limit = Settings::get('WE_change_timelimit');
+
+            if($user->canChangeFaction) {
+                $user->faction_id = $id;
+                $user->faction_changed = Carbon::now();
+                $user->save();
+            }
+            else throw new \Exception("You can't change your faction yet!");
+
+            // Reset standing/remove from closed rank
+            if(($id == null) || (isset($old) && $faction->id != $old->id)) {
+                $standing = $user->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
+                if($standing && $standing->quantity > 0) if(!$debit = (new CurrencyManager)->debitCurrency($user, null, 'Changed Factions', null, $standing, $standing->quantity))
+                    throw new \Exception('Failed to reset standing.');
+
+                if(FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()) FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()->delete();
+            }
+
+            return $this->commitReturn(true);
+        } catch(\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+        return $this->rollbackReturn(false);
     }
 
     /**
@@ -205,6 +293,74 @@ class UserService extends Service {
             $this->setError('error', $e->getMessage());
         }
 
+        return $this->rollbackReturn(false);
+    }
+
+     /**
+     * * Updates or creates a user's staff profile
+     */
+    public function updateStaffProfile($data, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            if(!$user->isStaff) throw new \Exception("You must be a current staff member to update a staff profile.");
+
+            $staffProfile = StaffProfile::find($user->id);
+            if($staffProfile) {
+                $staffProfile->update([
+                    'text' => $data['text']
+                    ]);
+            }
+            else {
+                $staffProfile = StaffProfile::create([
+                    'user_id' => $user->id,
+                    'text' => $data['text']
+                    ]);
+            }
+            
+            return $this->commitReturn($staffProfile);
+        } catch(\Exception $e) { 
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+     /**
+     * Updates or creates a user's staff links
+     */
+    public function updateStaffLinks($data, $user)
+    {
+        DB::beginTransaction();
+
+        try {
+            if(!$user->isStaff) throw new \Exception("You must be a current staff member to update your staff links.");
+
+            $staffProfile = StaffProfile::find($user->id);
+
+            if($staffProfile) {
+                $staffProfile->update([
+                    'contacts' => !$data ? null : json_encode([
+                        'site' => $data['site'],
+                        'url' =>  $data['url']
+                    ])
+                ]);
+            }
+            else {
+                $staffProfile = StaffProfile::create([
+                    'user_id' => $user->id,
+                    'contacts' => !$data ? null : json_encode([
+                        'site' => $data['site'],
+                        'url' =>  $data['url']
+                    ])
+                ]);
+            }
+            
+            return $this->commitReturn($staffProfile);
+        } catch(\Exception $e) { 
+            $this->setError('error', $e->getMessage());
+        }
         return $this->rollbackReturn(false);
     }
 

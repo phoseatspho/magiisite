@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use Settings;
+use App\Models\Character\Character;
+use View;
 
 class RegisterController extends Controller {
     /*
@@ -46,6 +48,13 @@ class RegisterController extends Controller {
      */
     public function __construct() {
         $this->middleware('guest');
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**

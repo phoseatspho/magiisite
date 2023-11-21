@@ -102,7 +102,45 @@ return [
                 'name' => 'Item Grants',
                 'url'  => 'admin/grants/items',
             ],
+            [
+            'name' => 'Recipe Grants',
+            'url' => 'admin/grants/recipes'
         ],
+        
+            [
+                'name' => 'Award Grants',
+                'url' => 'admin/grants/awards'
+            ],
+            [
+            'name' => 'EXP Grants',
+            'url' => 'admin/grants/exp'
+        ],
+        [
+            'name' => 'Pet Grants',
+            'url' => 'admin/grants/pets'
+        ],
+        [
+            'name' => 'Gear Grants',
+            'url' => 'admin/grants/gear'
+        ],
+        [
+            'name' => 'Weapon Grants',
+            'url' => 'admin/grants/weapons'
+        ],
+        [
+            'name' => 'Skill Grants',
+            'url' => 'admin/grants/skills'
+        ]
+        ]
+    ],
+    'Foraging' => [
+        'power' => 'edit_inventories',
+        'links' => [
+            [
+                'name' => 'Forages',
+                'url' => 'admin/data/forages'
+            ], 
+        ]
     ],
     'Masterlist' => [
         'power' => 'manage_characters',
@@ -131,7 +169,33 @@ return [
                 'name' => 'MYO Approvals',
                 'url'  => 'admin/myo-approvals/pending',
             ],
-        ],
+            [
+             'name' => 'Transformations',
+             'url'  => 'admin/data/transformations',
+            ],
+        ]
+    ],
+    'Stats' => [
+        'power' => 'edit_stats',
+        'links' => [
+            [
+                'name' => 'Stats',
+                'url' => 'admin/stats'
+            ],
+        ]
+    ],
+    'Levels' => [
+        'power' => 'edit_levels',
+        'links' => [
+            [
+                'name' => 'User Levels',
+                'url' => 'admin/levels/user'
+            ],
+            [
+                'name' => 'Character Levels',
+                'url' => 'admin/levels/character'
+            ],
+        ]
     ],
     'Data'       => [
         'power' => 'edit_data',
@@ -139,6 +203,14 @@ return [
             [
                 'name' => 'Galleries',
                 'url'  => 'admin/data/galleries',
+            ],
+            [
+                'name' => 'Award Categories',
+                'url' => 'admin/data/award-categories'
+            ],
+            [
+                'name' => 'Awards',
+                'url' => 'admin/data/awards'
             ],
             [
                 'name' => 'Character Categories',
@@ -169,6 +241,14 @@ return [
                 'url'  => 'admin/data/shops',
             ],
             [
+                'name' => 'Dailies',
+                'url' => 'admin/data/dailies'
+            ],
+            [
+                'name' => 'Activities',
+                'url' => 'admin/data/activities'
+            ],
+            [
                 'name' => 'Currencies',
                 'url'  => 'admin/data/currencies',
             ],
@@ -184,7 +264,88 @@ return [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
             ],
+            [
+                'name' => 'Collections',
+                'url' => 'admin/data/collections'
+            ],
+            [
+                'name' => 'Pets',
+                'url' => 'admin/data/pets'
+            ],
+            
+            [
+            'name' => 'Codes',
+            'url' => 'admin/prizecodes'
+            ],
+            [
+            'name' => 'Recipes',
+            'url' => 'admin/data/recipes'
         ],
+        [
+        'name' => 'Scavenger Hunts',
+        'url' => 'admin/data/hunts'
+    ],
+        
+        ]
+    ],
+    'Claymores' => [
+        'power' => 'edit_claymores',
+        'links' => [
+            [
+                'name' => 'Gear',
+                'url' => 'admin/gear'
+            ],
+            [
+                'name' => 'Weapons',
+                'url' => 'admin/weapon'
+            ],
+            [
+                'name' => 'Character Classes',
+                'url' => 'admin/character-classes'
+            ],
+            [
+                'name' => 'Character Skills',
+                'url' => 'admin/data/skills'
+            ],
+        
+        ]
+    ],
+    'World_Expanded' => [
+        'power' => 'manage_world',
+        'links' => [
+            [
+                'name' => 'Glossary',
+                'url' => 'admin/world/glossary'
+            ],
+            [
+                'name' => 'Locations',
+                'url' => 'admin/world/locations'
+            ],
+            [
+                'name' => 'Fauna',
+                'url' => 'admin/world/faunas'
+            ],
+            [
+                'name' => 'Flora',
+                'url' => 'admin/world/floras'
+            ],
+            [
+                'name' => ' Events',
+                'url' => 'admin/world/events'
+            ],
+            [
+                'name' => ' Figures',
+                'url' => 'admin/world/figures'
+            ],
+            [
+                'name' => 'Factions',
+                'url' => 'admin/world/factions'
+            ],
+            [
+                'name' => 'Concepts',
+                'url' => 'admin/world/concepts'
+            ],
+        ]
     ],
     'Raffles'    => [
         'power' => 'manage_raffles',

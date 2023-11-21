@@ -57,7 +57,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/lorekeeper.css?v=' . filemtime(public_path('css/lorekeeper.css'))) }}" rel="stylesheet">
+    <link href="{{ asset('css/lorekeeper.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/magii.css') }}" rel="stylesheet">
 
     {{-- Font Awesome --}}
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
@@ -85,18 +86,20 @@
 <body>
     <div id="app">
         <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}');"></div>
-        @include('layouts._nav')
-        @if (View::hasSection('sidebar'))
-            <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
-        @endif
 
         <main class="container-fluid">
-            <div class="row">
-
+            <div class="row px-1 px-lg-0">
                 <div class="sidebar col-lg-2" id="sidebar">
-                    @yield('sidebar')
+                    @include('layouts._left')
                 </div>
-                <div class="main-content col-lg-8 p-4">
+
+                <div class="main-content col-lg-8 px-0">
+                    @include('layouts._nav')
+                    <div class="site-mobile-header bg-primary">
+                        <a href="#" class="btn btn-sm btn-mobile" id="mobileMenuButton">Menu <i class="fas fa-bars ml-1"></i></a>
+                        <a href="#" class="btn btn-sm btn-mobile" id="mobileFeaturedButton"><i class="fas fa-star mr-1"></i> Featured</a>
+                    </div>
+
                     <div>
                         @if (Settings::get('is_maintenance_mode'))
                             <div class="alert alert-secondary">
@@ -106,8 +109,10 @@
                                 @endif
                             </div>
                         @endif
-                        @if (Auth::check() && !Config::get('lorekeeper.extensions.navbar_news_notif'))
-                            @if (Auth::user()->is_news_unread)
+                    
+                    <div class="p-4">
+                        @if(Auth::check() && !Config::get('lorekeeper.extensions.navbar_news_notif'))
+                            @if(Auth::user()->is_news_unread)
                                 <div class="alert alert-info"><a href="{{ url('news') }}">There is a new news post!</a></div>
                             @endif
                             @if (Auth::user()->is_sales_unread)
@@ -117,15 +122,17 @@
                         @include('flash::message')
                         @yield('content')
                     </div>
+                </div>
 
-                    <div class="site-footer mt-4" id="footer">
-                        @include('layouts._footer')
-                    </div>
+                <div class="sidebar col-lg-2" id="rightSidebar">
+                    @include('layouts._right')
                 </div>
             </div>
-
         </main>
 
+        <div class="site-footer mt-md-4" id="footer">
+            @include('layouts._footer')
+        </div>
 
         <div class="modal fade" id="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
@@ -166,11 +173,39 @@
                     spoiler_caption: 'Toggle Spoiler',
                     target_list: false
                 });
+
                 var $mobileMenuButton = $('#mobileMenuButton');
+                var $leftCloseButton = $('#leftCloseButton')
                 var $sidebar = $('#sidebar');
                 $('#mobileMenuButton').on('click', function(e) {
                     e.preventDefault();
                     $sidebar.toggleClass('active');
+                });
+                $('#leftCloseButton').on('click', function(e) {
+                    e.preventDefault();
+                    $sidebar.css('transition', 'left 0ms linear 350ms, opacity 350ms linear 0ms').delay(350)
+                        .queue(function (next) {
+                            $(this).css('transition', 'opacity 350ms linear 100ms');
+                            next();
+                        })
+                    $sidebar.toggleClass('active');
+                });
+
+                var $mobileFeaturedButton = $('#mobileFeaturedButton');
+                var $rightCloseButton = $('#rightCloseButton')
+                var $featuredSidebar = $('#rightSidebar');
+                $('#mobileFeaturedButton').on('click', function(e) {
+                    e.preventDefault();
+                    $featuredSidebar.toggleClass('active');
+                });
+                $('#rightCloseButton').on('click', function(e) {
+                    e.preventDefault();
+                    $featuredSidebar.css('transition', 'left 0ms linear 350ms, opacity 350ms linear 0ms').delay(350)
+                        .queue(function (next) {
+                            $(this).css('transition', 'opacity 350ms linear 100ms');
+                            next();
+                        })
+                    $featuredSidebar.toggleClass('active');
                 });
 
                 $('.inventory-log-stack').on('click', function(e) {

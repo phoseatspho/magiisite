@@ -7,11 +7,14 @@ use App\Models\Character\Character;
 use App\Models\Character\CharacterTransfer;
 use App\Models\User\User;
 use App\Services\CharacterManager;
+use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
 use Auth;
 use Illuminate\Http\Request;
 use Route;
 use Settings;
+
+use View;
 
 class MyoController extends Controller {
     /*
@@ -51,6 +54,15 @@ class MyoController extends Controller {
             }
         });
     }
+
+    if (Settings::get('featured_character')) {
+        $character = Character::find(Settings::get('featured_character'));
+    } else {
+        $character = null;
+    }
+    View::share('featured', $character);
+}
+
 
     /**
      * Shows an MYO slot's masterlist entry.

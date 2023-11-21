@@ -239,6 +239,11 @@
         </div>
 
         <div class="form-group">
+        {!! Form::label(ucfirst(__('transformations.transformation')).' (Optional)') !!} {!! add_help('This will make the image have the selected '.__('transformations.transformation').' id.') !!}
+        {!! Form::select('transformation_id', $transformations, null, ['class' => 'form-control']) !!}
+    </div>
+
+        <div class="form-group">
             {!! Form::label('Traits') !!} @if ($isMyo)
                 {!! add_help(
                     'These traits will be listed as required traits for the slot. The user will still be able to add on more traits, but not be able to remove these. This is allowed to conflict with the rarity above; you may add traits above the character\'s specified rarity.',
@@ -253,6 +258,14 @@
                 <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
             </div>
         </div>
+
+        @if($stats)
+    <h3>Stats</h3>
+    <p class="alert alert-info">If you want a character to have different stats from the default, set them here. Else, leave it as default</p>
+    <div class="form-group" id="stats">
+        <p>Set species and/or subtype to edit stats.</p>
+    </div>
+    @endif
 
         <div class="text-right">
             {!! Form::submit('Create Character', ['class' => 'btn btn-primary']) !!}
@@ -271,18 +284,24 @@
     @endif
 
     <script>
-        $("#species").change(function() {
-            var species = $('#species').val();
-            var myo = '<?php echo $isMyo; ?>';
-            $.ajax({
-                type: "GET",
-                url: "{{ url('admin/masterlist/check-subtype') }}?species=" + species + "&myo=" + myo,
-                dataType: "text"
-            }).done(function(res) {
-                $("#subtypes").html(res);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-            });
-        });
-    </script>
+    $( "#species" ).change(function() {
+      var species = $('#species').val();
+      var subtype = $('#subtype').val();
+      var myo = '<?php echo($isMyo); ?>';
+      $.ajax({
+        type: "GET", url: "{{ url('admin/masterlist/check-subtype') }}?species="+species+"&myo="+myo, dataType: "text"
+      }).done(function (res) { $("#subtypes").html(res); }).fail(function (jqXHR, textStatus, errorThrown) { alert("AJAX call failed: " + textStatus + ", " + errorThrown); });
+      $.ajax({
+        type: "GET", url: "{{ url('admin/masterlist/check-stats') }}?species="+species+"&subtype="+subtype, dataType: "text"
+      }).done(function (res) { $("#stats").html(res); }).fail(function (jqXHR, textStatus, errorThrown) { alert("AJAX call failed: " + textStatus + ", " + errorThrown); });
+    });
+
+    $( "#subtype" ).change(function() {
+        var species = $('#species').val();
+        var subtype = $('#subtype').val();
+        $.ajax({
+            type: "GET", url: "{{ url('admin/masterlist/check-stats') }}?species="+species+"&subtype="+subtype, dataType: "text"
+        }).done(function (res) { $("#stats").html(res); }).fail(function (jqXHR, textStatus, errorThrown) { alert("AJAX call failed: " + textStatus + ", " + errorThrown); });
+    });
+</script>
 @endsection

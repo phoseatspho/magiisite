@@ -30,12 +30,22 @@
             </div>
             @if (!$image->character->is_myo_slot && !$image->is_valid)
                 <div class="alert alert-danger">
-                    This version of this character is outdated, and only noted here for recordkeeping purposes. Do not use as an official reference.
+                    This version of this {{ __('lorekeeper.character') }} is outdated, and only noted here for recordkeeping purposes. Do not use as an official reference.
                 </div>
             @endif
 
             {{-- Basic info --}}
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
+            <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4"><h5>Class</h5></div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->character->class_id ? $image->character->class->displayName : 'None' !!} 
+                        @if(Auth::check())
+                        @if(Auth::user()->isStaff || Auth::user()->id == $image->character->user_id && $image->character->class_id == null) 
+                        <a href="#" class="btn btn-outline-info btn-sm edit-class ml-1" data-id="{{ $image->character->id }}"><i class="fas fa-cog"></i></a>
+                        @endif
+                        @endif
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
                         <h5>Species</h5>
@@ -48,6 +58,30 @@
                             <h5>Subtype</h5>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
+                    </div>
+                @endif
+                @if ($image->transformation_id)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4">
+                            <h5>{{ ucfirst(__('transformations.form')) }} {!! add_help('The main image is always the active image') !!}</h5>
+                        </div>
+                        <div class="col-lg-8 col-md-6 col-8">
+                            <a href="{{ $image->transformation->url }}">
+                                {!! $image->transformation->displayName !!}
+                            </a>
+                        </div>
+                    </div>
+                @endif
+                @if($image->character->homeSetting)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4"><h5>Home</h5></div>
+                        <div class="col-lg-8 col-md-6 col-8">{!! $image->character->location ? $image->character->location : 'None' !!}</div>
+                    </div>
+                @endif
+                @if($image->character->factionSetting)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4"><h5>Faction</h5></div>
+                        <div class="col-lg-8 col-md-6 col-8">{!! $image->character->faction ? $image->character->currentFaction : 'None' !!}{!! $character->factionRank ? ' ('.$character->factionRank->name.')' : null !!}</div>
                     </div>
                 @endif
                 <div class="row">
@@ -120,9 +154,59 @@
 
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <div class="mt-3">
-                        <a href="#" class="btn btn-outline-info btn-sm edit-features" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 @endif
+
+                <div class="mb-1">
+                    <div><h5>Pets</h5></div>
+                        <div class="text-center row">
+                        @foreach($image->character->pets as $pet)
+                            <div class="ml-3 mr-3">
+                                @if($pet->has_image)
+                                <img src="{{ $pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
+                                @elseif($pet->pet->imageurl)
+                                <img src="{{ $pet->pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
+                                @else {!!$pet->pet->displayName !!}
+                                @endif
+                                <br>
+                                <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
+                            </div>
+                        @endforeach
+                        </div>
+                </div>
+
+                <div class="mb-1">
+                    <div><h5>Gear</h5></div>
+                        <div class="text-center row">
+                        @foreach($image->character->gear as $gear)
+                            <div class="ml-3 mr-3">
+                                @if($gear->has_image)
+                                <img src="{{ $gear->imageUrl }}" data-toggle="tooltip" title="{{ $gear->gear->name }}" style="max-width: 75px;"/>
+                                @elseif($gear->gear->imageurl)
+                                <img src="{{ $gear->gear->imageUrl }}" data-toggle="tooltip" title="{{ $gear->gear->name }}" style="max-width: 75px;"/>
+                                @else {!!$gear->gear->displayName !!}
+                                @endif
+                            </div>
+                        @endforeach
+                        </div>
+                </div>
+
+                <div class="mb-1">
+                    <div><h5>Weapons</h5></div>
+                        <div class="text-center row">
+                        @foreach($image->character->weapons as $weapon)
+                            <div class="ml-3 mr-3">
+                                @if($weapon->has_image)
+                                <img src="{{ $weapon->imageUrl }}" data-toggle="tooltip" title="{{ $weapon->weapon->name }}" style="max-width: 75px;"/>
+                                @elseif($weapon->weapon->imageurl)
+                                <img src="{{ $weapon->weapon->imageUrl }}" data-toggle="tooltip" title="{{ $weapon->weapon->name }}" style="max-width: 75px;"/>
+                                @else {!!$weapon->weapon->displayName !!}
+                                @endif
+                            </div>
+                        @endforeach
+                        </div>
+                </div>
             </div>
 
             {{-- Image notes --}}
@@ -226,3 +310,4 @@
     </div>
 
 </div>
+

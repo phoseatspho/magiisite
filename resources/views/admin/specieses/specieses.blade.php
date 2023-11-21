@@ -52,6 +52,7 @@
             {!! Form::submit('Save Order', ['class' => 'btn btn-primary']) !!}
             {!! Form::close() !!}
         </div>
+        <div class="text-center mt-4 small text-muted">{{ count($specieses) }} {{ trans_choice('lorekeeper.specieses_', $specieses->count()) }} found.</div>
     @endif
 
 @endsection

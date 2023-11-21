@@ -107,36 +107,84 @@
             <tbody id="lootRow">
                 <tr class="loot-row">
                     <td>{!! Form::select(
-                        'rewardable_type[]',
-                        Config::get('lorekeeper.extensions.item_entry_expansion.loot_tables.enable')
-                            ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'None' => 'None']
-                            : ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'None' => 'None'],
-                        null,
-                        ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
-                    ) !!}</td>
-                    <td class="loot-row-select"></td>
-                    <td>{!! Form::text('quantity[]', 1, ['class' => 'form-control']) !!}</td>
-                    <td class="loot-row-weight">{!! Form::text('weight[]', 1, ['class' => 'form-control loot-weight']) !!}</td>
+                        'rewardable_type[]', 
+                        Config::get('lorekeeper.extensions.item_entry_expansion.loot_tables.enable') 
+                        ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'Pet' => 'Pet', 'None' => 'None']  
+                        : ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'Pet' => 'Pet', 'None' => 'None'], 
+                        $loot->rewardable_type, 
+                        ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type']
+                        ) !!}</td>
+                        <td class="loot-row-select"></td>
+                        <td>{!! Form::text('quantity[]', $loot->quantity, ['class' => 'form-control']) !!}</td>
+                    <td class="loot-row-weight">{!! Form::text('weight[]', $loot->weight, ['class' => 'form-control loot-weight']) !!}</td>
                     <td class="loot-row-chance"></td>
                     <td class="text-right"><a href="#" class="btn btn-danger remove-loot-button">Remove</a></td>
-                </tr>
-            </tbody>
-        </table>
-        {!! Form::select('rewardable_id[]', $items, null, ['class' => 'form-control item-select', 'placeholder' => 'Select Item']) !!}
-        <div class="item-rarity-select d-flex">
-            {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
-            {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
-        </div>
-        {!! Form::select('rewardable_id[]', $currencies, null, ['class' => 'form-control currency-select', 'placeholder' => 'Select Currency']) !!}
-        {!! Form::select('rewardable_id[]', $tables, null, ['class' => 'form-control table-select', 'placeholder' => 'Select Loot Table']) !!}
-        {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control category-select', 'placeholder' => 'Select Item Category']) !!}
-        <div class="category-rarity-select d-flex">
-            {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control', 'placeholder' => 'Category']) !!}
-            {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
-            {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
-        </div>
-        {!! Form::select('rewardable_id[]', [1 => 'No reward given.'], null, ['class' => 'form-control none-select']) !!}
+                    </tr>
+                    </tbody>
+                    </table>
+                        @if($loot->rewardable_type == 'Item')
+                            {!! Form::select('rewardable_id[]', $items, $loot->rewardable_id, ['class' => 'form-control item-select selectize', 'placeholder' => 'Select Item']) !!}
+                        @elseif($loot->rewardable_type == 'ItemRarity')
+                            <div class="item-rarity-select d-flex">
+                                {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], isset($loot->data['criteria']) ? $loot->data['criteria'] : null, ['class' => 'form-control', 'placeholder' => 'Criteria']) !!}
+                                {!! Form::select('rarity[]', $rarities, isset($loot->data['rarity']) ? $loot->data['rarity'] : null, ['class' => 'form-control', 'placeholder' => 'Rarity']) !!}
+                            </div>
+                        @elseif($loot->rewardable_type == 'Currency')
+                            {!! Form::select('rewardable_id[]', $currencies, $loot->rewardable_id, ['class' => 'form-control currency-select selectize', 'placeholder' => 'Select Currency']) !!}
+                        @elseif($loot->rewardable_type == 'Pet')
+                            {!! Form::select('rewardable_id[]', $pets, $loot->rewardable_id, ['class' => 'form-control currency-select selectize', 'placeholder' => 'Select Pet']) !!}
+                        @elseif($loot->rewardable_type == 'LootTable')
+                            {!! Form::select('rewardable_id[]', $tables, $loot->rewardable_id, ['class' => 'form-control table-select selectize', 'placeholder' => 'Select Loot Table']) !!}
+                        @elseif($loot->rewardable_type == 'ItemCategoryRarity')
+                            <div class="category-rarity-select d-flex">
+                                {!! Form::select('rewardable_id[]', $categories, $loot->rewardable_id, ['class' => 'form-control selectize', 'placeholder' => 'Category']) !!}
+                                {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], isset($loot->data['criteria']) ? $loot->data['criteria'] : null, ['class' => 'form-control', 'placeholder' => 'Criteria']) !!}
+                                {!! Form::select('rarity[]', $rarities, isset($loot->data['rarity']) ? $loot->data['rarity'] : null, ['class' => 'form-control', 'placeholder' => 'Rarity']) !!}
+                            </div>
+                        @elseif($loot->rewardable_type == 'ItemCategory')
+                            {!! Form::select('rewardable_id[]', $categories, $loot->rewardable_id, ['class' => 'form-control item-select selectize', 'placeholder' => 'Select Item']) !!}
+                        @elseif($loot->rewardable_type == 'None')
+                            {!! Form::select('rewardable_id[]', [1 => 'No reward given.'], $loot->rewardable_id, ['class' => 'form-control']) !!}
+                        @endif
+                   
+            @endforeach
+        @endif
+
+<div class="text-right">
+    {!! Form::submit($table->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
+</div>
+
+{!! Form::close() !!}
+
+<div id="lootRowData" class="hide">
+    <table class="table table-sm">
+        <tbody id="lootRow">
+            <tr class="loot-row">
+                <td>{!! Form::select('rewardable_type[]', Config::get('lorekeeper.extensions.item_entry_expansion.loot_tables.enable') ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'Pet' => 'Pet', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'None' => 'None'] : ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'None' => 'None'], null, ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type']) !!}</td>
+                <td class="loot-row-select"></td>
+                <td>{!! Form::text('quantity[]', 1, ['class' => 'form-control']) !!}</td>
+                <td class="loot-row-weight">{!! Form::text('weight[]', 1, ['class' => 'form-control loot-weight']) !!}</td>
+                <td class="loot-row-chance"></td>
+                <td class="text-right"><a href="#" class="btn btn-danger remove-loot-button">Remove</a></td>
+            </tr>
+        </tbody>
+    </table>
+    {!! Form::select('rewardable_id[]', $items, null, ['class' => 'form-control item-select', 'placeholder' => 'Select Item']) !!}
+    <div class="item-rarity-select d-flex">
+        {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
+        {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
     </div>
+    {!! Form::select('rewardable_id[]', $currencies, null, ['class' => 'form-control currency-select', 'placeholder' => 'Select Currency']) !!}
+    {!! Form::select('rewardable_id[]', $pets, null, ['class' => 'form-control pet-select', 'placeholder' => 'Select Pet']) !!}
+    {!! Form::select('rewardable_id[]', $tables, null, ['class' => 'form-control table-select', 'placeholder' => 'Select Loot Table']) !!}
+    {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control category-select', 'placeholder' => 'Select Item Category']) !!}
+    <div class="category-rarity-select d-flex">
+        {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control', 'placeholder' => 'Category']) !!}
+        {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
+        {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
+    </div>
+    {!! Form::select('rewardable_id[]', [1 => 'No reward given.'], null, ['class' => 'form-control none-select']) !!}
+</div>
 
     @if ($table->id)
         <h3>Test Roll</h3>
@@ -155,18 +203,19 @@
 @endsection
 
 @section('scripts')
-    @parent
-    <script>
-        $(document).ready(function() {
-            var $lootTable = $('#lootTableBody');
-            var $lootRow = $('#lootRow').find('.loot-row');
-            var $itemSelect = $('#lootRowData').find('.item-select');
-            var $itemRaritySelect = $('#lootRowData').find('.item-rarity-select');
-            var $currencySelect = $('#lootRowData').find('.currency-select');
-            var $tableSelect = $('#lootRowData').find('.table-select');
-            var $categorySelect = $('#lootRowData').find('.category-select');
-            var $categoryRaritySelect = $('#lootRowData').find('.category-rarity-select');
-            var $noneSelect = $('#lootRowData').find('.none-select');
+@parent
+<script>
+$( document ).ready(function() {
+    var $lootTable  = $('#lootTableBody');
+    var $lootRow = $('#lootRow').find('.loot-row');
+    var $itemSelect = $('#lootRowData').find('.item-select');
+    var $petSelect = $('#lootRowData').find('.pet-select');
+    var $itemRaritySelect = $('#lootRowData').find('.item-rarity-select');
+    var $currencySelect = $('#lootRowData').find('.currency-select');
+    var $tableSelect = $('#lootRowData').find('.table-select');
+    var $categorySelect = $('#lootRowData').find('.category-select');
+    var $categoryRaritySelect = $('#lootRowData').find('.category-rarity-select');
+    var $noneSelect = $('#lootRowData').find('.none-select');
 
             refreshChances();
             $('#lootTableBody .selectize').selectize();

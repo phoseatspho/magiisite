@@ -59,10 +59,17 @@
                     $cell.children('.character-items').addClass('show');
                     $cell.children('.character-items').removeClass('hide');
                     $cell.children('.character-items');
-                } else if (val == 'Currency') {
+                }
+                else if(val == 'Award') {
+                    $cell.children('.character-awards').addClass('show');
+                    $cell.children('.character-awards').removeClass('hide');
+                    $cell.children('.character-awards');
+                }
+                else if (val == 'Currency'){
                     $cell.children('.character-currencies').addClass('show');
                     $cell.children('.character-currencies').removeClass('hide');
-                } else if (val == 'LootTable') {
+                } 
+                else if (val == 'LootTable') {
                     $cell.children('.character-tables').addClass('show');
                     $cell.children('.character-tables').addClass('show');
                     $cell.children('.character-tables').removeClass('hide');
@@ -73,8 +80,10 @@
         function updateRewardNames(node, id) {
             node.find('.character-rewardable-type').attr('name', 'character_rewardable_type[' + id + '][]');
             node.find('.character-rewardable-quantity').attr('name', 'character_rewardable_quantity[' + id + '][]');
+            node.find('.character-is-focus').attr('name', 'character_is_focus[' + id + ']');
             node.find('.character-currency-id').attr('name', 'character_rewardable_id[' + id + '][]');
             node.find('.character-item-id').attr('name', 'character_rewardable_id[' + id + '][]');
+            node.find('.character-award-id').attr('name', 'character_rewardable_id[' + id + '][]');
             node.find('.character-table-id').attr('name', 'character_rewardable_id[' + id + '][]');
         }
 

@@ -11,6 +11,10 @@
                     <i class="fas fa-search"></i>
                 </a>
             @endif
+            @if(Auth::check())
+                <div class="float-right">
+                    @include('widgets._wishlist_add', ['item' => $item])
+                </div>
         </h3>
         <div class="row">
             @if (isset($item->category) && $item->category)

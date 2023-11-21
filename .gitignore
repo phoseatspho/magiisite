@@ -12,3 +12,5 @@ yarn-error.log
 *.env
 /composer.phar
 *.cache
+/resources/sass/
+

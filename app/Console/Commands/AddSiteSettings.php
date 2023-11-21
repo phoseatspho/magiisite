@@ -27,6 +27,7 @@ class AddSiteSettings extends Command {
         parent::__construct();
     }
 
+
     /**
      * Execute the console command.
      *
@@ -82,6 +83,30 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('deactivated_key', 0, 'Optional key to view the deactivated list. Enter "0" to not require one.');
 
         $this->addSiteSetting('comment_dislikes_enabled', 0, '0: Dislikes disabled, 1: Dislikes enabled.');
+
+        $this->addSiteSetting('foraging_stamina', 1, 'How many times a user can forage a day.');
+        
+        $this->addSiteSetting('birthday_item', 1, 'ID of item to be granted to a user on their birth month. Suggestion is to set this to a box type item.');
+
+        $this->addSiteSetting('featured_character', 1, 'ID of the currently featured character.');
+
+        $this->addSiteSetting('fetch_item', 1, 'ID of the currently requested fetch quest item.');
+
+        $this->addSiteSetting('fetch_currency_id', 1, 'ID for fetch currency');
+
+        $this->addSiteSetting('fetch_category_id', 1, 'ID for category to pull items from');
+
+        $this->addSiteSetting('fetch_reward', 10, 'MINIMUM Reward granted after fetch is completed');
+
+        $this->addSiteSetting('fetch_reward_max', 100, 'MAXIMUM Reward granted after fetch is completed');
+        
+        $this->addSiteSetting('claymore_cooldown', 0, 'Number of days to add to the cooldown timer when a pet/weapon/gear is attached.');
+
+        $this->addSiteSetting('shop_type', 0, '0: Default, 1: Collapsible.');
+
+        $this->addSiteSetting('coupon_settings', 0, '0: Percentage is taken from total (e.g 20% from 2 items costing a total of 100 = 80), 1: Percentage is taken from item (e.g 20% from 2 items costing a total of 100 = 90)');
+        
+        $this->addSiteSetting('limited_stock_coupon_settings', 0, '0: Does not allow coupons to be used on limited stock items, 1: Allows coupons to be used on limited stock items');
 
         $this->line("\nSite settings up to date!");
     }

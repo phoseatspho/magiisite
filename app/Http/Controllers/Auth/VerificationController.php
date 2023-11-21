@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
+use App\Models\Character\Character;
+use Settings;
+use View;
+
 class VerificationController extends Controller {
     /*
     |--------------------------------------------------------------------------
@@ -33,5 +37,12 @@ class VerificationController extends Controller {
         $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 }

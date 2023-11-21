@@ -10,8 +10,13 @@ use Auth;
 use Carbon\Carbon;
 use Config;
 use DB;
+use Settings;
+
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+
+use App\Models\Character\Character;
+use App\Services\DeviantArtService;
 
 class HomeController extends Controller {
     /*

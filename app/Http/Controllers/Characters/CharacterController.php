@@ -8,7 +8,14 @@ use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterItem;
 use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterTransfer;
+use App\Models\Level\CharacterLevel;
+use App\Models\Species\Species;
+use App\Models\Rarity;
+use App\Models\WorldExpansion\Location;
+use App\Models\WorldExpansion\Faction;
+use App\Models\Feature\Feature;
 use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
@@ -19,12 +26,20 @@ use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
 use App\Services\InventoryManager;
+use App\Models\Item\ItemLog;
+use App\Models\Award\Award;
+use App\Models\Award\AwardCategory;
+use App\Models\User\UserAward;
+use App\Models\Award\AwardLog;
+use App\Models\Character\CharacterAward;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
 use Route;
 use Settings;
+use View; 
+use App\Models\Skill\Skill;
 
 class CharacterController extends Controller {
     /*
@@ -52,6 +67,13 @@ class CharacterController extends Controller {
             }
 
             $this->character->updateOwner();
+
+            if(!$this->character->level) {
+                $this->character->level()->create([
+                    'character_id' => $this->character->id
+                ]);
+
+            }
 
             if (Config::get('lorekeeper.extensions.previous_and_next_characters.display')) {
                 $query = Character::myo(0);
@@ -105,7 +127,16 @@ class CharacterController extends Controller {
             }
 
             return $next($request);
+
+            
         });
+
+        if (Settings::get('featured_character')) {
+            $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
+        }
+        View::share('featured', $character);
     }
 
     /**
@@ -120,6 +151,7 @@ class CharacterController extends Controller {
             'character'             => $this->character,
             'showMention'           => true,
             'extPrevAndNextBtnsUrl' => '',
+            'skills' => Skill::where('parent_id', null)->orderBy('name', 'ASC')->get(),
         ]);
     }
 
@@ -157,6 +189,12 @@ class CharacterController extends Controller {
 
         return view('character.edit_profile', [
             'character' => $this->character,
+            'locations' => Location::all()->where('is_character_home')->pluck('style','id')->toArray(),
+            'factions' => Faction::all()->where('is_character_faction')->pluck('style','id')->toArray(),
+            'user_enabled' => Settings::get('WE_user_locations'),
+            'user_faction_enabled' => Settings::get('WE_user_factions'),
+            'char_enabled' => Settings::get('WE_character_locations'),
+            'char_faction_enabled' => Settings::get('WE_character_factions')
         ]);
     }
 
@@ -181,7 +219,7 @@ class CharacterController extends Controller {
 
         $request->validate(CharacterProfile::$rules);
 
-        if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'alert_user']), $this->character, Auth::user(), !$isOwner)) {
+        if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'alert_user', 'location', 'faction']), $this->character, Auth::user(), !$isOwner)) {
             flash('Profile edited successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
@@ -288,6 +326,60 @@ class CharacterController extends Controller {
     }
 
     /**
+     * Shows a character's awards.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterAwards($slug)
+    {
+        $categories = AwardCategory::orderBy('sort', 'DESC')->get();
+        $awardOptions = Award::where('is_character_owned', '1');
+
+        $awards = count($categories) ?
+            $this->character->awards()
+                ->where('count', '>', 0)
+                ->orderByRaw('FIELD(award_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
+                ->orderBy('name')
+                ->orderBy('updated_at')
+                ->get()
+                ->groupBy(['award_category_id', 'id']) :
+            $this->character->awards()
+                ->where('count', '>', 0)
+                ->orderBy('name')
+                ->orderBy('updated_at')
+                ->get()
+                ->groupBy(['award_category_id', 'id']);
+        return view('character.awards', [
+            'character' => $this->character,
+            'categories' => $categories->keyBy('id'),
+            'awards' => $awards,
+            'logs' => $this->character->getAwardLogs(),
+            ] + (Auth::check() && (Auth::user()->hasPower('edit_inventories') || Auth::user()->id == $this->character->user_id) ? [
+                'awardOptions' => $awardOptions->pluck('name', 'id'),
+                'page' => 'character'
+            ] : []));
+    }
+
+
+    /**
+    * Shows a character's levels
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterLevel($name)
+    {
+        return view('character.stats.level', [
+            'character' => $this->character,
+            'exps' => $this->character->getExpLogs(),
+            'levels' => $this->character->getLevelLogs(),
+            'stats' => $this->character->getStatLogs(),
+            'counts' => $this->character->getCountLogs(),
+        ]);
+    }
+
+    /**
      * Transfers currency between the user and character.
      *
      * @param App\Services\CharacterManager $service
@@ -316,18 +408,18 @@ class CharacterController extends Controller {
     }
 
     /**
-     * Handles inventory item processing, including transferring items between the user and character.
+     * Handles inventory award processing, including transferring awards between the user and character.
      *
-     * @param App\Services\CharacterManager $service
-     * @param string                        $slug
-     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @param  string                         $slug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postInventoryEdit(Request $request, InventoryManager $service, $slug) {
-        if (!Auth::check()) {
-            abort(404);
-        }
-        switch ($request->get('action')) {
+    public function postAwardEdit(Request $request, AwardCaseManager $service, $slug)
+    {
+        // TODO: THIS
+        if(!Auth::check()) abort(404);
+        switch($request->get('action')) {
             default:
                 flash('Invalid action selected.')->error();
                 break;
@@ -335,25 +427,111 @@ class CharacterController extends Controller {
                 $sender = Auth::user();
                 $recipient = $this->character;
 
-                if ($service->transferCharacterStack($sender, $recipient, UserItem::find($request->get('stack_id')), $request->get('stack_quantity'), Auth::user())) {
-                    flash('Item transferred successfully.')->success();
-                } else {
-                    foreach ($service->errors()->getMessages()['error'] as $error) {
-                        flash($error)->error();
-                    }
+                if($service->transferCharacterStack($sender, $recipient, UserAward::find($request->get('stack_id')), $request->get('stack_quantity'))) {
+                    flash(ucfirst(__('awards.award')).' transferred successfully.')->success();
                 }
-                break;
-            case 'name':
-                return $this->postName($request, $service);
+                else {
+                    foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+                }
+
                 break;
             case 'delete':
-                return $this->postDelete($request, $service);
+                return $this->postDeleteAward($request, $service);
                 break;
             case 'take':
-                return $this->postItemTransfer($request, $service);
+                return $this->postAwardTransfer($request, $service);
                 break;
         }
 
+        return redirect()->back();
+    }
+
+    /**
+     * Transfers inventory items back to a user.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\InventoryManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postItemTransfer(Request $request, InventoryManager $service)
+    {
+        if($service->transferCharacterStack($this->character, $this->character->user, CharacterItem::find($request->get('ids')), $request->get('quantities'))) {
+            flash('Item transferred successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Transfers inventory awards back to a user.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\InventoryManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postAwardTransfer(Request $request, AwardCaseManager $service)
+    {
+        if($service->transferCharacterStack($this->character, $this->character->user, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
+            flash(ucfirst(__('awards.award')).' transferred successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Names an inventory stack.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postName(Request $request, InventoryManager $service)
+    {
+        if($service->nameStack($this->character, CharacterItem::find($request->get('ids')), $request->get('stack_name'))) {
+            flash('Item named successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Deletes an inventory stack.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postDelete(Request $request, InventoryManager $service)
+    {
+        if($service->deleteStack($this->character, CharacterItem::find($request->get('ids')), $request->get('quantities'))) {
+            flash('Item deleted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+    /**
+     * Deletes an award stack.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postDeleteAward(Request $request, AwardCaseManager $service)
+    {
+        if($service->deleteStack($this->character, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
+            flash(ucfirst(__('awards.award')).' deleted successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 
@@ -384,6 +562,80 @@ class CharacterController extends Controller {
             'character'             => $this->character,
             'extPrevAndNextBtnsUrl' => '/item-logs',
             'logs'                  => $this->character->getItemLogs(0),
+        ]);
+    }
+
+    /**
+     * Shows a character's awar logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterAwardLogs($slug)
+    {
+        return view('character.award_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getAwardLogs(0)
+        ]);
+    }
+
+     /**
+     * Shows a character's exp logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterExpLogs($slug)
+    {
+        $character = $this->character;
+        return view('character.stats.exp_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getExpLogs(0)
+        ]);
+    }
+
+    /**
+     * Shows a user's stat logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterStatLogs($slug)
+    {
+        $character = $this->character;
+        return view('character.stats.stat_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getStatLogs(0)
+        ]);
+    }
+
+    /**
+     * Shows a user's level logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterLevelLogs($slug)
+    {
+        $character = $this->character;
+        return view('character.stats.level_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getLevelLogs(0)
+        ]);
+    }
+
+    /**
+     * Shows a user's count logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterCountLogs($slug)
+    {
+        $character = $this->character;
+        return view('character.stats.count_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getCountLogs(0)
         ]);
     }
 
@@ -429,6 +681,20 @@ class CharacterController extends Controller {
             'character'             => $this->character,
             'extPrevAndNextBtnsUrl' => '/submissions',
             'logs'                  => $this->character->getSubmissions(),
+        ]);
+    }
+
+    /**
+     * Shows a character's skill logs.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterSkillLogs($slug)
+    {
+        return view('character.character_skill_logs', [
+            'character' => $this->character,
+            'logs' => $this->character->getCharacterSkillLogs()
         ]);
     }
 
@@ -607,6 +873,47 @@ class CharacterController extends Controller {
             }
         }
 
+        return redirect()->back();
+    }
+
+    /**
+     * Shows a character's images.
+     *
+     * @param string $slug
+     * @param mixed  $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterImage($slug, $id) {
+        $image = CharacterImage::where('character_id', $this->character->id)->where('id', $id)->first();
+
+        return view('character.image', [
+            'user'      => Auth::check() ? Auth::user() : null,
+            'character' => $this->character,
+            'image'     => $image,
+            'ajax'      => true,
+        ]);
+    }
+
+    /**
+     * Opens a new design update approval request for a character. but with a specific image lmao
+     *
+     * @param  App\Services\CharacterManager  $service
+     * @param  string                         $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCharacterApprovalSpecificImage($slug, CharacterManager $service, $id)
+    {
+        if(!Auth::check() || $this->character->user_id != Auth::user()->id) abort(404);
+        $image = CharacterImage::where('character_id', $this->character->id)->where('id', $id)->first();
+
+        if($request = $service->createDesignUpdateRequestSpecificImage($this->character, Auth::user(), $image)) {
+            flash('Successfully created new design update request draft.')->success();
+            return redirect()->to($request->url);
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 }

@@ -63,6 +63,7 @@
         <h2>Characters</h2>
         @if ($isClaim)
             <p>If there are character-specific rewards you would like to claim, attach them here. Otherwise, this section can be left blank.</p>
+            <p>Any character set to focus shall receive any stat / level / skill awards. The character must be apart of the prompt / the focus character.</p>
         @endif
         <div id="characters" class="mb-3">
         </div>
@@ -83,12 +84,12 @@
         </div>
         {!! Form::close() !!}
 
-        @include('widgets._character_select', ['characterCurrencies' => $characterCurrencies, 'showLootTables' => false])
-        @if ($isClaim)
-            @include('widgets._loot_select_row', ['showLootTables' => false, 'showRaffles' => true])
-        @else
-            @include('widgets._loot_select_row', ['showLootTables' => false, 'showRaffles' => false])
-        @endif
+    @include('widgets._character_select', ['characterCurrencies' => $characterCurrencies, 'showLootTables' => false])
+    @if($isClaim)
+        @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => false, 'showRaffles' => true, 'showRecipes' => true])
+    @else
+        @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false])
+    @endif
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -111,17 +112,17 @@
 @endsection
 
 @section('scripts')
-    @parent
-    @if (!$closed)
-        @if ($isClaim)
-            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true])
-        @else
-            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
-        @endif
-        @include('js._character_select_js')
-        @include('widgets._inventory_select_js', ['readOnly' => true])
-        @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
-        @include('widgets._bank_select_js', [])
+@parent
+@if(!$closed)
+    @if($isClaim)
+        @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true, 'showRecipes' => true])
+    @else
+        @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false])
+    @endif
+    @include('js._character_select_js')
+    @include('widgets._inventory_select_js', ['readOnly' => true])
+    @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
+    @include('widgets._bank_select_js', [])
 
         <script>
             $(document).ready(function() {

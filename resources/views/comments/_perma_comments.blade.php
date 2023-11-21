@@ -25,7 +25,7 @@
                 @endif
             </div>
             <div
-                class="comment border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }} {{ $comment->is_featured && $limit != 0 ? 'border-success' : '' }} {{ $comment->likes()->where('is_like', 1)->count() -$comment->likes()->where('is_like', 0)->count() <0? 'bg-light bg-gradient': '' }}">
+                class="site-comment border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }} {{ $comment->is_featured && $limit != 0 ? 'border-success' : '' }} {{ $comment->likes()->where('is_like', 1)->count() -$comment->likes()->where('is_like', 0)->count() <0? 'bg-light bg-gradient': '' }}">
                 <p>{!! nl2br($markdown->line($comment->comment)) !!} </p>
                 <p class="border-top pt-1 text-right mb-0">
                     <small class="text-muted">{!! $comment->created_at !!}
@@ -120,3 +120,7 @@ url should be equal to the last replies permalink (e.g reply 5) --}}
 </div>
 </div>
 @endif
+
+
+
+

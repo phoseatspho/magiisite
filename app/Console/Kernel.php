@@ -29,6 +29,22 @@ class Kernel extends ConsoleKernel {
             ->daily();
         $schedule->command('update-staff-reward-actions')
             ->daily();
+            $schedule->command('reset-foraging')
+                ->daily();
+        $schedule->command('update-timed-daily')
+                ->everyMinute();          
+        $schedule->command('check-pet-drops')
+                ->everyMinute();
+        $schedule->command('restock-shops')
+                ->daily();
+        $schedule->command('update-timed-stock')
+                ->everyMinute();
+        $schedule->command('distribute-birthday-rewards')
+                ->monthly();
+        $schedule->command('change-feature')
+                ->monthly();
+        $schedule->command('change-fetch-item')
+                ->hourly();
     }
 
     /**

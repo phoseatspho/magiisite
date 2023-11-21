@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use DB;
+use Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Rank\Rank;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\UserUpdateLog;
 use App\Services\UserService;
+use App\Models\User\StaffProfile;
+use App\Models\WorldExpansion\Location;
+use App\Models\WorldExpansion\Faction;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -73,16 +78,36 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUser($name) {
+    public function getUser($name)
+    {
+        $interval = array(
+            0 => 'whenever',
+            1 => 'yearly',
+            2 => 'quarterly',
+            3 => 'monthly',
+            4 => 'weekly',
+            5 => 'daily'
+        );
+
         $user = User::where('name', $name)->first();
 
         if (!$user) {
             abort(404);
         }
 
+        $links = StaffProfile::where('user_id', $user->id)->first();
+
         return view('admin.users.user', [
-            'user'  => $user,
+            'user' => $user,
             'ranks' => Rank::orderBy('ranks.sort')->pluck('name', 'id')->toArray(),
+            'locations' => Location::all()->where('is_user_home')->pluck('style','id')->toArray(),
+            'factions' => Faction::all()->where('is_user_faction')->pluck('style','id')->toArray(),
+            'user_enabled' => Settings::get('WE_user_locations'),
+            'user_faction_enabled' => Settings::get('WE_user_factions'),
+            'char_enabled' => Settings::get('WE_character_locations'),
+            'char_faction_enabled' => Settings::get('WE_character_factions'),
+            'location_interval' => $interval[Settings::get('WE_change_timelimit')],
+            'links' => $links ? $links : null
         ]);
     }
 
@@ -116,7 +141,45 @@ class UserController extends Controller {
         return redirect()->to($user->adminUrl);
     }
 
-    public function postUserAlias(Request $request, $name, $id) {
+    public function postUserLocation(Request $request, $name, $id)
+    {
+        $user = User::where('name', $name)->first();
+        $service = new UserService;
+
+        if(!$user) flash('Invalid user.')->error();
+        else if (!Auth::user()->canEditRank($user->rank)) {
+            flash('You cannot edit the information of a user that has a higher rank than yourself.')->error();
+        }
+        else if($service->updateLocation($request->input('location'), $user)) {
+            flash('Location updated successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    public function postUserFaction(Request $request, $name)
+    {
+        $user = User::where('name', $name)->first();
+        $service = new UserService;
+        
+        if(!$user) flash('Invalid user.')->error();
+        else if (!Auth::user()->canEditRank($user->rank)) {
+            flash('You cannot edit the information of a user that has a higher rank than yourself.')->error();
+        }
+        else if($service->updateFaction($request->input('faction'), $user)) {
+            flash('Faction updated successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+
+    public function postUserAlias(Request $request, $name, $id)
+    {
         $user = User::where('name', $name)->first();
         $alias = UserAlias::find($id);
 
@@ -215,6 +278,48 @@ class UserController extends Controller {
             }
         }
 
+        return redirect()->back();
+    }
+
+    public function postStaffProfile(Request $request, $name)
+    {
+        $user = User::where('name', $name)->first();
+        if(!$user) {
+            flash('Invalid user.')->error();
+        }
+
+        $service = new UserService;
+        $logData = ['old_profile' => $user->staffProfile ? $user->staffProfile->text : ''] + ['new_profile' => $request['text']];
+
+        if($service->updateStaffProfile($request->only(['text']), $user)) {
+            UserUpdateLog::create(['staff_id' => Auth::user()->id, 'user_id' => $user->id, 'data' => json_encode($logData), 'type' => 'Staff Profile Update']);
+            flash($name.'\'s staff profile updated successfully!')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+
+    public function postStaffLinks(Request $request, $name)
+    {
+        $user = User::where('name', $name)->first();
+        if(!$user) {
+            flash('Invalid user.')->error();
+        }
+
+        $service = new UserService;
+        $oldData = $user->staffProfile && $user->staffProfile->contacts ? implode(", ", $user->staffProfile->contacts['url']) : '';
+        $newData = $request['url'] ? implode (", ", $request['url']) : '';
+
+        if($service->updateStaffLinks($request->only(['site', 'url']), $user)) {
+            $logData = ['old_urls' => $oldData] + ['new_urls' => $newData];
+            UserUpdateLog::create(['staff_id' => Auth::user()->id, 'user_id' => $user->id, 'data' => json_encode($logData), 'type' => 'Staff Links Update']);
+            flash($name.'\'s staff profile links updated successfully!')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 
