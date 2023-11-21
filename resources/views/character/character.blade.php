@@ -72,7 +72,7 @@
                 </li>
             @endif
         </ul>
-        @include('character._image_info', ['image' => $character->image])
+       
     </div>
 
         <div class="card-body tab-content">

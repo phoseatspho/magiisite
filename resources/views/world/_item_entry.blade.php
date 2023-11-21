@@ -5,17 +5,13 @@
     <div class="{{ $imageUrl ? 'col-md-9' : 'col-12' }}">
         <x-admin-edit title="Item" :object="$item" />
         <h3>
-            {!! $name !!}
-            @if (isset($idUrl) && $idUrl)
-                <a href="{{ $idUrl }}" class="world-entry-search text-muted">
-                    <i class="fas fa-search"></i>
-                </a>
-            @endif
-            @if(Auth::check())
-                <div class="float-right">
-                    @include('widgets._wishlist_add', ['item' => $item])
-                </div>
-        </h3>
+             {!! $name !!} @if(isset($idUrl) && $idUrl) <a href="{{ $idUrl }}" class="world-entry-search text-muted"><i class="fas fa-search"></i></a>  @endif
+             @if(Auth::check())
+                 <div class="float-right">
+                     @include('widgets._wishlist_add', ['item' => $item])
+                 </div>
+             @endif
+         </h3>
         <div class="row">
             @if (isset($item->category) && $item->category)
                 <div class="col-md">
@@ -133,3 +129,4 @@
         </div>
     </div>
 </div>
+

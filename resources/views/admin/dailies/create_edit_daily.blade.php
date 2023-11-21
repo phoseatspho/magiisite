@@ -121,14 +121,14 @@ true]) !!}
 {!! Form::close() !!}
 
 
-@include('dailies._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'showLootTables' => true, 'showRaffles' => true])
+@include('dailies._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
 
 
 @endsection
 
 @section('scripts')
 @parent
-@include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
+@include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true, 'showRecipes' =>true])
 
 <script>
 $('#is_timed_daily').change(function() {

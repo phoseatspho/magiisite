@@ -100,7 +100,7 @@
                         <a href="#" class="btn btn-sm btn-mobile" id="mobileFeaturedButton"><i class="fas fa-star mr-1"></i> Featured</a>
                     </div>
 
-                    <div>
+                    
                         @if (Settings::get('is_maintenance_mode'))
                             <div class="alert alert-secondary">
                                 The site is currently in maintenance mode!
@@ -220,6 +220,7 @@
             });
         </script>
     </div>
+    
 </body>
 
 </html>

@@ -615,14 +615,14 @@ select.form-control:focus::-ms-value {
 }
 
 .btn-secondary {
-  background-color: #5654a3;
+  background-color: #00d7f6;
   border-color: #5654a3;
   border-right: 2px solid #444381;
   border-left: 2px solid #444381;
 }
 
 .btn-secondary:hover {
-  background-color: #8584c0;
+  background-color: #8be4ff;
   border-color: #8584c0;
   border-right: 2px solid #444381;
   border-left: 2px solid #444381;
@@ -2283,6 +2283,8 @@ button.bg-light:focus {
 
 .bg-dark {
   background-color: #3e3c4b !important;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 a.bg-dark:hover,
@@ -2458,22 +2460,23 @@ a.text-dark:focus {
 .alert-secondary,
 .alert-secondary > th,
 .alert-secondary > td {
-  background-color: #5654a3;
-  border-color: #5654a3 !important;
-  border-right-color: #444381 !important;
+  background-color: color(display-p3 0.3216 0.7098 0.9255)!important;
+  border-color: color(display-p3 0.204 0.578 0.785) !important;
+  border-right-color: color(display-p3 0.204 0.578 0.785) !important;
 }
 
 .alert-secondary::before,
 .alert-secondary > th::before,
 .alert-secondary > td::before {
   content: "";
-  background-color: #444381;
+  background-color: color(display-p3 0.164 0.527 0.73);
   border-radius: 2px;
   height: 125%;
   width: 5px;
   position: absolute;
   left: 1px;
   top: -12.5%;
+  
 }
 
 .alert-success,
@@ -2786,6 +2789,7 @@ a.text-dark:focus {
 .main-content {
   background-color: #d2edf8;
   box-shadow: none;
+  border-radius: 15px;
 }
 
 .sidebar {

@@ -1,3 +1,6 @@
+@php
+if(!isset($showRecipes)) $showRecipes = false;
+@endphp
 <script>
 $( document ).ready(function() {    
     var $lootTable  = $('#lootTableBody');
@@ -17,6 +20,7 @@ $( document ).ready(function() {
     @if($showRecipes)
         var $recipeSelect = $('#lootRowData').find('.recipe-select');
     @endif
+
 
     $('#lootTableBody .selectize').selectize();
     attachRemoveListener($('#lootTableBody .remove-loot-button'));
@@ -44,15 +48,15 @@ $( document ).ready(function() {
             else if (val == 'LootTable') $clone = $tableSelect.clone();
         @endif
         @if ($showRaffles)
-            var $raffleSelect = $('#lootRowData').find('.raffle-select');
+            else if (val == 'Raffle') $clone = $raffleSelect.clone();
         @endif
         @if($showRecipes)
             else if (val == 'Recipe') $clone = $recipeSelect.clone();
         @endif
-        
             $cell.html('');
             $cell.append($clone);
-        });
+    });
+    
 
         function attachRewardTypeListener(node) {
             node.on('change', function(e) {
@@ -62,12 +66,19 @@ $( document ).ready(function() {
                 var $clone = null;
                 if (val == 'Item') $clone = $itemSelect.clone();
                 else if (val == 'Currency') $clone = $currencySelect.clone();
+                else if (val == 'Pet') $clone = $PetSelect.clone();
+                else if (val == 'Weapon') $clone = $WeaponSelect.clone();
+                else if (val == 'Gear') $clone = $GearSelect.clone();
+                else if (val == 'Award') $clone = $awardSelect.clone();
                 @if ($showLootTables)
                     else if (val == 'LootTable') $clone = $tableSelect.clone();
                 @endif
                 @if ($showRaffles)
                     else if (val == 'Raffle') $clone = $raffleSelect.clone();
                 @endif
+                @if($showRecipes)
+                else if (val == 'Recipe') $clone = $recipeSelect.clone();
+            @endif
 
                 $cell.html('');
                 $cell.append($clone);
@@ -81,6 +92,7 @@ $( document ).ready(function() {
                 $(this).parent().parent().remove();
             });
         }
+});
 
-    });
+
 </script>

@@ -44,14 +44,7 @@
                                 </div>
                             @endif
                         </h1>
-                        <div class="row">
-                        @if(isset($item->category) && $item->category)
-                            <div class="col-md">
-                                <p><strong>Category:</strong> {!! $item->category->name !!}</p>
-                            </div>
-                        @endif
-                        <div class="{{ $imageUrl ? 'col-md-9' : 'col-12' }}">
-                            <h1>{!! $name !!}</h1>
+                       
                             <div class="row">
                                 @if (isset($item->category) && $item->category)
                                     <div class="col-md">

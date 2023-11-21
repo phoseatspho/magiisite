@@ -55,13 +55,7 @@ class MyoController extends Controller {
         });
     }
 
-    if (Settings::get('featured_character')) {
-        $character = Character::find(Settings::get('featured_character'));
-    } else {
-        $character = null;
-    }
-    View::share('featured', $character);
-}
+    
 
 
     /**

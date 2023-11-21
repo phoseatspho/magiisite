@@ -51,6 +51,7 @@ use App\Models\User\UserWeapon;
 use App\Models\User\UserPrizeLog;
 
 
+
 class UserController extends Controller {
     /*
     |--------------------------------------------------------------------------
@@ -97,19 +98,22 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUser($name) {
+    public function getUser($name) 
+    {
         $characters = $this->user->characters();
         if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
             $characters->visible();
-            $gears = $this->user->gears()->orderBy('user_gears.updated_at', 'DESC')->take(4)->get();
-            $weapons = $this->user->weapons()->orderBy('user_weapons.updated_at', 'DESC')->take(4)->get();
-            $armours = $gears->union($weapons);
-        }
 
-        $aliases = $this->user->aliases();
-        if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('edit_user_info'))) {
-            $aliases->visible();
-        }
+    }
+    $gears = $this->user->gears()->orderBy('user_gears.updated_at', 'DESC')->take(4)->get();
+    $weapons = $this->user->weapons()->orderBy('user_weapons.updated_at', 'DESC')->take(4)->get();
+    $armours = $gears->union($weapons);
+
+            $aliases = $this->user->aliases();
+            if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('edit_user_info'))) {
+                $aliases->visible();
+            }
+    
 
         return view('user.profile', [
             'user'       => $this->user,
@@ -125,6 +129,7 @@ class UserController extends Controller {
             'aliases'    => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
         ]);
     }
+
 
     /**
      * Shows a user's aliases.
@@ -144,6 +149,7 @@ class UserController extends Controller {
             'aliases' => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
         ]);
     }
+
 
     /**
      * Shows a user's characters.

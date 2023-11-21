@@ -7,11 +7,11 @@
             <div class="mb-1"><a href="{{ $item->url }}"><img src="{{ $item->imageUrl }}" alt="{{ $item->name }}" /></a></div>
         @endif
         <div @if(count($item->tags)) class="mb-1" @endif>
-            <a href="{{ $item->idUrl }}">{{ $item->name }}</a>
-            @if(Auth::check())
-                @include('widgets._wishlist_add', ['item' => $item, 'small' => true])
-            @endif
-        </div>
+             <a href="{{ $item->idUrl }}">{{ $item->name }}</a>
+             @if(Auth::check())
+                 @include('widgets._wishlist_add', ['item' => $item, 'small' => true])
+             @endif
+         </div>
         @if(count($item->tags))
             <div>
                 @foreach($item->tags as $tag)

@@ -257,16 +257,6 @@
                         </td>
                     @endif
 
-<<<<<<< HEAD
-                    <td class="d-flex align-items-center">
-                        {!! Form::text('character_quantity[]', 0, ['class' => 'form-control mr-2  character-rewardable-quantity']) !!}
-                        <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true])
-=======
                 <td class="d-flex align-items-center">
                     {!! Form::text('character_quantity[]', 0, ['class' => 'form-control mr-2  character-rewardable-quantity']) !!}
                     <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
@@ -274,12 +264,8 @@
             </tr>
         </table>
     </div>
-<<<<<<< HEAD
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true])
-=======
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
->>>>>>> d9c1fb9791084131749baf4b577c15f34293bc9f
->>>>>>> 4089da53099925f6356df3fdb3d80fd8927cecef
+    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">

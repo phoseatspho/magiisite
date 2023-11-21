@@ -184,8 +184,8 @@
 {!! Form::close() !!}
 
 @if($award->id)
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'awards' => $awards, 'showLootTables' => false, 'showRaffles' => false, 'progression' => true])
-    @include('widgets._reward_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'awards' => $awards, 'showLootTables' => false, 'showRaffles' => false, 'progression' => true])
+    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'awards' => $awards, 'pets' => $pets, 'showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false, 'progression' => true])
+    @include('widgets._reward_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'awards' => $awards, 'pets' => $pets, 'showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false, 'progression' => true])
 @endif
 
 <div class="row hide credit-row col-12 mb-1">
@@ -229,7 +229,7 @@
 
 @section('scripts')
 @parent
-@include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
+@include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false])
 @include('js._reward_js', ['showLootTables' => false, 'showRaffles' => false])
 <script>
 $( document ).ready(function() {

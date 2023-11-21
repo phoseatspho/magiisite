@@ -8,7 +8,7 @@
     {!! breadcrumbs(['Prompts' => 'prompts', 'All Prompts' => 'prompts/prompts']) !!}
     <h1>All Prompts</h1>
 
-    <div>
+    
         {!! Form::open(['method' => 'GET', 'class' => '']) !!}
         <div class="form-inline justify-content-end">
             <div class="form-group ml-3 mb-3">

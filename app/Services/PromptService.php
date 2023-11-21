@@ -311,35 +311,7 @@ class PromptService extends Service {
         return $this->rollbackReturn(false);
     }
 
-    /**
-     * Deletes a prompt.
-     *
-     * @param \App\Models\Prompt\Prompt $prompt
-     *
-     * @return bool
-     */
-    public function deletePrompt($prompt) {
-        DB::beginTransaction();
-
-        try {
-            // Check first if the category is currently in use
-            if (Submission::where('prompt_id', $prompt->id)->exists()) {
-                throw new \Exception('A submission under this prompt exists. Deleting the prompt will break the submission page - consider setting the prompt to be not active instead.');
-            }
-
-            $prompt->rewards()->delete();
-            if ($prompt->has_image) {
-                $this->deleteImage($prompt->imagePath, $prompt->imageFileName);
-            }
-            $prompt->delete();
-
-            return $this->commitReturn(true);
-        } catch (\Exception $e) {
-            $this->setError('error', $e->getMessage());
-        }
-
-        return $this->rollbackReturn(false);
-    }
+   
 
     /**
      * Handle category data.

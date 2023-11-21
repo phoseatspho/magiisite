@@ -89,7 +89,7 @@ function getAssetKeys($isCharacter = false) {
  */
 function getAssetModelString($type, $namespaced = true) {
     switch ($type) {
-        case 'items':
+        case 'items': case 'item':
             if ($namespaced) {
                 return '\App\Models\Item\Item';
             } else {
@@ -528,7 +528,7 @@ function rollCategory($id, $quantity = 1, $criteria = null, $rarity = null)
  * @param  string $rarity
  * @return \Illuminate\Support\Collection
  */
-function rollRarityItem($quantity = 1, $criteria, $rarity)
+function rollRarityItem( $criteria, $rarity, $quantity = 1)
 {
     $rewards = createAssetsArray();
 

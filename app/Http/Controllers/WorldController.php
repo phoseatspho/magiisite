@@ -746,10 +746,13 @@ class WorldController extends Controller {
         $name = $request->get('name');
         if($name) $query->where('name', 'LIKE', '%'.$name.'%');
         return view('world.pet_categories', [  
-            'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+            'categories' => $query->visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
 
+
+
+    
     /** 
     * Shows the pets page.
     *
@@ -788,8 +791,9 @@ class WorldController extends Controller {
        else $query->sortCategory();
 
        return view('world.pets', [
-           'pets' => $query->paginate(20)->appends($request->query()),
+           'pets' => $query->visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
            'categories' => ['none' => 'Any Category'] + PetCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
+           
        ]);
     }    
 

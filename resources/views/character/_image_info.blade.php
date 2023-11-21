@@ -173,7 +173,7 @@
                                 <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
                             </div>
                         @endforeach
-                        </div>
+                   </div>
                 </div>
 
                 <div class="mb-1">

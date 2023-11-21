@@ -2,6 +2,15 @@
     // This file represents a common source and definition for assets used in loot_select
     // While it is not per se as tidy as defining these in the controller(s),
     // doing so this way enables better compatibility across disparate extensions
+    if(!isset($showRecipes)) $showRecipes = false;
+    if(!isset($awards))
+   $awards = \App\Models\Award\Award::orderBy('name')->pluck('name', 'id');
+    if(!isset($pets))
+    $pets = \App\Models\Pet\Pet::orderBy('name')->pluck('name', 'id');
+    if(!isset($weapons))
+    $weapons = \App\Models\Claymore\Weapon::orderBy('name')->pluck('name', 'id');
+    if(!isset($gears))
+    $gears = \App\Models\Claymore\Gear::orderBy('name')->pluck('name', 'id');
     $characterCurrencies = \App\Models\Currency\Currency::where('is_character_owned', 1)
         ->orderBy('sort_character', 'DESC')
         ->pluck('name', 'id');

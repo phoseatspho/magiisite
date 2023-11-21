@@ -11,6 +11,10 @@
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
+
+    @if ($user->is_banned)
+        <div class="alert alert-danger">This user has been banned.</div>
+    @endif
 @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
 
 @if($user->is_banned)
@@ -70,6 +74,13 @@
             @if (Auth::check() && Auth::user()->isStaff)
                 <p class="mb-0">As you are staff, you can see the profile contents below and the sidebar contents.</p>
             @endif
+        </div>
+    @endif
+
+    @if (isset($user->profile->parsed_text))
+    <div class="card mb-3" style="clear:both;">
+        <div class="card-body">
+            {!! $user->profile->parsed_text !!}
         </div>
     </div>
 @endif
@@ -206,13 +217,6 @@
     </div>
 </div>
 
-<h2>
-    <a href="{{ $user->url.'/characters' }}">Characters</a>
-    @if(isset($sublists) && $sublists->count() > 0)
-        @foreach($sublists as $sublist)
-        / <a href="{{ $user->url.'/sublist/'.$sublist->key }}">{{ $sublist->name }}</a>
-        @endforeach
-    @endif
 
     @if (!$user->is_deactivated || (Auth::check() && Auth::user()->isStaff))
         @include('user._profile_content', ['user' => $user, 'deactivated' => $user->is_deactivated])

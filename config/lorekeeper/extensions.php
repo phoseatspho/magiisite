@@ -91,7 +91,8 @@ return [
     ],
 
     // Aliases on Userpage - Speedy
-    'aliases_on_userpage' => 0, // By default, does not display the aliases on userpage. Enable to add a small arrow to display these underneath the primary alias.
+    'aliases_on_userpage' => 1, // By default, does not display the aliases on userpage. Enable to add a small arrow to display these underneath the primary alias.
+
 
     // Show All Recent Submissions - Speedy
     'show_all_recent_submissions' => [
