@@ -208,7 +208,7 @@ main > .row {
     .site-mobile-header {
         display: block;
         position: fixed;
-		top: 68px;
+		top: 3.45rem;
         z-index: 4;
         width: 100%;
     }
@@ -220,7 +220,7 @@ main > .row {
     }
 
     main.container-fluid {
-        margin-top: 122px;
+        margin-top: 6.45rem;
     }
 
     main.container-fluid > .row {
@@ -749,7 +749,7 @@ tr.accountbound {
         padding-left: 3rem;
         border-left-width: 2px!important;
     }
-    
+
 .comment>p>img {
         max-width: 100%;
         height: auto;

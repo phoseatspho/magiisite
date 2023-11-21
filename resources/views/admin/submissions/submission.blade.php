@@ -203,8 +203,8 @@
                         <div class="col-md-10">
                             <a href="#" class="float-right fas fa-close"></a>
                             <div class="form-group">
-                                {!! Form::label('slug[]', 'Character Code') !!}
-                                {!! Form::text('slug[]', null, ['class' => 'form-control character-code']) !!}
+                                {!! Form::label('slug', 'Character Code') !!}
+                                {!! Form::select('slug[]', $characters, null, ['class' => 'form-control character-code', 'placeholder' => 'Select Character']) !!}
                             </div>
 
                             <div class="form-group col-6">
