@@ -8,6 +8,7 @@ use Config;
 use App\Models\User\User;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
+use App\Models\RankReward;
 
 class RankService extends Service
 {
@@ -124,6 +125,9 @@ class RankService extends Service
         try {
             // Disallow deletion of ranks that are currently assigned to users
             if(User::where('rank_id', $rank->id)->exists()) throw new \Exception("There are currently user(s) with the selected rank. Please change their rank before deleting this one.");
+
+            // aaand check it's not set as a rank reward
+            if(RankReward::where('rank_id', $rank->id)->exists()) throw new \Exception("An rank reward with this rank exists. Please change its rank or delete it first.");
 
             $rank->powers()->delete();
             $rank->delete();

@@ -407,4 +407,11 @@ return [
         'message' => '<a href="{sender_url}">{sender}</a> has added you as a participant on a gallery submission. (<a href="{url}">View Submission</a>)',
         'url' => 'gallery/view/{submission_id}'
     ],
+
+    // RANK_REWARD
+    1107 => [
+        'name' => 'Rank Reward',
+        'message' => 'You recieved rewards for being part of the {rank_name} rank. (<a href="{url}">View Inventory</a>)',
+        'url' => 'inventory'
+    ]
 ];

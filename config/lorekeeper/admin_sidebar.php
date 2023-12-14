@@ -20,7 +20,7 @@ return [
             [
                 'name' => 'User Ranks',
                 'url' => 'admin/users/ranks'
-            ]
+            ],
         ]
     ],
     'Reports' => [
@@ -60,6 +60,10 @@ return [
                 'name' => 'Invitation Keys',
                 'url' => 'admin/invitations'
             ],
+            [
+                'name' => 'Rank Rewards',
+                'url' => 'admin/rank-rewards'
+            ]
         ]
     ],
     'Queues' => [

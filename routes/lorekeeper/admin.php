@@ -437,3 +437,15 @@ Route::group(['prefix' => 'designs', 'middleware' => 'power:manage_characters'],
     Route::post('vote/{id}/{action}', 'DesignController@postVote')->where('action', 'approve|reject');
 });
 Route::get('{type}/{status}', 'DesignController@getDesignIndex')->where('type', 'myo-approvals|design-approvals')->where('status', 'pending|approved|rejected');
+
+
+# RANK REWARDS
+Route::group(['middleware' => 'admin'], function() {
+    Route::get('rank-rewards', 'RankRewardController@getIndex');
+    Route::get('rank-rewards/create', 'RankRewardController@getCreateRankReward');
+    Route::get('rank-rewards/edit/{id}', 'RankRewardController@getEditRankReward');
+    Route::get('rank-rewards/delete/{id}', 'RankRewardController@getDeleteRankReward');
+    Route::post('rank-rewards/create', 'RankRewardController@postCreateEditRankReward');
+    Route::post('rank-rewards/edit/{id?}', 'RankRewardController@postCreateEditRankReward');
+    Route::post('rank-rewards/delete/{id}', 'RankRewardController@postDeleteRankReward');
+});
