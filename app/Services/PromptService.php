@@ -7,8 +7,8 @@ use App\Models\Prompt\PromptCategory;
 use App\Models\Prompt\PromptReward;
 use App\Models\Prompt\PromptSkill;
 use App\Models\Submission\Submission;
-use DB;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class PromptService extends Service {
     /*
@@ -43,6 +43,7 @@ class PromptService extends Service {
             $image = null;
             if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             } else {
@@ -86,6 +87,7 @@ class PromptService extends Service {
             $image = null;
             if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             }
@@ -194,6 +196,7 @@ class PromptService extends Service {
             $image = null;
             if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             } else {
@@ -267,6 +270,7 @@ class PromptService extends Service {
             $image = null;
             if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             }

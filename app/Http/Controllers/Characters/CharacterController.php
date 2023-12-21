@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Characters;
 
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCurrency;
@@ -34,7 +35,7 @@ use App\Models\Award\AwardLog;
 use App\Models\Character\CharacterAward;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Route;
 use Settings;
@@ -74,10 +75,10 @@ class CharacterController extends Controller {
 
             }
 
-            if (Config::get('lorekeeper.extensions.previous_and_next_characters.display')) {
+            if (config('lorekeeper.extensions.previous_and_next_characters.display')) {
                 $query = Character::myo(0);
                 // Get only characters of this category if pull number is limited to category
-                if (Config::get('lorekeeper.settings.character_pull_number') === 'category') {
+                if (config('lorekeeper.settings.character_pull_number') === 'category') {
                     $query->where('character_category_id', $this->character->character_category_id);
                 }
 
@@ -99,7 +100,7 @@ class CharacterController extends Controller {
                     $higherChar = $characters->where('number', '>', $this->character->number)->last();
                 }
 
-                if (Config::get('lorekeeper.extensions.previous_and_next_characters.reverse') == 0) {
+                if (config('lorekeeper.extensions.previous_and_next_characters.reverse') == 0) {
                     $nextCharacter = $lowerChar;
                     $previousCharacter = $higherChar;
                 } else {

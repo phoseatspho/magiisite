@@ -7,9 +7,9 @@ use App\Models\Character\Character;
 use App\Models\Currency\Currency;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
-use Auth;
 use Illuminate\Http\Request;
 use App\Services\AwardCaseManager;
+use Illuminate\Support\Facades\Auth;
 
 class GrantController extends Controller {
     /**

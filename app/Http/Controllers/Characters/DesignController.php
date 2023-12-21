@@ -18,6 +18,7 @@ use App\Services\CharacterManager;
 use App\Models\Character\CharacterTransformation as Transformation;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DesignController extends Controller {
     /**

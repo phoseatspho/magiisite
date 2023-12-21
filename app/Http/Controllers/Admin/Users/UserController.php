@@ -15,8 +15,8 @@ use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
 use Auth;
 use Carbon\Carbon;
-use Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller {
     /**
@@ -48,10 +48,10 @@ class UserController extends Controller {
                 $query->orderBy('name', 'DESC');
                 break;
             case 'alias':
-                $query->orderBy('alias', 'ASC');
+                $query->aliasSort();
                 break;
             case 'alias-reverse':
-                $query->orderBy('alias', 'DESC');
+                $query->aliasSort(true);
                 break;
             case 'rank':
                 $query->orderBy('ranks.sort', 'DESC')->orderBy('name');
@@ -201,7 +201,7 @@ class UserController extends Controller {
                 } else {
                     // Hidden aliases are excluded as a courtesy measure (users may not want them forced visible for any number of reasons)
                     foreach ($user->aliases as $alias) {
-                        if (Config::get('lorekeeper.sites.'.$alias->site.'.auth') && Config::get('lorekeeper.sites.'.$alias->site.'.primary_alias') && $alias->is_visible) {
+                        if (config('lorekeeper.sites.'.$alias->site.'.auth') && config('lorekeeper.sites.'.$alias->site.'.primary_alias') && $alias->is_visible) {
                             $alias->update(['is_primary_alias' => 1]);
                             break;
                         }

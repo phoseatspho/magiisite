@@ -17,7 +17,7 @@ use App\Services\CurrencyManager;
 use App\Models\Character\CharacterClass;
 use Auth;
 use Illuminate\Http\Request;
-use Settings;
+use Illuminate\Support\Facades\Auth;
 
 class CharacterController extends Controller {
     /*

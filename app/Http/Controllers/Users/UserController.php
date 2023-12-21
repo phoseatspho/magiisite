@@ -20,6 +20,9 @@ use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
+use App\Models\User\UserUpdateLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 use App\Models\Item\ItemLog;
@@ -69,6 +72,10 @@ class UserController extends Controller {
         parent::__construct();
         $name = Route::current()->parameter('name');
         $this->user = User::where('name', $name)->first();
+        // check previous usernames (only grab the latest change)
+        if (!$this->user) {
+            $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])->where('data', 'like', '%"old_name":"'.$name.'"%')->orderBy('id', 'DESC')->first()->user ?? null;
+        }
         if (!$this->user) {
             abort(404);
         }
@@ -117,6 +124,7 @@ class UserController extends Controller {
 
         return view('user.profile', [
             'user'       => $this->user,
+            'name'       => $name,
             'items'      => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
             'collections' => $this->user->collections()->orderBy('user_collections.updated_at', 'DESC')->take(4)->get(),
             'pets' => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),

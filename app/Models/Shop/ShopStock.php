@@ -2,6 +2,8 @@
 
 namespace App\Models\Shop;
 
+use App\Models\Currency\Currency;
+use App\Models\Item\Item;
 use App\Models\Model;
 
 class ShopStock extends Model {
@@ -40,24 +42,22 @@ class ShopStock extends Model {
     /**
      * Get the item being stocked.
      */
-    public function item() 
-    {
-        $model = getAssetModelString(strtolower($this->stock_type));
-        return $this->belongsTo($model);
+    public function item() {
+        return $this->belongsTo(Item::class);
     }
 
     /**
      * Get the shop that holds this item.
      */
     public function shop() {
-        return $this->belongsTo('App\Models\Shop\Shop');
+        return $this->belongsTo(Shop::class);
     }
 
     /**
      * Get the currency the item must be purchased with.
      */
     public function currency() {
-        return $this->belongsTo('App\Models\Currency\Currency');
+        return $this->belongsTo(Currency::class);
     }
 
 

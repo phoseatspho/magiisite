@@ -6,6 +6,7 @@ use App\Models\Shop\Shop;
 use DB;
 use App\Models\Shop\ShopLimit;
 use App\Models\Shop\ShopStock;
+use Illuminate\Support\Facades\DB;
 
 class ShopService extends Service {
     /*
@@ -41,6 +42,7 @@ class ShopService extends Service {
             $image = null;
             if(isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             }
@@ -80,6 +82,7 @@ class ShopService extends Service {
             $image = null;
             if(isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
+                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             }

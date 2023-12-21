@@ -18,6 +18,7 @@ use App\Models\Claymore\Weapon;
 use App\Models\Recipe\Recipe;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PromptController extends Controller {
     /*

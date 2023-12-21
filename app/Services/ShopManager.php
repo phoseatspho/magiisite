@@ -14,6 +14,7 @@ use DB;
 use App\Models\User\UserItem;
 use App\Models\Item\Item;
 use App\Models\Item\ItemTag;
+use Illuminate\Support\Facades\DB;
 
 class ShopManager extends Service {
     /*
@@ -210,7 +211,7 @@ class ShopManager extends Service {
     }
 
     public function getStockPurchaseLimit($shopStock, $user) {
-        $limit = Config::get('lorekeeper.settings.default_purchase_limit');
+        $limit = config('lorekeeper.settings.default_purchase_limit');
         if ($shopStock->purchase_limit > 0) {
             $user_purchase_limit = $shopStock->purchase_limit - $this->checkUserPurchases($shopStock, $user);
             if ($user_purchase_limit < $limit) {

@@ -5,6 +5,7 @@
         ->get()
         ->pluck('fullName', 'slug')
         ->toArray();
+    $tables = \App\Models\Loot\LootTable::orderBy('name')->pluck('name', 'id');
 @endphp
 
 <div class="submission-character mb-3 card">
@@ -15,7 +16,7 @@
                 <div class="d-flex text-center align-items-center">
                     <div class="character-image-blank hide">Enter character code.</div>
                     <div class="character-image-loaded">
-                        @include('home._character', ['character' => $character->character])
+                        @include('home._character', ['character' => $character->character ? $character->character : $character])
                     </div>
                 </div>
             </div>
@@ -23,7 +24,7 @@
                 <a href="#" class="float-right fas fa-close"></a>
                 <div class="form-group">
                     {!! Form::label('slug[]', 'Character Code') !!}
-                    {!! Form::select('slug[]', $characters, $character->character->slug, ['class' => 'form-control character-code', 'placeholder' => 'Select Character']) !!}
+                    {!! Form::select('slug[]', $characters, $character->character ? $character->character->slug : $character->slug, ['class' => 'form-control character-code', 'placeholder' => 'Select Character']) !!}
                 </div>
                 @if(isset($submission))
                     <div class="form-group col-6">
@@ -46,7 +47,7 @@
                             </tr>
                         </thead>
                         <tbody class="character-rewards">
-                            @foreach ($character->rewards as $reward)
+                            @foreach ($character->rewards ?? [] as $reward)
                                 <tr class="character-reward-row">
                                     @if ($expanded_rewards)
                                         <td>
@@ -81,7 +82,7 @@
                                         </td>
                                     @endif
                                     <td class="d-flex align-items-center">
-                                        {!! Form::text('character_rewardable_quantity[' . $character->character_id . '][]', $reward->quantity, ['class' => 'form-control mr-2 character-rewardable-quantity']) !!}
+                                        {!! Form::number('character_rewardable_quantity[' . $character->character_id . '][]', $reward->quantity, ['class' => 'form-control mr-2 character-rewardable-quantity']) !!}
                                         <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
                                     </td>
                                 </tr>

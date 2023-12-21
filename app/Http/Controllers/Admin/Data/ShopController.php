@@ -12,6 +12,7 @@ use App\Models\Pet\Pet;
 use Auth;
 use Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller {
     /*

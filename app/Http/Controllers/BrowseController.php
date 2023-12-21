@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
+use App\Facades\Settings;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
@@ -15,9 +16,8 @@ use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\User\User;
-use Auth;
 use Illuminate\Http\Request;
-use Settings;
+use Illuminate\Support\Facades\Auth;
 
 class BrowseController extends Controller {
     /*
@@ -56,6 +56,12 @@ class BrowseController extends Controller {
                 break;
             case 'alpha-reverse':
                 $query->orderBy('name', 'DESC');
+                break;
+            case 'alias':
+                $query->aliasSort();
+                break;
+            case 'alias-reverse':
+                $query->aliasSort(true);
                 break;
             case 'rank':
                 $query->orderBy('ranks.sort', 'DESC')->orderBy('name');

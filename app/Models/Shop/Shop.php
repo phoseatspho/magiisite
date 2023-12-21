@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop;
 
+use App\Models\Item\Item;
 use App\Models\Model;
 
 class Shop extends Model {
@@ -11,7 +12,7 @@ class Shop extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'sort', 'has_image', 'description', 'parsed_description', 'is_active', 'is_staff', 'use_coupons', 'is_restricted', 'is_fto', 'allowed_coupons', 'is_timed_shop', 'start_at', 'end_at',
+        'name', 'sort', 'has_image', 'description', 'parsed_description', 'is_active', 'hash', 'is_staff', 'use_coupons', 'is_restricted', 'is_fto', 'allowed_coupons', 'is_timed_shop', 'start_at', 'end_at',
     ];
 
     /**
@@ -52,7 +53,7 @@ class Shop extends Model {
      * Get the shop stock.
      */
     public function stock() {
-        return $this->hasMany('App\Models\Shop\ShopStock');
+        return $this->hasMany(ShopStock::class);
     }
 
     /**
@@ -104,7 +105,7 @@ class Shop extends Model {
      * @return string
      */
     public function getShopImageFileNameAttribute() {
-        return $this->id.'-image.png';
+        return $this->hash.$this->id.'-image.png';
     }
 
     /**

@@ -20,6 +20,12 @@
         </li>
     @endauth
 
+    @if (config('lorekeeper.extensions.show_all_recent_submissions.enable') && config('lorekeeper.extensions.show_all_recent_submissions.links.sidebar'))
+        <li class="sidebar-section">
+            <div class="sidebar-item"><a href="{{ url('gallery/all') }}" class="{{ set_active('gallery/all') }}">All Recent Submissions</a></div>
+        </li>
+    @endif
+
     @if ($galleryPage && $sideGallery->children->count())
         <li class="sidebar-section">
             <div class="sidebar-section-header collapsed" data-toggle="collapse" data-target="#collapse{{ $sideGallery->name }}" aria-expanded="false" aria-controls="collapse{{ $sideGallery->name }}" id="heading{{ $sideGallery->name }}">

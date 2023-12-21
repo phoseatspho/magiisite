@@ -30,6 +30,7 @@ use App\Services\RecipeService;
 use Auth;
 use Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GrantController extends Controller {
     /**
