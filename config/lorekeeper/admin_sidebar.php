@@ -237,6 +237,10 @@ return [
                 'url'  => 'admin/data/traits',
             ],
             [
+                'name' => 'Elements',
+                'url'  => 'admin/data/elements',
+            ],
+            [
                 'name' => 'Shops',
                 'url'  => 'admin/data/shops',
             ],

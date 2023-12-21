@@ -42,9 +42,16 @@ return [
         'text_color' => '#ffffff',
         'background_color' => '#6D18A7'
     ],
+    
     'choicebox' => [
         'name' => 'Choice Box',
         'text_color' => '#ffffff',
         'background_color' => '#56639E'
+    ],   
+
+    'elemental_potion' => [
+        'name'             => 'Elemental Potion',
+        'text_color'       => '#f5f3d3',
+        'background_color' => '#468a82',
     ],
 ];

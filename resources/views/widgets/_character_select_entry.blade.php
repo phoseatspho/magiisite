@@ -50,7 +50,7 @@
                                 <tr class="character-reward-row">
                                     @if ($expanded_rewards)
                                         <td>
-                                            {!! Form::select('character_rewardable_type[' . $character->character_id . '][]', ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'Award' => ucfirst(__('awards.award'))], $reward->rewardable_type, [
+                                            {!! Form::select('character_rewardable_type[' . $character->character_id . '][]', ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'Element' => 'Element', 'Award' => ucfirst(__('awards.award'))], $reward->rewardable_type, [
                                                 'class' => 'form-control character-rewardable-type',
                                                 'placeholder' => 'Select Reward Type',
                                             ]) !!}
@@ -65,6 +65,10 @@
                                             <div class="character-tables {{ $reward->rewardable_type == 'Loot Table' ? 'show' : 'hide' }}">{!! Form::select('character_rewardable_id[' . $character->character_id . '][]', $tables, $reward->rewardable_type == 'Loot Table' ? $reward->rewardable_id : null, [
                                                 'class' => 'form-control character-table-id',
                                                 'placeholder' => 'Select Loot Table',
+                                            ]) !!}</div>
+                                            <div class="character-elements {{ $reward->rewardable_type == 'Element' ? 'show' : 'hide' }}">{!! Form::select('character_rewardable_id[' . $character->character_id . '][]', $elements, $reward->rewardable_type == 'Element' ? $reward->rewardable_id : null, [
+                                                'class' => 'form-control character-element-id',
+                                                'placeholder' => 'Select Element',
                                             ]) !!}</div>
                                         </td>
                                     @else

@@ -181,6 +181,8 @@ Route::group(['prefix' => 'world'], function () {
     Route::get('recipes', 'WorldController@getRecipes');
     Route::get('recipes/{id}', 'WorldController@getRecipe');
     Route::get(__('transformations.transformations'), 'WorldController@getTransformations');
+    Route::get('elements', 'WorldController@getElements');
+    Route::get('elements/{id}', 'WorldController@getElement');
 });
 
 Route::group(['prefix' => 'prompts'], function () {

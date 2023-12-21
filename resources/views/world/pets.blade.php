@@ -37,7 +37,7 @@
 @foreach($pets as $pet)
     <div class="card mb-3">
         <div class="card-body">
-            @include('world._entry', ['imageUrl' => $pet->imageUrl, 'name' => $pet->displayName, 'description' => $pet->parsed_description, 'searchUrl' => $pet->searchUrl])
+            @include('world._entry', ['imageUrl' => $pet->imageUrl, 'visible' => true, 'name' => $pet->displayName, 'description' => $pet->parsed_description, 'searchUrl' => $pet->searchUrl])
             <div class="container mt-2">
                 <h5 class="pl-2">Variants</h5>
                 @foreach($pet->variants as $variant)

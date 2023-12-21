@@ -1,34 +1,35 @@
 <?php
 
-namespace App\Models\Species;
+namespace App\Models\Element;
 
 use App\Models\Model;
 
-class Species extends Model {
+class Element extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'sort', 'has_image', 'description', 'parsed_description', 'masterlist_sub_id', 'is_visible',
+        'name', 'description', 'parsed_description', 'has_image', 'colour',
     ];
+
+    protected $appends = ['image_url'];
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'specieses';
+    protected $table = 'elements';
     /**
      * Validation rules for creation.
      *
      * @var array
      */
     public static $createRules = [
-        'name'        => 'required|unique:specieses|between:3,100',
-        'description' => 'nullable',
-        'image'       => 'mimes:png',
+        'name'              => 'required|unique:elements|between:3,100',
+        'description'       => 'nullable',
     ];
 
     /**
@@ -37,9 +38,8 @@ class Species extends Model {
      * @var array
      */
     public static $updateRules = [
-        'name'        => 'required|between:3,100',
-        'description' => 'nullable',
-        'image'       => 'mimes:png',
+        'name'              => 'required|between:3,100',
+        'description'       => 'nullable',
     ];
 
     /**********************************************************************************************
@@ -49,32 +49,24 @@ class Species extends Model {
     **********************************************************************************************/
 
     /**
-     * Get the subtypes for this species.
+     * get the element strengths.
      */
-    public function subtypes() 
-    {
-        return $this->hasMany('App\Models\Species\Subtype')->orderBy('sort', 'DESC');
+    public function strengths() {
+        return $this->hasMany('App\Models\Element\ElementWeakness', 'weakness_id');
     }
 
     /**
-     * Get the sub masterlist for this species.
+     * Get the weaknesses of this element.
      */
-    public function sublist() {
-        return $this->belongsTo('App\Models\Character\Sublist', 'masterlist_sub_id');
+    public function weaknesses() {
+        return $this->hasMany('App\Models\Element\ElementWeakness', 'element_id');
     }
 
     /**
-     * Get the features associated with this species.
+     * Get the element's immunities.
      */
-    public function features() {
-        return $this->hasMany('App\Models\Feature\Feature');
-    }
-
-    /**
-     * Get the species typing.
-     */
-    public function typing() {
-        return $this->hasMany('App\Models\Element\Typing', 'typing_id')->where('typing_model', '\App\Models\Species\Species');
+    public function immunities() {
+        return $this->hasMany('App\Models\Element\ElementImmunity', 'element_id');
     }
 
     /**********************************************************************************************
@@ -84,19 +76,37 @@ class Species extends Model {
     **********************************************************************************************/
 
     /**
-     * Scope a query to show only visible species.
+     * Scope a query to sort elements in alphabetical order.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed|null                            $user
+     * @param bool                                  $reverse
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeVisible($query, $user = null) {
-        if ($user && $user->hasPower('edit_data')) {
-            return $query;
-        }
+    public function scopeSortAlphabetical($query, $reverse = false) {
+        return $query->orderBy('name', $reverse ? 'DESC' : 'ASC');
+    }
 
-        return $query->where('is_visible', 1);
+    /**
+     * Scope a query to sort elements by newest first.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortNewest($query) {
+        return $query->orderBy('id', 'DESC');
+    }
+
+    /**
+     * Scope a query to sort features oldest first.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortOldest($query) {
+        return $query->orderBy('id');
     }
 
     /**********************************************************************************************
@@ -111,7 +121,7 @@ class Species extends Model {
      * @return string
      */
     public function getDisplayNameAttribute() {
-        return '<a href="'.$this->url.'" class="display-species">'.$this->name.'</a>';
+        return '<a href="'.$this->idUrl.'" class="display-item" style="color:'.$this->colour.' !important;">'.$this->name.'</a>';
     }
 
     /**
@@ -120,7 +130,7 @@ class Species extends Model {
      * @return string
      */
     public function getImageDirectoryAttribute() {
-        return 'images/data/species';
+        return 'images/data/elements';
     }
 
     /**
@@ -128,7 +138,7 @@ class Species extends Model {
      *
      * @return string
      */
-    public function getSpeciesImageFileNameAttribute() {
+    public function getImageFileNameAttribute() {
         return $this->id.'-image.png';
     }
 
@@ -137,7 +147,7 @@ class Species extends Model {
      *
      * @return string
      */
-    public function getSpeciesImagePathAttribute() {
+    public function getImagePathAttribute() {
         return public_path($this->imageDirectory);
     }
 
@@ -146,12 +156,21 @@ class Species extends Model {
      *
      * @return string
      */
-    public function getSpeciesImageUrlAttribute() {
+    public function getImageUrlAttribute() {
         if (!$this->has_image) {
             return null;
         }
 
-        return asset($this->imageDirectory.'/'.$this->speciesImageFileName);
+        return asset($this->imageDirectory.'/'.$this->imageFileName);
+    }
+
+    /**
+     * Gets the currency's asset type for asset management.
+     *
+     * @return string
+     */
+    public function getAssetTypeAttribute() {
+        return 'elements';
     }
 
     /**
@@ -160,29 +179,16 @@ class Species extends Model {
      * @return string
      */
     public function getUrlAttribute() {
-        return url('world/species?name='.$this->name);
+        return url('world/elements?name='.$this->name);
     }
 
     /**
-     * Gets the URL for a masterlist search of characters of this species.
+     * Gets the URL of the individual element's page, by ID.
      *
      * @return string
      */
-    public function getSearchUrlAttribute() {
-        if ($this->masterlist_sub_id != 0 && $this->sublist->show_main == 0) {
-            return url('sublist/'.$this->sublist->key.'?species_id='.$this->id);
-        } else {
-            return url('masterlist?species_id='.$this->id);
-        }
-    }
-
-    /**
-     * Gets the URL the visual index of this species' traits.
-     *
-     * @return string
-     */
-    public function getVisualTraitsUrlAttribute() {
-        return url('/world/species/'.$this->id.'/traits');
+    public function getIdUrlAttribute() {
+        return url('world/elements/'.$this->id);
     }
 
     /**
@@ -191,7 +197,7 @@ class Species extends Model {
      * @return string
      */
     public function getAdminUrlAttribute() {
-        return url('admin/data/species/edit/'.$this->id);
+        return url('admin/data/elements/edit/'.$this->id);
     }
 
     /**

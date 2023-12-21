@@ -13,6 +13,9 @@
                 <a href="{{ url('world/species') }}" class="{{ set_active('world/species*') }}">{{ __('lorekeeper.specieses') }}</a>
             </div>
             <div class="sidebar-item">
+                <a href="{{ url('world/elements') }}" class="{{ set_active('world/elements*') }}">All Elements</a>
+            </div>
+            <div class="sidebar-item">
                 <a href="{{ url('world/subtypes') }}" class="{{ set_active('world/subtypes*') }}">{{ __('lorekeeper.subtypes') }}</a>
             </div>
             <div class="sidebar-item">

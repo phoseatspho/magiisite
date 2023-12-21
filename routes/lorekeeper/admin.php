@@ -411,6 +411,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('hunts/targets/edit/{id}', 'HuntController@postCreateEditHuntTarget');
     Route::get('hunts/targets/delete/{id}', 'HuntController@getDeleteHuntTarget');
     Route::post('hunts/targets/delete/{id}', 'HuntController@postDeleteHuntTarget');
+
+    // ELEMENTS
+    Route::get('elements', 'ElementController@getIndex');
+    Route::get('elements/create', 'ElementController@getCreateElement');
+    Route::get('elements/edit/{id}', 'ElementController@getEditElement');
+    Route::get('elements/delete/{id}', 'ElementController@getDeleteElement');
+    Route::post('elements/create', 'ElementController@postCreateEditElement');
+    Route::post('elements/edit/{id?}', 'ElementController@postCreateEditElement');
+    Route::post('elements/delete/{id}', 'ElementController@postDeleteElement');
 });
 
 # PAGES
@@ -552,6 +561,9 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     Route::post('{slug}/images/sort', 'CharacterImageController@postSortImages');
     Route::get('image/transformation', 'CharacterImageController@getNewImageTransformation');
     Route::get('image/traits/transformation', 'CharacterImageController@getEditImageTransformation');
+
+    Route::get('{slug}/typing', 'CharacterImageController@getTyping');
+    Route::post('{slug}/typing', 'CharacterImageController@postTyping');
 
     // CHARACTER
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
@@ -895,5 +907,10 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('glossary/edit/{id}', 'GlossaryController@postCreateEditTerm');
     Route::get('glossary/delete/{id}', 'GlossaryController@getDeleteTerm');
     Route::post('glossary/delete/{id}', 'GlossaryController@postDeleteTerm');
+});
 
+Route::group(['prefix' => 'typing', 'middleware' => 'power:edit_data', 'namespace' => 'Data'], function () {
+    Route::post('/', 'ElementController@postTyping');
+    Route::get('delete/{id}', 'ElementController@getDeleteTyping');
+    Route::post('delete/{id}', 'ElementController@postDeleteTyping');
 });

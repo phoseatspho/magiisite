@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Character\CharacterCategory;
 use App\Models\Currency\Currency;
+use App\Models\Element\Element;
 use App\Models\Feature\Feature;
 use App\Models\Feature\FeatureCategory;
 use App\Models\Item\Item;
@@ -749,7 +750,7 @@ class WorldController extends Controller {
         $name = $request->get('name');
         if($name) $query->where('name', 'LIKE', '%'.$name.'%');
         return view('world.pet_categories', [  
-            'categories' => $query->visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+            'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
 
@@ -794,7 +795,7 @@ class WorldController extends Controller {
        else $query->sortCategory();
 
        return view('world.pets', [
-           'pets' => $query->visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        'pets' => $query->paginate(20)->appends($request->query()),
            'categories' => ['none' => 'Any Category'] + PetCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
            
        ]);
@@ -1035,6 +1036,8 @@ class WorldController extends Controller {
         ]);
 
 }
+
+
      /**
      * Shows the Transformations page.
      *
@@ -1051,4 +1054,58 @@ class WorldController extends Controller {
             'transformations' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
+
+
+  /**
+     * Shows the elements page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getElements(Request $request) {
+        $query = Element::query();
+        $name = $request->get('name');
+        if ($name) {
+            $query->where('name', 'LIKE', '%'.$name.'%');
+        }
+
+        if (isset($data['sort'])) {
+            switch ($data['sort']) {
+                case 'alpha':
+                    $query->sortAlphabetical();
+                    break;
+                case 'alpha-reverse':
+                    $query->sortAlphabetical(true);
+                    break;
+                case 'newest':
+                    $query->sortNewest();
+                    break;
+                case 'oldest':
+                    $query->sortOldest();
+                    break;
+            }
+        } else {
+            $query->sortAlphabetical();
+        }
+
+        return view('world.elements', [
+            'elements' => $query->orderBy('name', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
+     * Shows a single element's page.
+     *
+     * @param mixed $id
+     */
+    public function getElement($id) {
+        $element = Element::where('id', $id)->first();
+        if (!$element) {
+            abort(404);
+        }
+
+        return view('world.element_page', [
+            'element' => $element,
+        ]);
+    }
+
 }

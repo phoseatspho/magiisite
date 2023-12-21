@@ -419,4 +419,22 @@ class CharacterImageController extends Controller {
             'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
+
+   /* Gets the typing widget for a character image.
+    *
+    * @param mixed $id
+    *
+    * @return \Illuminate\Contracts\Support\Renderable
+    */
+   public function getTyping($id) {
+       $image = CharacterImage::find($id);
+       if (!$image) {
+           abort(404);
+       }
+
+       return view('widgets._add_typing', [
+           'object' => $image,
+
+       ]);
+    }
 }
