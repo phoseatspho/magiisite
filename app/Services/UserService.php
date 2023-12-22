@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use DB;
-use Settings;
 use Auth;
 use File;
 use Image;
