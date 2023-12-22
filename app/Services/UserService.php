@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Auth;
 
-use Image;
 
 use App\Models\User\StaffProfile;
 use App\Models\WorldExpansion\Location;
