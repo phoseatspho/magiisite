@@ -29,7 +29,6 @@ use App\Services\CurrencyManager;
 use App\Models\Trade;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User\UserUpdateLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
