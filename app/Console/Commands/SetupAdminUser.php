@@ -98,7 +98,11 @@ class SetupAdminUser extends Command {
                     'email'     => $email,
                     'rank_id'   => $adminRank->id,
                     'password'  => $password,
-                    'dob'       => '01/01/1970',
+                    'dob'       => [
+                        'day'   => '01',
+                        'month' => '01',
+                        'year'  => '1970',
+                    ],
                     'has_alias' => isset($alias) ? 1 : 0,
                 ]);
                 if (isset($verifiedAt)) {
