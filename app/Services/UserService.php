@@ -64,7 +64,7 @@ class UserService extends Service {
             'email'     => $data['email'] ?? null,
             'rank_id'   => $data['rank_id'],
             'password'  => isset($data['password']) ? Hash::make($data['password']) : null,
-            'birthday'  => $formatDate ?? null,
+            'birthday'  => $formatDate,
             'has_alias' => $data['has_alias'] ?? false,
             // Verify the email if we're logging them in with their social
             'email_verified_at' => (!isset($data['password']) && !isset($data['email'])) ? now() : null,
