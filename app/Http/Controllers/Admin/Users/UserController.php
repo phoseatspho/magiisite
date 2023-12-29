@@ -13,7 +13,6 @@ use App\Services\UserService;
 use App\Models\User\StaffProfile;
 use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -15,7 +15,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
-use Settings;
 use App\Models\Character\Character;
 use View;
 

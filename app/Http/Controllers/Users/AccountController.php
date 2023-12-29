@@ -12,7 +12,6 @@ use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
 use App\Services\LinkService;
 use App\Services\UserService;
-use Auth;
 use Settings;
 use File;
 use Image;
