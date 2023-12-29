@@ -15,7 +15,6 @@ use App\Models\User\User;
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Models\Character\CharacterClass;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
