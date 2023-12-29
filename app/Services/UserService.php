@@ -32,7 +32,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use App\Services\Invitation; 
 
 class UserService extends Service {
     /*
@@ -97,7 +96,7 @@ class UserService extends Service {
             'agreement' => ['required', 'accepted'],
             'password'  => ($socialite ? [] : ['required']) + ['string', 'min:8', 'confirmed'],
             'dob'       => [
-                'required', function ($attribute, $value, $fail) {
+                'string', 'required', function ($attribute, $value, $fail) {
                     $formatDate = Carbon::createFromFormat('Y-m-d', $value);
                     $now = Carbon::now();
                     if ($formatDate->diffInYears($now) < 13) {
