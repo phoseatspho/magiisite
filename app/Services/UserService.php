@@ -96,7 +96,7 @@ class UserService extends Service {
             'agreement' => ['required', 'accepted'],
             'password'  => ($socialite ? [] : ['required']) + ['string', 'min:8', 'confirmed'],
             'dob'       => [
-                 'required', 'string', function ($attribute, $value, $fail) {
+                 'required', function ($attribute, $value, $fail) {
                     $formatDate = Carbon::createFromFormat('Y-m-d', $value);
                     $now = Carbon::now();
                     if ($formatDate->diffInYears($now) < 13) {
