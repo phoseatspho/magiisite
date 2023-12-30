@@ -4,8 +4,8 @@
         <i class="far fa-clock"></i> {!! format_date(Carbon\Carbon::now()) !!}
     </div>
 </div>
-test test 
- <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b6759b14-b430-4129-ba10-f0ee6193d692/dgn8agk-129800c1-0bbb-4e41-9397-2215d494d3f2.png/v1/fill/w_1280,h_431,q_80,strp/banner_by_phoseatspho_dgn8agk-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NDMxIiwicGF0aCI6IlwvZlwvYjY3NTliMTQtYjQzMC00MTI5LWJhMTAtZjBlZTYxOTNkNjkyXC9kZ244YWdrLTEyOTgwMGMxLTBiYmItNGU0MS05Mzk3LTIyMTVkNDk0ZDNmMi5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.aP27QkLvQaj6TEbfJhPfxEVV_NAoIH8l4C3OpqwKV2w">
+test test
+ <img src="../files/banner.png">
 
 <div class="row justify-content-center">
     <div class="col-md-6">
