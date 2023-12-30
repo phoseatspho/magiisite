@@ -5,7 +5,7 @@
     </div>
 </div>
 
- <img src="../files/banner.png">
+ <img src="banner.png">
 
 <div class="row justify-content-center">
     <div class="col-md-6">
