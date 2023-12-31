@@ -8,8 +8,8 @@
  <br> 
 
 <div class="row justify-content-center">
-  
  <div class="col-6 col-md-3">
+<div class="dashboardtext">
  <h3>Profile</h3>
  <ul>
  <img src="../files/profile.png" class="img-fluid">
@@ -53,6 +53,7 @@
  </ul>
  </div>
 </div> 
+</div>
 
 
 test test 
