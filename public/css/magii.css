@@ -3209,4 +3209,8 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
   list-style-type: none;
 }
 
+.dashboardtext ul {
+  list-style-type: none;
+}
+
 /*# sourceMappingURL=magii.css.map */
