@@ -8,7 +8,7 @@
  <br> 
 
 <div class="row justify-content-center">
-    <div-align="center">
+  
  <div class="col-6 col-md-3">
  <h3>Profile</h3>
  <ul>
@@ -53,7 +53,7 @@
  </ul>
  </div>
 </div> 
-</div>
+</div> 
 
 test test 
 
