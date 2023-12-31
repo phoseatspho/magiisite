@@ -5,8 +5,8 @@
     </div>
 </div>
  <img src="../files/banner.png" class="img-fluid">
- test
  <br> 
+ <img src="../files/profile.png"> <img src="../files/play.png"> <img src="../files/explore.png">
 
 <div class="row justify-content-center">
     <div class="col-md-6">
