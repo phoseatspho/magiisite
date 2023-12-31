@@ -3206,6 +3206,7 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
 
 .dashboardtext {
   text-align: center;
+  list-style-type: none;
 }
 
 /*# sourceMappingURL=magii.css.map */
