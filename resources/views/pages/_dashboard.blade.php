@@ -4,8 +4,9 @@
         <i class="far fa-clock"></i> {!! format_date(Carbon\Carbon::now()) !!}
     </div>
 </div>
-test test testing 
  <img src="../files/banner.png" class="img-fluid">
+ test
+ <br> 
 
 <div class="row justify-content-center">
     <div class="col-md-6">
