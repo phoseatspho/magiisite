@@ -98,8 +98,7 @@ class SetupAdminUser extends Command {
                     'email'     => $email,
                     'rank_id'   => $adminRank->id,
                     'password'  => $password,
-                    'dob'       => '01/01/1970',
-
+                    'dob'       => Carbon::createFromFormat('Y-m-d', '1970-01-01'),
                     'has_alias' => isset($alias) ? 1 : 0,
                 ]);
                 if (isset($verifiedAt)) {

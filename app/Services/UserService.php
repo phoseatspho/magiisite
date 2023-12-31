@@ -268,8 +268,18 @@ class UserService extends Service {
      * @param mixed $user
      */
     public function updateBirthday($data, $user) {
-        $user->birthday = $data;
-        $user->save();
+        DB::beginTransaction();
+
+        try {
+            $user->birthday = $data;
+            $user->save();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
     }
 
     /**
@@ -278,9 +288,19 @@ class UserService extends Service {
      * @param mixed $data
      * @param mixed $user
      */
-    public function updateDOB($data, $user) {
-        $user->settings->birthday_setting = $data;
-        $user->settings->save();
+    public function updateBirthdayVisibilitySetting($data, $user) {
+        DB::beginTransaction();
+
+        try {
+            $user->settings->birthday_setting = $data;
+            $user->settings->save();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
     }
 
     /**

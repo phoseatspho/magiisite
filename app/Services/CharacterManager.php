@@ -1205,7 +1205,7 @@ class CharacterManager extends Service {
 
         try {
             $ids = explode(',', $data['sort']);
-            $images = CharacterImage::whereIn('id', $ids)->where('character_id', $character->id)->orderByRaw(DB::raw('FIELD(id, '.implode(',', $ids).')'))->get();
+            $images = CharacterImage::whereIn('id', $ids)->where('character_id', $character->id)->orderBy(DB::raw('FIELD(id, '.implode(',', $ids).')'))->get();
 
             if (count($images) != count($ids)) {
                 throw new \Exception('Invalid image included in sorting order.');
@@ -1252,7 +1252,7 @@ class CharacterManager extends Service {
 
         try {
             $ids = array_reverse(explode(',', $data['sort']));
-            $characters = Character::myo(0)->whereIn('id', $ids)->where('user_id', $user->id)->where('is_visible', 1)->orderByRaw(DB::raw('FIELD(id, '.implode(',', $ids).')'))->get();
+            $characters = Character::myo(0)->whereIn('id', $ids)->where('user_id', $user->id)->where('is_visible', 1)->orderBy(DB::raw('FIELD(id, '.implode(',', $ids).')'))->get();
 
             if (count($characters) != count($ids)) {
                 throw new \Exception('Invalid character included in sorting order.');
