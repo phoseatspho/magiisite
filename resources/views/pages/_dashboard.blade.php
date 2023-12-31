@@ -15,11 +15,12 @@
  <h3>Profile</h3>
 
  <img src="../files/profile.png" class="img-fluid">
+ <ul>
  <a href="https://magiispecies.com/profile">Profile</a>
  <a href="https://magiispecies.com/characters">My Magii</a>
  <a href="https://magiispecies.com/inventory">Inventory</a>
  <a href="https://magiispecies.com/bank">Bank</a>
-
+</ul>
 </div>
 
 <div class="col-6 col-md-3">
