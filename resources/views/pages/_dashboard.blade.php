@@ -7,8 +7,7 @@
  <img src="../files/banner.png" class="img-fluid">
  <br> 
 
- <div class="justify-content-center">
-<div class="row no-gutters">
+<div class="row justify-content-center">
  <div class="col-6 col-md-3">
  <h3>Profile</h3>
  <ul>
@@ -53,7 +52,7 @@
  </ul>
  </div>
 </div> 
-</div>
+
 
 <div class="row justify-content-center">
     <div class="col-md-6">
