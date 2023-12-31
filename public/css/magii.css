@@ -3204,4 +3204,8 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
   color: #00d7f6;
 }
 
+.dashboardtext {
+  text-align: center;
+}
+
 /*# sourceMappingURL=magii.css.map */
