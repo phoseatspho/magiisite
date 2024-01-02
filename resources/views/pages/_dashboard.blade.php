@@ -26,7 +26,7 @@
 <div class="col-6 col-md-3">
  <h3>Info</h3>
 <ul>
- <img src="../files/explore.png" class="img-fluid">
+ <img src="../files/info.png" class="img-fluid">
  <li><a href="https://magiispecies.com/profile">Profile</a></li>
  <li><a href="https://magiispecies.com/characters">My Magii</a></li>
  <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
