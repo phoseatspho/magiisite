@@ -2,34 +2,7 @@
     <div style="filter:grayscale(1); opacity:0.75">
 @endif
 
-<div class="row mb-3">
-    <div class="col-md-2 text-center">
-        <!-- User Icon -->
-        <img src="{{ $user->avatarUrl }}" class="img-fluid rounded-circle" style="max-height: 125px;" alt="{{ $user->name }}'s Avatar">
-    </div>
 
-    <div class="col">
-        <!-- Username & optional FTO Badge -->
-        <div class="row no-gutters">
-            <div class="col h2 text-center text-md-left">
-                {!! $user->displayName !!}
-                @if ($user->previousUsername)
-                    <small>{!! add_help('Previously known as ' . $user->previousUsername) !!}</small>
-                @endif
-                <a href="{{ url('reports/new?url=') . $user->url }}"><i class="fas fa-exclamation-triangle fa-xs text-danger" data-toggle="tooltip" title="Click here to report this user." style="opacity: 50%;"></i></a>
-            </div>
-
-            @if ($user->settings->is_fto)
-                <div class="col-md-1 text-center">
-                    <span class="badge badge-success float-md-right" data-toggle="tooltip" title="This user has not owned any characters from this world before.">FTO</span>
-                </div>
-            @endif
-        </div>
-
-        
-        
-    </div>
-</div>
 
 
 
