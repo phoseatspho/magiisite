@@ -27,10 +27,10 @@
  <h3>Info</h3>
 <ul>
  <img src="../files/info.png" class="img-fluid">
- <li><a href="https://magiispecies.com/profile">Profile</a></li>
- <li><a href="https://magiispecies.com/characters">My Magii</a></li>
- <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
- <li><a href="https://magiispecies.com/bank">Bank</a></li>
+ <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
+ <li><a href="https://magiispecies.com/characters">Species Info</a></li>
+ <li><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
+ <li><a href="https://magiispecies.com/bank">FAQ</a></li>
 </ul>
 </div>
 
@@ -38,10 +38,10 @@
  <h3>Play</h3>
 <ul>
   <img src="../files/play.png" class="img-fluid"> 
-  <li><a href="https://magiispecies.com/profile">Profile</a></li>
- <li><a href="https://magiispecies.com/characters">My Magii</a></li>
- <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
- <li><a href="https://magiispecies.com/bank">Bank</a></li>
+  <li><a href="https://magiispecies.com/profile">Check In</a></li>
+ <li><a href="https://magiispecies.com/characters">Quests</a></li>
+ <li><a href="https://magiispecies.com/inventory">Foraging</a></li>
+ <li><a href="https://magiispecies.com/bank">Crafting</a></li>
 </ul>
 </div>
 
@@ -49,10 +49,10 @@
   <h3>Explore</h3>
 <ul>
   <img src="../files/explore.png" class="img-fluid">
-  <li><a href="https://magiispecies.com/profile">Profile</a></li>
- <li><a href="https://magiispecies.com/characters">My Magii</a></li>
- <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
- <li><a href="https://magiispecies.com/bank">Bank</a></li>
+  <li><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
+ <li><a href="https://magiispecies.com/characters">Story</a></li>
+ <li><a href="https://magiispecies.com/inventory">NPCs</a></li>
+ <li><a href="https://www.magiispecies.com/shops">Shop</a></li>
 </ul>
 </div>
 </div> 
