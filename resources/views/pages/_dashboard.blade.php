@@ -16,7 +16,7 @@
  <h3>Profile</h3>
 <ul>
  <img src="../files/profile.png" class="img-fluid">
- <li><a href="https://magiispecies.com/profile">Profile</a></li>
+ <li><a href="{{ Auth::user()->url }}">Profile</a></li>
  <li><a href="https://magiispecies.com/characters">My Magii</a></li>
  <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
  <li><a href="https://magiispecies.com/bank">Bank</a></li>
@@ -38,7 +38,7 @@
  <h3>Play</h3>
 <ul>
   <img src="../files/play.png" class="img-fluid"> 
-  <li><a href="https://magiispecies.com/profile">Check In</a></li>
+  <li><a href="https://www.magiispecies.com/dailies">Check In</a></li>
  <li><a href="https://magiispecies.com/characters">Quests</a></li>
  <li><a href="https://magiispecies.com/inventory">Foraging</a></li>
  <li><a href="https://magiispecies.com/bank">Crafting</a></li>
