@@ -5,7 +5,7 @@
 @endsection
 
 @section('sales-content')
-    {!! breadcrumbs(['Site Sales' => 'sales']) !!}
+    {!! breadcrumbs(['Adopts' => 'sales']) !!}
     <h1>Adopts</h1>
 
     <div>

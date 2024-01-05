@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs(['Prompts' => 'prompts', 'All Prompts' => 'prompts/prompts']) !!}
+    {!! breadcrumbs(['Quests' => 'prompts', 'All Quests' => 'prompts/prompts']) !!}
     <h1>All Quests</h1>
 
     

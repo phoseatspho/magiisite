@@ -124,7 +124,7 @@ return [
     */
     'character_codes'                                   => '{category}-{number}',
     'character_number_digits'                           => 3,
-    'character_pull_number'                             => 'all',
+    'character_pull_number'                             => 'category',
 
     'reset_character_status_on_transfer'                => 0,
     'reset_character_profile_on_transfer'               => 0,
@@ -159,7 +159,7 @@ return [
     'masterlist_image_dimension'                        => 0,
     'masterlist_image_dimension_target'                 => 'shorter',
 
-    'masterlist_image_format'                           => null,
+    'masterlist_image_format'                           => webP,
     'masterlist_image_background'                       => '#ffffff',
 
     /*
@@ -280,7 +280,7 @@ return [
     |
     */
     'gallery_images_cap'    => 0,
-    'gallery_images_format' => null,
+    'gallery_images_format' => webP,
 
     /*
     |--------------------------------------------------------------------------
@@ -328,7 +328,7 @@ return [
     |
     */
 
-    'allow_username_changes'                            => 0,
+    'allow_username_changes'                            => 1,
     'username_change_cooldown'                          => 30,
 
     /*

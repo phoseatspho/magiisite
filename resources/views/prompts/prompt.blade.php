@@ -5,6 +5,6 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs(['Prompts' => 'prompts', 'All Prompts' => 'prompts/prompts', $prompt->name => 'prompts/' . $prompt->id]) !!}
+    {!! breadcrumbs(['Quests' => 'prompts', 'All Quests' => 'prompts/prompts', $prompt->name => 'prompts/' . $prompt->id]) !!}
     @include('prompts._prompt_entry', ['prompt' => $prompt, 'isPage' => true])
 @endsection
