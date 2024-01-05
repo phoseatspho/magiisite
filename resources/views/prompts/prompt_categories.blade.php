@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs(['Prompts' => 'prompts', 'Prompt Categories' => 'prompts/prompt-categories']) !!}
-    <h1>Prompt Categories</h1>
+    {!! breadcrumbs(['Quests' => 'prompts', 'Quest Categories' => 'prompts/prompt-categories']) !!}
+    <h1>Quest Categories</h1>
 
     <div>
         {!! Form::open(['method' => 'GET', 'class' => 'form-inline justify-content-end']) !!}
