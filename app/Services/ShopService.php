@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Shop\Shop;
-use DB;
 use App\Models\Shop\ShopLimit;
 use App\Models\Shop\ShopStock;
 use Illuminate\Support\Facades\DB;
