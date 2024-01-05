@@ -3213,4 +3213,14 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
   list-style-type: none;
 }
 
+.logs-table .logs-table-header {
+  border-top: 1px solid #235fbc!important;
+  border-bottom: 2px solid #90b2e8!important;
+}
+
+.logs-table .logs-table-body > .logs-table-row,
+.logs-table-row .logs-table-row {
+    border-top: 1px solid #90b2e8!important;
+}
+
 /*# sourceMappingURL=magii.css.map */
