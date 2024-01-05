@@ -10,7 +10,6 @@ use App\Models\Shop\Shop;
 use App\Models\Shop\ShopLog;
 use App\Models\Shop\ShopStock;
 use Config;
-use DB;
 use App\Models\User\UserItem;
 use App\Models\Item\Item;
 use App\Models\Item\ItemTag;
