@@ -9,7 +9,6 @@ use App\Models\Shop\Shop;
 use App\Services\ShopService;
 use App\Models\Shop\ShopStock;
 use App\Models\Pet\Pet;
-use Auth;
 use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
