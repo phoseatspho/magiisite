@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', 'Gear' => 'world/gear', $gear->name => $gear->idUrl]) !!}
+{!! breadcrumbs(['World' => 'world', 'Equipment' => 'world/gear', $gear->name => $gear->idUrl]) !!}
 
 <div class="row">
     <div class="col-lg-6 col-lg-12">

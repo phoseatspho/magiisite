@@ -3,8 +3,8 @@
 @section('title') Gear Categories @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', 'Gear Categories' => 'world/gear-categories']) !!}
-<h1>Gear Categories</h1>
+{!! breadcrumbs(['World' => 'world', 'Equipment Categories' => 'world/gear-categories']) !!}
+<h1>Equipment Categories</h1>
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => 'form-inline justify-content-end']) !!}

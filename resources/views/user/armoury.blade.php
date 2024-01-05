@@ -35,7 +35,7 @@
     </div>
 @endforeach
 
-<h3>Gear</h3>
+<h3>Equipment</h3>
 @foreach($gears as $categoryId=>$categoryGears)
     <div class="card mb-3 inventory-category">
         <h5 class="card-header inventory-header">

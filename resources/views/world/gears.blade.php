@@ -3,8 +3,8 @@
 @section('title') Gear @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', 'Gear' => 'world/gear']) !!}
-<h1>Gear</h1>
+{!! breadcrumbs(['World' => 'world', 'Equipment' => 'world/gear']) !!}
+<h1>Equipment</h1>
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => '']) !!}
