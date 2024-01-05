@@ -10,7 +10,7 @@
                 <a href="{{ url('prompts/prompt-categories') }}" class="{{ set_active('prompts/prompt-categories*') }}">Quest Categories</a>
             </div>
             <div class="sidebar-item">
-                <a href="{{ url('prompts/prompts') }}" class="{{ set_active('prompts/prompts*') }}">Quest Prompts</a>
+                <a href="{{ url('prompts/prompts') }}" class="{{ set_active('prompts/prompts*') }}">All Quests</a>
             </div>
         </div>
     </li>
