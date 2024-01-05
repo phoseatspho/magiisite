@@ -6,7 +6,7 @@
 
 @section('content')
     {!! breadcrumbs(['Prompts' => 'prompts', 'All Prompts' => 'prompts/prompts']) !!}
-    <h1>All Prompts</h1>
+    <h1>All Quests</h1>
 
     
         {!! Form::open(['method' => 'GET', 'class' => '']) !!}

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs(['Prompts' => 'prompts']) !!}
+    {!! breadcrumbs(['Quests' => 'prompts']) !!}
 
     <h1>Quests</h1>
     <div class="row">
