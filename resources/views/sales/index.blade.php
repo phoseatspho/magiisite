@@ -6,7 +6,7 @@
 
 @section('sales-content')
     {!! breadcrumbs(['Site Sales' => 'sales']) !!}
-    <h1>Site Sales</h1>
+    <h1>Adopts</h1>
 
     <div>
         {!! Form::open(['method' => 'GET', 'class' => '']) !!}
@@ -48,6 +48,6 @@
         @endforeach
         {!! $saleses->render() !!}
     @else
-        <div>No sales posts yet.</div>
+        <div>No adopt posts yet.</div>
     @endif
 @endsection

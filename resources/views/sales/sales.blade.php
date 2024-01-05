@@ -13,7 +13,7 @@
         @comments(['model' => $sales, 'perPage' => 5])
     @else
         <div class="alert alert-warning text-center">
-            <p>Comments for this sale aren't open yet! They will open {!! pretty_date($sales->comments_open_at) !!}.</p>
+            <p>Comments for this adopt aren't open yet! They will open {!! pretty_date($sales->comments_open_at) !!}.</p>
         </div>
     @endif
 @endsection
