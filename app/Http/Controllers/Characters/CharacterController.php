@@ -33,12 +33,10 @@ use App\Models\Award\AwardCategory;
 use App\Models\User\UserAward;
 use App\Models\Award\AwardLog;
 use App\Models\Character\CharacterAward;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Route;
-use Settings;
 use App\Models\Skill\Skill;
 
 class CharacterController extends Controller {
