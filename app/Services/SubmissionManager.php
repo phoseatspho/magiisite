@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Carbon\Carbon;
 
-use DB;
 use Config;
 use Image;
 use Notifications;
@@ -35,8 +34,6 @@ use App\Services\Stat\ExperienceManager;
 use App\Services\Stat\StatManager;
 use App\Services\SkillManager;
 use App\Models\Recipe\Recipe;
-
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class SubmissionManager extends Service {
