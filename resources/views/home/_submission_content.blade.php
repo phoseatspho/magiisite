@@ -260,10 +260,9 @@
                     </div>
                 </div>
             </div>
-            
-        @endforeach
     </div>
 </div>
+@endforeach
 
 @if (isset($inventory['user_items']) && array_filter($inventory['user_items']))
     <div class="card mb-3">
