@@ -250,7 +250,6 @@ class SubmissionManager extends Service {
                     'data'          => json_encode(getDataReadyAssets($assets)),
                     'is_focus'      => isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] ? $data['character_is_focus'][$c->id] : 0,
                 ]);
-
             } else {
                 // This is when a user cancels their own submission back into draft form
                 $submission->update([
@@ -283,10 +282,10 @@ class SubmissionManager extends Service {
                 
 
             return $this->commitReturn($submission);
-            } catch(\Exception $e) {
+        } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
-             return $this->rollbackReturn(false);
+            return $this->rollbackReturn(false);
     }
 
 
