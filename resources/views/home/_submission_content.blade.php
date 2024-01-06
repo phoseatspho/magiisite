@@ -227,37 +227,39 @@
                                                     @endforeach
                                                 @endif
                                             @endforeach
-
                                             --}}
+                                            </tbody>
+                                    </table>
+
                                 @endif       
 
-                             @if($character->is_focus && $submission->prompt_id)
-                                @if (isset($submission->data['skills']))
-                                    @foreach($submission->data['skills'] as $data)
-                                        <tr>
+                              @if($character->is_focus && $submission->prompt_id)
+                                 @if (isset($submission->data['skills']))
+                                     @foreach($submission->data['skills'] as $data)
+                                         <tr>
                                             <td>{{ \App\Models\Skill\Skill::find($data['skill'])->name }}</td>
                                             <td>{{ $data['quantity'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    @foreach($submission->prompt->skills as $skill)
-                                        <tr>
+                                         </tr>
+                                     @endforeach
+                                     @else
+                                     @foreach($submission->prompt->skills as $skill)
+                                         <tr>
                                             <td>{!! $skill->skill->name !!}</td>
                                             <td>{{ $skill->quantity }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                                <tr>
-                                    <td>{{ $submission->prompt->expreward->chara_exp ? $submission->prompt->expreward->chara_exp : 0 }} EXP
-                                    <br>
-                                    {{ $submission->prompt->expreward->chara_points ? $submission->prompt->expreward->chara_points : 0  }} Stat Point
-                                    </td>
-                                    <td></td>
-                                </tr>
+                                         </tr>
+                                     @endforeach
+                                   @endif
+                                 <tr>
+                                     <td>{{ $submission->prompt->expreward->chara_exp ? $submission->prompt->expreward->chara_exp : 0 }} EXP
+                                     <br>
+                                     {{ $submission->prompt->expreward->chara_points ? $submission->prompt->expreward->chara_points : 0  }} Stat Point
+                                     </td>
+                                     <td></td>
+                                 </tr>
                              @endif
-                            </tbody>
-                        </div></table>
-                   </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endforeach
