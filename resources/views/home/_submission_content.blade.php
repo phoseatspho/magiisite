@@ -94,27 +94,8 @@
         </div>
     </div>
 @endif
-
-<h2>Rewards</h2>
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th width="70%">Reward</th>
-            <th width="30%">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (parseAssetData(isset($submission->data['rewards']) ? $submission->data['rewards'] : $submission->data) as $type)
-            @foreach ($type as $asset)
-                <tr>
-                    <td>{!! $asset['asset'] ? $asset['asset']->displayName : 'Deleted Asset' !!}</td>
-                    <td>{{ $asset['quantity'] }}</td>
-                </tr>
-            @endforeach
-        @endforeach
-    </tbody>
-</table>
 <hr>
+
 @if($submission->prompt_id)
     <h2>Skills</h2>
     <table class="table table-sm">
@@ -193,6 +174,7 @@
         <hr>
     @endif
 @endif
+
 <div class="card mb-3">
     <div class="card-header h2">Characters</div>
     <div class="card-body">
@@ -247,14 +229,8 @@
                                             @endforeach
 
                                             --}}
-                                        </tbody>
-                                    </table>
-                                @else
-                                    <p>
-                                        No rewards set.
-                                    </p>
-                                @endif
-                            @endforeach --}}
+                                        
+
                             @if($character->is_focus && $submission->prompt_id)
                                 @if (isset($submission->data['skills']))
                                     @foreach($submission->data['skills'] as $data)
@@ -284,6 +260,7 @@
                     </div>
                 </div>
             </div>
+            
         @endforeach
     </div>
 </div>
