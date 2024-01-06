@@ -262,25 +262,6 @@ class SubmissionManager extends Service {
                 ]);
             }
 
-                if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
-                    if($prompt->level_req)
-                    {
-                        if(!$c->level || $c->level->current_level < $prompt->level_req) throw new \Exception('One or more characters are not high enough level to enter this prompt');
-                    }
-                    foreach($submission->prompt->skills as $skill) {
-                        if($skill->skill->parent) {
-                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
-                            if(!$charaSkill || $charaSkill->level < $skill->parent_level) throw new \Exception("Skill level too low on one or more characters.");
-                        }
-                        if($skill->skill->prerequisite) {
-                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
-                            if(!$charaSkill) throw new \Exception("Skill not unlocked on one or more characters.");
-                        }
-                    }
-                }
-            
-                
-
             return $this->commitReturn($submission);
         } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
@@ -952,6 +933,22 @@ class SubmissionManager extends Service {
                 'submission_id' => $submission->id,
                 'data'          => json_encode(getDataReadyAssets($assets)),
             ]);
+            if(isset($data['character_is_focus']) && $data['character_is_focus'][$c->id] && $submission->prompt_id) {
+                if($prompt->level_req)
+                {
+                    if(!$c->level || $c->level->current_level < $prompt->level_req) throw new \Exception('One or more characters are not high enough level to enter this prompt');
+                }
+                foreach($submission->prompt->skills as $skill) {
+                    if($skill->skill->parent) {
+                        $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
+                        if(!$charaSkill || $charaSkill->level < $skill->parent_level) throw new \Exception("Skill level too low on one or more characters.");
+                    }
+                    if($skill->skill->prerequisite) {
+                        $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
+                        if(!$charaSkill) throw new \Exception("Skill not unlocked on one or more characters.");
+                    }
+                }
+            }
         }
 
         return true;
