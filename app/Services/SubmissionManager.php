@@ -196,7 +196,7 @@ class SubmissionManager extends Service {
     *
     * @param mixed $data the submission data
     * @param mixed $user the user performing the cancellation
-     */
+    */
     public function cancelSubmission($data, $user) {
         DB::beginTransaction();
 
@@ -279,7 +279,8 @@ class SubmissionManager extends Service {
                         }
                     }
                 }
-            }
+            
+                
 
             return $this->commitReturn($submission);
         } catch(\Exception $e) {
