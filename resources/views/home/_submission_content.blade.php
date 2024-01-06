@@ -231,7 +231,7 @@
                                             --}}
                                 @endif       
 
-                            @if($character->is_focus && $submission->prompt_id)
+                             @if($character->is_focus && $submission->prompt_id)
                                 @if (isset($submission->data['skills']))
                                     @foreach($submission->data['skills'] as $data)
                                         <tr>
@@ -254,10 +254,10 @@
                                     </td>
                                     <td></td>
                                 </tr>
-                            @endif
+                             @endif
                             </tbody>
-                        </table>
-                    </div>
+                        </div></table>
+                   </div>
                 </div>
             </div>
         @endforeach
