@@ -6,7 +6,6 @@ use Carbon\Carbon;
 
 use Config;
 use Image;
-use Notifications;
 use Settings;
 
 use Illuminate\Support\Arr;
