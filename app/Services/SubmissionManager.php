@@ -283,10 +283,10 @@ class SubmissionManager extends Service {
                 
 
             return $this->commitReturn($submission);
-        } catch(\Exception $e) {
+            } catch(\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
-        return $this->rollbackReturn(false);
+             return $this->rollbackReturn(false);
     }
 
 
