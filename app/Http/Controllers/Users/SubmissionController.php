@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class SubmissionController extends Controller {
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +120,7 @@ class SubmissionController extends Controller {
             'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'inventory' => $inventory,
             'page' => 'submission',
-            'expanded_rewards' => Config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
+            'expanded_rewards' => config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
             'elements' => Element::orderBy('name')->pluck('name', 'id'),
         ]));
     }
@@ -399,7 +400,7 @@ class SubmissionController extends Controller {
             'raffles' => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'recipes'=> Recipe::orderBy('name')->pluck('name', 'id'),
             'page' => 'submission',
-            'expanded_rewards' => Config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
+            'expanded_rewards' => config::get('lorekeeper.extensions.character_reward_expansion.expanded'),
         ]));
     }
 
