@@ -229,7 +229,7 @@
                                             @endforeach
 
                                             --}}
-                                        
+                                @endif       
 
                             @if($character->is_focus && $submission->prompt_id)
                                 @if (isset($submission->data['skills']))
