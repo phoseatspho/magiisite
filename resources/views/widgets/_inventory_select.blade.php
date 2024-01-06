@@ -3,7 +3,6 @@
         $old_selection = array_combine(old('stack_id'), old('stack_quantity'));
     }
 @endphp
-@if(!isset($hideCollapse))
 <h3>Your Inventory <a class="small inventory-collapse-toggle collapse-toggle collapsed" href="#userInventory" data-toggle="collapse">Show</a></h3>
 <hr>
 <div class="{{ isset($selected) && count($selected) ? '' : 'collapse' }}" id="userInventory">
