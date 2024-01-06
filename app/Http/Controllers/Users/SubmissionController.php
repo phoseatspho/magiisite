@@ -25,7 +25,7 @@ use App\Models\Claymore\Weapon;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use config;
+use Config;
 
 
 
