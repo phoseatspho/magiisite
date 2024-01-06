@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 use Config;
 use Image;
-use Settings;
+
 
 use Illuminate\Support\Arr;
 use App\Models\User\User;
