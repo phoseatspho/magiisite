@@ -274,7 +274,7 @@
             </tr>
         </table>
     </div>
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'elements' => $elements, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
 
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
