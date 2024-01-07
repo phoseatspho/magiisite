@@ -57,6 +57,8 @@
                                 {!! Form::select('rewardable_id[]', $awards, $loot->rewardable_id, ['class' => 'form-control award-select selectize', 'placeholder' => 'Select '.ucfirst(__('awards.award'))]) !!}
                                 @elseif($loot->rewardable_type == 'Pet')
                             {!! Form::select('rewardable_id[]', $pets, $loot->rewardable_id, ['class' => 'form-control pet-select selectize', 'placeholder' => 'Select Pet']) !!}
+                            @elseif($loot->rewardable_type == 'Element')
+                            {!! Form::select('rewardable_id[]', $elements, $loot->rewardable_id, ['class' => 'form-control element-select selectize', 'placeholder' => 'Select Element']) !!}
                         @elseif($loot->rewardable_type == 'Weapon')
                             {!! Form::select('rewardable_id[]', $weapons, $loot->rewardable_id, ['class' => 'form-control weapon-select selectize', 'placeholder' => 'Select Weapon']) !!}
                         @elseif($loot->rewardable_type == 'Gear')
