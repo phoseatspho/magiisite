@@ -695,7 +695,7 @@ class UserService extends Service {
                 $submissionManager = new SubmissionManager;
                 $submissions = Submission::where('user_id', $user->id)->where('status', 'Pending')->get();
                 foreach ($submissions as $submission) {
-                    $submissionManager->rejectSubmission(['submission' => $submission, 'staff_comments' => 'User\'s account was deactivated.']);
+                    $submissionManager->rejectSubmission(['submission' => $submission, 'staff_comments' => 'User\'s account was deactivated.'], $user);
                 }
 
                 // 3. Gallery Submissions
