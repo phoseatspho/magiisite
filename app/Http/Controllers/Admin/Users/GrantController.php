@@ -27,7 +27,6 @@ use App\Services\Claymore\GearManager;
 use App\Services\Claymore\WeaponManager;
 use App\Services\SkillManager;
 use App\Services\RecipeService;
-use Auth;
 use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
