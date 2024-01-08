@@ -306,3 +306,10 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() 
     Route::get('concept-categories/{id}', 'ConceptController@getConceptCategory');
 });
 
+/**************************************************************************************************
+    FAQ
+**************************************************************************************************/
+Route::group(['prefix' => 'faq',], function () {
+    Route::get('/', 'BrowseController@getFaq');
+    Route::get('/search', 'BrowseController@getFaqSearch');
+});

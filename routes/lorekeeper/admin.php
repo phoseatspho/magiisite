@@ -9,6 +9,8 @@
 |
 */
 
+use App\Models\Rank\Rank;
+
 Route::get('/', 'HomeController@getIndex');
 
 Route::get('logs', 'HomeController@getLogs');
@@ -420,6 +422,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('elements/create', 'ElementController@postCreateEditElement');
     Route::post('elements/edit/{id?}', 'ElementController@postCreateEditElement');
     Route::post('elements/delete/{id}', 'ElementController@postDeleteElement');
+
+    // FAQ
+    Route::get('faq', 'FaqController@getFaqIndex');
+    Route::get('faq/create', 'FaqController@getCreateFaqQuestion');
+    Route::get('faq/edit/{id}', 'FaqController@getEditFaqQuestion');
+    Route::get('faq/delete/{id}', 'FaqController@getDeleteFaqQuestion');
+    Route::post('faq/create', 'FaqController@postCreateEditFaqQuestion');
+    Route::post('faq/edit/{id?}', 'FaqController@postCreateEditFaqQuestion');
+    Route::post('faq/delete/{id}', 'FaqController@postDeleteFaqQuestion');
 });
 
 # PAGES

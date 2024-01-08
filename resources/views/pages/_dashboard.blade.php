@@ -30,7 +30,7 @@
  <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
  <li><a href="https://magiispecies.com/characters">Species Info</a></li>
  <li><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
- <li><a href="https://magiispecies.com/bank">FAQ</a></li>
+ <li><a href="{{ url('faq') }}">FAQ</a></li>
 </ul>
 </div>
 

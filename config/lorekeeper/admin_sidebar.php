@@ -55,6 +55,10 @@ return [
                 'name' => 'Pages',
                 'url'  => 'admin/pages',
             ],
+            [
+                 'name' => 'FAQ',
+                 'url'  => 'admin/data/faq',
+            ],
         ],
     ],
     'Users'      => [
