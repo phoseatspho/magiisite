@@ -226,8 +226,15 @@ class DiscordBot extends Command
                                 $message->author->sendMessage('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 break;
                             case 2:
-                                // Reply directly to message
-                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
+                                // check if we have a specific channel set
+                                if (config('lorekeeper.discord_bot.level_up_channel_id')) {
+                                    $channel = $message->guild->channels->get('id', config('lorekeeper.discord_bot.level_up_channel'));
+                                    // mention user
+                                    $channel->sendMessage('<@'.$message->author->id.'> You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
+                                } else {
+                                    // Reply directly to message
+                                    $message->reply('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
+                                }
                                 break;
                         }
                     }

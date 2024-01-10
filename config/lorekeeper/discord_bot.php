@@ -81,6 +81,9 @@ return [
         // 0000000000000000000
     ],
 
+    // channel to send level up messages to (if site setting is set to 2)
+    'level_up_channel' => null,
+
     // These settings pertain to the generation of rank cards
     'rank_cards' => [
         // Color used for the background of the rank card
@@ -122,5 +125,4 @@ return [
         'error_channel'        => env('DISCORD_ERROR_CHANNEL'),
         'guild_id'             => env('DISCORD_GUILD_ID'),
     ],
-
 ];
