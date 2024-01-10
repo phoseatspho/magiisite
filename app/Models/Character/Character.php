@@ -6,6 +6,7 @@ use Config;
 use DB;
 use Settings;
 use App\Models\Model;
+use App\Models\Rarity; 
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCharacter;

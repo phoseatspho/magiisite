@@ -11,7 +11,7 @@ use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Level\CharacterLevel;
 use App\Models\Species\Species;
-use App\Models\Character\Rarity;
+use App\Models\Rarity;
 use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
 use App\Models\Feature\Feature;
