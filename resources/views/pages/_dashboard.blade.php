@@ -39,9 +39,9 @@
 <ul>
   <img src="../files/play.png" class="img-fluid"> 
   <li><a href="https://www.magiispecies.com/dailies">Check In</a></li>
- <li><a href="https://magiispecies.com/characters">Quests</a></li>
- <li><a href="https://magiispecies.com/inventory">Foraging</a></li>
- <li><a href="https://magiispecies.com/bank">Crafting</a></li>
+ <li><a href="https://www.magiispecies.com/prompts/prompts">Quests</a></li>
+ <li><a href="https://www.magiispecies.com/foraging">Foraging</a></li>
+ <li><a href="https://www.magiispecies.com/crafting">Crafting</a></li>
 </ul>
 </div>
 
@@ -51,7 +51,7 @@
   <img src="../files/explore.png" class="img-fluid">
   <li><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
  <li><a href="https://magiispecies.com/characters">Story</a></li>
- <li><a href="https://magiispecies.com/inventory">NPCs</a></li>
+ <li><a href="https://www.magiispecies.com/world/figure-categories">NPCs</a></li>
  <li><a href="https://www.magiispecies.com/shops">Shop</a></li>
 </ul>
 </div>
