@@ -16,7 +16,6 @@ use App\Models\Pet\Pet;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 use App\Models\Recipe\Recipe;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
