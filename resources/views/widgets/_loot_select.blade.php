@@ -5,6 +5,12 @@
     if(!isset($showRecipes)) $showRecipes = false;
     if(!isset($elements))
    $elements = \App\Models\Element\Element::orderBy('name')->pluck('name', 'id');
+   if (!isset($type)) {
+        $type = \App\Models\Element\Typing::where('typing_model', get_class($object))
+            ->where('typing_id', $object->id)
+            ->first();
+    }
+    $type = $type ?? null;
     if(!isset($awards))
    $awards = \App\Models\Award\Award::orderBy('name')->pluck('name', 'id');
     if(!isset($pets))
