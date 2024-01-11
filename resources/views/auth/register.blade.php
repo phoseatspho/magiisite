@@ -12,18 +12,9 @@
             </div>
         </div>
 
-        @if ($altRegistrations)
-            <h3 class="text-center">Alternate Registrations</h3>
-            @foreach ($altRegistrations as $provider => $site)
-                @if (isset($site['login']) && $site['login'])
-                    <div class="text-center w-75 m-auto pt-2 pb-2">
-                        <a href="{{ url('/login/redirect/' . $provider) }}" class="btn btn-primary text-white w-100"><i class="{{ $site['icon'] }} mr-2"></i> Register With {{ ucfirst($provider) }}</a>
-                    </div>
-                @endif
-            @endforeach
-        @endif
+     
 
-        <h3 class="mt-5 text-center">Regular Registration</h3>
+        <h3 class="mt-5 text-center">Registration</h3>
         <form method="POST" action="{{ route('register') }}">
             @csrf
             @honeypot
