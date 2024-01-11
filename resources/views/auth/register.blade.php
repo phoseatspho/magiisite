@@ -8,13 +8,10 @@
     @if ($userCount)
         <div class="row">
             <div class="col-md-6 offset-md-4">
-                <h1>Register</h1>
             </div>
         </div>
 
-     
-
-        <h3 class="mt-5 text-center">Registration</h3>
+        <h3 class="mt-5 text-center">Register</h3>
         <form method="POST" action="{{ route('register') }}">
             @csrf
             @honeypot
