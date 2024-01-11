@@ -32,12 +32,12 @@ return [
 
         // Auth is for whether or not the site should offer this provider as an option for users
         // to authenticate with,
-        'auth'          => 1,
+        'auth'          => 0,
         // Login is for whether the site should be used as a login / registration provider instead of email verification with password
         // Login can only be used when auth has already been turned on as well.
         'login'         => 0,
         // while primary alias is whether or not an alias on this site can be a user's primary alias.
-        'primary_alias' => 1,
+        'primary_alias' => 0,
     ],
 
     'toyhouse'   => [
@@ -111,8 +111,8 @@ return [
         'display_name'  => 'discord',
         'regex'         => '/([A-Za-z0-9_-]+)#([0-9]+)/m',
         'icon'          => 'fab fa-discord',
-        'auth'          => 0,
-        'primary_alias' => 0,
+        'auth'          => 1,
+        'primary_alias' => 1,
     ],
 
     /**********************************************************************************************
