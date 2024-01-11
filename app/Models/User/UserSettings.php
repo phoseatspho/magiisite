@@ -27,7 +27,7 @@ class UserSettings extends Model {
      *
      * @var array
      */
-    protected $dates = ['banned_at', 'deactivated_at'];
+    protected $dates = ['banned_at', 'deactivated_at', 'format_date', 'pretty_date'];
 
     /**
      * The primary key of the model.
