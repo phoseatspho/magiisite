@@ -1,5 +1,7 @@
 @php
 if(!isset($showRecipes)) $showRecipes = false;
+if(!isset($elements))
+   $elements = \App\Models\Element\Element::orderBy('name')->pluck('name', 'id');
 @endphp
 <script>
 $( document ).ready(function() {    
