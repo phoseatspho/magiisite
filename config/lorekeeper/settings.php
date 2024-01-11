@@ -159,7 +159,7 @@ return [
     'masterlist_image_dimension'                        => 0,
     'masterlist_image_dimension_target'                 => 'shorter',
 
-    'masterlist_image_format'                           => '.webP',
+    'masterlist_image_format'                           => null,
     'masterlist_image_background'                       => '#ffffff',
 
     /*
@@ -280,7 +280,7 @@ return [
     |
     */
     'gallery_images_cap'    => 0,
-    'gallery_images_format' => '.webP',
+    'gallery_images_format' => '.webp',
 
     /*
     |--------------------------------------------------------------------------
