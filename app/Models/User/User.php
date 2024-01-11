@@ -91,7 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @var array
      */
-    protected $dates = ['birthday', 'home_changed', 'faction_changed', 'format_date'];
+    protected $dates = ['birthday', 'home_changed', 'faction_changed'];
 
     /**
      * Accessors to append to the model.
