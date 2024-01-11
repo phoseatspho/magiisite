@@ -160,7 +160,7 @@ return [
     'masterlist_image_dimension_target'                 => 'shorter',
 
     'masterlist_image_format'                           => '.webp',
-    'masterlist_image_background'                       => null,
+    'masterlist_image_background'                       => '#d2edf8',
 
     /*
     |--------------------------------------------------------------------------
