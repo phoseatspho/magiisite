@@ -2,15 +2,7 @@
     // This file represents a common source and definition for assets used in loot_select
     // While it is not per se as tidy as defining these in the controller(s),
     // doing so this way enables better compatibility across disparate extensions
-    if(!isset($showRecipes)) $showRecipes = false;
-    if(!isset($elements))
-   $elements = \App\Models\Element\Element::orderBy('name')->pluck('name', 'id');
-   if (!isset($type)) {
-        $type = \App\Models\Element\Typing::where('typing_model', get_class($object))
-            ->where('typing_id', $object->id)
-            ->first();
-    }
-    $type = $type ?? null;
+    if(!isset($showRecipes)) $showRecipes = false;   
     if(!isset($awards))
    $awards = \App\Models\Award\Award::orderBy('name')->pluck('name', 'id');
     if(!isset($pets))
