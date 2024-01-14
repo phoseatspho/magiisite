@@ -7,7 +7,7 @@
 
 <h1>Explore Arcadia</h1>
 <div class="dashboardtext">
-<div class="row justify-content-center">
+
 <div class="site-page-content parsed-text">
 <div class="col-6 col-md-3">
     <h3>Lore</h3>
@@ -34,7 +34,6 @@
 <img src="../files/fauna.png" class="img-fluid">
 </div>
     {!! $world->parsed_text !!}
-</div>
 </div>
 </div>
 
