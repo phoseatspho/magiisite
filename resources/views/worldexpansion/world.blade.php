@@ -27,8 +27,12 @@
 <div class="col-6 col-md-3">
     <h3>Fauna</h3>
 <img src="../files/fauna.png" class="img-fluid">
-    {!! $world->parsed_text !!}
 </div>
+<div class="col-6 col-md-3">
+    <h3>Fauna</h3>
+<img src="../files/fauna.png" class="img-fluid">
+</div>
+    {!! $world->parsed_text !!}
 </div>
 </div>
 
