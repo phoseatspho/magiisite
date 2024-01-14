@@ -30,5 +30,6 @@
     {!! $world->parsed_text !!}
 </div>
 </div>
+</div>
 
 @endsection
