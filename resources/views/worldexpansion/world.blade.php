@@ -1,4 +1,4 @@
-
+@extends('worldexpansion.layout')
 
 @section('title') {{$world->title}} @endsection
 
