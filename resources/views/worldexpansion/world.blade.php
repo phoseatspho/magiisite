@@ -6,13 +6,11 @@
 {!! breadcrumbs(['World' => 'world', $world->title => 'world/info']) !!}
 
 <h1>Explore Arcadia</h1>
-<div class="row">
+<div align="center">
 <div class="dashboardtext">
-<div class="col-6 col-md-3">
 <div class="site-page-content parsed-text">
     <h3>Lore</h3>
 <img src="../files/lorescroll.png" class="img-fluid">
-</div>
     <h3>Locations</h3>
 <img src="../files/mapsprite.png" class="img-fluid">
 
@@ -27,6 +25,5 @@
 </div>
 </div>
 </div>
-
 
 @endsection
