@@ -12,6 +12,7 @@
 <div class="site-page-content parsed-text">
     <h3>Lore</h3>
 <img src="../files/lorescroll.png" class="img-fluid">
+</div>
     <h3>Locations</h3>
 <img src="../files/mapsprite.png" class="img-fluid">
 
@@ -26,6 +27,6 @@
 </div>
 </div>
 </div>
-</div>
+
 
 @endsection
