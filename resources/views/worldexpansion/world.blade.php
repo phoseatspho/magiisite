@@ -8,7 +8,7 @@
 <h1>Explore Arcadia</h1>
 <div class="row">
 <div class="dashboardtext">
-
+<div class="col-6 col-md-3">
 <div class="site-page-content parsed-text">
     <h3>Lore</h3>
 <img src="../files/lorescroll.png" class="img-fluid">
@@ -23,6 +23,7 @@
     <h3>Fauna</h3>
 <img src="../files/fauna.png" class="img-fluid">
     {!! $world->parsed_text !!}
+</div>
 </div>
 </div>
 </div>
