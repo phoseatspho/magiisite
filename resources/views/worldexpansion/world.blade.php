@@ -6,6 +6,7 @@
 {!! breadcrumbs(['World' => 'world', $world->title => 'world/info']) !!}
 
 <h1>Explore Arcadia</h1>
+<div class="row">
 <div class="dashboardtext">
 
 <div class="site-page-content parsed-text">
@@ -22,6 +23,7 @@
     <h3>Fauna</h3>
 <img src="../files/fauna.png" class="img-fluid">
     {!! $world->parsed_text !!}
+</div>
 </div>
 </div>
 
