@@ -9,20 +9,19 @@
 <div align="center">
 <div class="dashboardtext">
 <div class="site-page-content parsed-text">
-    <h3>Lore</h3>
-    <div class="tooltip" title="Lore">
+<li class="nav-item" data-toggle="tooltip" title="Lore">
 <img src="../files/lorescroll.png" class="img-fluid">
-</div>
-    <h3>Locations</h3>
+</li>
+<li class="nav-item" data-toggle="tooltip" title="Locations">
 <img src="../files/mapsprite.png" class="img-fluid">
-
-    <h3>Npcs</h3>
+</li>
+<li class="nav-item" data-toggle="tooltip" title="NPCs">
 <img src="../files/npcs.png" class="img-fluid">
-
-    <h3>Flora</h3>
+</li>
+<li class="nav-item" data-toggle="tooltip" title="Flora">
 <img src="../files/flora.png" class="img-fluid">
+</li>
 <li class="nav-item" data-toggle="tooltip" title="Fauna">
-    <h3>Fauna</h3>
 <img src="../files/fauna.png" class="img-fluid">
 </li>
     {!! $world->parsed_text !!}
