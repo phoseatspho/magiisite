@@ -6,7 +6,6 @@
 {!! breadcrumbs(['World' => 'world', $world->title => 'world/info']) !!}
 
 <h1>Explore Arcadia</h1>
-<div align="center">
 <div class="dashboardtext">
 <div class="site-page-content parsed-text">
 <li class="nav-item" data-toggle="tooltip" title="Lore">
@@ -25,7 +24,6 @@
 <img src="../files/fauna.png" class="img-fluid">
 </li>
     {!! $world->parsed_text !!}
-</div>
 </div>
 </div>
 
