@@ -8,7 +8,7 @@
 <h1>Explore Arcadia</h1>
 <div class="site-page-content parsed-text">
 <div align="center">
-<img src="../files/lorescroll.png" class="img-fluid">
+<img src="../files/lorescroll.png" class="img-fluid" title="Lore">
 <img src="../files/mapsprite.png" class="img-fluid">
 <img src="../files/npcs.png" class="img-fluid">
 <img src="../files/flora.png" class="img-fluid">
