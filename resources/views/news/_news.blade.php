@@ -8,7 +8,9 @@
     </div>
     <div class="card-body">
         <div class="parsed-text">
+            <div align="center">
             <img src="../files/news.png">
+</div>
         <hr>
             {!! $news->parsed_text !!}
         </div>
