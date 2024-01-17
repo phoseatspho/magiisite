@@ -115,7 +115,7 @@
                     <div class="p-4">
                     @if (Auth::check() && !config('lorekeeper.extensions.navbar_news_notif'))
                             @if (Auth::user()->is_news_unread)
-                                <div class="alert alert-info"><img src="../files/newsalert.png" width="4%" height="auto"> <a href="{{ url('news') }}">Hey! There's news!</a></div>
+                                <div class="alert alert-info"><img src="../files/newsalert.png" width="4%" height="auto"> <a href="{{ url('news') }}">Psst! There's news!</a></div>
                             @endif
                             @if (Auth::user()->is_sales_unread)
                                 <div class="alert alert-info"><a href="{{ url('sales') }}">There is a new sales post!</a></div>
