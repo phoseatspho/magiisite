@@ -10,9 +10,9 @@
 
 @section('content')
     {!! breadcrumbs(['MYO Slot Masterlist' => 'myos']) !!}
-    <h1>MYO Slot Masterlist</h1>
+        <h1>MYO Slot Masterlist</h1>
 
-    @include('browse._masterlist_content', ['characters' => $slots])
+        @include('browse._masterlist_content', ['characters' => $slots])
 @endsection
 
 @section('scripts')

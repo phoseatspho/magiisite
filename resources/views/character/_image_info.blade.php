@@ -64,10 +64,7 @@
                     @if (config('lorekeeper.extensions.traits_by_category'))
                         <div>
                             @php
-                                $traitgroup = $image
-                                    ->features()
-                                    ->get()
-                                    ->groupBy('feature_category_id');
+                                $traitgroup = $image->features()->get()->groupBy('feature_category_id');
                             @endphp
                             @if ($image->features()->count())
                                 @foreach ($traitgroup as $key => $group)
@@ -75,38 +72,35 @@
                                         @if ($key)
                                             <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                         @else
-                                            <strong>Miscellaneous:</strong>
-                                        @endif
+<strong>Miscellaneous:</strong>
+@endif
                                         @foreach ($group as $feature)
-                                            <div class="ml-md-2">{!! $feature->feature->displayName !!} @if ($feature->data)
-                                                    ({{ $feature->data }})
-                                                @endif
+<div class="ml-md-2">{!! $feature->feature->displayName !!} @if ($feature->data)
+({{ $feature->data }})
+@endif
                                             </div>
-                                        @endforeach
+@endforeach
                                     </div>
-                                @endforeach
-                            @else
-                                <div>No traits listed.</div>
+@endforeach
+@else
+<div>No traits listed.</div>
                             @endif
                         </div>
-                    @else
-                        <div>
-                            <?php $features = $image
-                                ->features()
-                                ->with('feature.category')
-                                ->get(); ?>
+@else
+<div>
+                            <?php $features = $image->features()->with('feature.category')->get(); ?>
                             @if ($features->count())
                                 @foreach ($features as $feature)
-                                    <div>
+<div>
                                         @if ($feature->feature->feature_category_id)
-                                            <strong>{!! $feature->feature->category->displayName !!}:</strong>
-                                            @endif {!! $feature->feature->displayName !!} @if ($feature->data)
-                                                ({{ $feature->data }})
-                                            @endif
+<strong>{!! $feature->feature->category->displayName !!}:</strong>
+@endif {!! $feature->feature->displayName !!} @if ($feature->data)
+({{ $feature->data }})
+@endif
                                     </div>
-                                @endforeach
-                            @else
-                                <div>No traits listed.</div>
+@endforeach
+@else
+<div>No traits listed.</div>
                             @endif
                         </div>
                     @endif
@@ -119,24 +113,24 @@
                 </div>
 
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
+<div class="mt-3">
                         <a href="#" class="btn btn-outline-info btn-sm edit-features" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
-                @endif
+@endif
             </div>
 
             {{-- Image notes --}}
             <div class="tab-pane fade" id="notes-{{ $image->id }}">
                 @if ($image->parsed_description)
-                    <div class="parsed-text imagenoteseditingparse">{!! $image->parsed_description !!}</div>
-                @else
-                    <div class="imagenoteseditingparse">No additional notes given.</div>
-                @endif
+<div class="parsed-text imagenoteseditingparse">{!! $image->parsed_description !!}</div>
+@else
+<div class="imagenoteseditingparse">No additional notes given.</div>
+@endif
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
+<div class="mt-3">
                         <a href="#" class="btn btn-outline-info btn-sm edit-notes" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
-                @endif
+@endif
             </div>
 
             {{-- Image credits --}}
@@ -148,8 +142,8 @@
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->designers as $designer)
-                            <div>{!! $designer->displayLink() !!}</div>
-                        @endforeach
+<div>{!! $designer->displayLink() !!}</div>
+@endforeach
                     </div>
                 </div>
                 <div class="row">
@@ -158,20 +152,20 @@
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->artists as $artist)
-                            <div>{!! $artist->displayLink() !!}</div>
-                        @endforeach
+<div>{!! $artist->displayLink() !!}</div>
+@endforeach
                     </div>
                 </div>
 
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
+<div class="mt-3">
                         <a href="#" class="btn btn-outline-info btn-sm edit-credits" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
-                @endif
+@endif
             </div>
 
             @if (isset($showMention) && $showMention)
-                {{-- Mention This tab --}}
+{{-- Mention This tab --}}
                 <div class="tab-pane fade" id="mention-{{ $image->id }}">
                     <div class="imagenoteseditingparse">
                         In the rich text editor:
@@ -196,7 +190,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+@endif
 
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $image->id }}">
@@ -216,8 +210,8 @@
                     <hr />
                     <div class="text-right">
                         @if ($character->character_image_id != $image->id)
-                            <a href="#" class="btn btn-outline-info btn-sm active-image" data-id="{{ $image->id }}">Set Active</a>
-                        @endif <a href="#" class="btn btn-outline-info btn-sm reupload-image" data-id="{{ $image->id }}">Reupload Image</a> <a href="#" class="btn btn-outline-danger btn-sm delete-image"
+<a href="#" class="btn btn-outline-info btn-sm active-image" data-id="{{ $image->id }}">Set Active</a>
+@endif <a href="#" class="btn btn-outline-info btn-sm reupload-image" data-id="{{ $image->id }}">Reupload Image</a> <a href="#" class="btn btn-outline-danger btn-sm delete-image"
                             data-id="{{ $image->id }}">Delete</a>
                     </div>
                 </div>

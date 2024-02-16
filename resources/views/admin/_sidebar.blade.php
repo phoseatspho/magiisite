@@ -27,20 +27,20 @@
 
 @if (config('lorekeeper.extensions.collapsible_admin_sidebar'))
     @section('scripts')
-        <script>
-            $(document).ready(function() {
-                let currentCollapse = $(".sidebar-section").find('.collapse');
-                [...currentCollapse].forEach(element => {
-                    let links = $(element).find('.collapse-link');
-                    [...links].forEach(link => {
-                        isActive = link.classList.contains('active');
-                        if (isActive) {
-                            let active = $(link).closest('.collapse');
-                            $(active).addClass('show');
-                        }
-                    })
+    <script>
+        $(document).ready(function() {
+            let currentCollapse = $(".sidebar-section").find('.collapse');
+            [...currentCollapse].forEach(element => {
+                let links = $(element).find('.collapse-link');
+                [...links].forEach(link => {
+                    isActive = link.classList.contains('active');
+                    if (isActive) {
+                        let active = $(link).closest('.collapse');
+                        $(active).addClass('show');
+                    }
                 })
             })
-        </script>
-    @endsection
+        })
+    </script>
+@endsection
 @endif

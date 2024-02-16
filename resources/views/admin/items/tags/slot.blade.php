@@ -11,8 +11,8 @@
     @if ($isMyo)
         {!! add_help('This section is for making additional notes about the MYO slot. If there are restrictions for the character that can be created by this slot that cannot be expressed with the options below, use this section to describe them.') !!}
     @else
-        {!! add_help('This section is for making additional notes about the character and is separate from the character\'s profile (this is not editable by the user).') !!}
-    @endif
+{!! add_help('This section is for making additional notes about the character and is separate from the character\'s profile (this is not editable by the user).') !!}
+@endif
     {!! Form::textarea('description', $tag->getData()['description'], ['class' => 'form-control wysiwyg']) !!}
 </div>
 
@@ -72,5 +72,5 @@
 
 @section('scripts')
     @parent
-    @include('widgets._character_create_options_js')
+        @include('widgets._character_create_options_js')
 @endsection

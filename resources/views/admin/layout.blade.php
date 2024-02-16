@@ -2,7 +2,7 @@
 
 @section('title')
     Admin ::
-    @yield('admin-title')
+        @yield('admin-title')
 @endsection
 
 @section('sidebar')

@@ -101,13 +101,13 @@
                                 @if ($item->imageUrl)
                                     <img src="{{ $item->imageUrl }}" data-toggle="tooltip" title="{{ $item->name }}" alt="{{ $item->name }}" />
                                 @else
-                                    <p>{{ $item->name }}</p>
-                                @endif
+<p>{{ $item->name }}</p>
+@endif
                             </div>
-                        @endforeach
+@endforeach
                     </div>
-                @else
-                    <div>No items owned.</div>
+@else
+<div>No items owned.</div>
                 @endif
             </div>
             <div class="text-right"><a href="{{ $user->url . '/inventory' }}">View all...</a></div>
@@ -119,27 +119,27 @@
     <a href="{{ $user->url . '/characters' }}">Characters</a>
     @if (isset($sublists) && $sublists->count() > 0)
         @foreach ($sublists as $sublist)
-            / <a href="{{ $user->url . '/sublist/' . $sublist->key }}">{{ $sublist->name }}</a>
-        @endforeach
+/ <a href="{{ $user->url . '/sublist/' . $sublist->key }}">{{ $sublist->name }}</a>
+@endforeach
     @endif
 </h2>
 
 @foreach ($characters->take(4)->get()->chunk(4) as $chunk)
-    <div class="row mb-4">
+<div class="row mb-4">
         @foreach ($chunk as $character)
-            <div class="col-md-3 col-6 text-center">
+<div class="col-md-3 col-6 text-center">
                 <div>
                     <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="{{ $character->fullName }}" /></a>
                 </div>
                 <div class="mt-1">
                     <a href="{{ $character->url }}" class="h5 mb-0">
                         @if (!$character->is_visible)
-                            <i class="fas fa-eye-slash"></i>
-                        @endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
+<i class="fas fa-eye-slash"></i>
+@endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
                     </a>
                 </div>
             </div>
-        @endforeach
+@endforeach
     </div>
 @endforeach
 
@@ -178,7 +178,7 @@
                 </div>
             </div>
             @if (Auth::check() && Auth::user()->isStaff)
-                <div class="card-footer">
+<div class="card-footer">
                     <h5>[ADMIN]</h5>
                     Permalinking to this user, in the rich text editor:
                     <div class="alert alert-secondary">
@@ -189,11 +189,11 @@
                         [userav={{ $user->id }}]
                     </div>
                 </div>
-            @endif
+@endif
         </div>
     </div>
 </div>
 
 @if ($deactivated)
-    </div>
+</div>
 @endif

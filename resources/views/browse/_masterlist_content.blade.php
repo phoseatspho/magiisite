@@ -123,8 +123,8 @@
                     ['class' => 'form-control'],
                 ) !!}
             @else
-                {!! Form::select('sort', ['id_desc' => 'Newest First', 'id_asc' => 'Oldest First', 'sale_value_desc' => 'Highest Sale Value', 'sale_value_asc' => 'Lowest Sale Value'], Request::get('sort'), ['class' => 'form-control']) !!}
-            @endif
+{!! Form::select('sort', ['id_desc' => 'Newest First', 'id_asc' => 'Oldest First', 'sale_value_desc' => 'Highest Sale Value', 'sale_value_asc' => 'Lowest Sale Value'], Request::get('sort'), ['class' => 'form-control']) !!}
+@endif
         </div>
         {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
     </div>
@@ -150,26 +150,26 @@
 {!! $characters->render() !!}
 <div id="gridView" class="hide">
     @foreach ($characters->chunk(4) as $chunk)
-        <div class="row">
+<div class="row">
             @foreach ($chunk as $character)
-                <div class="col-md-3 col-6 text-center">
+<div class="col-md-3 col-6 text-center">
                     <div>
                         <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="Thumbnail for {{ $character->fullName }}" /></a>
                     </div>
                     <div class="mt-1">
                         <a href="{{ $character->url }}" class="h5 mb-0">
                             @if (!$character->is_visible)
-                                <i class="fas fa-eye-slash"></i>
-                            @endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
+<i class="fas fa-eye-slash"></i>
+@endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
                         </a>
                     </div>
                     <div class="small">
                         {!! $character->image->species_id ? $character->image->species->displayName : 'No Species' !!} ・ {!! $character->image->rarity_id ? $character->image->rarity->displayName : 'No Rarity' !!} ・ {!! $character->displayOwner !!}
                     </div>
                 </div>
-            @endforeach
+@endforeach
         </div>
-    @endforeach
+@endforeach
 </div>
 <div id="listView" class="hide">
     <table class="table table-sm">
@@ -184,18 +184,18 @@
         </thead>
         <tbody>
             @foreach ($characters as $character)
-                <tr>
+<tr>
                     <td>{!! $character->displayOwner !!}</td>
                     <td>
                         @if (!$character->is_visible)
-                            <i class="fas fa-eye-slash"></i>
-                        @endif {!! $character->displayName !!}
+<i class="fas fa-eye-slash"></i>
+@endif {!! $character->displayName !!}
                     </td>
                     <td>{!! $character->image->rarity_id ? $character->image->rarity->displayName : 'None' !!}</td>
                     <td>{!! $character->image->species_id ? $character->image->species->displayName : 'None' !!}</td>
                     <td>{!! format_date($character->created_at) !!}</td>
                 </tr>
-            @endforeach
+@endforeach
         </tbody>
     </table>
 </div>

@@ -5,7 +5,7 @@
         {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
     </div>
 @else
-    <div class="row">
+<div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 {!! Form::label('Character Category') !!}

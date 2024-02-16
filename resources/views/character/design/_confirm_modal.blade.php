@@ -6,11 +6,11 @@
         {!! Form::submit('Submit Request', ['class' => 'btn btn-primary']) !!}
         {!! Form::close() !!}
     @else
-        <p class="text-danger">Not all sections have been completed yet. Please visit the necessary tab(s) and click Save to update them, even if no modifications to the information are needed.</p>
+<p class="text-danger">Not all sections have been completed yet. Please visit the necessary tab(s) and click Save to update them, even if no modifications to the information are needed.</p>
         <div class="text-right">
             <button class="btn btn-primary" disabled>Submit Request</button>
         </div>
-    @endif
+@endif
 @else
-    <div>You cannot submit this request.</div>
+<div>You cannot submit this request.</div>
 @endif

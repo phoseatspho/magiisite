@@ -2,7 +2,7 @@
 
 @section('title')
     World ::
-    @yield('world-title')
+        @yield('world-title')
 @endsection
 
 @section('sidebar')
