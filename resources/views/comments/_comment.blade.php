@@ -9,7 +9,7 @@
             {{-- Show avatar if not compact --}}
             @if (isset($compact) && !$compact)
                 <div class="d-none d-md-block">
-                    <img class="mr-3 mt-2" src="/images/avatars/{{ $comment->commenter->avatar }}" style="width:70px; height:70px; border-radius:50%;" alt="{{ $comment->commenter->name }} Avatar">
+                    <img class="mr-3 mt-2" src="{{ $comment->commenter->avatarUrl }}" style="width:70px; height:70px; border-radius:50%;" alt="{{ $comment->commenter->name }} Avatar">
                 </div>
             @endif
 
@@ -31,11 +31,15 @@
                 {{-- Comment --}}
                 <div
                     class="comment border p-3 rounded {{ $comment->is_featured ? 'border-success bg-light' : '' }} {{ $comment->likes()->where('is_like', 1)->count() -$comment->likes()->where('is_like', 0)->count() <0? 'bg-light bg-gradient': '' }}">
-                    <p>{!! nl2br($markdown->line($comment->comment)) !!} </p>
+                    {!! config('lorekeeper.settings.wysiwyg_comments') ? $comment->comment : '<p>' . nl2br($markdown->line(strip_tags($comment->comment))) . '</p>' !!}
                     <p class="border-top pt-1 text-right mb-0">
                         <small class="text-muted">{!! $comment->created_at !!}
                             @if ($comment->created_at != $comment->updated_at)
-                                <span class="text-muted border-left mx-1 px-1">(Edited {!! $comment->updated_at !!})</span>
+                                <span class="text-muted border-left mx-1 px-1">(Edited {!! $comment->updated_at !!})
+                                    @if (Auth::check() && Auth::user()->isStaff)
+                                        <a href="#" data-toggle="modal" data-target="#show-edits-{{ $comment->id }}">Edit History</a>
+                                    @endif
+                                </span>
                             @endif
                         </small>
                         @if ($comment->type == 'User-User')

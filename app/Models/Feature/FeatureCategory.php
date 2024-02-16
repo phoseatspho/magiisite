@@ -11,7 +11,7 @@ class FeatureCategory extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'sort', 'has_image', 'description', 'parsed_description',
+        'name', 'sort', 'has_image', 'description', 'parsed_description', 'is_visible', 'hash',
     ];
 
     /**
@@ -20,6 +20,7 @@ class FeatureCategory extends Model {
      * @var string
      */
     protected $table = 'feature_categories';
+
     /**
      * Validation rules for creation.
      *
@@ -41,6 +42,28 @@ class FeatureCategory extends Model {
         'description' => 'nullable',
         'image'       => 'mimes:png',
     ];
+
+    /**********************************************************************************************
+
+        SCOPES
+
+    **********************************************************************************************/
+
+    /**
+     * Scope a query to show only visible categories.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed|null                            $user
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query, $user = null) {
+        if ($user && $user->hasPower('edit_data')) {
+            return $query;
+        }
+
+        return $query->where('is_visible', 1);
+    }
 
     /**********************************************************************************************
 
@@ -72,7 +95,7 @@ class FeatureCategory extends Model {
      * @return string
      */
     public function getCategoryImageFileNameAttribute() {
-        return $this->id.'-image.png';
+        return $this->hash.$this->id.'-image.png';
     }
 
     /**

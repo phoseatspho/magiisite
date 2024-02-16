@@ -11,7 +11,7 @@ class CharacterCategory extends Model {
      * @var array
      */
     protected $fillable = [
-        'code', 'name', 'sort', 'has_image', 'description', 'parsed_description', 'masterlist_sub_id',
+        'code', 'name', 'sort', 'has_image', 'description', 'parsed_description', 'masterlist_sub_id', 'is_visible', 'hash',
     ];
 
     /**
@@ -20,6 +20,7 @@ class CharacterCategory extends Model {
      * @var string
      */
     protected $table = 'character_categories';
+
     /**
      * Validation rules for creation.
      *
@@ -54,7 +55,29 @@ class CharacterCategory extends Model {
      * Get the sub masterlist for this species.
      */
     public function sublist() {
-        return $this->belongsTo('App\Models\Character\Sublist', 'masterlist_sub_id');
+        return $this->belongsTo(Sublist::class, 'masterlist_sub_id');
+    }
+
+    /**********************************************************************************************
+
+        SCOPES
+
+    **********************************************************************************************/
+
+    /**
+     * Scope a query to show only visible categories.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed|null                            $user
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query, $user = null) {
+        if ($user && $user->hasPower('edit_data')) {
+            return $query;
+        }
+
+        return $query->where('is_visible', 1);
     }
 
     /**********************************************************************************************
@@ -87,7 +110,7 @@ class CharacterCategory extends Model {
      * @return string
      */
     public function getCategoryImageFileNameAttribute() {
-        return $this->id.'-image.png';
+        return $this->hash.$this->id.'-image.png';
     }
 
     /**

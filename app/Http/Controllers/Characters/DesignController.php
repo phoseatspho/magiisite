@@ -14,8 +14,8 @@ use App\Models\Species\Subtype;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Services\DesignUpdateManager;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DesignController extends Controller {
     /**
@@ -171,7 +171,7 @@ class DesignController extends Controller {
 
         return view('character.design.addons', [
             'request'     => $r,
-            'categories'  => ItemCategory::orderBy('sort', 'DESC')->get(),
+            'categories'  => ItemCategory::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->get(),
             'inventory'   => $inventory,
             'items'       => Item::all()->keyBy('id'),
             'item_filter' => Item::orderBy('name')->get()->keyBy('id'),

@@ -23,7 +23,10 @@ return [
     'navbar_news_notif'                    => 0,
 
     // Species Trait Index - Mercury
-    'species_trait_index'                  => 0,
+    'species_trait_index'                  => [
+        'enable'       => 0,
+        'trait_modals' => 0, // Enables modals when you click on a trait for more info instead of linking to the traits page - Moif
+    ],
 
     // Character Status Badges - Juni
     'character_status_badges'              => 0,
@@ -94,4 +97,13 @@ return [
         'section_on_front' => 0, // By default, does not display on the front page. Enable to add a block above the footer.
     ],
 
+    // collapsible admin sidebar - Newt
+    'collapsible_admin_sidebar' => 0,
+
+    // use gravatar for user avatars - Newt
+    'use_gravatar' => 0,
+
+    // Use ReCaptcha to check new user registrations - Mercury
+    // Requires site key and secret be set in your .env file!
+    'use_recaptcha' => 0,
 ];
