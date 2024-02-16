@@ -9,6 +9,7 @@ use App\Models\User\UserUpdateLog;
 use Config;
 use Intervention\Image\Facades\Image;
 use Settings;
+use Str;
 
 class DiscordManager extends Service
 {
@@ -39,14 +40,13 @@ class DiscordManager extends Service
      *
      * @param mixed      $content
      * @param mixed      $title
-     * @param mixed      $embed_content
      * @param mixed|null $author
      * @param mixed|null $url
      * @param mixed|null $fields
      */
-    public function handleWebhook($content, $title, $embed_content, $author = null, $url = null, $fields = null)
+    public function handleWebhook($content, $title, $author = null, $url = null, $fields = null, $is_staff = false)
     {
-        $webhook = env('DISCORD_WEBHOOK_URL');
+        $webhook = $is_staff ? config('lorekeeper.discord_bot.env.webhooks.staff') : config('lorekeeper.discord_bot.env.webhooks.announcement');
         if ($webhook) {
             // format data
             if ($author) {
@@ -127,8 +127,8 @@ class DiscordManager extends Service
             }
 
             // Provided message author, fetch user information
-            if (UserAlias::where('site', 'discord')->where('extra_data', $author)->exists()) {
-                $user = UserAlias::where('site', 'discord')->where('extra_data', $author)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('user_snowflake', $author)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('user_snowflake', $author)->first()->user;
             } else {
                 return false;
             }
@@ -137,8 +137,12 @@ class DiscordManager extends Service
             $level = UserDiscordLevel::where('user_id', $user->id)->first();
             if (!$level) {
                 // Or create it, if necessary
-                $this->giveExp($author, $timestamp ?? $context->timestamp);
-                $level = UserDiscordLevel::where('user_id', $user->id)->first();
+                $level = UserDiscordLevel::create([
+                    'user_id'         => $user->id,
+                    'level'           => 0,
+                    'exp'             => 0,
+                    'last_message_at' => $timestamp ?? ($content->timestamp ?? now()),
+                ]);
             }
 
             return $level;
@@ -243,8 +247,8 @@ class DiscordManager extends Service
     public function checkRewards($id)
     {
         try {
-            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('user_snowflake', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('user_snowflake', $id)->first()->user;
             } else {
                 return;
             }
@@ -310,8 +314,8 @@ class DiscordManager extends Service
     public function giveExp($id, $timestamp)
     {
         try {
-            if (UserAlias::where('site', 'discord')->where('extra_data', $id)->exists()) {
-                $user = UserAlias::where('site', 'discord')->where('extra_data', $id)->first()->user;
+            if (UserAlias::where('site', 'discord')->where('user_snowflake', $id)->exists()) {
+                $user = UserAlias::where('site', 'discord')->where('user_snowflake', $id)->first()->user;
             } else {
                 return;
             }
@@ -347,7 +351,8 @@ class DiscordManager extends Service
             $requiredExp = 5 * (pow($level->level, 2)) + (50 * $level->level) + 100 - $level->exp;
             if ($requiredExp <= 0) {
                 $level->level++;
-                $level->exp = 0;
+                // dont reset exp, just subtract the required exp from it
+                $level->exp = $level->exp - ((pow($level->level, 2)) + (50 * $level->level) + 100);
                 $level->save();
 
                 return [
@@ -373,10 +378,10 @@ class DiscordManager extends Service
     public function grant($interaction)
     {
         // check if the user has the permission to grant levels (on-site must have manage_discord power)
-        if (UserAlias::where('extra_data', $interaction->user->id)->exists()) {
-            $user = UserAlias::where('extra_data', $interaction->user->id)->first()->user;
+        if (UserAlias::where('site', 'discord')->where('user_snowflake', $interaction->user->id)->exists()) {
+            $user = UserAlias::where('site', 'discord')->where('user_snowflake', $interaction->user->id)->first()->user;
         } else {
-            return 'Could not verify user on site.';
+            return 'Could not verify invoking user on site.';
         }
 
         if (!$user->hasPower('manage_discord')) {
@@ -390,6 +395,8 @@ class DiscordManager extends Service
         $recipientInfo = $this->getUserLevel($options['user']['value']);
         if (!$recipientInfo) {
             return 'Recipient does not have any discord level data. Check that they are correctly linked.';
+        } else if (is_string($recipientInfo)) {
+            return $recipientInfo;
         }
 
         // log the action

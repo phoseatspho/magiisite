@@ -42,7 +42,6 @@ class NewsService extends Service {
                 $response = (new DiscordManager)->handleWebhook(
                     'A new news post has been made!',
                     $news->title,
-                    $news->parsed_text,
                     $user,
                     $news->url
                 );

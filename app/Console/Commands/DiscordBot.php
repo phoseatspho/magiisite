@@ -42,6 +42,7 @@ class DiscordBot extends Command
         $this->error_channel_id = config('lorekeeper.discord_bot.env.error_channel');
         // webhook related settings - if we should delete webhook messages and post them ourselves etc.
         $this->announcement_channel_id = config('lorekeeper.discord_bot.env.announcement_channel');
+        // 
     }
 
     /**
@@ -82,7 +83,7 @@ class DiscordBot extends Command
             // startup message //////////////////
             echo 'Bot is ready!', PHP_EOL;
             // send message to specified channel
-            $guild = $discord->guilds->get('id', config('lorekeeper.discord_bot.env.guild_id'));
+            $guild = config('lorekeeper.discord_bot.env.guild_id') ? $discord->guilds->get('id', config('lorekeeper.discord_bot.env.guild_id')) : $discord->guilds->first();
             $channel = $guild->channels->get('id', $this->error_channel_id);
 
             $channel->sendMessage('Bot is ready! Use '.$this->prefix.'ping to check delay.');
@@ -228,13 +229,17 @@ class DiscordBot extends Command
                             case 2:
                                 // check if we have a specific channel set
                                 if (config('lorekeeper.discord_bot.level_up_channel_id')) {
-                                    $channel = $message->guild->channels->get('id', config('lorekeeper.discord_bot.level_up_channel'));
+                                    $channel = $message->guild->channels->get('id', config('lorekeeper.discord_bot.level_up_channel_id'));
                                     // mention user
                                     $channel->sendMessage('<@'.$message->author->id.'> You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 } else {
                                     // Reply directly to message
                                     $message->reply('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 }
+                                break;
+                            default:
+                                // Reply directly to message
+                                $message->reply('You leveled up! You are now level '.$action['level'].'!'.($data['count'] ? ' You have received '.$data['count'].' rewards!' : ''));
                                 break;
                         }
                     }

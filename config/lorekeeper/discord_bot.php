@@ -39,7 +39,8 @@ return [
         ],
         [
             'name'        => 'grant',
-            'description' => 'Grants exp or levels to a user. The invoker must be on-site staff.',
+            'description' => 'Grants exp or levels to a user. The invoker must be on-site staff.' . 
+                            'This command is recommended to be run in a staff channel, as it will send errors as a response if the user is not found.',
             'options'     => [
                 [
                     'name'        => 'user',
@@ -124,5 +125,11 @@ return [
         'announcement_channel' => env('DISCORD_ANNOUNCEMENT_CHANNEL'),
         'error_channel'        => env('DISCORD_ERROR_CHANNEL'),
         'guild_id'             => env('DISCORD_GUILD_ID'),
+
+        // WEBHOOKS
+        'webhooks' => [
+            'staff'        => env('DISCORD_STAFF_WEBHOOK_URL'), // staff is an all-purpose webhook for on-site submissions
+            'announcement' => env('DISCORD_ANNOUNCEMENT_WEBHOOK_URL'),
+        ],
     ],
 ];

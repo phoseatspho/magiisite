@@ -64,7 +64,6 @@ class SalesService extends Service {
                 $response = (new DiscordManager)->handleWebhook(
                     'A new sales post has been created!',
                     $sales->title,
-                    $sales->parsed_text,
                     $user,
                     $sales->url,
                     [
