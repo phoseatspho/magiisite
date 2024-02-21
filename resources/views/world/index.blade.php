@@ -16,36 +16,63 @@
 </div>
 
 <div class="col-6 col-md-3">
- <h3>Info</h3>
-<ul>
- <img src="../files/info.png" class="img-fluid">
- <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
- <li><a href="https://magiispecies.com/characters">Species Info</a></li>
- <li><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
- <li><a href="{{ url('faq') }}">FAQ</a></li>
-</ul>
+ 
+ <h3>Elements</h3>
+ <a href="{{ url('world/elements') }}"><img src="../files/elements.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
- <h3>Play</h3>
-<ul>
-  <img src="../files/play.png" class="img-fluid"> 
-  <li><a href="https://www.magiispecies.com/dailies">Check In</a></li>
- <li><a href="https://www.magiispecies.com/prompts/prompts">Quests</a></li>
- <li><a href="https://www.magiispecies.com/foraging">Foraging</a></li>
- <li><a href="https://www.magiispecies.com/crafting">Crafting</a></li>
-</ul>
+ 
+ <h3>Currency</h3>
+ <a href="{{ url('world/currencies') }}"><img src="../files/currencies.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
-  <h3>Explore</h3>
-<ul>
-  <img src="../files/explore.png" class="img-fluid">
-  <li><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
- <li><a href="https://magiispecies.com/characters">Story</a></li>
- <li><a href="https://www.magiispecies.com/world/figure-categories">NPCs</a></li>
- <li><a href="https://www.magiispecies.com/shops">Shop</a></li>
-</ul>
+ 
+ <h3>Items</h3>
+ <a href="{{ url('world/items') }}"><img src="../files/items.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Awards</h3>
+ <a href="{{ url('world/'.__('awards.awards')) }}"><img src="../files/awards.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Collections</h3>
+ <a href="{{ url('world/collections') }}"><img src="../files/collections.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Recipes</h3>
+ <a href="{{ url('world/recipes') }}"><img src="../files/recipes.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Pets</h3>
+ <a href="{{ url('world/pets') }}"><img src="../files/pets.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Weapons</h3>
+ <a href="https://www.magiispecies.com/world/species"><img src="../files/weapons.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Equipment</h3>
+ <a href="{{ url('world/gear') }}"><img src="../files/equipment.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ 
+ <h3>Skills</h3>
+ <a href="{{ url('world/skills') }}"><img src="../files/skills.png" class="img-fluid"></a>
 </div>
 </div> 
 </div>
