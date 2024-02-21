@@ -11,67 +11,67 @@
 <div class="row justify-content-center">
 <div class="col-6 col-md-3">
  
- <h3>Species</h3>
+ <h4>Species</h4>
  <a href="https://www.magiispecies.com/world/species"><img src="../files/species.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Elements</h3>
+ <h4>Elements</h4>
  <a href="{{ url('world/elements') }}"><img src="../files/elements.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Currency</h3>
+ <h4>Currency</h4>
  <a href="{{ url('world/currencies') }}"><img src="../files/currencies.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Items</h3>
+ <h4>Items</h4>
  <a href="{{ url('world/items') }}"><img src="../files/items.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Awards</h3>
+ <h4>Awards</h4>
  <a href="{{ url('world/'.__('awards.awards')) }}"><img src="../files/awards.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Collections</h3>
+ <h4>Collections</h4>
  <a href="{{ url('world/collections') }}"><img src="../files/collections.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Recipes</h3>
+ <h4>Recipes</h4>
  <a href="{{ url('world/recipes') }}"><img src="../files/recipes.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Pets</h3>
+ <h4>Pets</h4>
  <a href="{{ url('world/pets') }}"><img src="../files/pets.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Weapons</h3>
- <a href="https://www.magiispecies.com/world/species"><img src="../files/weapons.png" class="img-fluid"></a>
+ <h4>Weapons</h4>
+ <a href="{{ url('world/weapons') }}"><img src="../files/weapons.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Equipment</h3>
+ <h4>Equipment</h4>
  <a href="{{ url('world/gear') }}"><img src="../files/equipment.png" class="img-fluid"></a>
 </div>
 
 <div class="col-6 col-md-3">
  
- <h3>Skills</h3>
+ <h4>Skills</h4>
  <a href="{{ url('world/skills') }}"><img src="../files/skills.png" class="img-fluid"></a>
 </div>
 </div> 
