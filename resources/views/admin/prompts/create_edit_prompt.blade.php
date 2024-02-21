@@ -212,6 +212,7 @@
 @section('scripts')
     @parent
     @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+    @include('widgets._datetimepicker_js')
     <script>
  $( document ).ready(function() {
 
@@ -242,9 +243,9 @@
     }
 
     $('.delete-prompt-button').on('click', function(e) {
-        e.preventDefault();
-        loadModal("{{ url('admin/data/prompts/delete') }}/{{ $prompt->id }}", 'Delete Prompt');
-    });
+                e.preventDefault();
+                loadModal("{{ url('admin/data/prompts/delete') }}/{{ $prompt->id }}", 'Delete Prompt');
+            });
     
     $( ".datepicker" ).datetimepicker({
         dateFormat: "yy-mm-dd",

@@ -25,26 +25,28 @@
     <x-admin-edit title="Item" :object="$item" />
     {!! breadcrumbs(['World' => 'world', 'Items' => 'world/items', $item->name => $item->idUrl]) !!}
 
-<div class="row">
-    <div class="col-sm">
-    </div>
-    <div class="col-lg-6 col-lg-10">
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="row world-entry">
-                    @if($imageUrl)
-                        <div class="col-md-3 world-entry-image"><a href="{{ $imageUrl }}" data-lightbox="entry" data-title="{{ $name }}"><img src="{{ $imageUrl }}" class="world-entry-image" alt="{{ $name }}" /></a></div>
-                    @endif
-                    <div class="{{ $imageUrl ? 'col-md-9' : 'col-12' }}">
-                        <h1>
-                            {!! $name !!}
-                            @if(Auth::check())
+    <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-lg-6 col-lg-10">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row world-entry">
+                        @if ($imageUrl)
+                            <div class="col-md-3 world-entry-image"><a href="{{ $imageUrl }}" data-lightbox="entry" data-title="{{ $name }}"><img src="{{ $imageUrl }}" class="world-entry-image" alt="{{ $name }}" /></a></div>
+                        @endif
+                        <div class="{{ $imageUrl ? 'col-md-9' : 'col-12' }}">
+                            <h1>
+                                @if (!$item->is_released)
+                                    <i class="fas fa-eye-slash mr-1"></i>
+                                @endif
+                                {!! $name !!}
+                                @if(Auth::check())
                                 <div class="float-right">
                                     @include('widgets._wishlist_add', ['item' => $item])
                                 </div>
                             @endif
-                        </h1>
-                       
+                            </h1>
                             <div class="row">
                                 @if (isset($item->category) && $item->category)
                                     <div class="col-md">

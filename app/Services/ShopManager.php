@@ -37,7 +37,7 @@ class ShopManager extends Service {
         DB::beginTransaction();
 
         try {
-            $quantity = $data['quantity'];
+            $quantity = ceil($data['quantity']);
             if (!$quantity || $quantity == 0) {
                 throw new \Exception('Invalid quantity selected.');
             }
@@ -63,6 +63,12 @@ class ShopManager extends Service {
             if ($shopStock->purchase_limit && $this->checkPurchaseLimitReached($shopStock, $user)) {
                 throw new \Exception('You have already purchased the maximum amount of this item you can buy.');
             }
+
+            if ($shopStock->purchase_limit && $quantity > $shopStock->purchase_limit) {
+                throw new \Exception('The quantity specified exceeds the amount of this item you can buy.');
+            }
+
+            $total_cost = $shopStock->cost * $quantity;
 
 
             if(isset($data['use_coupon'])) {

@@ -312,6 +312,9 @@ class BrowseController extends Controller {
         }
 
         switch ($request->get('sort')) {
+            default:
+                $query->orderBy('characters.number', 'DESC');
+                break;
             case 'number_desc':
                 $query->orderBy('characters.number', 'DESC');
                 break;
@@ -330,8 +333,6 @@ class BrowseController extends Controller {
             case 'sale_value_asc':
                 $query->orderBy('characters.sale_value', 'ASC');
                 break;
-            default:
-                $query->orderBy('characters.number', 'DESC');
         }
 
         if (!Auth::check() || !Auth::user()->hasPower('manage_characters')) {
@@ -449,6 +450,9 @@ class BrowseController extends Controller {
         $query->whereIn('id', $imageQuery->pluck('character_id')->toArray());
 
         switch ($request->get('sort')) {
+            default:
+                $query->orderBy('characters.id', 'DESC');
+                break;
             case 'id_desc':
                 $query->orderBy('characters.id', 'DESC');
                 break;
@@ -630,6 +634,9 @@ class BrowseController extends Controller {
         $query->whereIn('id', $imageQuery->pluck('character_id')->toArray());
 
         switch ($request->get('sort')) {
+            default:
+                $query->orderBy('characters.number', 'DESC');
+                break;
             case 'number_desc':
                 $query->orderBy('characters.number', 'DESC');
                 break;
@@ -648,8 +655,6 @@ class BrowseController extends Controller {
             case 'sale_value_asc':
                 $query->orderBy('characters.sale_value', 'ASC');
                 break;
-            default:
-                $query->orderBy('characters.number', 'DESC');
         }
 
         if (!Auth::check() || !Auth::user()->hasPower('manage_characters')) {
