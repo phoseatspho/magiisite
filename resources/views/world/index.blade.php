@@ -7,6 +7,49 @@
 @section('content')
     {!! breadcrumbs(['Encyclopedia' => 'world']) !!}
 
+    <div class="dashboardtext">
+<div class="row justify-content-center">
+<div class="col-6 col-md-3">
+ 
+ <h3>Species</h3>
+ <a href="https://www.magiispecies.com/world/species"><img src="../files/species.png" class="img-fluid"></a>
+</div>
+
+<div class="col-6 col-md-3">
+ <h3>Info</h3>
+<ul>
+ <img src="../files/info.png" class="img-fluid">
+ <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
+ <li><a href="https://magiispecies.com/characters">Species Info</a></li>
+ <li><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
+ <li><a href="{{ url('faq') }}">FAQ</a></li>
+</ul>
+</div>
+
+<div class="col-6 col-md-3">
+ <h3>Play</h3>
+<ul>
+  <img src="../files/play.png" class="img-fluid"> 
+  <li><a href="https://www.magiispecies.com/dailies">Check In</a></li>
+ <li><a href="https://www.magiispecies.com/prompts/prompts">Quests</a></li>
+ <li><a href="https://www.magiispecies.com/foraging">Foraging</a></li>
+ <li><a href="https://www.magiispecies.com/crafting">Crafting</a></li>
+</ul>
+</div>
+
+<div class="col-6 col-md-3">
+  <h3>Explore</h3>
+<ul>
+  <img src="../files/explore.png" class="img-fluid">
+  <li><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
+ <li><a href="https://magiispecies.com/characters">Story</a></li>
+ <li><a href="https://www.magiispecies.com/world/figure-categories">NPCs</a></li>
+ <li><a href="https://www.magiispecies.com/shops">Shop</a></li>
+</ul>
+</div>
+</div> 
+</div>
+
     <h1>World</h1>
     <div class="row">
         <div class="col-md-6">
