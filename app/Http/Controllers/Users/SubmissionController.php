@@ -403,6 +403,7 @@ class SubmissionController extends Controller {
             'recipes'=> Recipe::orderBy('name')->pluck('name', 'id'),
             'page' => 'submission',
             'expanded_rewards' => config('lorekeeper.extensions.character_reward_expansion.expanded'),
+            'elements' => Element::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 

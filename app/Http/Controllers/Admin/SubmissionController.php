@@ -127,7 +127,6 @@ class SubmissionController extends Controller {
         return view('admin.submissions.index', [
             'submissions' => $submissions->paginate(30),
             'isClaims'    => true,
-            'elements'            => Element::orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
