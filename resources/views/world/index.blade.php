@@ -7,9 +7,11 @@
 @section('content')
     {!! breadcrumbs(['Encyclopedia' => 'world']) !!}
 
-    Click the sprites below to view information about various aspects of the species & ARPG! 
+    <div align="center">Click the sprites below to view information about various aspects of the species & ARPG!
+        <hr>
     <br>
-
+    <br>
+</div>
     <div class="dashboardtext">
 <div class="row justify-content-center">
 <div class="col-6 col-md-3">
