@@ -9,7 +9,7 @@
                     <span class="btn badge-success float-md-right" data-toggle="tooltip" title="This user has not owned any characters from this world before.">FTO</span>
                 </div>
             @endif
-        </div>
+        
 
 
 
@@ -94,4 +94,5 @@
 </div>
 
 @if ($deactivated)
+    </div>
 @endif
