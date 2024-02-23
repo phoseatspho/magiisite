@@ -159,7 +159,7 @@ return [
     'masterlist_image_dimension'                        => 0,
     'masterlist_image_dimension_target'                 => 'shorter',
 
-    'masterlist_image_format'                           => '.webp',
+    'masterlist_image_format'                           => .webp,
     'masterlist_image_background'                       => '#ffffff',
 
     /*
@@ -181,7 +181,7 @@ return [
     */
     'store_masterlist_fullsizes'                        => 0,
     'masterlist_fullsizes_cap'                          => 0,
-    'masterlist_fullsizes_format'                       => '.webP',
+    'masterlist_fullsizes_format'                       => .webp,
 
     /*
     |--------------------------------------------------------------------------
