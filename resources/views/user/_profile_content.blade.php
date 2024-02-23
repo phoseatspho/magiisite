@@ -94,5 +94,4 @@
 </div>
 
 @if ($deactivated)
-    </div>
 @endif
