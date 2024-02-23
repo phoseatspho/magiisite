@@ -13,7 +13,7 @@
 <div class="row justify-content-center">
 <div class="col-6 col-md-3">
  
- <h3>Profile</h3>
+ <h2>Profile</h2>
 <ul>
  <img src="../files/profile.png" class="img-fluid">
  <li><a href="{{ Auth::user()->url }}">Profile</a></li>
@@ -24,7 +24,7 @@
 </div>
 
 <div class="col-6 col-md-3">
- <h3>Info</h3>
+ <h2>Info</h2>
 <ul>
  <img src="../files/info.png" class="img-fluid">
  <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
@@ -35,7 +35,7 @@
 </div>
 
 <div class="col-6 col-md-3">
- <h3>Play</h3>
+ <h2>Play</h2>
 <ul>
   <img src="../files/play.png" class="img-fluid"> 
   <li><a href="https://www.magiispecies.com/dailies">Check In</a></li>
@@ -46,7 +46,7 @@
 </div>
 
 <div class="col-6 col-md-3">
-  <h3>Explore</h3>
+  <h2>Explore</h2>
 <ul>
   <img src="../files/explore.png" class="img-fluid">
   <li><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
