@@ -54,4 +54,10 @@ return [
         'text_color'       => '#f5f3d3',
         'background_color' => '#468a82',
     ],
+
+    'volume' => [
+        'name' => 'Volume',
+        'text_color' => '#ffffff',
+        'background_color' => '#1fd1a7'
+    ],
 ];

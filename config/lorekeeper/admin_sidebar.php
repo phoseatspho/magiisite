@@ -353,6 +353,10 @@ return [
                 'name' => 'Concepts',
                 'url' => 'admin/world/concepts'
             ],
+            [
+                'name' => 'Library',
+                'url' => 'admin/data/volumes'
+            ],
         ]
     ],
     'Raffles'    => [
