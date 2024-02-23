@@ -16,10 +16,10 @@
  <h2>Profile</h2>
 <ul>
  <img src="../files/profile.png" class="img-fluid">
- <li><a href="{{ Auth::user()->url }}">Profile</a></li>
+ <h6><li><a href="{{ Auth::user()->url }}">Profile</a></li>
  <li><a href="https://magiispecies.com/characters">My Magii</a></li>
  <li><a href="https://magiispecies.com/inventory">Inventory</a></li>
- <li><a href="https://magiispecies.com/bank">Bank</a></li>
+ <li><a href="https://magiispecies.com/bank">Bank</a></li></h6>
 </ul>
 </div>
 
@@ -27,10 +27,10 @@
  <h2>Info</h2>
 <ul>
  <img src="../files/info.png" class="img-fluid">
- <li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
+ <h5><li><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
  <li><a href="https://magiispecies.com/characters">Species Info</a></li>
  <li><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
- <li><a href="{{ url('faq') }}">FAQ</a></li>
+ <li><a href="{{ url('faq') }}">FAQ</a></li></h5>
 </ul>
 </div>
 
