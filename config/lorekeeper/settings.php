@@ -181,7 +181,7 @@ return [
     */
     'store_masterlist_fullsizes'                        => 0,
     'masterlist_fullsizes_cap'                          => 0,
-    'masterlist_fullsizes_format'                       => '.webp',
+    'masterlist_fullsizes_format'                       => '.webP',
 
     /*
     |--------------------------------------------------------------------------
