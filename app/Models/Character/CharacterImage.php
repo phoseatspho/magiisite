@@ -2,6 +2,8 @@
 
 namespace App\Models\Character;
 
+use App\Models\Feature\FeatureCategory;
+use DB;
 use App\Models\Model;
 use App\Models\Rarity;
 use App\Models\Species\Species;
