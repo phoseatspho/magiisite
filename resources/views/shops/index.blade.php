@@ -17,8 +17,6 @@
         @if(auth::check() && auth::user()->isstaff)
             @include('shops._shop')
         @endif
-        @else
-                @include('shops._shop')
             @endif
             <div class="col-md-3 col-6 mb-3 text-center">
                 @if ($shop->has_image)
