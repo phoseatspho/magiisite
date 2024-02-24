@@ -159,7 +159,7 @@ return [
     'masterlist_image_dimension'                        => 0,
     'masterlist_image_dimension_target'                 => 'shorter',
 
-    'masterlist_image_format'                           => '.webp',
+    'masterlist_image_format'                           => 'webp',
     'masterlist_image_background'                       => '#ffffff',
 
     /*
@@ -181,7 +181,7 @@ return [
     */
     'store_masterlist_fullsizes'                        => 0,
     'masterlist_fullsizes_cap'                          => 0,
-    'masterlist_fullsizes_format'                       => '.webp',
+    'masterlist_fullsizes_format'                       => 'webp',
 
     /*
     |--------------------------------------------------------------------------
@@ -280,7 +280,7 @@ return [
     |
     */
     'gallery_images_cap'    => 0,
-    'gallery_images_format' => '.webp',
+    'gallery_images_format' => 'webp',
 
     /*
     |--------------------------------------------------------------------------
