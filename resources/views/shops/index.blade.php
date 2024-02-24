@@ -27,6 +27,7 @@
                     <a href="{{ $shop->url }}" class="h5 mb-0">{{ $shop->name }}</a>
                 </div>
             </div>
+            @endif
         @endforeach
     </div>
 @endsection
