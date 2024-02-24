@@ -17,6 +17,9 @@
         @if(auth::check() && auth::user()->isstaff)
             @include('shops._shop')
         @endif
+        @else
+                @include('shops._shop')
+            @endif
             <div class="col-md-3 col-6 mb-3 text-center">
                 @if ($shop->has_image)
                     <div class="shop-image">
@@ -27,7 +30,7 @@
                     <a href="{{ $shop->url }}" class="h5 mb-0">{{ $shop->name }}</a>
                 </div>
             </div>
-            @endif
+        
         @endforeach
     </div>
 @endsection
