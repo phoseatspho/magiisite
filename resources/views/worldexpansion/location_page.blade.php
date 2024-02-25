@@ -20,6 +20,8 @@
 @endif
 
 
+BLAHAHASBBASHAHA
+
 @if($location->image_extension)
     <div class="text-center"><img src="{{$location->imageUrl}}" class="mw-100"/></div>
 @endif
