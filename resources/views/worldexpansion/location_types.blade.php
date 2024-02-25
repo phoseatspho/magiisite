@@ -6,7 +6,8 @@
 {!! breadcrumbs(['World' => 'world', 'Arcadia' => 'world/location-types']) !!}
 <h1>Arcadia</h1>
 <br>
-<div align="center"><img src="../files/arcadia.webp" class="img-fluid"></div>
+<div align="center"><img src="../files/arcadia.webp" class="img-fluid">
+In this World, elemental essence circulates and converges to form 9 distinctive realms with unique civilisations and ideals driven by their respective Gods.</div>
 <hr>
 
 <div>
