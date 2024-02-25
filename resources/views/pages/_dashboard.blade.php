@@ -27,9 +27,8 @@
  <h2>Info</h2>
 <ul>
  <img src="../files/info.png" class="img-fluid">
- <li style="font-size:17px"><a href="https://magiispecies.com/profile">Beginner Guide</a></li>
+ <li style="font-size:17px"><a href="https://www.magiispecies.com/info/guide">Beginner Guide</a></li>
  <li style="font-size:17px"><a href="https://magiispecies.com/characters">Species Info</a></li>
- <li style="font-size:17px"><a href="https://magiispecies.com/inventory">Origin Lore</a></li>
  <li style="font-size:17px"><a href="{{ url('faq') }}">FAQ</a></li>
 </ul>
 </div>
@@ -51,7 +50,7 @@
   <img src="../files/explore.png" class="img-fluid">
   <li style="font-size:17px"><a href="https://www.magiispecies.com/world/info">Arcadia</a></li>
  <li style="font-size:17px"><a href="https://magiispecies.com/characters">Story</a></li>
- <li style="font-size:17px"><a href="https://www.magiispecies.com/world/figure-categories">NPCs</a></li>
+ <li style="font-size:17px"><a href="https://www.magiispecies.com/sublist/NPCs">NPCs</a></li>
  <li style="font-size:17px"><a href="https://www.magiispecies.com/shops">Shop</a></li>
 </ul>
 </div>

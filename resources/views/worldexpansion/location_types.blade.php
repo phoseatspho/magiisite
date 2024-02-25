@@ -3,8 +3,11 @@
 @section('title') Location Types @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', 'Location Types' => 'world/location-types']) !!}
-<h1>Location Types</h1>
+{!! breadcrumbs(['World' => 'world', 'Arcadia' => 'world/location-types']) !!}
+<h1>Arcadia</h1>
+<br>
+<div align="center"><img src="../files/arcadia.webp" class="img-fluid"></div>
+<hr>
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => 'form-inline justify-content-end']) !!}
