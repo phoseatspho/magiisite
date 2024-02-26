@@ -67,6 +67,8 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('admin_user', 1, 'ID of the site\'s admin user.');
 
         $this->addSiteSetting('gallery_submissions_open', 1, '0: Gallery submissions closed, 1: Gallery submissions open.');
+        
+        $this->addSiteSetting('gallery_rewards_divided', 1, '0: Gallery criteria rewards will be rewarded to each collaborator, 1: Gallery criteria rewards will be divided between collaborators.');
 
         $this->addSiteSetting('gallery_submissions_require_approval', 1, '0: Gallery submissions do not require approval, 1: Gallery submissions require approval.');
 
@@ -75,6 +77,7 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('group_currency', 1, 'ID of the group currency to award from gallery submissions (if enabled).');
 
         $this->addSiteSetting('is_maintenance_mode', 0, '0: Site is normal, 1: Users without the Has Maintenance Access power will be redirected to the home page.');
+        $this->line("\nSite settings up to date!");
 
         $this->addSiteSetting('deactivated_privacy', 0, 'Who can view the deactivated list? 0: Admin only, 1: Staff only, 2: Members only, 3: Public.');
 

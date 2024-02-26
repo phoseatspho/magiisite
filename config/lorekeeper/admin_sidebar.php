@@ -357,6 +357,10 @@ return [
                 'name' => 'Library',
                 'url' => 'admin/data/volumes'
             ],
+            [
+                'name' => 'Criteria Rewards',
+                'url' => 'admin/data/criteria'
+            ]
         ]
     ],
     'Raffles'    => [
