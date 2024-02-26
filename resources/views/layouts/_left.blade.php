@@ -63,6 +63,7 @@
                     <li><a href="{{ url('masterlist') }}">Masterlist</a></li>
                     <li><a href="{{ url('/') }}">Events</a></li>
                     <li><a href="https://discord.gg/magiispecies">Discord</a></li>
+                    <li><a href="{{ url('users') }}">Users</a></li>
                 </ul>
             </div>
 
