@@ -30,7 +30,7 @@
             <div class="collapse" aria-labelledby="headingCurrencies" data-parent="#accordion" id="collapseCurrencies">
                 @foreach(Auth::user()->getCurrencies(true) as $currency)
                     <div class="sidebar-item pr-3">
-                        {!! $currency->display($currency->quantity) !!}
+                    &nbsp;{!! $currency->display($currency->quantity) !!}
                     </div>
                 @endforeach
             </div>
