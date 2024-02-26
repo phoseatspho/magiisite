@@ -141,7 +141,7 @@
         </div>
         </div>
 
-<div class="card-deck mb-4 profile-assets">
+ <div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Pets</h5>
@@ -184,7 +184,7 @@
             <div class="text-right"><a href="{{ $user->url.'/armoury' }}">View all...</a></div>
         </div>
     </div>
-</div>
+
 
 
     @if (!$user->is_deactivated || (Auth::check() && Auth::user()->isStaff))
