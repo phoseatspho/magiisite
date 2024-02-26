@@ -37,10 +37,10 @@
 
 <div class="mb-4">
     <div class="row">
-        <div class="row col-md-6">
+        
             <div class="col-md-4 col-4"><h5>Alias</h5></div>
             <div class="col-md-8 col-8">{!! $user->displayAlias !!}</div>
-        </div>
+        
         <div class="row col-md-6">
             <div class="col-md-4 col-4"><h5>Joined</h5></div>
             <div class="col-md-8 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
