@@ -77,7 +77,7 @@
             @endif
         </div>
     </div>
-</div>
+
 
     @if ($user->is_deactivated)
         <div class="alert alert-info text-center">
