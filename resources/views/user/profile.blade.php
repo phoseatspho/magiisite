@@ -34,50 +34,40 @@
     <span class="badge badge-info float-right text-white mx-1" data-toggle="tooltip" title="Current user level. Checkout the level area for more info.">Lvl: {{ $user->level->current_level }}</span>
 </h1>
 
-
-  <!-- User Information -->
-  <div class="row no-gutters">
-            <div class="row col-sm-5">
-                <div class="col-lg-2 col-md-3 col-4">
-                    <h5>Alias</h5>
-                </div>
-                <div class="col-lg-10 col-md-9 col-8">
-                    {!! $user->displayAlias !!}
-                    @if (count($aliases) > 1 && config('lorekeeper.extensions.aliases_on_userpage'))
-                        <a class="small collapse-toggle collapsed" href="#otherUserAliases" data-toggle="collapse">&nbsp;</a>
-                        <p class="collapse mb-0" id="otherUserAliases">
-                            @foreach ($aliases as $alias)
-                                @if ($alias != $user->primaryAlias)
-                                    <a href="{{ $alias->url }}"><i class="{{ $alias->config['icon'] }} fa-fw mr-1" data-toggle="tooltip" title="{{ $alias->alias . '@' . $alias->siteDisplayName }}"></i></a>
-                                @endif
-                            @endforeach
-                        </p>
-                    @endif
-                </div>
-            </div>
-            <div class="row col-sm-7">
-                <div class="col-md-3 col-4">
-                    <h5>Joined</h5>
-                </div>
-                <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
-            </div>
-            <div class="row col-sm-5">
-                <div class="col-lg-2 col-md-3 col-4">
-                    <h5>Rank</h5>
-                </div>
-                <div class="col-lg-10 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
-            </div>
-            @if ($user->birthdayDisplay && isset($user->birthday))
-                <div class="row col-sm-7">
-                    <div class="col-md-3 col-4">
-                        <h5>Birthday</h5>
-                    </div>
-                    <div class="col-md-9 col-8">{!! $user->birthdayDisplay !!}</div>
-                </div>
-            @endif
+<div class="mb-4">
+    <div class="row">
+        <div class="row col-md-6">
+            <div class="col-md-4 col-4"><h5>Alias</h5></div>
+            <div class="col-md-8 col-8">{!! $user->displayAlias !!}</div>
         </div>
+        <div class="row col-md-6">
+            <div class="col-md-4 col-4"><h5>Joined</h5></div>
+            <div class="col-md-8 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
+        </div>
+        <div class="row col-md-6">
+            <div class="col-md-4 col-4"><h5>Rank</h5></div>
+            <div class="col-md-8 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
+        </div>
+        @if($user->birthdayDisplay && isset($user->birthday))
+            <div class="row col-md-6">
+                <div class="col-md-4 col-4"><h5>Birthday</h5></div>
+                <div class="col-md-8 col-8">{!! $user->birthdayDisplay !!}</div>
+            </div>
+        @endif
+        @if($user_enabled && isset($user->home_id))
+            <div class="row col-md-6">
+                <div class="col-md-4 col-4"><h5>Home</h5></div>
+                <div class="col-md-8 col-8">{!! $user->home ? $user->home->fullDisplayName : '-Deleted Location-' !!}</div>
+            </div>
+        @endif
+        @if($user_factions_enabled && isset($user->faction_id))
+            <div class="row col-md-6">
+                <div class="col-md-4 col-4"><h5>Faction</h5></div>
+                <div class="col-md-8 col-8">{!! $user->faction ? $user->faction->fullDisplayName : '-Deleted Faction-' !!}{!! $user->factionRank ? ' ('.$user->factionRank->name.')' : null !!}</div>
+            </div>
+        @endif
     </div>
-
+</div>
 
     @if ($user->is_deactivated)
         <div class="alert alert-info text-center">
