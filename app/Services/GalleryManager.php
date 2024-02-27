@@ -9,6 +9,7 @@ use App\Facades\Notifications;
 use App\Facades\Settings;
 use App\Models\Character\Character;
 use App\Models\Currency\Currency;
+use App\Models\Criteria\Criterion;
 use App\Models\Gallery\Gallery;
 use App\Models\Gallery\GalleryCharacter;
 use App\Models\Gallery\GalleryCollaborator;
@@ -116,7 +117,7 @@ class GalleryManager extends Service {
             if(count($withCriteriaSelected) > 0) $currencyFormData['criterion'] = $withCriteriaSelected;
             else $currencyFormData['criterion'] = null;
             
-            if(isset($currencyFormData) && $currencyFormData && isset($currencyFormData['criterion'])) {
+            if (isset($currencyFormData) && $currencyFormData && isset($currencyFormData['criterion'])) {
                 $data['data']['criterion'] = $currencyFormData['criterion'];
                 $total = 0;
                 foreach($currencyFormData['criterion'] as $criteria) {
@@ -132,7 +133,6 @@ class GalleryManager extends Service {
             if (isset($data['image']) && $data['image']) {
                 $this->processImage($data, $submission);
             }
-            $submission->update();
 
             if (isset($data['collaborator_id']) && $collaborators->count()) {
                 // Attach any collaborators to the submission
@@ -605,7 +605,7 @@ class GalleryManager extends Service {
                 
                 $shouldDivideRewards = Settings::get('gallery_rewards_divided') === '1';
 
-                if(isset($data['criterion'])) {
+                if (isset($data['criterion'])) {
                     foreach($data['criterion'] as $criterionData) {
                         $criterion = Criterion::where('id', $criterionData['id'])->first();
                         $total = $criterion->calculateReward($criterionData);
@@ -634,19 +634,17 @@ class GalleryManager extends Service {
                     }
                 }
 
-                if (isset($data['value']['participant'])) {
-                    foreach ($submission->participants as $participant) {
-                        if ($data['value']['participant'][$participant->user->id] > 0) {
-                            if (!$currencyManager->creditCurrency($user, $participant->user, $awardType, $awardData, $currency, $data['value']['participant'][$participant->user->id])) {
-                                throw new \Exception('Failed to award currency to one or more participants.');
-                            }
+                // TODO:
+                // if(isset($data['value']['participant'])) {
+                //     foreach($submission->participants as $participant) {
+                //         if($data['value']['participant'][$participant->user->id] > 0) {
+                //             if(!$currencyManager->creditCurrency($user, $participant->user, $awardType, $awardData, $currency, $data['value']['participant'][$participant->user->id])) throw new \Exception("Failed to award currency to one or more participants.");
 
-                             $grantedList[] = $participant->user;
-                             $awardQuantity[] = $data['value']['participant'][$participant->user->id];
-                         }
-                     }
-                 }
-
+                //             $grantedList[] = $participant->user;
+                //             $awardQuantity[] = $data['value']['participant'][$participant->user->id];
+                //         }
+                //     }
+                // }
                 // Collect and json encode existing as well as new data for storage
                 if (isset($submission->data['total'])) {
                     $valueData = collect([
@@ -675,20 +673,19 @@ class GalleryManager extends Service {
                 foreach ($grantedList as $key=> $grantedUser) {
                     Notifications::create('GALLERY_SUBMISSION_VALUED', $grantedUser, [
                         'currency_quantity' => $awardQuantity[$key],
-                        'currency_name'     => $currency->name,
+                        'currency_name'     => $currency[$key]->name,
                         'submission_title'  => $submission->title,
                         'submission_id'     => $submission->id,
                     ]);
                 }
             } else {
                 // Collect and json encode existing as well as new data for storage
-                if (isset($submission->data['total'])) {
+                if(isset($submission->data['total'])) {
                     $valueData = collect([
                         'criterion' => isset($submission->data['criterion']) ? $submission->data['criterion'] : null,
-                        'currencyData' => $submission->data['currencyData'],
-                        'total'        => $submission->data['total'],
-                        'ineligible'   => 1,
-                        'staff'        => $user->id,
+                        'total' => $submission->data['total'],
+                        'ineligible' => 1,
+                        'staff' => $user->id,
                     ])->toJson();
                 } else {
                     $valueData = collect(['ineligible' => 1, 'staff' => $user->id])->toJson();
@@ -943,3 +940,4 @@ class GalleryManager extends Service {
         return $this->rollbackReturn(false);
     }
 }
+

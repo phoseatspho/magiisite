@@ -94,6 +94,12 @@ class SubmissionManager extends Service {
                 }
             }
 
+            $withCriteriaSelected = isset($data['criterion']) ? array_filter($data['criterion'], function($obj){
+                return isset($obj['id']);
+            }) : [];
+            if(count($withCriteriaSelected) > 0) $data['criterion'] = $withCriteriaSelected;
+            else $data['criterion'] = null;
+
             // Create the submission itself.
             $promptRewards = mergeAssetsArrays($promptRewards, $this->processRewards($data, false));
             
@@ -189,6 +195,7 @@ class SubmissionManager extends Service {
                 'data'          => json_encode([
                     'user'          => Arr::only(getDataReadyAssets($userAssets), ['user_items', 'currencies']),
                     'rewards'       => getDataReadyAssets($promptRewards),
+                    'criterion'     => isset($data['criterion']) ? $data['criterion'] : null,
                 ]), // list of rewards and addons
             ] + ($isClaim ? [] : ['prompt_id' => $prompt->id]));
 
@@ -618,7 +625,7 @@ class SubmissionManager extends Service {
                     'skills' => $skills ?? null,
                     'criterion' => isset($data['criterion']) ? $data['criterion'] : null,
                     ]), // list of rewards
-                'bonus' => isset($bonus) ? $bonus : null,
+                
             ]);
 
             Notifications::create($submission->prompt_id ? 'SUBMISSION_APPROVED' : 'CLAIM_APPROVED', $submission->user, [

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GalleryController extends Controller {
+
     /*
     |--------------------------------------------------------------------------
     | Admin / Gallery Controller
@@ -39,7 +40,7 @@ class GalleryController extends Controller {
         return view('admin.galleries.create_edit_gallery', [
             'gallery'   => new Gallery,
             'galleries' => Gallery::sort()->pluck('name', 'id'),
-            'criteria' => Criterion::active()->orderBy('name')->pluck('name', 'id'),
+            'criteria'  => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -59,7 +60,7 @@ class GalleryController extends Controller {
         return view('admin.galleries.create_edit_gallery', [
             'gallery'   => $gallery,
             'galleries' => Gallery::sort()->pluck('name', 'id')->forget($id),
-            'criteria' => Criterion::active()->orderBy('name')->pluck('name', 'id'),
+            'criteria'  => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 

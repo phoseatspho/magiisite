@@ -11,6 +11,7 @@ use Config;
 
 
 use App\Models\Gallery\Gallery;
+use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Prompt\Prompt;
 use App\Models\WorldExpansion\Location;
@@ -253,12 +254,12 @@ class GalleryController extends Controller {
         }
 
         return view('galleries.submission_log', [
-            'submission'  => $submission,
-            'currency'    => Currency::find(Settings::get('group_currency')),
-            'galleryPage' => true,
-            'sideGallery' => $submission->gallery,
-            'totals' => $totals,
-            'collaboratorsCount' => $submission->collaborators->count() + ($submission->collaborators->where('user_id', $submission->user_id)->first() === null ? 1 : 0),
+'submission'         => $submission,
+// 'currency'    => Currency::find(Settings::get('group_currency')),
+'galleryPage'        => true,
+'sideGallery'        => $submission->gallery,
+'totals'             => $totals,
+'collaboratorsCount' => $submission->collaborators->count() + ($submission->collaborators->where('user_id', $submission->user_id)->first() === null ? 1 : 0),
          ]);
     } 
             /**
@@ -333,7 +334,7 @@ class GalleryController extends Controller {
             'prompts'     => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),
             'locations'   => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
             'users'       => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'currency'    => Currency::find(Settings::get('group_currency')),
+            // 'currency'    => Currency::find(Settings::get('group_currency')),
             'galleryPage' => true,
             'sideGallery' => $gallery,
             'criteria' => Criterion::active()->whereIn('id', $galleryCriteria)->orderBy('name')->pluck('name', 'id'),
@@ -372,10 +373,10 @@ class GalleryController extends Controller {
             'locations'      => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
             'submission'     => $submission,
             'users'          => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'currency'       => Currency::find(Settings::get('group_currency')),
+            // 'currency'       => Currency::find(Settings::get('group_currency')),
             'galleryPage'    => true,
             'sideGallery'    => $submission->gallery,
-            'criteria' => Criterion::active()->whereIn('id', $galleryCriteria)->orderBy('name')->pluck('name', 'id'),
+            'criteria'        => Criterion::active()->whereIn('id', $galleryCriteria)->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -419,10 +420,11 @@ class GalleryController extends Controller {
      */
     public function postCreateEditGallerySubmission(Request $request, GalleryManager $service, $id = null) {
         $id ? $request->validate(GallerySubmission::$updateRules) : $request->validate(GallerySubmission::$createRules);
-        $data = $request->only(['image', 'text', 'title', 'description', 'slug', 'collaborator_id', 'collaborator_data', 'participant_id', 'participant_type', 'gallery_id', 'alert_user', 'prompt_id', 'location_id', 'content_warning']);
+        $data = $request->only(['image', 'text', 'title', 'description', 'slug', 'collaborator_id', 'collaborator_data', 'participant_id', 'participant_type', 'gallery_id', 'alert_user', 'prompt_id', 'location_id', 'content_warning', 'criterion', 'criterion_id']);
 
         if (!$id && Settings::get('gallery_submissions_reward_currency')) {
-            $currencyFormData = $request->only(collect(config('lorekeeper.group_currency_form'))->keys()->toArray());
+            // $currencyFormData = $request->only(collect(config('lorekeeper.group_currency_form'))->keys()->toArray());
+            $currencyFormData = $request->only(['criterion']);
         } else {
 
             

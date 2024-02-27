@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
+use App\Models\Criteria\Criterion;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
 use App\Services\PromptService;
@@ -20,7 +21,6 @@ use App\Models\Recipe\Recipe;
 use App\Models\Element\Element;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 class PromptController extends Controller {
     /*
     |--------------------------------------------------------------------------

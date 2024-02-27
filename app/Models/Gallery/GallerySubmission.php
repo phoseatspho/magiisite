@@ -379,8 +379,6 @@ class GallerySubmission extends Model {
      * @return string
      */
     public function getPrefixAttribute() {
-        $currencyName = Currency::find(Settings::get('group_currency'))->abbreviation ? Currency::find(Settings::get('group_currency'))->abbreviation : Currency::find(Settings::get('group_currency'))->name;
-
         $prefixList = [];
         if ($this->promptSubmissions->count()) {
             foreach ($this->prompts as $prompt) {
