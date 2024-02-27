@@ -10,7 +10,6 @@ use App\Models\Character\CharacterTransfer;
 use App\Models\Currency\Currency;
 use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
-use App\Models\Gallery\GalleryCriterion;
 use App\Models\Report\Report;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
