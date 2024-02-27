@@ -17,7 +17,6 @@ use App\Models\Prompt\Prompt;
 use App\Models\WorldExpansion\Location;
 use App\Models\User\User;
 
-use App\Models\Gallery\GalleryCriterion;
 use App\Services\GalleryManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

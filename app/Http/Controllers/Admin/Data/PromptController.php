@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
-use App\Models\Criteria\Criterion;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
 use App\Services\PromptService;
