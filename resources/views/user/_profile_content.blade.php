@@ -136,12 +136,13 @@
                 @endif
             </div>
             <div class="text-right"><a href="{{ $user->url.'/'.__('awards.awardcase') }}">View all...</a></div>
-        </div>
-    </div>
+      </div>
+    
+</div>
 
 <div class="card-deck mb-4 profile-assets" style="clear:both;">
     <div class="card profile-inventory profile-assets-card">
-    <div class="card-body text-center">
+        <div class="card-body text-center">
             <h5 class="card-title">Completed Collections</h5>
             <div class="profile-assets-content">
                 @if(count($collections))
@@ -162,10 +163,10 @@
             </div>
             <div class="text-right"><a href="{{ $user->url.'/collection-logs' }}">View all...</a></div>
         </div>
-        </div>
-        </div>
+    </div>
+</div>
 
- <div class="card-deck mb-4 profile-assets">
+<div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Pets</h5>
@@ -185,7 +186,9 @@
             <div class="text-right"><a href="{{ $user->url.'/pets' }}">View all...</a></div>
         </div>
     </div>
-    <div class="card profile-inventory profile-assets-card">
+</div>
+
+<div class="card profile-inventory profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Armoury</h5>
             <div class="card-body">
@@ -207,9 +210,9 @@
             </div>
             <div class="text-right"><a href="{{ $user->url.'/armoury' }}">View all...</a></div>
         </div>
-    </div>
+</div>
 
-    <h2>
+<h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
     @if (isset($sublists) && $sublists->count() > 0)
         @foreach ($sublists as $sublist)
