@@ -28,7 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use config;
 use App\Models\Criteria\Criterion;
-use App\Models\Prompt\PromptCriterion;
+
 
 
 
