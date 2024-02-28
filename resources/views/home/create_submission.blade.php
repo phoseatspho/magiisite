@@ -25,22 +25,6 @@
         </div>
     @else
 @include('home._submission_form', ['submission' => $submission, 'criteria' => $criteria, 'isClaim' => $isClaim])
-
-
-    
-    
-    <div id="copy-calc" class="card p-3 mb-2 pl-0 hide">
-    @if(isset($criteria))
-        @include('criteria._criterion_selector', ['criteria' => $criteria])
-    @endif
-    </div>
-    @include('widgets._character_select', ['characterCurrencies' => $characterCurrencies, 'showLootTables' => false])
-    @if($isClaim)
-        @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'showLootTables' => false, 'showRaffles' => true])
-    @else
-        @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'showLootTables' => false, 'showRaffles' => false])
-    @endif
-
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
 
