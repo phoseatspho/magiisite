@@ -26,20 +26,7 @@
     @else
 @include('home._submission_form', ['submission' => $submission, 'criteria' => $criteria, 'isClaim' => $isClaim])
 
-        @if(!$isClaim)
-        <div id="criterion-section" class="{{ Request::get('prompt_id') ? '' : 'hide' }}">
-            <h2 class="mt-5">Criteria Rewards bing bing <button class="btn  btn-outline-info float-right add-calc" type="button">Add Criterion</a></h2>
-            <p>Criteria can be used in addition to or in replacement of rewards. They take input on what you are turning in for the prompt in order to calculate your final reward.</p>
-            <p>Criteria may populate in with pre-selected minimum requirements for this prompt. </p>
-            <div id="criteria"></div>
-            <div class="mb-4"></div>
-        </div>
-        @endif
 
-        <div class="text-right">
-            <a href="#" class="btn btn-primary" id="submitButton">Submit</a>
-        </div>
-    {!! Form::close() !!}
     
     
     <div id="copy-calc" class="card p-3 mb-2 pl-0 hide">
