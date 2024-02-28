@@ -28,7 +28,7 @@
 
         @if(!$isClaim)
         <div id="criterion-section" class="{{ Request::get('prompt_id') ? '' : 'hide' }}">
-            <h2 class="mt-5">Criteria Rewards <button class="btn  btn-outline-info float-right add-calc" type="button">Add Criterion</a></h2>
+            <h2 class="mt-5">Criteria Rewards bing bing <button class="btn  btn-outline-info float-right add-calc" type="button">Add Criterion</a></h2>
             <p>Criteria can be used in addition to or in replacement of rewards. They take input on what you are turning in for the prompt in order to calculate your final reward.</p>
             <p>Criteria may populate in with pre-selected minimum requirements for this prompt. </p>
             <div id="criteria"></div>

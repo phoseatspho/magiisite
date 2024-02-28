@@ -71,7 +71,7 @@
 
 @if(isset($submission->data['criterion']))
     <div class="card mb-3">
-        <div class="card-header h2">Criteria Rewards test wawa</div>
+        <div class="card-header h2">Criteria Rewards</div>
         <div class="card-body">
             @foreach($submission->data['criterion'] as $criterionData)
                 <div class="card p-3 mb-2">
@@ -124,7 +124,7 @@
 <hr>
 
 @if(isset($submission->data['criterion']))
-<h2 class="mt-5">Criteria Rewards boop</h2>
+<h2 class="mt-5">Criteria Rewards</h2>
 @foreach($submission->data['criterion'] as $criterionData)
     <div class="card p-3 mb-2">
     @php $criterion = \App\Models\Criteria\Criterion::where('id', $criterionData['id'])->first() @endphp
