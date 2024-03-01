@@ -100,9 +100,7 @@ class SubmissionManager extends Service {
             if(count($withCriteriaSelected) > 0) $data['criterion'] = $withCriteriaSelected;
             else $data['criterion'] = null;
 
-            // Create the submission itself.
-            $promptRewards = mergeAssetsArrays($promptRewards, $this->processRewards($data, false));
-            
+            // Create the submission itself.    
             $submission = Submission::create([
                 'user_id'   => $user->id,
                 'url'       => $data['url'] ?? null,
