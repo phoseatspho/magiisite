@@ -2753,7 +2753,7 @@ a.text-dark:focus {
 
 /* LAYOUT */
 #app {
-  background-image: url("../files/bg.png"), linear-gradient(to bottom, #113b96, #3777be, #4a92ca, #8cdae5);
+  background-image: url("../files/bg.png"), linear-gradient(to bottom, #1a4ab0, #3777be, #4a92ca, #8cdae5);
   color: #245fbc;
   font-family: "Niramit", serif;
 }
