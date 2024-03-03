@@ -114,12 +114,12 @@
         @if(Request::is('/'))
             <hr>
             <div class="my-3 px-3">
-                <a class="btn btn-primary my-1" href="{{ url('/') }}">
-                    Button 1
+                <a class="btn btn-primary my-1" href="https://www.magiispecies.com/info/guide">
+                    Beginner Guide
                 </a>
 
-                <a class="btn btn-primary my-1" href="{{ url('/') }}">
-                    Button 2
+                <a class="btn btn-primary my-1" href="https://www.magiispecies.com/faq">
+                    FAQ
                 </a>
             </div>
         @endif
