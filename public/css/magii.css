@@ -573,6 +573,10 @@ select.form-control:focus::-ms-value {
   opacity: 0.65;
 }
 
+.btn-faded {
+  background-color: #215fbc9c!important; 
+}
+
 .btn-primary {
   background-color: #245fbc;
   border-color: #245fbc;
