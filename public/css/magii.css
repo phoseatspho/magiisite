@@ -650,8 +650,8 @@ select.form-control:focus::-ms-value {
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show > .btn-secondary.dropdown-toggle {
   color: #fbfbfd;
-  background-color: #8584c0;
-  border-color: #8584c0;
+  background-color: #235fbc;
+  border-color: #235fbc;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active:focus,
