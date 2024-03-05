@@ -2287,6 +2287,9 @@ button.bg-light:focus {
 }
 
 .bg-dark {
+  background-image: url("..files/navbg.png")!important;
+  background-size: contain!important;
+  background-repeat: repeat;
   background-color: #3e3c4b !important;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -2772,10 +2775,11 @@ a.text-dark:focus {
 
 #headerNav {
   background-image: url("..files/navbg.png")!important;
-  background-color: #194479 !important;
   background-size: contain!important;
   background-repeat: repeat;
+  background-color: #194479 !important;
 }
+
 #headerNav .navbar-brand {
   color: #d2edf8;
   font-family: "Niramit", serif;
