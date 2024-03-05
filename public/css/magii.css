@@ -2779,7 +2779,7 @@ a.text-dark:focus {
   background-color: #194479 !important;
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1280px) {
   #headerNav {
   background-image: url("../files/navbg.png")!important;
   background-size: cover!important;
