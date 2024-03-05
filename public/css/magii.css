@@ -2761,7 +2761,7 @@ a.text-dark:focus {
 
 /* LAYOUT */
 #app {
-  background-image: url("../files/bg.png"), linear-gradient(to bottom, #2f65d6, #3777be, #4a92ca, #8cdae5);
+  background-image: url("../files/pbg.png"), linear-gradient(to bottom, #2f65d6, #3777be, #4a92ca, #8cdae5);
   background-size:contain!important;
   background-repeat: repeat;
   color: #245fbc;
@@ -2776,7 +2776,7 @@ a.text-dark:focus {
 }
 
 #headerNav {
-  background-image: url("../files/navbg.png")!important;
+  background-image: url("..files/navbg.png")!important;
   background-size: cover!important;
   background-repeat: no-repeat;
   background-color: #194479 !important;
