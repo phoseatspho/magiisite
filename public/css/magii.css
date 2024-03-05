@@ -2783,6 +2783,7 @@ a.text-dark:focus {
 }
 
 #headerNav .navbar-brand {
+  background-image: url("../files/logo.png")!important;
   color: #d2edf8;
   font-family: "Niramit", serif;
   text-transform: none;
