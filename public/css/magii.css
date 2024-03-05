@@ -2794,7 +2794,7 @@ a.text-dark:focus {
 .main-content {
   background-image: url("../files/bgoverlay.png");
   background-size:contain;
-  background-repeat: no-repeat;
+  background-repeat:repeat;
   background-color: #d2edf8;
   box-shadow: none;
   border-radius: 15px;
