@@ -2761,7 +2761,7 @@ a.text-dark:focus {
 
 /* LAYOUT */
 #app {
-  background-image: url("../files/pbg.png"), linear-gradient(to bottom, #2459c9, #3777be, #4a92ca, #8cdae5);
+  background-image: url("../files/pbg.png"), linear-gradient(to bottom, #246ebf, #3777be, #4a92ca, #8cdae5);
   background-size:contain!important;
   background-repeat: repeat;
   color: #245fbc;
