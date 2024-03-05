@@ -364,8 +364,8 @@ pre {
 }
 
 .form-control {
-  color: #3e3c4b;
-  background-color: #fbfbfd;
+  color: #033e99!important;
+  background-color: #ade9ff!important;
   border: 1px solid rgba(36, 95, 188, 0.55);
 }
 
@@ -2792,6 +2792,7 @@ a.text-dark:focus {
 }
 
 .main-content {
+  background-image: url("../files/bgoverlay.png");
   background-color: #d2edf8;
   box-shadow: none;
   border-radius: 15px;
