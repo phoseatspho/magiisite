@@ -2788,6 +2788,11 @@ a.text-dark:focus {
   font-family: "Niramit", serif;
   text-transform: none;
 }
+
+.navbar-brand img {
+  background-image: url("../files/logo.png")!important;
+}
+
 #headerNav .navbar-brand:hover {
   text-shadow: 0px 0px 0.5rem #00d7f6;
 }
