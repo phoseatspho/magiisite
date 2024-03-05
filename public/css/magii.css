@@ -2761,9 +2761,8 @@ a.text-dark:focus {
 
 /* LAYOUT */
 #app {
-  background-image: url("../files/pbg.png"), linear-gradient(to bottom, #2153bf, #3777be, #4a92ca, #8cdae5);
+  background-image: url("../files/pbg.png"), linear-gradient(to bottom, #2153bf, #3777be, #4a92ca, #8cdae5), position 0 300px;
   background-size:contain!important;
-  background-position: 0 250px;
   background-repeat: repeat;
   color: #245fbc;
   font-family: "Niramit", serif;
