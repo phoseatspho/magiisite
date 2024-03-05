@@ -2783,7 +2783,7 @@ a.text-dark:focus {
 }
 
 #headerNav .navbar-brand {
-  color: transparent;
+  color: #d2edf8;
   font-family: "Niramit", serif;
   text-transform: none;
 }
