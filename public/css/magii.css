@@ -2776,7 +2776,7 @@ a.text-dark:focus {
 #headerNav {
   background-image: url("../files/navbg.png")!important;
   background-size: contain!important;
-  background-repeat: repeat;
+  background-repeat: no-repeat;
   background-color: #194479 !important;
 }
 
