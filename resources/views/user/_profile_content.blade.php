@@ -22,6 +22,10 @@
 
  <!-- User Information -->
  <div class="row no-gutters">
+ <h5>Alias</h5> {!! $user->displayAlias !!}
+ <h5>Joined</h5> {!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})
+ <h5>Rank</h5> {!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}
+
             <div class="row col-sm-5">
                 <div class="col-lg-2 col-md-3 col-4">
                     <h5>Alias</h5>
