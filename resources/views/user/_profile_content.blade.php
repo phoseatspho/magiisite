@@ -33,13 +33,13 @@
 
             <div class="row col-sm-7">
                 <div class="col-md-3 col-4">
-                    <h5>Joined</h5>
+                    <h6>Joined</h6>
                 </div>
                 <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
             </div>
             <div class="row col-sm-5">
                 <div class="col-lg-2 col-md-3 col-4">
-                    <h5>Rank</h5>
+                    <h6>Rank</h6>
                 </div>
 
 <div class="col-lg-10 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
@@ -48,7 +48,7 @@
             @if ($user->birthdayDisplay && isset($user->birthday))
                 <div class="row col-sm-7">
                     <div class="col-md-3 col-4">
-                        <h5>Birthday</h5>
+                        <h6>Birthday</h6>
                     </div>
                     <div class="col-md-9 col-8">{!! $user->birthdayDisplay !!}</div>
                 </div>
