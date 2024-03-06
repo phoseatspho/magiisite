@@ -26,7 +26,7 @@
 
             <div class="row col-sm-5">
                 <div class="col-lg-2 col-md-3 col-4">
-                    <h5>Alias</h5>
+                    <h6>Alias</h6>
                 </div>
                 <div class="col-lg-10 col-md-9 col-8 pl-3">{!! $user->displayAlias !!}</div>
             </div>
