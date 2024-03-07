@@ -4,8 +4,6 @@
     Home
 @endsection
 
-test test hellooo
-
 @section('content')
     @if (Auth::check())
         @include('pages._dashboard')
@@ -14,7 +12,6 @@ test test hellooo
     @endif
 @endsection
 
-test hellooo
 
 @section('sidebar')
     @include('pages._sidebar')
