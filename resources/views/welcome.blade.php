@@ -16,3 +16,5 @@
 @section('sidebar')
     @include('pages._sidebar')
 @endsection
+
+@include('widgets._news', ['textPreview' => true])
