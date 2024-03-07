@@ -6,6 +6,7 @@
 
 
 @section('content')
+test test hello 
     @if (Auth::check())
         @include('pages._dashboard')
     @else
