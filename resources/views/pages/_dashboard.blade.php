@@ -9,8 +9,6 @@
  <br> 
  <br>
 
- @include('widgets._news', ['textPreview' => true])
-
  <div class="dashboardtext">
 <div class="row justify-content-center">
 <div class="col-6 col-md-3">
@@ -59,5 +57,5 @@
 </div> 
 </div>
 
-
+@include('widgets._news', ['textPreview' => true])
 @include('widgets._recent_gallery_submissions', ['gallerySubmissions' => $gallerySubmissions])

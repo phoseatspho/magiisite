@@ -3,6 +3,7 @@
 @section('title')
     Home
 @endsection
+@include('widgets._news', ['textPreview' => true])
 
 @section('content')
     @if (Auth::check())
