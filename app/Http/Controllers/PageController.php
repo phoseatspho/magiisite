@@ -29,7 +29,7 @@ class PageController extends Controller {
             abort(404);
         }
 
-        return view('pages.page', ['page' => $page
+        return view('pages.page', ['page' => $page,
         'newses'   => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),]);
     }
 
