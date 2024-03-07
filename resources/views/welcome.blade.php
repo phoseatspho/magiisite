@@ -11,7 +11,7 @@
     @else
         @include('pages._logged_out')
 
-        @include('widgets._news', ['textPreview' => true])
+       
 
     @endif
 @endsection
