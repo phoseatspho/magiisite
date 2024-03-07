@@ -2,8 +2,9 @@
 
 @section('title')
     Home
+    @include('widgets._news', ['textPreview' => true])
 @endsection
-@include('widgets._news', ['textPreview' => true])
+
 
 @section('content')
     @if (Auth::check())
