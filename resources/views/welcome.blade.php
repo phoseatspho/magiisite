@@ -2,7 +2,6 @@
 
 @section('title')
     Home
-    @include('widgets._news', ['textPreview' => true])
 @endsection
 
 
