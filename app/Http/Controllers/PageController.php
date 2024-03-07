@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SitePage;
 use Illuminate\Support\Facades\DB;
+use App\Models\News;
 
 class PageController extends Controller {
     /*
@@ -28,7 +29,8 @@ class PageController extends Controller {
             abort(404);
         }
 
-        return view('pages.page', ['page' => $page]);
+        return view('pages.page', ['page' => $page
+        'newses'   => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),]);
     }
 
     /**
