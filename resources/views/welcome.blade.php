@@ -10,8 +10,10 @@
         @include('pages._dashboard')
     @else
         @include('pages._logged_out')
+
+        @include('widgets._news', ['textPreview' => true])
+
     @endif
-    @include('widgets._news', ['textPreview' => true])
 @endsection
 
 
