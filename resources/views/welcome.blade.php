@@ -9,8 +9,8 @@
         @include('pages._dashboard')
     @else
         @include('pages._logged_out')
-        <p>test test hello</p>
-@include('widgets._news', ['textPreview' => true])
+        <div><p>test test hello</p>
+@include('widgets._news', ['textPreview' => true])</div>
     @endif
 @endsection
 
