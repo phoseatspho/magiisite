@@ -17,4 +17,5 @@
     @include('pages._sidebar')
 @endsection
 
+<p>test test hello</p>
 @include('widgets._news', ['textPreview' => true])
