@@ -9,6 +9,8 @@
         @include('pages._dashboard')
     @else
         @include('pages._logged_out')
+        <p>test test hello</p>
+@include('widgets._news', ['textPreview' => true])
     @endif
 @endsection
 
@@ -16,6 +18,3 @@
 @section('sidebar')
     @include('pages._sidebar')
 @endsection
-
-<p>test test hello</p>
-@include('widgets._news', ['textPreview' => true])
