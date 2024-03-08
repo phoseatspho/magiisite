@@ -1337,11 +1337,11 @@ class User extends Authenticatable implements MustVerifyEmail {
                    <!-- frame -->
                    <img src="' .
                    $this->border->imageUrl .
-                   '" style="position: absolute;width:125px; height:125px;"  alt="avatar frame">
+                   '" style="position: absolute;width:150px; height:150px;"  alt="avatar frame">
                    <!-- avatar -->
                    <img class="avatar" src="' .
                    $this->avatarUrl .
-                   '" style="position: absolute; border-radius:50%; width:125px; height:125px;" alt="' .
+                   '" style="position: absolute; border-radius:50%; width:150px; height:150px;" alt="' .
                    $this->name .
                    '">
                </div>';
