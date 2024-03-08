@@ -131,7 +131,7 @@
 
                 
 
-                @if ($image->character->pets as $pet)
+               
                 <div class="mb-1">
                     <div><h6>FAMILIARS</h6></div>
                         <div class="text-center row">
@@ -149,7 +149,7 @@
                         @endforeach
                    </div>
                 </div>
-@endif
+
                 <div class="mb-1">
                     <div><h6>EQUIPMENT</h6></div>
                         <div class="text-center row">
