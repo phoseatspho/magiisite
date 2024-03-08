@@ -188,6 +188,34 @@
             
             @endif
 
+            <div class="row mb-2">
+                    <div class="col-lg-4 col-md-6 col-4">
+                        <h6>DESIGN</h6>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-8">
+                        @foreach ($image->designers as $designer)
+                            <div>{!! $designer->displayLink() !!}</div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4">
+                        <h6>ART</h6>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-8">
+                        @foreach ($image->artists as $artist)
+                            <div>{!! $artist->displayLink() !!}</div>
+                        @endforeach
+                    </div>
+                </div>
+
+                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-info btn-sm edit-credits" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                    </div>
+                @endif
+            </div>
+
             {{-- Image notes --}}
             <div class="tab-pane fade" id="notes-{{ $image->id }}">
                 @if ($image->parsed_description)
