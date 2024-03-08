@@ -13,8 +13,7 @@
         <div class="row no-gutters">
             <div class="col h2 text-center text-md-left">
              
-            {!! $user->userBorder !!}
-            {!! $user->displayName !!}
+            {!! $user->userBorder !!}{!! $user->displayName !!}
                 <a href="{{ url('reports/new?url=') . $user->url }}"><i class="fas fa-exclamation-triangle fa-xs" data-toggle="tooltip" title="Click here to report this user." style="opacity: 50%; font-size:0.5em;"></i></a>
             </div>
             <div class="col-md-1 text-center">
