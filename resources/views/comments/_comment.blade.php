@@ -9,8 +9,8 @@
             {{-- Show avatar if not compact --}}
             @if (isset($compact) && !$compact)
                 <div class="d-none d-md-block">
-                    <img class="mr-3 mt-2" src=" {!!  $comment->commenter->userBorder !!}" style="width:70px; height:70px; border-radius:50%;" alt=" {!!  $comment->commenter->userBorder !!} Avatar">
-                   
+                    <img class="mr-3 mt-2" src="{{ $comment->commenter->avatarUrl }}" style="width:70px; height:70px; border-radius:50%;" alt="{{ $comment->commenter->name }} Avatar">
+                    
                 </div>
             @endif
 
