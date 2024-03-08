@@ -151,7 +151,7 @@
                 </div>
 @endif
 
-@if ($image->character->gear)
+@if ($image->character->gears)
                 <div class="mb-1">
                     <div><h6>EQUIPMENT</h6></div>
                         <div class="text-center row">
