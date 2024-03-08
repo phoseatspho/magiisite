@@ -150,6 +150,8 @@
                    </div>
                 </div>
 @endif
+
+@if ($image->character->gear)
                 <div class="mb-1">
                     <div><h6>EQUIPMENT</h6></div>
                         <div class="text-center row">
@@ -165,7 +167,9 @@
                         @endforeach
                         </div>
                 </div>
+                @endif
 
+                @if ($image->character->weapon)
                 <div class="mb-1">
                     <div><h6>WEAPONS</h6></div>
                         <div class="text-center row">
@@ -182,6 +186,7 @@
                         </div>
                 </div>
             </div>
+            @endif
 
             {{-- Image notes --}}
             <div class="tab-pane fade" id="notes-{{ $image->id }}">
