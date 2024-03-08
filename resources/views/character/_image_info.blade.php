@@ -37,7 +37,7 @@
             {{-- Basic info --}}
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
             <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><h5>Class</h5></div>
+                    <div class="col-lg-4 col-md-6 col-4"><h6>CLASS</h6></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->character->class_id ? $image->character->class->displayName : 'None' !!} 
                         @if(Auth::check())
                         @if(Auth::user()->isStaff || Auth::user()->id == $image->character->user_id && $image->character->class_id == null) 
@@ -48,7 +48,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Species</h5>
+                        <h6>SPECIES</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
                 </div>
@@ -86,7 +86,7 @@
                 @endif
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Rarity</h5>
+                        <h6>TYPE</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
@@ -111,7 +111,7 @@
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <h5>Typing</h5>
+                            <h6>ELEMENT</h6>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
                             <h5>{!! $type?->displayElements !!}</h5>
@@ -127,75 +127,13 @@
                     </div>
                 @endif
 
-                <div class="mb-3">
-                    <div>
-                        <h5>Traits</h5>
-                    </div>
-                    @if (config('lorekeeper.extensions.traits_by_category'))
-                        <div>
-                            @php
-                                $traitgroup = $image
-                                    ->features()
-                                    ->get()
-                                    ->groupBy('feature_category_id');
-                            @endphp
-                            @if ($image->features()->count())
-                                @foreach ($traitgroup as $key => $group)
-                                    <div class="mb-2">
-                                        @if ($key)
-                                            <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
-                                        @else
-                                            <strong>Miscellaneous:</strong>
-                                        @endif
-                                        @foreach ($group as $feature)
-                                            <div class="ml-md-2">{!! $feature->feature->displayName !!} @if ($feature->data)
-                                                    ({{ $feature->data }})
-                                                @endif
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                            @else
-                                <div>No traits listed.</div>
-                            @endif
-                        </div>
-                    @else
-                        <div>
-                            <?php $features = $image
-                                ->features()
-                                ->with('feature.category')
-                                ->get(); ?>
-                            @if ($features->count())
-                                @foreach ($features as $feature)
-                                    <div>
-                                        @if ($feature->feature->feature_category_id)
-                                            <strong>{!! $feature->feature->category->displayName !!}:</strong>
-                                            @endif {!! $feature->feature->displayName !!} @if ($feature->data)
-                                                ({{ $feature->data }})
-                                            @endif
-                                    </div>
-                                @endforeach
-                            @else
-                                <div>No traits listed.</div>
-                            @endif
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <strong>Uploaded:</strong> {!! pretty_date($image->created_at) !!}
-                </div>
-                <div>
-                    <strong>Last Edited:</strong> {!! pretty_date($image->updated_at) !!}
-                </div>
+                
 
-                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
-                    </div>
-                @endif
+                
 
+                @if ($image->character->pets as $pet)
                 <div class="mb-1">
-                    <div><h5>Pets</h5></div>
+                    <div><h6>FAMILIARS</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->pets as $pet)
                             <div class="ml-3 mr-3">
@@ -211,9 +149,9 @@
                         @endforeach
                    </div>
                 </div>
-
+@endif
                 <div class="mb-1">
-                    <div><h5>Gear</h5></div>
+                    <div><h6>EQUIPMENT</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->gear as $gear)
                             <div class="ml-3 mr-3">
@@ -229,7 +167,7 @@
                 </div>
 
                 <div class="mb-1">
-                    <div><h5>Weapons</h5></div>
+                    <div><h6>WEAPONS</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->weapons as $weapon)
                             <div class="ml-3 mr-3">
@@ -264,7 +202,7 @@
 
                 <div class="row mb-2">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Design</h5>
+                        <h6>DESIGN</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->designers as $designer)
@@ -274,7 +212,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Art</h5>
+                        <h6>ART</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->artists as $artist)
