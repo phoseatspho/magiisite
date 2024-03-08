@@ -86,7 +86,7 @@
                 @endif
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h6>TYPE</h6>
+                        <h6>RARITY</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
@@ -131,7 +131,7 @@
 
                 
 
-               
+                @if ($image->character->pets)
                 <div class="mb-1">
                     <div><h6>FAMILIARS</h6></div>
                         <div class="text-center row">
@@ -149,7 +149,7 @@
                         @endforeach
                    </div>
                 </div>
-
+@endif
                 <div class="mb-1">
                     <div><h6>EQUIPMENT</h6></div>
                         <div class="text-center row">
