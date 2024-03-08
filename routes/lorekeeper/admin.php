@@ -391,7 +391,6 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
      Route::post('borders/create', 'BorderController@postCreateEditBorder');
      Route::post('borders/edit/{id?}', 'BorderController@postCreateEditBorder');
      Route::post('borders/delete/{id}', 'BorderController@postDeleteBorder');
-});
 
      # VOLUMES
      Route::get('volumes', 'VolumeController@getVolumeIndex');
