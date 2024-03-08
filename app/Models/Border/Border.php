@@ -274,7 +274,7 @@ class Border extends Model
                     <!-- frame -->
                     <img src="' .
                 $this->imageUrl .
-                '" style="position: absolute;width:1500px; height:1500px;"  alt="avatar frame">
+                '" style="position: absolute;width:125px; height:125px;"  alt="avatar frame">
                     <!-- avatar -->
                     <img class="avatar" src="' .
                 $user .
