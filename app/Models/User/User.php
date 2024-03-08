@@ -71,12 +71,8 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @var array
      */
     protected $fillable = [
-<<<<<<< HEAD
         'name', 'alias', 'rank_id', 'email', 'email_verified_at', 'password', 'is_news_unread', 'is_banned', 'has_alias', 'avatar', 'is_sales_unread', 'birthday',
-        'is_deactivated', 'deactivater_id', 'home_id', 'home_changed', 'faction_id', 'faction_changed', 
-=======
-        'name', 'alias', 'rank_id', 'email', 'password', 'is_news_unread', 'is_banned', 'has_alias', 'avatar', 'is_sales_unread', 'birthday','border_id'
->>>>>>> 73986d341ed02f9b49aa2421a4cd7d101a0f0fff
+        'is_deactivated', 'deactivater_id', 'home_id', 'home_changed', 'faction_id', 'faction_changed', 'border_id', 
     ];
 
     /**
@@ -1373,3 +1369,5 @@ class User extends Authenticatable implements MustVerifyEmail {
                $this->name .
                '"> </div>';
        }
+    }
+}
