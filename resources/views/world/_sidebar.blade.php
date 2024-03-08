@@ -57,6 +57,12 @@
                 <a href="{{ url('world/collection-categories') }}" class="{{ set_active('world/collection-categories*') }}">Collection Categories</a>
             </div>
             <div class="sidebar-item">
+                <a href="{{ url('world/border-categories') }}" class="{{ set_active('world/border-categories*') }}">User Border Categories</a>
+            </div>
+            <div class="sidebar-item">
+            <a href="{{ url('world/borders') }}" class="{{ set_active('world/borders*') }}">User Borders</a>
+             </div>
+            <div class="sidebar-item">
                 <a href="{{ url('world/'.__('volumes.library')) }}" class="{{ set_active('world/'.__('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a>
             </div>
             <div class="sidebar-item">

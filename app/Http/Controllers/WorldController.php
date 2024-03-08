@@ -46,6 +46,9 @@ use App\Models\Volume\Book;
 use App\Models\Recipe\Recipe;
 use App\Models\Character\CharacterTransformation as Transformation;
 
+use App\Models\Border\BorderCategory;
+use App\Models\Border\Border;
+
 class WorldController extends Controller {
     /*
     |--------------------------------------------------------------------------
@@ -1213,6 +1216,88 @@ class WorldController extends Controller {
             'imageUrl' => $book->imageUrl,
             'name' => $book->displayName,
             'description' => $book->parsed_description,
+        ]);
+    }
+
+      /**
+     * Shows the border categories page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorderCategories(Request $request)
+    {
+        $query = BorderCategory::query();
+        $name = $request->get('name');
+        if($name) $query->where('name', 'LIKE', '%'.$name.'%');
+        return view('world.border_categories', [
+            'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
+     * Shows the borders page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorders(Request $request)
+    {
+        $query = Border::active();
+        $data = $request->only(['border_category_id', 'name', 'sort','is_default']);
+        if(isset($data['border_category_id']) && $data['border_category_id'] != 'none')
+            $query->where('border_category_id', $data['border_category_id']);
+        if(isset($data['is_default']) && $data['is_default'] != 'none') 
+            $query->where('is_default', $data['is_default'])->where('admin_only', 0);
+        if(isset($data['name']))
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+
+        if(isset($data['sort']))
+        {
+            switch($data['sort']) {
+                case 'alpha':
+                    $query->sortAlphabetical();
+                    break;
+                case 'alpha-reverse':
+                    $query->sortAlphabetical(true);
+                    break;
+                case 'category':
+                    $query->sortCategory();
+                    break;
+                case 'newest':
+                    $query->sortNewest();
+                    break;
+                case 'oldest':
+                    $query->sortOldest();
+                    break;
+            }
+        }
+        else $query->sortCategory();
+
+        return view('world.borders', [
+            'borders' => $query->paginate(20)->appends($request->query()),
+            'categories' => ['none' => 'Any Category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_default' => ['none' => 'Any Type', '0' => 'Unlockable', '1' => 'Default'],
+        ]);
+    }
+
+    
+        /**
+     * Shows an individual border's page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorder($id)
+    {
+        $border = Border::where('id', $id)->active()->first();
+        if(!$border) abort(404);
+
+        return view('world._border_page', [
+            'border' => $border,
+            'imageUrl' => $border->imageUrl,
+            'name' => $border->displayName,
+            'description' => $border->parsed_description,
         ]);
     }
 

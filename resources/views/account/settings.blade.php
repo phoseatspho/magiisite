@@ -29,6 +29,75 @@
         {!! Form::close() !!}
     </div>
 
+    <div class="card p-3 mb-2">
+        <h3>Border</h3>
+        <p>Change your onsite border. </p>
+        {!! Form::open(['url' => 'account/border']) !!}
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Border</label>
+            <div class="col-md-10">
+                {!! Form::select('border', $borders, Auth::user()->border_id, ['class' => 'form-control']) !!}
+            </div>
+        </div>
+        <div class="text-right">
+            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+        </div>
+        {!! Form::close() !!}
+
+        <h3 class="text-center">Your Borders</h3>
+        @if ($default->count())
+            <h4>Default</h4>
+            <div class="row mb-3">
+                @foreach ($default as $border)
+                    <div class="class="col-md-3 col-6 mb-3 text-center">
+                        <div class="shop-image">
+                            {!! $border->preview() !!}
+                        </div>
+                        <div class="shop-name mt-1 text-center">
+                            <h5>{!! $border->displayName !!}</h5>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+        @if (Auth::user()->borders->count())
+            <h4>Unlocked</h4>
+            <div class="row mb-3">
+                @foreach (Auth::user()->borders as $border)
+                    <div class="class="col-md-3 col-6 mb-3 text-center">
+                        <div class="shop-image">
+                            {!! $border->preview() !!}
+                        </div>
+                        <div class="shop-name mt-1 text-center">
+                            <h5>{!! $border->displayName !!}</h5>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+        @if (Auth::user()->isStaff)
+            @if ($admin->count())
+                <h4>Staff-Only</h4>
+                <small>You can see these as a member of staff</small>
+                <div class="row mb-3">
+                    @foreach ($admin as $border)
+                        <div class="class="col-md-3 col-6 mb-3 text-center">
+                            <div class="shop-image">
+                                {!! $border->preview() !!}
+                            </div>
+                            <div class="shop-name mt-1 text-center">
+                                <h5>{!! $border->displayName !!}</h5>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        @endif
+        <div class="text-right mb-4">
+            <a href="{{ url(Auth::user()->url . '/border-logs') }}">View logs...</a>
+        </div>
+    </div>
+
     @if (config('lorekeeper.settings.allow_username_changes'))
         <div class="card p-3 mb-2">
             <h3>Change Username</h3>
@@ -254,3 +323,4 @@ $( document ).ready(function() {
 
 </script>
 @endsection
+

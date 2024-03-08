@@ -68,6 +68,9 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function () {
     Route::get('{name}/wishlists/{id}', 'UserController@getUserWishlist')->where(['id' => '[0-9]+']);
     Route::get('{name}/wishlists/default', 'UserController@getUserWishlist');
 
+    Route::get('{name}/borders', 'UserController@getUserBorders');
+    Route::get('{name}/border-logs', 'UserController@getUserBorderLogs');
+    
     Route::get('{name}/currency-logs', 'UserController@getUserCurrencyLogs');
     Route::get('{name}/item-logs', 'UserController@getUserItemLogs');
     Route::get('{name}/'.__('awards.award').'-logs', 'UserController@getUserAwardLogs');
@@ -188,6 +191,9 @@ Route::group(['prefix' => 'world'], function () {
     Route::get(__('volumes.library').'/'.__('volumes.book').'/{id}', 'WorldController@getBook');
     Route::get(__('volumes.library').'/'.__('volumes.volumes'), 'WorldController@getVolumes');
 
+    Route::get('border-categories', 'WorldController@getBorderCategories');
+    Route::get('borders', 'WorldController@getBorders');
+    Route::get('borders/{id}', 'WorldController@getBorder');
 });
 
 Route::group(['prefix' => 'prompts'], function () {

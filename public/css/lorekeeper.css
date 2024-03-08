@@ -940,3 +940,6 @@ tr.accountbound {
 .recipe-image {
     width: 150px;
 }
+.avatar {
+    border: 16px solid rgba(0, 0, 0, .0); 
+}

@@ -22,6 +22,9 @@ $( document ).ready(function() {
         var $recipeSelect = $('#lootRowData').find('.recipe-select');
     @endif
 
+    @if(isset($showBorders) && $showBorders)
+        var $borderSelect = $('#lootRowData').find('.border-select');
+    @endif
 
     $('#lootTableBody .selectize').selectize();
     attachRemoveListener($('#lootTableBody .remove-loot-button'));
@@ -55,6 +58,10 @@ $( document ).ready(function() {
         @if($showRecipes)
             else if (val == 'Recipe') $clone = $recipeSelect.clone();
         @endif
+
+        @if(isset($showBorders) && $showBorders)
+            else if (val == 'Border') $clone = $borderSelect.clone();
+        @endif
             $cell.html('');
             $cell.append($clone);
     });
@@ -81,7 +88,10 @@ $( document ).ready(function() {
                 @endif
                 @if($showRecipes)
                 else if (val == 'Recipe') $clone = $recipeSelect.clone();
-            @endif
+                @endif
+                @if(isset($showBorders) && $showBorders)
+                else if (val == 'Border') $clone = $borderSelect.clone();
+                @endif
 
                 $cell.html('');
                 $cell.append($clone);

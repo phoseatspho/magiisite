@@ -110,6 +110,10 @@ return [
             'name' => 'Recipe Grants',
             'url' => 'admin/grants/recipes'
         ],
+    [
+        'name' => 'Border Grants',
+        'url' => 'admin/grants/borders'
+    ],
         
             [
                 'name' => 'Award Grants',
@@ -276,6 +280,10 @@ return [
                 'name' => 'Collections',
                 'url' => 'admin/data/collections'
             ],
+            [
+            'name' => 'User Borders',
+            'url' => 'admin/data/borders'
+             ],
             [
                 'name' => 'Pets',
                 'url' => 'admin/data/pets'

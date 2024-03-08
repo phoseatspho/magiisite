@@ -26,6 +26,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;
+use App\Models\Border\Border;
 
 class AccountController extends Controller {
     /*
@@ -79,6 +80,16 @@ class AccountController extends Controller {
             5 => 'daily'
         );
 
+        if(Auth::user()->isStaff){
+            $borderOptions = ['0' => 'Select Border'] + Border::where('is_active', 1)->where('is_default', 1)->get()->pluck('settingsName', 'id')->toArray() + Border::where('admin_only', 1)->get()->pluck('settingsName', 'id')->toArray();
+            
+        }else{
+            $borderOptions = ['0' => 'Select Border'] + Border::where('is_active', 1)->where('is_default', 1)->where('admin_only', 0)->get()->pluck('settingsName', 'id')->toArray();
+        }
+
+        $default =  Border::where('is_active', 1)->where('is_default', 1)->get();
+        $admin = Border::where('admin_only', 1)->get();
+
         return view('account.settings',[
             'locations' => Location::all()->where('is_user_home')->pluck('style','id')->toArray(),
             'factions' => Faction::all()->where('is_user_faction')->pluck('style','id')->toArray(),
@@ -86,6 +97,9 @@ class AccountController extends Controller {
             'user_faction_enabled' => Settings::get('WE_user_factions'),
             'char_enabled' => Settings::get('WE_character_locations'),
             'char_faction_enabled' => Settings::get('WE_character_factions'),
+            'borders' => $borderOptions + Auth::user()->borders()->get()->pluck('settingsName', 'id')->toArray(),
+            'default' => $default,
+            'admin' => $admin,
             'location_interval' => $interval[Settings::get('WE_change_timelimit')]
 
            
@@ -576,6 +590,23 @@ class AccountController extends Controller {
             }
         }
 
+        return redirect()->back();
+    }
+
+     /**
+     * Edits the user's border.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postBorder(Request $request, UserService $service)
+    {
+        if($service->updateBorder($request->only('border'), Auth::user())) {
+            flash('Border updated successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 }

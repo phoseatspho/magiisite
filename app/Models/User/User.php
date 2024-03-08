@@ -20,6 +20,10 @@ use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
 use App\Models\Gallery\GallerySubmission;
+use App\Traits\Commenter;
+use App\Models\Border\Border;
+use App\Models\User\UserBorder;
+use App\Models\User\UserBorderLog;
 use App\Models\Notification;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
@@ -67,8 +71,12 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @var array
      */
     protected $fillable = [
+<<<<<<< HEAD
         'name', 'alias', 'rank_id', 'email', 'email_verified_at', 'password', 'is_news_unread', 'is_banned', 'has_alias', 'avatar', 'is_sales_unread', 'birthday',
         'is_deactivated', 'deactivater_id', 'home_id', 'home_changed', 'faction_id', 'faction_changed', 
+=======
+        'name', 'alias', 'rank_id', 'email', 'password', 'is_news_unread', 'is_banned', 'has_alias', 'avatar', 'is_sales_unread', 'birthday','border_id'
+>>>>>>> 73986d341ed02f9b49aa2421a4cd7d101a0f0fff
     ];
 
     /**
@@ -323,6 +331,21 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function wishlists()
     {
         return $this->hasMany('App\Models\User\Wishlist')->where('user_id', $this->id);
+    }
+
+    /**
+     * Get user's unlocked borders.
+     */
+    public function borders() {
+        return $this->belongsToMany('App\Models\Border\Border', 'user_borders')->withPivot('id');
+    }
+
+    /**
+     * Get the border associated with this user.
+     */
+    public function border() 
+    {
+        return $this->belongsTo('App\Models\Border\Border', 'border_id');
     }
 
     /**********************************************************************************************
@@ -1251,4 +1274,102 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $ownedvolumes;
     }
 
-}
+    /**
+    * Get the user's border logs.
+    *
+    * @param  int  $limit
+    * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+    */
+   public function getBorderLogs($limit = 10)
+   {
+       $user = $this;
+       $query = UserBorderLog::with('border')->where(function($query) use ($user) {
+           $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+       })->orWhere(function($query) use ($user) {
+           $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
+       })->orderBy('id', 'DESC');
+       if($limit) return $query->take($limit)->get();
+       else return $query->paginate(30);
+   }
+
+  /**
+    * Checks if the user has the named border
+    *
+    * @return bool
+    */
+   public function hasBorder($border_id)
+   {
+       $border = Border::find($border_id);
+       $user_has = $this->borders->contains($border);
+       $default = $border->is_default;
+       return $default ? true : $user_has;
+   }
+
+   /**
+    * Gets the display URL for a user's avatar, or the default avatar if they don't have one.
+    * 
+    * @return url
+    */
+   public function getAvatarUrlAttribute()
+   {
+       // Yoinking a bit of this from develop, just to future proof it a bit. 
+       //and plus it simplifies the user icons which is good for this ext
+       //just replace this with the full bit when develop is the new main, it wont change anything
+       if ($this->avatar == 'default.jpg') return url('images/avatars/default.jpg');
+       return url('images/avatars/'.$this->avatar);
+   }
+
+   /**
+    * display the user's icon and border styling
+    *
+    */
+   public function getUserBorderAttribute()
+   {
+       //basically just an ugly ass string of html for copypasting use
+       //would you want to keep posting this everywhere? yeah i thought so. me neither
+       //there's probably a less hellish way to do this but it beats having to paste this over everywhere... EVERY SINGLE TIME.
+       //especially with the checks
+
+       //if the user has a border, we apply it
+       if ($this->border_id) {
+           //but first check the frame style
+
+           //under style
+           if ($this->border->border_style) {
+               return '<div style="width:125px; height:125px; float:left; border-radius:50%; margin-right:25px;">
+                   <!-- avatar -->
+                   <img class="avatar" src="' .
+                   $this->avatarUrl .
+                   '" style="position: absolute; border-radius:50%; width:125px; height:125px;" alt="' .
+                   $this->name .
+                   '">
+                   <!-- frame -->
+                   <img src="' .
+                   $this->border->imageUrl .
+                   '" style="position: absolute;width:125px; height:125px;"  alt="avatar frame">
+               </div>';
+
+               //then over style
+           } else {
+               return '<div style="width:125px; height:125px; float:left; border-radius:50%; margin-right:25px;">
+                   <!-- frame -->
+                   <img src="' .
+                   $this->border->imageUrl .
+                   '" style="position: absolute;width:125px; height:125px;"  alt="avatar frame">
+                   <!-- avatar -->
+                   <img class="avatar" src="' .
+                   $this->avatarUrl .
+                   '" style="position: absolute; border-radius:50%; width:125px; height:125px;" alt="' .
+                   $this->name .
+                   '">
+               </div>';
+           }
+           //if no border return standard avatar style
+       } else {
+           return '<div style="width:125px; height:125px; float:left; border-radius:50%; margin-right:25px;">
+       <img src="' .
+               $this->avatarUrl .
+               '" style="position: absolute; border-radius:50%; width:125px; height:125px;" alt="' .
+               $this->name .
+               '"> </div>';
+       }

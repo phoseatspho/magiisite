@@ -15,6 +15,7 @@ use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 use App\Models\Recipe\Recipe;
 use Illuminate\Support\Facades\DB;
+use App\Models\Border\Border;
 
 class BoxService extends Service {
     /*
@@ -44,6 +45,7 @@ class BoxService extends Service {
             'gears' => Gear::orderBy('name')->pluck('name', 'id'),
             'weapons' => Weapon::orderBy('name')->pluck('name', 'id'),
             'recipes'=> Recipe::orderBy('name')->pluck('name', 'id'),
+            'borders' => Border::orderBy('name')->where('is_default', 0)->where('admin_only', 0)->pluck('name', 'id'),
         ];
     }
 
@@ -121,6 +123,9 @@ class BoxService extends Service {
                         break;
                     case 'Recipe':
                         $type = 'App\Models\Recipe\Recipe';
+                        break;
+                    case 'Border':
+                        $type = 'App\Models\Border\Border';
                         break;
                 }
                 $asset = $type::find($data['rewardable_id'][$key]);

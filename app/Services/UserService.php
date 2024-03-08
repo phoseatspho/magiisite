@@ -663,6 +663,7 @@ class UserService extends Service {
 
         return $this->rollbackReturn(false);
     }
+    
 
     /**
      * Deactivates a user.
@@ -800,4 +801,18 @@ class UserService extends Service {
 
         return $this->rollbackReturn(false);
     }
+
+  /** 
+  * Updates the user's border.
+  *
+  * @param  array                  $data
+  * @param  \App\Models\User\User  $user
+  * @return bool
+  */
+  public function updateBorder($data, $user)
+  {
+   $user->border_id = $data['border'];
+   $user->save();
+   return true;
+  }
 }

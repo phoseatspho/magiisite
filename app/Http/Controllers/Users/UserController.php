@@ -36,6 +36,7 @@ use App\Models\Gallery\GalleryFavorite;
 
 use App\Models\Character\CharacterCategory;
 use App\Models\Collection\CollectionCategory;
+use App\Models\Border\Border;
 
 use App\Models\User\UserPet;
 use App\Models\Pet\Pet;
@@ -768,6 +769,42 @@ class UserController extends Controller {
         return view('home._redeem_logs', [
             'user' => $this->user,
             'logs' => $this->user->getRedeemLogs(0),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+        ]);
+    }
+
+    /**
+     * Shows a user's borders.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserBorders($name)
+    {
+        $default =  Border::where('is_active', 1)->where('is_default', 1)->get();
+        $admin = Border::where('admin_only', 1)->get();
+        
+        return view('user.borders', [
+            'user' => $this->user,
+            'default' => $default,
+            'admin' => $admin,
+            'logs' => $this->user->getBorderLogs(),
+        ]);
+    }
+
+    /**
+     * Shows a user's border logs.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserBorderLogs($name)
+    {
+        $user = $this->user;
+
+        return view('user.border_logs', [
+            'user' => $this->user,
+            'logs' => $this->user->getBorderLogs(0),
             'sublists' => Sublist::orderBy('sort', 'DESC')->get()
         ]);
     }

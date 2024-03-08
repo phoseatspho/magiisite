@@ -52,6 +52,9 @@
                 <a href="{{ $user->url.'/bank' }}" class="{{ set_active('user/'.$user->name.'/bank*') }}">Bank</a>
             </div>
             <div class="sidebar-item">
+                <a href="{{ $user->url.'/borders' }}" class="{{ set_active('user/'.$user->name.'/borders*') }}">Borders</a>
+            </div>
+            <div class="sidebar-item">
                 <a href="{{ $user->url.'/level' }}" class="{{ set_active('user/'.$user->name.'/level*') }}">Level Logs</a>
             </div>
             <div class="sidebar-item">
@@ -79,6 +82,9 @@
             </div>
             <div class="sidebar-item">
                 <a href="{{ $user->url.'/'.__('awards.award').'-logs' }}" class="{{ set_active('user/'.$user->name.'/award-logs*') }}">{{ucfirst(ucfirst(__('awards.award')))}} Logs</a>
+            </div>
+            <div class="sidebar-item">
+                <a href="{{ $user->url.'/border-logs' }}" class="{{ set_active('user/'.$user->name.'/border-logs*') }}">Border Logs</a>
             </div>
             <div class="sidebar-item">
                 <a href="{{ $user->url.'/pet-logs' }}" class="{{ set_active('user/'.$user->name.'/pet-logs*') }}">Pet Logs</a>
