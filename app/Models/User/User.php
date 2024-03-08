@@ -1300,19 +1300,6 @@ class User extends Authenticatable implements MustVerifyEmail {
        return $default ? true : $user_has;
    }
 
-   /**
-    * Gets the display URL for a user's avatar, or the default avatar if they don't have one.
-    * 
-    * @return url
-    */
-   public function getAvatarUrlAttribute()
-   {
-       // Yoinking a bit of this from develop, just to future proof it a bit. 
-       //and plus it simplifies the user icons which is good for this ext
-       //just replace this with the full bit when develop is the new main, it wont change anything
-       if ($this->avatar == 'default.jpg') return url('images/avatars/default.jpg');
-       return url('images/avatars/'.$this->avatar);
-   }
 
    /**
     * display the user's icon and border styling
