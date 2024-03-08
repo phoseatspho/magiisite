@@ -258,7 +258,7 @@ class Border extends Model
 
         //under style
         if ($this->border_style) {
-            return '<div style="width:135px; height:135px;border-radius:50%;">
+            return '<div style="width:125px; height:125px;border-radius:50%;">
                     <!-- avatar -->
                     <img class="avatar" src="' .
                 $user .
@@ -270,11 +270,11 @@ class Border extends Model
 
         //then over style
         } else {
-            return '<div style="width:135px; height:135px;border-radius:50%;">
+            return '<div style="width:125px; height:125px;border-radius:50%;">
                     <!-- frame -->
                     <img src="' .
                 $this->imageUrl .
-                '" style="position: absolute;width:125px; height:125px;"  alt="avatar frame">
+                '" style="position: absolute;width:1500px; height:1500px;"  alt="avatar frame">
                     <!-- avatar -->
                     <img class="avatar" src="' .
                 $user .
