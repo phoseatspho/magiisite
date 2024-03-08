@@ -20,7 +20,6 @@ use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
 use App\Models\Gallery\GallerySubmission;
-use App\Traits\Commenter;
 use App\Models\Border\Border;
 use App\Models\User\UserBorder;
 use App\Models\User\UserBorderLog;
