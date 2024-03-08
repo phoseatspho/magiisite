@@ -270,7 +270,7 @@ class Border extends Model
 
         //then over style
         } else {
-            return '<div style="width:1500px; height:1500px;border-radius:50%;">
+            return '<div style="width:125px; height:125px;border-radius:50%;">
                     <!-- frame -->
                     <img src="' .
                 $this->imageUrl .
