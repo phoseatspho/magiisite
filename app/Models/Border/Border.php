@@ -278,7 +278,7 @@ class Border extends Model
                     <!-- avatar -->
                     <img class="avatar" src="' .
                 $user .
-                '" style="position: absolute; border-radius:50%; width:125px; height:125px;"></div>';
+                '" style="position: absolute; border-radius:50%; width:1500px; height:1500px;"></div>';
         }
     }
 
