@@ -185,7 +185,7 @@
                         @endforeach
                         </div>
                 </div>
-            </div>
+            
             @endif
 
             {{-- Image notes --}}
@@ -288,5 +288,5 @@
         </div>
     </div>
 
-
+</div>
 
