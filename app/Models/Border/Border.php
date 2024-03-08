@@ -258,7 +258,7 @@ class Border extends Model
 
         //under style
         if ($this->border_style) {
-            return '<div style="width:125px; height:125px;border-radius:50%;">
+            return '<div style="width:135px; height:135px;border-radius:50%;">
                     <!-- avatar -->
                     <img class="avatar" src="' .
                 $user .
