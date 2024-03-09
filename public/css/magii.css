@@ -70,23 +70,23 @@ pre {
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #706d7c;
+  color: #235fbc!important;
 }
 
 .table th,
 .table td {
   padding: 0.75rem;
   vertical-align: top;
-  border-top: 1px solid #6c6c7a;
+  border-top: 1px solid #235fbc!important;
 }
 
 .table thead th {
   vertical-align: bottom;
-  border-bottom: 2px solid #6c6c7a;
+  border-bottom: 2px solid #235fbc!important;
 }
 
 .table tbody + tbody {
-  border-top: 2px solid #6c6c7a;
+  border-top: 2px solid #235fbc!important;
 }
 
 .table-sm th,
@@ -95,12 +95,12 @@ pre {
 }
 
 .table-bordered {
-  border: 1px solid #6c6c7a;
+  border: 1px solid #235fbc!important;
 }
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #6c6c7a;
+  border: 1px solid #235fbc!important;
 }
 
 .table-bordered thead th,
