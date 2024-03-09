@@ -10,7 +10,7 @@
         <div class="card-body">
             <div class="text-left mb-3">
                 <div class="form-group d-flex align-items-center">
-                    {!! Form::label('item_id_filter', 'Item:', ['class' => 'mr-2']) !!}
+                    {!! Form::label('item_id_filter', '', ['class' => 'mr-2']) !!}
                     {!! Form::select('item_id_filter', $item_filter, null, ['id' => 'itemIdFilter', 'class' => 'form-control mr-2 default item-select', 'placeholder' => 'type to find item']) !!}
                     <a href="#" class="clear-item-filter btn btn-primary mb-2">Clear</a>
                 </div>
