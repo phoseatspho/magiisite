@@ -12,7 +12,7 @@
                 <div class="form-group d-flex align-items-center">
                     {!! Form::label('item_id_filter', 'Item:', ['class' => 'mr-2']) !!}
                     {!! Form::select('item_id_filter', $item_filter, null, ['id' => 'itemIdFilter', 'class' => 'form-control mr-2 default item-select', 'placeholder' => 'Start typing to find an item']) !!}
-                    <a href="#" class="clear-item-filter btn btn-primary mb-2">Clear Item Filter</a>
+                    <a href="#" class="clear-item-filter btn btn-primary mb-2">Clear</a>
                 </div>
             </div>
             <div class="text-right mb-3">
