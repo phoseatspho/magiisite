@@ -7,7 +7,7 @@
 @if (!$character->is_myo_slot)
     <div class="row">
         <div class="col-lg-3 col-4">
-            <h6>Species</h6>
+            <h6>Type</h6>
         </div>
         <div class="col-lg-9 col-8">{!! $character->category->displayName !!}</div>
     </div>
