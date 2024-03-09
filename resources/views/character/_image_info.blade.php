@@ -37,7 +37,7 @@
             {{-- Basic info --}}
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
             <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><h6>CLASS</h6></div>
+                    <div class="col-lg-4 col-md-6 col-4"><h6>Class</h6></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->character->class_id ? $image->character->class->displayName : 'None' !!} 
                         @if(Auth::check())
                         @if(Auth::user()->isStaff || Auth::user()->id == $image->character->user_id && $image->character->class_id == null) 
@@ -48,7 +48,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h6>SPECIES</h6>
+                        <h6>Species</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
                 </div>
@@ -86,7 +86,7 @@
                 @endif
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h6>RARITY</h6>
+                        <h6>Rarity</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
@@ -111,7 +111,7 @@
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <h6>ELEMENT</h6>
+                            <h6>Element</h6>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
                             <h5>{!! $type?->displayElements !!}</h5>
@@ -133,7 +133,7 @@
 
                 @if ($image->character->pet)
                 <div class="mb-1">
-                    <div><h6>FAMILIARS</h6></div>
+                    <div><h6>Familiars</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->pets as $pet)
                             <div class="ml-3 mr-3">
@@ -153,7 +153,7 @@
 
 @if ($image->character->gears)
                 <div class="mb-1">
-                    <div><h6>EQUIPMENT</h6></div>
+                    <div><h6>Equipment</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->gear as $gear)
                             <div class="ml-3 mr-3">
@@ -171,7 +171,7 @@
 
                 @if ($image->character->weapon)
                 <div class="mb-1">
-                    <div><h6>WEAPONS</h6></div>
+                    <div><h6>Weapons</h6></div>
                         <div class="text-center row">
                         @foreach($image->character->weapons as $weapon)
                             <div class="ml-3 mr-3">
@@ -209,7 +209,7 @@
 
                 <div class="row mb-2">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h6>DESIGN</h6>
+                        <h6>Design</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->designers as $designer)
@@ -219,7 +219,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h6>ART</h6>
+                        <h6>Art</h6>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">
                         @foreach ($image->artists as $artist)
