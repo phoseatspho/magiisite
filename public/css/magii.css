@@ -338,8 +338,8 @@ pre {
 }
 
 .table .thead-light th {
-  color: #3e3c4b;
-  background-color: #f4f3fc;
+  color: #134799!important;
+  background-color: #235fbc30!important;
   border-color: #aaa8b9;
 }
 
