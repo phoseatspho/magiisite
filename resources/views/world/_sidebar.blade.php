@@ -10,22 +10,13 @@
         </div>
         <div class="collapse show" aria-labelledby="headingCharacters" data-parent="#accordion" id="collapseCharacters">
             <div class="sidebar-item">
-                <a href="{{ url('world/species') }}" class="{{ set_active('world/species*') }}">{{ __('lorekeeper.specieses') }}</a>
+                <a href="{{ url('world/species') }}" class="{{ set_active('world/species*') }}">Species</a>
             </div>
             <div class="sidebar-item">
                 <a href="{{ url('world/elements') }}" class="{{ set_active('world/elements*') }}">All Elements</a>
             </div>
             <div class="sidebar-item">
-                <a href="{{ url('world/subtypes') }}" class="{{ set_active('world/subtypes*') }}">{{ __('lorekeeper.subtypes') }}</a>
-            </div>
-            <div class="sidebar-item">
                 <a href="{{ url('world/rarities') }}" class="{{ set_active('world/rarities*') }}">Rarities</a>
-            </div>
-            <div class="sidebar-item">
-                <a href="{{ url('world/trait-categories') }}" class="{{ set_active('world/trait-categories*') }}">Trait Categories</a>
-            </div>
-            <div class="sidebar-item">
-                <a href="{{ url('world/traits') }}" class="{{ set_active('world/traits*') }}">All Traits</a>
             </div>
             <div class="sidebar-item">
                 <a href="{{ url('world/character-categories') }}" class="{{ set_active('world/character-categories*') }}">Character Categories</a>
