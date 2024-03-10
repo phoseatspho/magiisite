@@ -3002,7 +3002,7 @@ a.text-dark:focus {
   color: #affdff;
 }
 .site-footer a {
-  color: rgba(175, 253, 255, 0.65) !important;
+  color: rgb(175 253 255 / 82%) !important;
 }
 .site-footer a:hover {
   color: #affdff !important;
