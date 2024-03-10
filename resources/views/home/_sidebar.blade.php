@@ -19,7 +19,7 @@
                 <a href="{{ url('inventory') }}" class="{{ set_active('inventory*') }}">Inventory</a>
             </div>
             <div class="sidebar-item">
-                <a href="{{ url(__('awards.awardcase')) }}" class="{{ set_active(__('awards.awardcase').'*') }}">{{__('awards.awardcase')}}</a>
+                <a href="{{ url(__('awards.awardcase')) }}" class="{{ set_active(__('awards.awardcase').'*') }}">Awardcase</a>
             </div>
             <div class="sidebar-item">
                 <a href="{{ url('bank') }}" class="{{ set_active('bank*') }}">Bank</a>
