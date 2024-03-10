@@ -5,7 +5,7 @@
     <div class="card-body text-center">
         @if(isset($collection->image_url))
             <div class="text-center mb-3">
-                <img src="{{ $collection->imageUrl }}" class="collection-image">
+                <img src="{{ $collection->imageUrl }}" class="collection-image img-fluid">
             </div>
         @endif
         <div class="row">
