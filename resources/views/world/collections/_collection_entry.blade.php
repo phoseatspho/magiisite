@@ -21,7 +21,7 @@
                     <div class="world-entry-text">
                         {!! $collection->description !!}
                     </div>
-                            <h5>Collection Requirements</h5>
+                            <h5>&nbsp;&nbsp;Collection Requirements</h5>
                                 <div class="alert alert-secondary">
                                     @include('home.collection._collection_ingredient_entry', ['ingredient' => $collection->ingredient])
 
@@ -41,7 +41,7 @@
                                     @endif
                                 </div>
                         </div>
-                            <h5>Rewards</h5>
+                            <h5>&nbsp;&nbsp;Rewards</h5>
                             @foreach($collection->reward_items as $type)
                                 @foreach($type as $item)
                                     <div class="alert alert-secondary">
