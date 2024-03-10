@@ -22,7 +22,7 @@
                 @endif
             </div>
             <div class="col-md-6">
-                <h5>Rewards</h5>
+                <h5>&nbsp;&nbsp;Rewards</h5>
                 <?php $counter = 0; ?>
                 @foreach($collection->reward_items as $type)
                     @foreach($type as $item)
