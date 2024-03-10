@@ -50,7 +50,7 @@
             @if ($user->birthdayDisplay && isset($user->birthday))
                 <div class="row col-sm-7">
                     <div class="col-md-3 col-4">
-                        <h6>Birthday</h6>
+                        <h6>Bday</h6>
                     </div>
                     <div class="col-md-9 col-8">{!! $user->birthdayDisplay !!}</div>
                 </div>
