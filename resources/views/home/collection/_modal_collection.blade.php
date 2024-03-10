@@ -3,7 +3,7 @@
 @elseif(Auth::check() && Auth::user()->hasCollection($collection->id))   
     @if($collection->imageUrl)
         <div class="text-center">
-            <div class="mb-3"><img class="collection-image" src="{{ $collection->imageUrl }}"/></div>
+            <div class="mb-3"><img class="collection-image img-fluid" src="{{ $collection->imageUrl }}"/></div>
         </div>
     @endif
     <h3>Collection Details <a class="small inventory-collapse-toggle collapse-toggle" href="#collectionDetails" data-toggle="collapse">Show</a></h3>
