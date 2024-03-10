@@ -32,7 +32,7 @@
         Completing a collection will not debit your items!
         </div>
 
-                <h5>&nbsp;Collection Requirements</h5>
+                <h5>&nbsp;&nbsp;Collection Requirements</h5>
                     <div class="alert alert-secondary">
                         @include('home.collection._collection_ingredient_entry', ['ingredient' => $collection->ingredient])
 
@@ -51,7 +51,7 @@
                                     @endif   
                     </div>
             </div>
-                <h5>&nbsp;Rewards</h5>
+                <h5>&nbsp;&nbsp;Rewards</h5>
                 @foreach($collection->reward_items as $type)
                     @foreach($type as $item)
                         <div class="alert alert-secondary">
