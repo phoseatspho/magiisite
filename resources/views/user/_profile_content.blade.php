@@ -5,6 +5,7 @@
 <div class="row mb-3">
     <div class="col-md-2 text-center">
         <!-- User Icon -->
+        {!! $user->userBorder !!}
         <img src="/images/avatars/{{ $user->avatar }}" class="img-fluid rounded-circle" style="max-height: 125px;" alt="{{ $user->name }}'s Avatar">
     </div>
 
