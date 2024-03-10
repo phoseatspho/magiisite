@@ -9,7 +9,7 @@
                 <div class="p-2 row">
                     <div class="col">
                         @if(isset($collection->image_url))
-                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2" style="max-height:15px; width:auto;">
+                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2 img-fluid" style="max-height:15px; width:auto;">
                         @endif
                         <h4 class="mb-0 mt-0 d-inline col-form-label">{!! $collection->displayName !!}</h4>
                     </div>
@@ -24,7 +24,7 @@
                 <div class="p-2 row">
                     <div class="col">
                         @if(isset($collection->image_url))
-                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2" style="max-height:15px; width:auto;">
+                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2 img-fluid" style="max-height:15px; width:auto;">
                         @endif
                         <h4 class="mb-0 mt-0 d-inline col-form-label">{!! $collection->displayName !!}</h4>
                     </div>
@@ -43,7 +43,7 @@
                 <div class="p-2 row">
                     <div class="col">
                         @if(isset($collection->image_url))
-                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2" style="max-height:15px; width:auto;">
+                            <img src="{{ $collection->imageUrl }}" class="collection-image mr-2 img-fluid" style="max-height:15px; width:auto;">
                         @endif
                         <h4 class="mb-0 mt-0 d-inline col-form-label">{!! $collection->displayName !!}</h4>
                     </div>
