@@ -8,7 +8,7 @@
 <h1 class="mb-4">
     Wishlist: {{ $wishlist ? $wishlist->name : 'Default' }}
     @if($wishlist)
-        <div class="float-right">
+        <div class="float-right mb-1">
             <a href="#" class="btn btn-secondary edit-wishlist">Edit Wishlist</a>
             <a href="#" class="btn btn-danger delete-wishlist">Delete Wishlist</a>
         </div>
@@ -17,11 +17,11 @@
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => '']) !!}
-        <div class="form-inline justify-content-end">
+       
             <div class="form-group ml-3 mb-3">
                 {!! Form::text('name', Request::get('name'), ['class' => 'form-control', 'placeholder' => 'Name']) !!}
             </div>
-        </div>
+       
         <div class="form-inline justify-content-end">
             <div class="form-group ml-3 mb-3">
                 {!! Form::select('sort', [
