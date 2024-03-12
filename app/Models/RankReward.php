@@ -14,7 +14,7 @@ class RankReward extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','rank_id', 'data', 'is_active', 'reward_time'];
+    protected $fillable = ['name', 'rank_id', 'data', 'is_active', 'reward_time'];
 
     /**
      * Validation rules for rank rewards.
@@ -47,17 +47,11 @@ class RankReward extends Model
         return $this->belongsTo('App\Models\Rank\Rank', 'rank_id');
     }
 
-    /**
-     * Gets the decoded output json
-     *
-     * @return array
-     */
-    public function getRewardsAttribute()
+    public function getDataAttribute($data)
     {
         $rewards = [];
-        if ($this->data) {
-            $assets = $this->getRewardItemsAttribute();
-
+        if ($data) {
+            $assets = parseAssetData(json_decode($data));
             foreach ($assets as $type => $a) {
                 $class = getAssetModelString($type, false);
                 foreach ($a as $id => $asset) {
@@ -72,14 +66,9 @@ class RankReward extends Model
         return $rewards;
     }
 
-    /**
-     * Interprets the json output and retrieves the corresponding items
-     *
-     * @return array
-     */
-    public function getRewardItemsAttribute()
+    public function getParsedDataAttribute()
     {
-        return parseAssetData(json_decode($this->data, true));
+        return json_decode($this->attributes['data']);
     }
 
 }

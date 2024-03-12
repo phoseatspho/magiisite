@@ -61,7 +61,7 @@
     <h3>Rewards</h3>
     <p>Rewards are credited to all users who are in this rank when the interval comes up.</p>
     @include('widgets._loot_select', [
-        'loots' => $rankreward->rewards,
+        'loots' => $rankreward->data,
         'showLootTables' => true,
         'showRaffles' => true,
     ])

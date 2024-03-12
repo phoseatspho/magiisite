@@ -411,7 +411,7 @@ return [
     // RANK_REWARD
     1107 => [
         'name' => 'Rank Reward',
-        'message' => 'You recieved rewards for being part of the {rank_name} rank. (<a href="{url}">View Inventory</a>)',
+        'message' => 'You recieved rewards for being part of the {rank_name} rank: {rewards}',
         'url' => 'inventory'
     ]
 ];

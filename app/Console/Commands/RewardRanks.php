@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\RankReward;
-use Illuminate\Console\Command;
-use Carbon\Carbon;
-use App\Models\User\User;
 use App\Facades\Notifications;
+use App\Models\RankReward;
+use App\Models\User\User;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class RewardRanks extends Command
 {
@@ -69,17 +69,17 @@ class RewardRanks extends Command
     {
         $users = User::where('rank_id', $reward->rank_id)->get();
         foreach ($users as $user) {
-
             
-            // Distribute user rewards
-            $rewards = fillUserAssets($reward->rewardItems, null, $user, 'Rank Reward', [
-                'data' => 'Reward for being part of the ' . $reward->rank->displayName . ' rank'
-            ]);
+            $rewards = '';
+            $rewards = $rewards . createRewardsString(fillUserAssets(parseAssetData($reward->parsedData), null, $user, 'Rank Rewards', [
+                'data' => 'Reward for being part of the ' . $reward->rank->displayName . ' rank',
+            ]));
 
             //notify the user of the grant
             Notifications::create('RANK_REWARD', $user, [
                 'user_name' => $user->name,
                 'rank_name' => $user->rank->name,
+                'rewards' => $rewards,
             ]);
         }
 
