@@ -11,7 +11,7 @@
     <div class="col">
         <!-- Username & optional FTO Badge -->
         <div class="row no-gutters">
-            <div class=" h2 text-center text-md-left">
+            <div class=" h3 text-center text-md-left">
              
           
             {!! $user->displayName !!} 
