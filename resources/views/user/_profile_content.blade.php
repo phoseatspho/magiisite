@@ -284,7 +284,7 @@
 <div align="right">
                
                 <b>Joined:</b> {!! format_date($user->created_at, false) !!}
-            </div
+</div>
 
 @if ($deactivated)
     </div>
