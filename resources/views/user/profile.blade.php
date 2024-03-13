@@ -24,8 +24,8 @@
 @if($user->is_banned)
     <div class="alert alert-danger">This user has been banned.</div>
 @endif
-<h1><span class="badge badge-info float-right text-white mx-1" data-toggle="tooltip" title="Current user level. Checkout the level area for more info.">Lvl: {{ $user->level->current_level }}</span>
-</h1> 
+<h2><span class="badge badge-info float-right text-white mx-1" data-toggle="tooltip" title="Current user level. Checkout the level area for more info.">Lvl: {{ $user->level->current_level }}</span>
+</h2> 
 
 @if ($user->is_deactivated)
         <div class="alert alert-info text-center">
