@@ -2,12 +2,13 @@
     <div style="filter:grayscale(1); opacity:0.75">
 @endif
 
-<div class="row mb-3">
+
+<div class="center">
  
 
     <div class="col">
         <!-- Username & optional FTO Badge -->
-        <div class="row no-gutters">
+        <div class="row">
             <div class="col h2 text-center text-md-left">
              
             {!! $user->userBorder !!}
