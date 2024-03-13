@@ -2,8 +2,8 @@
     <div style="filter:grayscale(1); opacity:0.75">
 @endif
 
-<div class="row mb-3">
-    <div class="col-md-12">
+<div class="col-lg-12 mb-3">
+    <div class="center">
         <!-- User Icon -->
         {!! $user->userBorder !!}
     </div>
@@ -11,7 +11,7 @@
     <div class="col">
         <!-- Username & optional FTO Badge -->
         <div class="row no-gutters">
-            <div class="col h2 text-center text-md-left">
+            <div class=" h2 text-center text-md-left">
              
           
             {!! $user->displayName !!} 
