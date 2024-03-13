@@ -3,7 +3,7 @@
 @endif
 
 
-<div class="center">
+<div class="center mb-2">
  
 
     <div class="col">
