@@ -281,12 +281,14 @@
     </div>
 </div>
 
+<div align="right">
 <div class="row col-sm-7">
                 <div class="col-md-3 col-4">
                     <h6>Joined</h6>
                 </div>
                 <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!}</div>
             </div>
+</div>
 
 @if ($deactivated)
     </div>
