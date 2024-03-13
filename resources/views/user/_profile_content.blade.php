@@ -23,7 +23,7 @@
 </div>
 
  <!-- User Information -->
- <div class="row no-gutters">
+ <div class="col">
  
 
             <div class="row col-sm-9">
