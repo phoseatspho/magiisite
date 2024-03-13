@@ -2,6 +2,7 @@
     <div style="filter:grayscale(1); opacity:0.75">
 @endif
 
+<div align="center">
 <div class="row mb-3">
     <div class="col-md-12">
         <!-- User Icon -->
@@ -57,6 +58,7 @@
             @endif
         </div>
     </div>
+</div>
 </div>
 
 @if (isset($user->profile->parsed_text))
