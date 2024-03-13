@@ -3,7 +3,7 @@
 @endif
 
 <div class="row mb-3">
-    <div class="col-md-2 text-center">
+    <div class="col-md-12">
         <!-- User Icon -->
         {!! $user->userBorder !!}
     </div>
