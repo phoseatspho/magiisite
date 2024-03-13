@@ -32,13 +32,6 @@
                 </div>
                 <div class="col-lg-10 col-md-9 col-8 pl-3">{!! $user->displayAlias !!}</div>
             </div>
-
-            <div class="row col-sm-7">
-                <div class="col-md-3 col-4">
-                    <h6>Joined</h6>
-                </div>
-                <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!}</div>
-            </div>
             <div class="row col-sm-9">
                 <div class="col-lg-2 col-md-3 col-4">
                     <h6>Rank</h6>
