@@ -6,16 +6,6 @@
 {!! breadcrumbs(['World' => 'world', $world->title => 'world/info']) !!}
 
 <h1>Explore Arcadia</h1>
-<div align="center">
-<a href="https://www.magiispecies.com/world/library"><img src="../files/lorescroll.png" class="img-fluid" title="Lore"></a>
-<a href="https://www.magiispecies.com/world/location-types"><img src="../files/mapsprite.png" class="img-fluid" title="Locations"></a>
-<a href="https://www.magiispecies.com/sublist/NPCs"><img src="../files/npcs.png" class="img-fluid" title="NPCs"></a>
-<a href="https://www.magiispecies.com/world/flora-categories"><img src="../files/flora.png" class="img-fluid" title="Flora"></a>
-<a href="https://www.magiispecies.com/world/fauna-categories"><img src="../files/fauna.png" class="img-fluid" title="Fauna"></a>
-<br>
-Click the sprites above to read more about the World of Arcadia and its inhabitants!
-</div>
-
 <div align="center">Click the sprites below to read more about the World of Arcadia and its inhabitants!
         <hr>
     <br>
