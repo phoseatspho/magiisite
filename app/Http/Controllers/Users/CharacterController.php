@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use DB;
 use Route;
+use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterTransfer;
