@@ -3027,7 +3027,7 @@ a.text-dark:focus {
 }
 @media (max-width: 991px) {
    html,body {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .site-header-image {
