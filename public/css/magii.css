@@ -3026,7 +3026,7 @@ a.text-dark:focus {
   }
 }
 @media (max-width: 991px) {
-   body {
+   html {
     overflow-x:hidden;
   }
 
