@@ -3030,6 +3030,10 @@ a.text-dark:focus {
     overflow-x:hidden;
   }
 
+  html {
+    overflow-x:hidden;
+  }
+
   .site-header-image {
     display: block;
     height: 100px;
