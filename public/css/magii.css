@@ -3027,7 +3027,6 @@ a.text-dark:focus {
 }
 @media (max-width: 991px) {
    html,body {
-    overflow-y:scroll;
     overflow-x: hidden;
   }
 
