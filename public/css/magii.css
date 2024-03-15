@@ -3027,7 +3027,7 @@ a.text-dark:focus {
 }
 @media (max-width: 991px) {
   html, body {
-    overflow-x: hidden;
+    overflow-x:scroll;
   }
 
   .site-header-image {
@@ -3247,5 +3247,7 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
 .logs-table-row .logs-table-row {
     border-top: 1px solid #90b2e8!important;
 }
+
+
 
 /*# sourceMappingURL=magii.css.map */
