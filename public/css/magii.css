@@ -3027,7 +3027,7 @@ a.text-dark:focus {
 }
 @media (max-width: 991px) {
   html, body {
-    overflow: hidden;
+    overflow-x:auto;
   }
 
   .site-header-image {
