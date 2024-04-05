@@ -36,10 +36,10 @@
           {!! $hunt->displayLink !!}
         </div>
         <div class="col-4 col-md-2">
-          {!! pretty_date($hunt->start_at) !!}
+          {!! format_date($hunt->start_at) !!}
         </div>
         <div class="col-4 col-md-2">
-          {!! pretty_date($hunt->end_at) !!}
+          {!! format_date($hunt->end_at) !!}
         </div>
         <div class="col-3 col-md-1 text-right">
           <a href="{{ url('admin/data/hunts/edit/'.$hunt->id) }}"  class="btn btn-primary py-0 px-2">Edit</a>

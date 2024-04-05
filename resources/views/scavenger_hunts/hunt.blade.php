@@ -40,7 +40,9 @@
                     <h4>Information</h4>
                 </div>
                 <div class="card-body">
-              
+                <div><strong>Start Time: </strong>{!! format_date($hunt->start_at) !!} ({{ $hunt->start_at->diffForHumans() }})</div>
+                <div class="mb-2"><strong>End Time: </strong>{!! format_date($hunt->end_at) !!} ({{ $hunt->end_at->diffForHumans() }})</div>
+                
                 @if($hunt->summary)
                     <i>{{ $hunt->summary }}</i>
                 @endif
