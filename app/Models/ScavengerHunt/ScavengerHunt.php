@@ -30,7 +30,7 @@ class ScavengerHunt extends Model
      *
      * @var array
      */
-    public $casts = ['start_at', 'end_at'];
+    protected $casts = ['start_at', 'end_at'];
     
     /**
      * Validation rules for hunt creation.
