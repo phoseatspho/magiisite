@@ -31,7 +31,7 @@ class ScavengerHunt extends Model
      * @var array
      */
     protected $casts = [
-        'transferrable_at' => 'datetime',
+        'start_at' => 'datetime', 'end_at' => 'datetime'
     ];
     
     /**
