@@ -15,7 +15,7 @@ class ScavengerHunt extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name', 'summary', 'locations', 'clue', 'start_at', 'end_at'
+        'name', 'display_name', 'summary', 'locations', 'clue', 'start_at', 'end_at', 'format_date', 'pretty_date' 
     ];
 
     /**
@@ -30,7 +30,7 @@ class ScavengerHunt extends Model
      *
      * @var array
      */
-    public $dates = ['start_at', 'end_at', 'format_date', 'pretty_date'];
+    public $dates = ['start_at', 'end_at'];
     
     /**
      * Validation rules for hunt creation.
