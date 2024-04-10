@@ -13,7 +13,7 @@
 
         <h3 class="mt-5 text-center">Register</h3>
         <div align="center">
-            <img src="../files/stares.png" class="img-fluid" width="400" height="400">
+            <img src="../files/stares.png" class="img-fluid" width="300" height="300">
 </div>
         <form method="POST" action="{{ route('register') }}">
             @csrf

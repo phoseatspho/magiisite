@@ -18,7 +18,7 @@
             </div>
         </div>
         <div align="center">
-            <img src="../files/stares.png" class="img-fluid" width="400" height="400">
+            <img src="../files/stares.png" class="img-fluid" width="300" height="300">
 </div>
         <form method="POST" action="{{ route('login') }}">
             @csrf
