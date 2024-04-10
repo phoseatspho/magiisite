@@ -17,6 +17,9 @@
                 <h1>Log In</h1>
             </div>
         </div>
+        <div align="center">
+            <img src="../files/stares.png" class="img-fluid">
+</div>
         <form method="POST" action="{{ route('login') }}">
             @csrf
             @honeypot

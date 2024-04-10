@@ -12,6 +12,9 @@
         </div>
 
         <h3 class="mt-5 text-center">Register</h3>
+        <div align="center">
+            <img src="../files/stares.png" class="img-fluid">
+</div>
         <form method="POST" action="{{ route('register') }}">
             @csrf
             @honeypot
