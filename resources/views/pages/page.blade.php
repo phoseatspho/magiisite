@@ -22,5 +22,18 @@
                 'allow_dislikes' => $page->allow_dislikes,
             ])
         </div>
+
+        <div class="site-page-content parsed-text">
+            {!! $page->parsed_text !!}
+        </div>
+
+        @if ($page->can_comment)
+    <div class="container">
+                @comments([
+                    'model' => $page,
+                    'perPage' => 5,
+                    'allow_dislikes' => $page->allow_dislikes,
+                ])
+            </div>
     @endif
 @endsection

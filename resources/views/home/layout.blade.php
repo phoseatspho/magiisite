@@ -2,7 +2,7 @@
 
 @section('title')
     Home ::
-    @yield('home-title')
+        @yield('home-title')
 @endsection
 
 @section('sidebar')

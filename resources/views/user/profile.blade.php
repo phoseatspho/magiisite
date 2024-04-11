@@ -9,15 +9,15 @@
 @endsection
 
 @section('profile-content')
-    {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
+        {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
 
     @if (mb_strtolower($user->name) != mb_strtolower($name))
         <div class="alert alert-info">This user has changed their name to <strong>{{ $user->name }}</strong>.</div>
     @endif
 
-    @if ($user->is_banned)
-        <div class="alert alert-danger">This user has been banned.</div>
+        @if ($user->is_banned)
+    <div class="alert alert-danger">This user has been banned.</div>
     @endif
 @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
 

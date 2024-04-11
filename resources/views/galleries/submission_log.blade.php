@@ -11,7 +11,7 @@
         <span class="float-right badge badge-{{ $submission->status == 'Pending' ? 'secondary' : ($submission->status == 'Accepted' ? 'success' : 'danger') }}">{{ $submission->collaboratorApproved ? $submission->status : 'Pending Collaborator Approval' }}</span>
     </h1>
 
-    @include('galleries._queue_submission', ['key' => 0])
+        @include('galleries._queue_submission', ['key' => 0])
 
     <div class="row">
         <div class="col-md">
@@ -149,6 +149,8 @@
                                         <p>This submission didn't have any criteria specified for rewards</p>
                                     @endif
                                 @endif
+@else
+    <p>This submission is not eligible for currency awards{{ $submission->status == 'Pending' ? ' yet-- it must be accepted first' : '' }}.</p>
                             @endif
                         @else
                         
@@ -226,34 +228,53 @@
             <div class="col-md-5">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5>[Admin] Vote Info</h5>
+                        <h4>Staff Comments</h4> {!! Auth::user()->hasPower('staff_comments') ? '(Visible to ' . $submission->credits . ')' : '' !!}
                     </div>
                     <div class="card-body">
-                        @if (isset($submission->vote_data) && $submission->voteData->count())
-                            @foreach ($submission->voteData as $voter => $vote)
-                                <li>
-                                    {!! App\Models\User\User::find($voter)->displayName !!} {{ $voter == Auth::user()->id ? '(you)' : '' }}: <span {!! $vote == 2 ? 'class="text-success">Accept' : 'class="text-danger">Reject' !!}</span>
-                                </li>
-                            @endforeach
-                        @else
-                            <p>No votes have been cast yet!</p>
-                        @endif
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5>[Admin] Staff Comments</h5> (Only visible to staff)
-                    </div>
-                    <div class="card-body">
+                        @if (isset($submission->parsed_staff_comments))
+    <h5>Staff Comments (Old):</h5>
+                            {!! $submission->parsed_staff_comments !!}
+                            <hr />
+    @endif
                         <!-- Staff-User Comments -->
                         <div class="container">
-                            @comments(['model' => $submission, 'type' => 'Staff-Staff', 'perPage' => 5])
+                            @comments(['model' => $submission, 'type' => 'Staff-User', 'perPage' => 5])
                         </div>
                     </div>
                 </div>
             </div>
-        @endif
-    </div>
+            @if (Auth::user()->hasPower('manage_submissions') && $submission->collaboratorApproved)
+                <div class="col-md-5">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>[Admin] Vote Info</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (isset($submission->vote_data) && $submission->voteData->count())
+    @foreach ($submission->voteData as $voter => $vote)
+    <li>
+                                        {!! App\Models\User\User::find($voter)->displayName !!} {{ $voter == Auth::user()->id ? '(you)' : '' }}: <span {!! $vote == 2 ? 'class="text-success">Accept' : 'class="text-danger">Reject' !!}</span>
+                                    </li>
+    @endforeach
+@else
+    <p>No votes have been cast yet!</p>
+    @endif
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>[Admin] Staff Comments</h5> (Only visible to staff)
+                        </div>
+                        <div class="card-body">
+                            <!-- Staff-User Comments -->
+                            <div class="container">
+                                @comments(['model' => $submission, 'type' => 'Staff-Staff', 'perPage' => 5])
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
 
 
 <script>

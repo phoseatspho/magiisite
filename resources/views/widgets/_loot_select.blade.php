@@ -15,17 +15,12 @@
         ->orderBy('sort_character', 'DESC')
         ->pluck('name', 'id');
     $items = \App\Models\Item\Item::orderBy('name')->pluck('name', 'id');
-    $currencies = \App\Models\Currency\Currency::where('is_user_owned', 1)
-        ->orderBy('name')
-        ->pluck('name', 'id');
+    $currencies = \App\Models\Currency\Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id');
     if ($showLootTables) {
         $tables = \App\Models\Loot\LootTable::orderBy('name')->pluck('name', 'id');
     }
     if ($showRaffles) {
-        $raffles = \App\Models\Raffle\Raffle::where('rolled_at', null)
-            ->where('is_active', 1)
-            ->orderBy('name')
-            ->pluck('name', 'id');
+        $raffles = \App\Models\Raffle\Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id');
     }
 @endphp
 
@@ -75,7 +70,7 @@
                     <td>{!! Form::text('quantity[]', $loot->quantity, ['class' => 'form-control']) !!}</td>
                     <td class="text-right"><a href="#" class="btn btn-danger remove-loot-button">Remove</a></td>
                 </tr>
-            @endforeach
+@endforeach
         @endif
     </tbody>
 </table>

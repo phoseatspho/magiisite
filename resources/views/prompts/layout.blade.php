@@ -2,7 +2,7 @@
 
 @section('title')
     Prompts ::
-    @yield('prompts-title')
+        @yield('prompts-title')
 @endsection
 
 @section('sidebar')

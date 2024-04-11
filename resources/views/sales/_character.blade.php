@@ -19,10 +19,7 @@
                             @if (config('lorekeeper.extensions.traits_by_category'))
                                 <div>
                                     @php
-                                        $traitgroup = $character->image
-                                            ->features()
-                                            ->get()
-                                            ->groupBy('feature_category_id');
+                                        $traitgroup = $character->image->features()->get()->groupBy('feature_category_id');
                                     @endphp
                                     @if ($character->image->features()->count())
                                         @foreach ($traitgroup as $key => $group)
@@ -37,36 +34,33 @@
                                                         @endforeach
                                                     </div>
                                                 @else
-                                                    <strong>{!! $key ? $group->first()->feature->category->displayName : 'Miscellaneous' !!}:</strong>
+<strong>{!! $key ? $group->first()->feature->category->displayName : 'Miscellaneous' !!}:</strong>
                                                     {!! $group->first()->feature->displayName !!}
                                                     @if ($group->first()->data)
-                                                        ({{ $group->first()->data }})
-                                                    @endif
-                                                @endif
+({{ $group->first()->data }})
+@endif
+@endif
                                             </div>
-                                        @endforeach
-                                    @else
-                                        <div>No traits listed.</div>
+@endforeach
+@else
+<div>No traits listed.</div>
                                     @endif
                                 </div>
-                            @else
-                                <div>
-                                    <?php $features = $character->image
-                                        ->features()
-                                        ->with('feature.category')
-                                        ->get(); ?>
+@else
+<div>
+                                    <?php $features = $character->image->features()->with('feature.category')->get(); ?>
                                     @if ($features->count())
                                         @foreach ($features as $feature)
-                                            <div>
+<div>
                                                 @if ($feature->feature->feature_category_id)
-                                                    <strong>{!! $feature->feature->category->displayName !!}:</strong>
-                                                    @endif {!! $feature->feature->displayName !!} @if ($feature->data)
-                                                        ({{ $feature->data }})
-                                                    @endif
+<strong>{!! $feature->feature->category->displayName !!}:</strong>
+@endif {!! $feature->feature->displayName !!} @if ($feature->data)
+({{ $feature->data }})
+@endif
                                             </div>
-                                        @endforeach
-                                    @else
-                                        <div>No traits listed.</div>
+@endforeach
+@else
+<div>No traits listed.</div>
                                     @endif
                                 </div>
                             @endif
@@ -77,23 +71,23 @@
                         <div class="mb-2">
                             Design:
                             @foreach ($character->image->designers as $designer)
-                                {!! $designer->displayLink() !!}{{ !$loop->last ? ', ' : '' }}
-                            @endforeach ・
+{!! $designer->displayLink() !!}{{ !$loop->last ? ', ' : '' }}
+@endforeach ・
                             Art:
                             @foreach ($character->image->artists as $artist)
-                                {!! $artist->displayLink() !!}{{ !$loop->last ? ', ' : '' }}
-                            @endforeach
+{!! $artist->displayLink() !!}{{ !$loop->last ? ', ' : '' }}
+@endforeach
                         </div>
 
                         {!! $character->price !!}
                         {!! isset($character->link) || isset($character->data['end_point']) ? '<br/>' : '' !!}
                         @if (isset($character->data['end_point']))
-                            {{ $character->data['end_point'] }}
-                        @endif
+{{ $character->data['end_point'] }}
+@endif
                         {{ isset($character->link) && (!isset($character->sales->comments_open_at) || (Auth::check() && Auth::user()->hasPower('edit_pages')) || $character->sales->comments_open_at < Carbon\Carbon::now()) && isset($character->data['end_point']) ? ' ・ ' : '' }}
                         @if (isset($character->link) && (!isset($character->sales->comments_open_at) || (Auth::check() && Auth::user()->hasPower('edit_pages')) || $character->sales->comments_open_at < Carbon\Carbon::now()))
-                            <a href="{{ $character->link }}">{{ $character->typeLink }}</a>
-                        @endif
+<a href="{{ $character->link }}">{{ $character->typeLink }}</a>
+@endif
                     </h6>
 
                     <p>{!! $character->description !!}</p>

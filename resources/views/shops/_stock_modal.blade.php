@@ -1,7 +1,7 @@
 @if (!$stock)
     <div class="text-center">Invalid item selected.</div>
 @else
-    <div class="text-center mb-3">
+<div class="text-center mb-3">
         <div class="mb-1"><a href="{{ $stock->item->idUrl }}"><img src="{{ $stock->item->imageUrl }}" alt="{{ $stock->item->name }}" /></a></div>
         <div>
             <a href="{{ $stock->item->idUrl }}"><strong>{{ $stock->item->name }}</strong></a>
@@ -16,7 +16,7 @@
     </div>
 
     @if ($stock->item->parsed_description)
-        <div class="mb-2">
+<div class="mb-2">
             <a data-toggle="collapse" href="#itemDescription" class="h5">Description <i class="fas fa-caret-down"></i></a>
             <div class="card collapse show mt-1" id="itemDescription">
                 <div class="card-body">
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-    @endif
+@endif
 
     @if($stock->shop->use_coupons)
         <div class="alert alert-success">You can use coupons in this store!</div>
@@ -54,7 +54,7 @@
             {!! Form::label('quantity', 'Quantity') !!}
             {!! Form::selectRange('quantity', 1, $quantityLimit, 1, ['class' => 'form-control mb-3']) !!}
             @if ($stock->use_user_bank && $stock->use_character_bank)
-                <p>This item can be paid for with either your user account bank, or a character's bank. Please choose which you would like to use.</p>
+<p>This item can be paid for with either your user account bank, or a character's bank. Please choose which you would like to use.</p>
                 <div class="form-group">
                     <div>
                         <label class="h5">{{ Form::radio('bank', 'user', true, ['class' => 'bank-select mr-1']) }} User Bank</label>

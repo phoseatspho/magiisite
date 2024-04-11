@@ -63,8 +63,8 @@
             @if (isset($submission->parsed_staff_comments))
                 {!! $submission->parsed_staff_comments !!}
             @else
-                {!! $submission->staff_comments !!}
-            @endif
+{!! $submission->staff_comments !!}
+@endif
         </div>
     @endif
 </div>
@@ -109,13 +109,13 @@
                 </thead>
                 <tbody>
                     @foreach (parseAssetData(isset($submission->data['rewards']) ? $submission->data['rewards'] : $submission->data) as $type)
-                        @foreach ($type as $asset)
-                            <tr>
+@foreach ($type as $asset)
+<tr>
                                 <td>{!! $asset['asset'] ? $asset['asset']->displayName : 'Deleted Asset' !!}</td>
                                 <td>{{ $asset['quantity'] }}</td>
                             </tr>
-                        @endforeach
-                    @endforeach
+@endforeach
+@endforeach
                 </tbody>
             </table>
         </div>
@@ -228,14 +228,13 @@
 <div class="card mb-3">
     <div class="card-header h2">Characters</div>
     <div class="card-body">
-        @if (count(
-                $submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
-            <div class="alert alert-warning">
+        @if (count($submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
+<div class="alert alert-warning">
                 Some characters have been deleted since this submission was created.
             </div>
-        @endif
+@endif
         @foreach ($submission->characters()->whereRelation('character', 'deleted_at', null)->get() as $character)
-            <div class="submission-character-row mb-2">
+<div class="submission-character-row mb-2">
                 <div class="submission-character-thumbnail">
                     <a href="{{ $character->character->url }}"><img src="{{ $character->character->image->thumbnailUrl }}" class="img-thumbnail" alt="Thumbnail for {{ $character->character->fullName }}" /></a>
                 </div>
@@ -245,7 +244,7 @@
                             <h3 class="mb-2 submission-character-info-header"><a href="{{ $character->character->url }}">{{ $character->character->fullName }}</a></h3>
                             <div class="submission-character-info-body">
                                 @if (array_filter(parseAssetData($character->data)))
-                                    <table class="table table-sm mb-0">
+<table class="table table-sm mb-0">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th width="70%">Reward</th>
@@ -254,13 +253,13 @@
                                         </thead>
                                         <tbody>
                                             @foreach (parseAssetData($character->data) as $key => $type)
-                                                @foreach ($type as $asset)
-                                                    <tr>
+@foreach ($type as $asset)
+<tr>
                                                         <td>{!! $asset['asset']->displayName !!} ({!! ucfirst($key) !!})</td>
                                                         <td>{{ $asset['quantity'] }}</td>
                                                     </tr>
-                                                @endforeach
-                                            @endforeach
+@endforeach
+@endforeach
 
                                             {{--
 
@@ -312,7 +311,7 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+@endforeach
     </div>
 </div>
 
@@ -333,16 +332,16 @@
                 </thead>
                 <tbody>
                     @foreach ($inventory['user_items'] as $itemRow)
-                        <tr class="d-flex">
+<tr class="d-flex">
                             <td class="col-2">
                                 @if (isset($itemsrow[$itemRow['asset']->item_id]->image_url))
-                                    <img class="small-icon" src="{{ $itemsrow[$itemRow['asset']->item_id]->image_url }}" alt="{{ $itemsrow[$itemRow['asset']->item_id]->name }}">
-                                @endif {!! $itemsrow[$itemRow['asset']->item_id]->name !!}
+<img class="small-icon" src="{{ $itemsrow[$itemRow['asset']->item_id]->image_url }}" alt="{{ $itemsrow[$itemRow['asset']->item_id]->name }}">
+@endif {!! $itemsrow[$itemRow['asset']->item_id]->name !!}
                             <td class="col-4">{!! array_key_exists('data', $itemRow['asset']->data) ? ($itemRow['asset']->data['data'] ? $itemRow['asset']->data['data'] : 'N/A') : 'N/A' !!}</td>
                             <td class="col-4">{!! array_key_exists('notes', $itemRow['asset']->data) ? ($itemRow['asset']->data['notes'] ? $itemRow['asset']->data['notes'] : 'N/A') : 'N/A' !!}</td>
                             <td class="col-2">{!! $itemRow['quantity'] !!}</td>
                         </tr>
-                    @endforeach
+@endforeach
                 </tbody>
             </table>
         </div>
@@ -362,11 +361,11 @@
                 </thead>
                 <tbody>
                     @foreach ($inventory['currencies'] as $currency)
-                        <tr>
+<tr>
                             <td>{!! $currency['asset']->name !!}</td>
                             <td>{{ $currency['quantity'] }}</td>
                         </tr>
-                    @endforeach
+@endforeach
                 </tbody>
             </table>
         </div>

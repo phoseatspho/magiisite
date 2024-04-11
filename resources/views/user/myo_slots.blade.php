@@ -7,9 +7,9 @@
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url, 'MYO Slots' => $user->url . '/myos']) !!}
 
-    <h1>
-        {!! $user->displayName !!}'s MYO Slots
-    </h1>
+        <h1>
+            {!! $user->displayName !!}'s MYO Slots
+        </h1>
 
-    @include('user._characters', ['characters' => $myos, 'myo' => true])
+        @include('user._characters', ['characters' => $myos, 'myo' => true])
 @endsection

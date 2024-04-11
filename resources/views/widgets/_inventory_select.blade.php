@@ -71,39 +71,39 @@
                                                     {{ $itemRow->getOthers($selected[$itemRow->id], 0) }}
                                                 @endif
                                             @elseif($page == 'update')
-                                                @if ($itemRow->getOthers(0, $selected[$itemRow->id]))
-                                                    {{ $itemRow->getOthers(0, $selected[$itemRow->id]) }}
-                                                @endif
-                                            @elseif($itemRow->getOthers())
-                                                {{ $itemRow->getOthers() }}
-                                            @endif
+@if ($itemRow->getOthers(0, $selected[$itemRow->id]))
+{{ $itemRow->getOthers(0, $selected[$itemRow->id]) }}
+@endif
+@elseif($itemRow->getOthers())
+{{ $itemRow->getOthers() }}
+@endif
                                         </td>
-                                    @elseif(in_array($itemRow->id, array_keys($selected)))
-                                        <td class="col-2">{!! Form::selectRange('stack_quantity[' . $itemRow->id . ']', 1, $itemRow->getAvailableContextQuantity($selected[$itemRow->id]), $selected[$itemRow->id], ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!}
+@elseif(in_array($itemRow->id, array_keys($selected)))
+<td class="col-2">{!! Form::selectRange('stack_quantity[' . $itemRow->id . ']', 1, $itemRow->getAvailableContextQuantity($selected[$itemRow->id]), $selected[$itemRow->id], ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!}
                                             /
                                             {{ $itemRow->getAvailableContextQuantity($selected[$itemRow->id]) }}
                                             @if ($page == 'trade')
-                                                @if ($itemRow->getOthers($selected[$itemRow->id], 0))
-                                                    {{ $itemRow->getOthers($selected[$itemRow->id], 0) }}
-                                                @endif
-                                            @elseif($page == 'update')
-                                                @if ($itemRow->getOthers(0, $selected[$itemRow->id]))
-                                                    {{ $itemRow->getOthers(0, $selected[$itemRow->id]) }}
-                                                @endif
-                                            @elseif($itemRow->getOthers())
-                                                {{ $itemRow->getOthers() }}
-                                            @endif
+@if ($itemRow->getOthers($selected[$itemRow->id], 0))
+{{ $itemRow->getOthers($selected[$itemRow->id], 0) }}
+@endif
+@elseif($page == 'update')
+@if ($itemRow->getOthers(0, $selected[$itemRow->id]))
+{{ $itemRow->getOthers(0, $selected[$itemRow->id]) }}
+@endif
+@elseif($itemRow->getOthers())
+{{ $itemRow->getOthers() }}
+@endif
                                         </td>
-                                    @else
-                                        <td class="col-2">{!! Form::selectRange('', 1, $itemRow->availableQuantity, 1, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!} /{{ $itemRow->availableQuantity }} @if ($itemRow->getOthers())
-                                                {{ $itemRow->getOthers() }}
-                                            @endif
+@else
+<td class="col-2">{!! Form::selectRange('', 1, $itemRow->availableQuantity, 1, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!} /{{ $itemRow->availableQuantity }} @if ($itemRow->getOthers())
+{{ $itemRow->getOthers() }}
+@endif
                                         </td>
-                                    @endif
-                                @else
-                                    <td class="col-2">{!! Form::selectRange('', 0, 0, 0, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;', 'disabled']) !!} /{{ $itemRow->availableQuantity }} @if ($itemRow->getOthers())
-                                            {{ $itemRow->getOthers() }}
-                                        @endif
+@endif
+@else
+<td class="col-2">{!! Form::selectRange('', 0, 0, 0, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;', 'disabled']) !!} /{{ $itemRow->availableQuantity }} @if ($itemRow->getOthers())
+{{ $itemRow->getOthers() }}
+@endif
                                     </td>
                                 @endif
                             </tr>

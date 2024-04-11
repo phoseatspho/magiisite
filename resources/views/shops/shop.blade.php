@@ -6,11 +6,11 @@
 
 @section('shops-content')
     <x-admin-edit title="Shop" :object="$shop" />
-    {!! breadcrumbs(['Shops' => 'shops', $shop->name => $shop->url]) !!}
+        {!! breadcrumbs(['Shops' => 'shops', $shop->name => $shop->url]) !!}
 
-    <h1>
-        {{ $shop->name }}
-    </h1>
+        <h1>
+            {{ $shop->name }}
+        </h1>
 
     <div class="text-center">
         @if ($shop->has_image)

@@ -5,17 +5,17 @@
 @endsection
 
 @section('sidebar')
-    @if (isset($user) && $user->is_deactivated)
-        @include('user._deactivated_sidebar')
-        @if (Auth::check() && Auth::user()->isStaff)
-            <ul class="my-0 py-0">
-                <li class="sidebar-header my-0 h4"><a href="{{ $user->url }}" class="card-link">ADMIN VIEW</a></li>
-            </ul>
+        @if (isset($user) && $user->is_deactivated)
+    @include('user._deactivated_sidebar')
+            @if (Auth::check() && Auth::user()->isStaff)
+    <ul class="my-0 py-0">
+                    <li class="sidebar-header my-0 h4"><a href="{{ $user->url }}" class="card-link">ADMIN VIEW</a></li>
+                </ul>
 
-            @include('user._sidebar')
-        @endif
-    @else
-        @include('user._sidebar')
+                @include('user._sidebar')
+    @endif
+@else
+    @include('user._sidebar')
     @endif
 @endsection
 

@@ -2,7 +2,7 @@
 
 @section('title')
     Shops ::
-    @yield('shops-title')
+        @yield('shops-title')
 @endsection
 
 @section('sidebar')

@@ -2,7 +2,7 @@
 
 @section('title')
     Account ::
-    @yield('account-title')
+        @yield('account-title')
 @endsection
 
 @section('sidebar')
