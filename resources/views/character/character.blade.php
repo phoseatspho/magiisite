@@ -155,10 +155,6 @@
 
 @section('scripts')
     @parent
-<<<<<<< HEAD
     @include('character._image_js', ['character' => $character])
     @include('character._transformation_js')
-=======
-        @include('character._image_js', ['character' => $character])
->>>>>>> beddd446afb8a145b5e452dafaaa9eb3163892d3
 @endsection
