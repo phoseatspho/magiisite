@@ -73,7 +73,7 @@
     <h3>Preview</h3>
     <div class="card mb-3">
         <div class="card-body">
-            @include('world._entry', ['imageUrl' => $recipe->imageUrl, 'name' => $recipe->displayName, 'description' => $recipe->parsed_description, 'searchUrl' => $recipe->searchUrl])
+            @include('world._entry', ['imageUrl' => $recipe->imageUrl, 'name' => $recipe->displayName, 'description' => $recipe->parsed_description, 'searchUrl' => $recipe->searchUrl, 'visible' => true])
         </div>
     </div>
 @endif
