@@ -248,7 +248,6 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->belongsToMany('App\Models\Recipe\Recipe', 'user_recipes')->withPivot('id');
     }
 
-
     /**
      * Returns user's foraging stats
      */
@@ -286,8 +285,8 @@ class User extends Authenticatable implements MustVerifyEmail {
      * Get the user's pets.
      */
     public function pets()
-    {
-        return $this->belongsToMany('App\Models\Pet\Pet', 'user_pets')->withPivot('data', 'updated_at', 'id', 'variant_id', 'chara_id', 'pet_name')->whereNull('user_pets.deleted_at');
+     {
+        return $this->belongsToMany('App\Models\Pet\Pet', 'user_pets')->withPivot('data', 'updated_at', 'id', 'variant_id', 'character_id', 'pet_name', 'has_image', 'evolution_id')->whereNull('user_pets.deleted_at');
     }
 
     /**
@@ -914,19 +913,22 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get the user's pet logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getPetLogs($limit = 10)
-    {
+    public function getPetLogs($limit = 10) {
         $user = $this;
-        $query = PetLog::with('sender')->with('recipient')->with('pet')->where(function($query) use ($user) {
-            $query->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Staff Removal']);
-        })->orWhere(function($query) use ($user) {
+        $query = PetLog::with('sender')->with('recipient')->with('pet')->where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Staff Removal']);
+        })->orWhere(function ($query) use ($user) {
             $query->where('recipient_id', $user->id);
         })->orderBy('id', 'DESC');
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**

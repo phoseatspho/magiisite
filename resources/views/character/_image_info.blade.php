@@ -134,28 +134,35 @@
                 @if ($image->character->pet)
                 <div class="mb-1">
                     <div><h6>Familiars</h6></div>
-                        <div class="text-center row">
-                        @foreach($image->character->pets as $pet)
-                            <div class="ml-3 mr-3">
-                                @if($pet->has_image)
-                                <img src="{{ $pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
-                                @elseif($pet->pet->imageurl)
-                                <img src="{{ $pet->pet->imageUrl }}" data-toggle="tooltip" title="{{ $pet->pet->name }}" style="max-width: 75px;"/>
-                                @else {!!$pet->pet->displayName !!}
-                                @endif
-                                <br>
-                                <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
-                            </div>
+                    <div class="row justify-content-center text-center">
+                        {{-- get one random pet --}}
+                        @php
+                            $pets = $image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
+                        @endphp
+                        @foreach ($pets as $pet)
+                            @if (config('lorekeeper.pets.pet_bonding_enabled'))
+                                @include('character._pet_bonding_info', ['pet' => $pet])
+                            @else
+                                <div class="ml-2 mr-3">
+                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 75px;" />
+                                    <br>
+                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
+                                </div>
+                            @endif
                         @endforeach
-                   </div>
+                        <div class="ml-auto float-right mr-3">
+                            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+                        </div>
+                    </div>
                 </div>
+            
 @endif
 
 @if ($image->character->gears)
                 <div class="mb-1">
                     <div><h6>Equipment</h6></div>
                         <div class="text-center row">
-                        @foreach($image->character->gear as $gear)
+                           @foreach($image->character->gear as $gear)
                             <div class="ml-3 mr-3">
                                 @if($gear->has_image)
                                 <img src="{{ $gear->imageUrl }}" data-toggle="tooltip" title="{{ $gear->gear->name }}" style="max-width: 75px;"/>
@@ -165,8 +172,8 @@
                                 @endif
                             </div>
                         @endforeach
-                        </div>
-                </div>
+                        </div>  
+                  </div>
                 @endif
 
                 @if ($image->character->weapon)

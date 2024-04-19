@@ -76,8 +76,8 @@ Route::group(['prefix' => __('awards.awardcase'), 'namespace' => 'Users'], funct
     Route::post('claim/{id}', 'AwardCaseController@postClaimAward');
     Route::get('selector', 'AwardCaseController@getSelector');
 });
-    
-Route::group(['prefix' => 'pets', 'namespace' => 'Users'], function() {
+
+Route::group(['prefix' => 'pets', 'namespace' => 'Users'], function () {
     Route::get('/', 'PetController@getIndex');
     Route::post('transfer/{id}', 'PetController@postTransfer');
     Route::post('delete/{id}', 'PetController@postDelete');
@@ -85,10 +85,18 @@ Route::group(['prefix' => 'pets', 'namespace' => 'Users'], function() {
     Route::post('attach/{id}', 'PetController@postAttach');
     Route::post('detach/{id}', 'PetController@postDetach');
     Route::post('variant/{id}', 'PetController@postVariant');
+    Route::post('evolution/{id}', 'PetController@postEvolution');
 
     Route::get('selector', 'PetController@getSelector');
+    Route::post('collect/{id}', 'PetController@postClaimPetDrops');
+    Route::post('collect-all', 'PetController@postClaimAllPetDrops');
+    Route::post('image/{id}', 'PetController@postCustomImage');
+    Route::post('description/{id}', 'PetController@postDescription');
 
-    Route::post('pet/{id}', 'PetController@postClaimPetDrops');
+    Route::get('view/{id}', 'PetController@getPetPage')->where('id', '[0-9]+');
+    Route::post('view/{id}/edit', 'PetController@postEditPetProfile')->where('id', '[0-9]+');
+
+    Route::post('bond/{id}', 'PetController@postBond');
 });
 
 Route::group(['prefix' => 'gears', 'namespace' => 'Users'], function() {
@@ -137,6 +145,8 @@ Route::group(['prefix' => 'wishlists', 'namespace' => 'Users'], function() {
 Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
     Route::get('/', 'CharacterController@getIndex');
     Route::post('sort', 'CharacterController@postSortCharacters');
+
+    Route::post('{slug}/pets/sort', 'CharacterController@postSortCharacterPets');
 
     Route::get('transfers/{type}', 'CharacterController@getTransfers');
     Route::post('transfer/act/{id}', 'CharacterController@postHandleTransfer');

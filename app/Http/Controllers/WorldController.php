@@ -753,73 +753,82 @@ class WorldController extends Controller {
         ]);
     }
 
-    /**
+   /**
      * Shows the pet categories page.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getPetCategories(Request $request)
-    {
+    public function getPetCategories(Request $request) {
         $query = PetCategory::query();
         $name = $request->get('name');
-        if($name) $query->where('name', 'LIKE', '%'.$name.'%');
-        return view('world.pet_categories', [  
+        if ($name) {
+            $query->where('name', 'LIKE', '%'.$name.'%');
+        }
+
+        return view('world.pet_categories', [
             'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
 
+    /**
+     * Shows the pets page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPets(Request $request) {
+        $query = Pet::with('category');
+        $data = $request->only(['pet_category_id', 'name', 'sort']);
+        if (isset($data['pet_category_id']) && $data['pet_category_id'] != 'none') {
+            $query->where('pet_category_id', $data['pet_category_id']);
+        }
+        if (isset($data['name'])) {
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        }
 
+        if (isset($data['sort'])) {
+            switch ($data['sort']) {
+                case 'alpha':
+                    $query->sortAlphabetical();
+                    break;
+                case 'alpha-reverse':
+                    $query->sortAlphabetical(true);
+                    break;
+                case 'category':
+                    $query->sortCategory();
+                    break;
+                case 'newest':
+                    $query->sortNewest();
+                    break;
+                case 'oldest':
+                    $query->sortOldest();
+                    break;
+            }
+        } else {
+            $query->sortCategory();
+        }
 
-    
-    /** 
-    * Shows the pets page.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Contracts\Support\Renderable
-    */
-   public function getPets(Request $request)
-   {
-       $query = Pet::with('category');
-       $data = $request->only(['pet_category_id', 'name', 'sort']);
-       if(isset($data['pet_category_id']) && $data['pet_category_id'] != 'none') 
-           $query->where('pet_category_id', $data['pet_category_id']);
-       if(isset($data['name'])) 
-           $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        return view('world.pets', [
+            'pets'       => $query->paginate(20)->appends($request->query()),
+            'categories' => ['none' => 'Any Category'] + PetCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+        ]);
+    }
 
-       if(isset($data['sort'])) 
-       {
-           switch($data['sort']) {
-               case 'alpha':
-                   $query->sortAlphabetical();
-                   break;
-               case 'alpha-reverse':
-                   $query->sortAlphabetical(true);
-                   break;
-               case 'category':
-                   $query->sortCategory();
-                   break;
-               case 'newest':
-                   $query->sortNewest();
-                   break;
-               case 'oldest':
-                   $query->sortOldest();
-                   break;
-           }
-       } 
-       else $query->sortCategory();
+    /**
+     * Gets a specific pet page.
+     *
+     * @param mixed $id
+     */
+    public function getPet($id) {
+        $pet = Pet::with('category')->findOrFail($id);
 
-       return view('world.pets', [
-        'pets' => $query->paginate(20)->appends($request->query()),
-           'categories' => ['none' => 'Any Category'] + PetCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray()
-           
-       ]);
-    }    
+        return view('world.pet_page', [
+            'pet' => $pet,
+        ]);
+    } 
 
     /**
      * Shows the weapon categories page.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getWeaponCategories(Request $request)
@@ -1004,6 +1013,7 @@ class WorldController extends Controller {
         $data = $request->only(['name', 'sort']);
         if(isset($data['name']))
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        }
 
         if(isset($data['sort']))
         {
@@ -1030,7 +1040,7 @@ class WorldController extends Controller {
         return view('world.recipes.recipes', [
             'recipes' => $query->paginate(20)->appends($request->query()),
         ]);
-    }
+    
 
      /**
      * Shows an individual recipe;ss page.
@@ -1050,7 +1060,7 @@ class WorldController extends Controller {
             'description' => $recipe->parsed_description,
         ]);
 
-}
+    }
 
 
      /**

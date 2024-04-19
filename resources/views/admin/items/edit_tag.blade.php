@@ -31,9 +31,9 @@
             {!! Form::submit('Edit Tag Settings', ['class' => 'btn btn-primary']) !!}
         </div>
 
-        {!! Form::close() !!}
-        @if (View::exists('admin.items.tags.' . $tag->tag . '_post'))
-    @include('admin.items.tags.' . $tag->tag . '_post', ['item' => $item, 'tag' => $tag])
+    {!! Form::close() !!}
+    @if (View::exists('admin.items.tags.' . $tag->tag . '_post'))
+        @include('admin.items.tags.' . $tag->tag . '_post', ['item' => $item, 'tag' => $tag])
     @endif
 @endsection
 

@@ -13,6 +13,9 @@
                 <a href="{{ url('characters/myos') }}" class="{{ set_active('characters/myos') }}">My MYO Slots</a>
             </div>
             <div class="sidebar-item">
+                <a href="{{ url('pets') }}" class="{{ set_active('pets*') }}">My Pets</a>
+            </div>
+            <div class="sidebar-item">
                 <a href="{{ url('wishlists') }}" class="{{ set_active('wishlists*') }}">Wishlists</a>
             </div>
             <div class="sidebar-item">

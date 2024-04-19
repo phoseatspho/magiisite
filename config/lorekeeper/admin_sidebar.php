@@ -286,7 +286,7 @@ return [
              ],
             [
                 'name' => 'Pets',
-                'url' => 'admin/data/pets'
+                'url'  => 'admin/data/pets',
             ],
             
             [

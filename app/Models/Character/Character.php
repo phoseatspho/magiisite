@@ -231,9 +231,8 @@ class Character extends Model {
         return $this->belongsTo(Rarity::class, 'rarity_id');
     }
 
-    public function pets()
-    {
-        return $this->hasMany('App\Models\User\UserPet', 'chara_id');
+    public function pets() {
+        return $this->hasMany('App\Models\User\UserPet', 'character_id');
     }
     
     public function gear()

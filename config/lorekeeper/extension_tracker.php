@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     // FORMAT EXAMPLE.
@@ -70,13 +71,15 @@ return [
          'version' => '1.0.0',
      ],
 
-     'Pets' => [
-        'key' => 'Pets',
+     'pets' => [
         'wiki_key' => 'Pets',
         'creators' => json_encode([
-            'Newt' => 'https://github.com/ne-wt/',
+            'Newt'      => 'https://github.com/ne-wt/',
+            'Mercury'   => 'https://github.com/itinerare/',
+            'Uri'       => 'https://github.com/preimpression/',
+            'SUPERCOOL' => 'https://github.com/CH3RVB/',
         ]),
-        'version' => '1.2.0',
+        'version' => '2.0.0',
     ],
 
     'Claymores and Companions' => [

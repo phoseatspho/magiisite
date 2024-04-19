@@ -1,19 +1,14 @@
-<?php namespace App\Services\Item;
+<?php
 
-use App\Services\Service;
-
-use DB;
-
-use App\Services\InventoryManager;
+namespace App\Services\Item;
 
 use App\Models\Item\Item;
-use App\Models\Currency\Currency;
-use App\Models\Loot\LootTable;
-use App\Models\Raffle\Raffle;
 use App\Models\Pet\Pet;
+use App\Models\Pet\PetVariant;
+use App\Services\Service;
+use DB;
 
-class SpliceService extends Service
-{
+class SpliceService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Splice Service
@@ -28,87 +23,65 @@ class SpliceService extends Service
      *
      * @return array
      */
-    public function getEditData()
-    {
+    public function getEditData() {
+        // group the variants by their $variant->pet name, and pluck the variant name and id
+        $variants = PetVariant::with('pet')->get()->groupBy('pet.name')->map(function ($item) {
+            return $item->pluck('variant_name', 'id');
+        })->toArray();
+
         return [
-            
+            'variants' => $variants,
         ];
     }
 
     /**
      * Processes the data attribute of the tag and returns it in the preferred format.
      *
-     * @param  string  $tag
+     * @param mixed $tag
+     *
      * @return mixed
      */
-    public function getTagData($tag)
-    {
+    public function getTagData($tag) {
+        $displayVariants = [];
+        if ($tag->data['variant_ids']) {
+            foreach ($tag->data['variant_ids'] as $variantId) {
+                if ($variantId == 'default') {
+                    $displayVariants[] = 'Default';
+                } else {
+                    $variant = PetVariant::find($variantId);
+                    $displayVariants[] = '<a href="'.$variant->pet->url.'" target="_blank">'.$variant->variant_name.' ('.$variant->pet->name.')</a>';
+                }
+            }
+        }
 
+        return [
+            'variant_ids' => $tag->data['variant_ids'] ?? null,
+            'variants'    => $tag->data['variant_ids'] ? PetVariant::whereIn('id', $tag->data['variant_ids'])->get() : null,
+            'display'     => $displayVariants ? implode(', ', $displayVariants) : null,
+        ];
     }
 
     /**
      * Processes the data attribute of the tag and returns it in the preferred format.
      *
-     * @param  string  $tag
-     * @param  array   $data
+     * @param mixed $tag
+     * @param array $data
+     *
      * @return bool
      */
-    public function updateData($tag, $data)
-    {
+    public function updateData($tag, $data) {
         DB::beginTransaction();
 
         try {
-            
+            $tag->data = json_encode([
+                'variant_ids' => $data['variant_ids'],
+            ]);
+
             return $this->commitReturn(true);
-        } catch(\Exception $e) { 
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
-    }
-
-
-    /**
-     * Acts upon the item when used from the inventory.
-     *
-     * @param  \App\Models\User\UserItem  $stacks
-     * @param  \App\Models\User\User      $user
-     * @param  array                      $data
-     * @return bool
-     */
-    public function act($stacks, $user, $data)
-    {
-        DB::beginTransaction();
-
-        try {
-        
-            
-            return $this->commitReturn(true);
-        } catch(\Exception $e) { 
-            $this->setError('error', $e->getMessage());
-        }
-        return $this->rollbackReturn(false);
-    }
-
-    /**
-     * Acts upon the item when used from the inventory.
-     *
-     * @param  array                  $rewards
-     * @return string
-     */
-    private function getSpliceRewardsString($rewards)
-    {
-        $results = "You have received: ";
-        $result_elements = [];
-        foreach($rewards as $assetType)
-        {
-            if(isset($assetType))
-            {
-                foreach($assetType as $asset)
-                {
-                    array_push($result_elements, $asset['asset']->name.(class_basename($asset['asset']) == 'Raffle' ? ' (Raffle Ticket)' : '')." x".$asset['quantity']);
-                }
-            }
-        }
-        return $results.implode(', ', $result_elements);
     }
 }

@@ -56,7 +56,7 @@
                     <tr class="loot-row">
                         <td>{!! Form::select(
                             'rewardable_type[]',
-                            config('lorekeeper.extensions.item_entry_expansion.loot_tables.enable')
+                            Config::get('lorekeeper.extensions.item_entry_expansion.loot_tables.enable')
                                 ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'Pet' => 'Pet', 'None' => 'None']
                                 : ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'Pet' => 'Pet', 'None' => 'None'],
                             $loot->rewardable_type,
@@ -70,6 +70,8 @@
                                     {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], isset($loot->data['criteria']) ? $loot->data['criteria'] : null, ['class' => 'form-control', 'placeholder' => 'Criteria']) !!}
                                     {!! Form::select('rarity[]', $rarities, isset($loot->data['rarity']) ? $loot->data['rarity'] : null, ['class' => 'form-control', 'placeholder' => 'Rarity']) !!}
                                 </div>
+                            @elseif($loot->rewardable_type == 'Pet')
+                                {!! Form::select('rewardable_id[]', $pets, $loot->rewardable_id, ['class' => 'form-control currency-select selectize', 'placeholder' => 'Select Pet']) !!}
                             @elseif($loot->rewardable_type == 'Currency')
                                 {!! Form::select('rewardable_id[]', $currencies, $loot->rewardable_id, ['class' => 'form-control currency-select selectize', 'placeholder' => 'Select Currency']) !!}
                                 @elseif($loot->rewardable_type == 'Pet')
@@ -112,31 +114,38 @@
     <table class="table table-sm">
         <tbody id="lootRow">
             <tr class="loot-row">
-                <td>{!! Form::select('rewardable_type[]', Config::get('lorekeeper.extensions.item_entry_expansion.loot_tables.enable') ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'Pet' => 'Pet', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'None' => 'None'] : ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'None' => 'None'], null, ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type']) !!}</td>
-                <td class="loot-row-select"></td>
-                <td>{!! Form::text('quantity[]', 1, ['class' => 'form-control']) !!}</td>
-                <td class="loot-row-weight">{!! Form::text('weight[]', 1, ['class' => 'form-control loot-weight']) !!}</td>
-                <td class="loot-row-chance"></td>
-                <td class="text-right"><a href="#" class="btn btn-danger remove-loot-button">Remove</a></td>
-            </tr>
-        </tbody>
-    </table>
-    {!! Form::select('rewardable_id[]', $items, null, ['class' => 'form-control item-select', 'placeholder' => 'Select Item']) !!}
-    <div class="item-rarity-select d-flex">
-        {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
-        {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
+            <td>{!! Form::select(
+                        'rewardable_type[]',
+                        config('lorekeeper.extensions.item_entry_expansion.loot_tables.enable')
+                            ? ['Item' => 'Item', 'ItemRarity' => 'Item Rarity', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'ItemCategoryRarity' => 'Item Category (Conditional)', 'None' => 'None']
+                            : ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'ItemCategory' => 'Item Category', 'None' => 'None'],
+                        null,
+                        ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
+                    ) !!}</td>
+                    <td class="loot-row-select"></td>
+                    <td>{!! Form::text('quantity[]', 1, ['class' => 'form-control']) !!}</td>
+                    <td class="loot-row-weight">{!! Form::text('weight[]', 1, ['class' => 'form-control loot-weight']) !!}</td>
+                    <td class="loot-row-chance"></td>
+                    <td class="text-right"><a href="#" class="btn btn-danger remove-loot-button">Remove</a></td>
+                </tr>
+            </tbody>
+        </table>
+        {!! Form::select('rewardable_id[]', $items, null, ['class' => 'form-control item-select', 'placeholder' => 'Select Item']) !!}
+        <div class="item-rarity-select d-flex">
+            {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
+            {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
+        </div>
+        {!! Form::select('rewardable_id[]', $pets, null, ['class' => 'form-control pet-select', 'placeholder' => 'Select Pet']) !!}
+        {!! Form::select('rewardable_id[]', $currencies, null, ['class' => 'form-control currency-select', 'placeholder' => 'Select Currency']) !!}
+        {!! Form::select('rewardable_id[]', $tables, null, ['class' => 'form-control table-select', 'placeholder' => 'Select Loot Table']) !!}
+        {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control category-select', 'placeholder' => 'Select Item Category']) !!}
+        <div class="category-rarity-select d-flex">
+            {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control', 'placeholder' => 'Category']) !!}
+            {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
+            {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
+        </div>
+        {!! Form::select('rewardable_id[]', [1 => 'No reward given.'], null, ['class' => 'form-control none-select']) !!}
     </div>
-    {!! Form::select('rewardable_id[]', $currencies, null, ['class' => 'form-control currency-select', 'placeholder' => 'Select Currency']) !!}
-    {!! Form::select('rewardable_id[]', $pets, null, ['class' => 'form-control pet-select', 'placeholder' => 'Select Pet']) !!}
-    {!! Form::select('rewardable_id[]', $tables, null, ['class' => 'form-control table-select', 'placeholder' => 'Select Loot Table']) !!}
-    {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control category-select', 'placeholder' => 'Select Item Category']) !!}
-    <div class="category-rarity-select d-flex">
-        {!! Form::select('rewardable_id[]', $categories, null, ['class' => 'form-control', 'placeholder' => 'Category']) !!}
-        {!! Form::select('criteria[]', ['=' => '=', '<' => '<', '>' => '>', '<=' => '<=', '>=' => '>='], null, ['class' => 'form-control criteria-select', 'placeholder' => 'Criteria']) !!}
-        {!! Form::select('rarity[]', $rarities, null, ['class' => 'form-control criteria-select', 'placeholder' => 'Rarity']) !!}
-    </div>
-    {!! Form::select('rewardable_id[]', [1 => 'No reward given.'], null, ['class' => 'form-control none-select']) !!}
-</div>
 
     @if ($table->id)
         <h3>Test Roll</h3>
@@ -155,78 +164,84 @@
 @endsection
 
 @section('scripts')
-@parent
-<script>
-$( document ).ready(function() {
-    var $lootTable  = $('#lootTableBody');
-    var $lootRow = $('#lootRow').find('.loot-row');
-    var $itemSelect = $('#lootRowData').find('.item-select');
-    var $petSelect = $('#lootRowData').find('.pet-select');
-    var $itemRaritySelect = $('#lootRowData').find('.item-rarity-select');
-    var $currencySelect = $('#lootRowData').find('.currency-select');
-    var $tableSelect = $('#lootRowData').find('.table-select');
-    var $categorySelect = $('#lootRowData').find('.category-select');
-    var $categoryRaritySelect = $('#lootRowData').find('.category-rarity-select');
-    var $noneSelect = $('#lootRowData').find('.none-select');
+    @parent
+    <script>
+        $(document).ready(function() {
+            var $lootTable = $('#lootTableBody');
+            var $lootRow = $('#lootRow').find('.loot-row');
+            var $itemSelect = $('#lootRowData').find('.item-select');
+            var $itemRaritySelect = $('#lootRowData').find('.item-rarity-select');
+            var $petSelect = $('#lootRowData').find('.pet-select');
+            var $currencySelect = $('#lootRowData').find('.currency-select');
+            var $tableSelect = $('#lootRowData').find('.table-select');
+            var $categorySelect = $('#lootRowData').find('.category-select');
+            var $categoryRaritySelect = $('#lootRowData').find('.category-rarity-select');
+            var $noneSelect = $('#lootRowData').find('.none-select');
 
-    refreshChances();
-    $('#lootTableBody .selectize').selectize();
-    attachRemoveListener($('#lootTableBody .remove-loot-button'));
+            refreshChances();
+            $('#lootTableBody .selectize').selectize();
+            attachRemoveListener($('#lootTableBody .remove-loot-button'));
 
-    $('.delete-table-button').on('click', function(e) {
-        e.preventDefault();
-        loadModal("{{ url('admin/data/loot-tables/delete') }}/{{ $table->id }}", 'Delete Loot Table');
-    });
+            $('.delete-table-button').on('click', function(e) {
+                e.preventDefault();
+                loadModal("{{ url('admin/data/loot-tables/delete') }}/{{ $table->id }}", 'Delete Loot Table');
+            });
 
-    $('#testRoll').on('click', function(e) {
-        e.preventDefault();
-        loadModal("{{ url('admin/data/loot-tables/roll') }}/{{ $table->id }}?quantity=" + $('#rollQuantity').val(), 'Rolling Loot Table');
-    });
+            $('#testRoll').on('click', function(e) {
+                e.preventDefault();
+                loadModal("{{ url('admin/data/loot-tables/roll') }}/{{ $table->id }}?quantity=" + $('#rollQuantity').val(), 'Rolling Loot Table');
+            });
 
-    $('#addLoot').on('click', function(e) {
-        e.preventDefault();
-        var $clone = $lootRow.clone();
-        $lootTable.append($clone);
-        attachRewardTypeListener($clone.find('.reward-type'));
-        attachRemoveListener($clone.find('.remove-loot-button'));
-        attachWeightListener($clone.find('.loot-weight'));
-        refreshChances();
-    });
+            $('#addLoot').on('click', function(e) {
+                e.preventDefault();
+                var $clone = $lootRow.clone();
+                $lootTable.append($clone);
+                attachRewardTypeListener($clone.find('.reward-type'));
+                attachRemoveListener($clone.find('.remove-loot-button'));
+                attachWeightListener($clone.find('.loot-weight'));
+                refreshChances();
+            });
 
-    $('.reward-type').on('change', function(e) {
-        var val = $(this).val();
-        var $cell = $(this).parent().find('.loot-row-select');
+            $('.reward-type').on('change', function(e) {
+                var val = $(this).val();
+                var $cell = $(this).parent().parent().find('.loot-row-select');
 
-        var $clone = null;
-        if(val == 'Item') $clone = $itemSelect.clone();
-        else if (val == 'ItemRarity') $clone = $itemRaritySelect.clone();
-        else if (val == 'Currency') $clone = $currencySelect.clone();
-        else if (val == 'Pet') $clone = $petSelect.clone();
-        else if (val == 'ItemCategory') $clone = $categorySelect.clone();
-        else if (val == 'ItemCategoryRarity') $clone = $categoryRaritySelect.clone();
-        else if (val == 'LootTable') $clone = $tableSelect.clone();
-        else if (val == 'None') $clone = $noneSelect.clone();
+                var $clone = null;
+                if (val == 'Item') $clone = $itemSelect.clone();
+                else if (val == 'ItemRarity') $clone = $itemRaritySelect.clone();
+                else if (val == 'Pet') $clone = $petSelect.clone();
+                else if (val == 'Currency') $clone = $currencySelect.clone();
+                else if (val == 'ItemCategory') $clone = $categorySelect.clone();
+                else if (val == 'ItemCategoryRarity') $clone = $categoryRaritySelect.clone();
+                else if (val == 'LootTable') $clone = $tableSelect.clone();
+                else if (val == 'None') $clone = $noneSelect.clone();
 
-        $cell.html('');
-        $cell.append($clone);
-    });
+                $cell.html('');
+                $cell.append($clone);
+                if (val != 'ItemCategoryRarity' && val != 'ItemRarity') $clone.selectize();
+                else {
+                    var row_num = $(this).parent().parent().index();
+                    $clone.find('[name="rarity[]"]').attr('name', `rarity[${row_num}]`);
+                    $clone.find('[name="criteria[]"]').attr('name', `criteria[${row_num}]`);
+                }
+            });
 
-    function attachRewardTypeListener(node) {
-        node.on('change', function(e) {
-            var val = $(this).val();
-            var $cell = $(this).parent().parent().find('.loot-row-select');
+            function attachRewardTypeListener(node) {
+                node.on('change', function(e) {
+                    var val = $(this).val();
+                    var $cell = $(this).parent().parent().find('.loot-row-select');
 
-            var $clone = null;
-            if(val == 'Item') $clone = $itemSelect.clone();
-            else if (val == 'ItemRarity') $clone = $itemRaritySelect.clone();
-            else if (val == 'ItemCategory') $clone = $categorySelect.clone();
-            else if (val == 'ItemCategoryRarity') $clone = $categoryRaritySelect.clone();
-            else if (val == 'Currency') $clone = $currencySelect.clone();
-            else if (val == 'Pet') $clone = $petSelect.clone();
-            else if (val == 'LootTable') $clone = $tableSelect.clone();
-            else if (val == 'None') $clone = $noneSelect.clone();
+                    var $clone = null;
+                    if (val == 'Item') $clone = $itemSelect.clone();
+                    else if (val == 'ItemRarity') $clone = $itemRaritySelect.clone();
+                    else if (val == 'ItemCategory') $clone = $categorySelect.clone();
+                    else if (val == 'ItemCategoryRarity') $clone = $categoryRaritySelect.clone();
+                    else if (val == 'Pet') $clone = $petSelect.clone();
+                    else if (val == 'Currency') $clone = $currencySelect.clone();
+                    else if (val == 'LootTable') $clone = $tableSelect.clone();
+                    else if (val == 'None') $clone = $noneSelect.clone();
 
-            $cell.html('');
+                    $cell.html('');
                     $cell.append($clone);
                     if (val != 'ItemCategoryRarity' && val != 'ItemRarity') $clone.selectize();
                     else {

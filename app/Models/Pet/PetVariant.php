@@ -4,23 +4,15 @@ namespace App\Models\Pet;
 
 use App\Models\Model;
 
-class PetVariant extends Model
-{
+class PetVariant extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'pet_id', 'variant_name', 'has_image'
+        'pet_id', 'variant_name', 'has_image',
     ];
-
-    /**
-     * Whether the model contains timestamps to be saved and updated.
-     *
-     * @var string
-     */
-    public $timestamps = false;
 
     /**
      * The table associated with the model.
@@ -29,8 +21,15 @@ class PetVariant extends Model
      */
     protected $table = 'pet_variants';
 
+    /**
+     * Whether the model contains timestamps to be saved and updated.
+     *
+     * @var string
+     */
+    public $timestamps = false;
+
     /**********************************************************************************************
-    
+
         RELATIONS
 
     **********************************************************************************************/
@@ -38,24 +37,38 @@ class PetVariant extends Model
     /**
      * Get the pet associated with this pet stack.
      */
-    public function pet() 
-    {
-        return $this->belongsTo('App\Models\Pet\Pet');
+    public function pet() {
+        return $this->belongsTo(Pet::class);
+    }
+
+    /**
+     * gets the variants drop data.
+     */
+    public function dropData() {
+        return $this->hasOne(PetVariantDropData::class, 'variant_id');
     }
 
     /**********************************************************************************************
-    
+
         ACCESSORS
 
     **********************************************************************************************/
+
+    /**
+     * Displays the model's name, linked to its encyclopedia page.
+     *
+     * @return string
+     */
+    public function getDisplayNameAttribute() {
+        return '<a href="'.$this->pet->idUrl.'" class="display-item">'.$this->name.' '.$this->pet->name.'</a>';
+    }
 
     /**
      * Gets the file directory containing the model's image.
      *
      * @return string
      */
-    public function getImageDirectoryAttribute()
-    {
+    public function getImageDirectoryAttribute() {
         return 'images/data/pets';
     }
 
@@ -64,9 +77,8 @@ class PetVariant extends Model
      *
      * @return string
      */
-    public function getImageFileNameAttribute()
-    {
-        return $this->pet_id .'-'. $this->variant_name .'-image.png';
+    public function getImageFileNameAttribute() {
+        return $this->pet_id.'-variant-'.$this->id.'-image.png';
     }
 
     /**
@@ -74,19 +86,20 @@ class PetVariant extends Model
      *
      * @return string
      */
-    public function getImagePathAttribute()
-    {
+    public function getImagePathAttribute() {
         return public_path($this->imageDirectory);
     }
-    
+
     /**
      * Gets the URL of the model's image.
      *
      * @return string
      */
-    public function getImageUrlAttribute()
-    {
-        if (!$this->has_image) return null;
-        return asset($this->imageDirectory . '/' . $this->imageFileName);
+    public function getImageUrlAttribute() {
+        if (!$this->has_image) {
+            return null;
+        }
+
+        return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 }

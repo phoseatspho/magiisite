@@ -153,23 +153,25 @@
 
 <div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Pets</h5>
-            <div class="card-body">
-                @if(count($pets))
-                    <div class="row">
-                        @foreach($pets as $pet)
-                            <div class="col profile-inventory-item">
-                                <a href="#" class="inventory-stack"><img src="{{ $pet->variantimage($pet->pivot->variant_id) }}" class="img-fluid" style="width:25%;" data-toggle="tooltip" title="{{ $pet->name }}" alt="{{ $pet->name }}" />
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div>No pets owned.</div>
-                @endif
-            </div>
-            <div class="text-right"><a href="{{ $user->url.'/pets' }}">View all...</a></div>
+    <div class="card-body text-center">
+        <h5 class="card-title">Pets</h5>
+        <div class="card-body">
+            @if (count($pets))
+                <div class="row justify-content-center">
+                    @foreach ($pets as $pet)
+                        <div class="col-md-2 profile-inventory-item">
+                            <a href="{{ url($user->url . '/pets') }}" class="inventory-stack">
+                                <img class="img-fluid" src="{{ $pet->VariantImage($pet->pivot->id) }}" data-toggle="tooltip" title="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}"
+                                    alt="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}" />
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div>No pets owned.</div>
+            @endif
         </div>
+        <div class="text-right"><a href="{{ $user->url . '/pets' }}">View all...</a></div>
     </div>
 </div>
 

@@ -151,17 +151,17 @@ class SubmissionManager extends Service {
     }
 
     /**
-    * Edits an existing submission.
-    *
-    * @param array                 $data
-    * @param \App\Models\User\User $user
-    * @param bool                  $isClaim
-    * @param mixed                 $submission
-    * @param mixed                 $isSubmit
-    *
-    * @return mixed
-    */
-   public function editSubmission($submission, $data, $user, $isClaim = false, $isSubmit = false) {
+     * Edits an existing submission.
+     *
+     * @param array                 $data
+     * @param \App\Models\User\User $user
+     * @param bool                  $isClaim
+     * @param mixed                 $submission
+     * @param mixed                 $isSubmit
+     *
+     * @return mixed
+     */
+    public function editSubmission($submission, $data, $user, $isClaim = false, $isSubmit = false) {
         DB::beginTransaction();
 
         try {

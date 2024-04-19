@@ -6,9 +6,9 @@
 
 @section('home-content')
     @if ($isClaim)
-    {!! breadcrumbs(['Claims' => 'claims', 'New Claim' => 'claims/new']) !!}
-@else
-    {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'New Submission' => 'submissions/new']) !!}
+        {!! breadcrumbs(['Claims' => 'claims', 'New Claim' => 'claims/new']) !!}
+    @else
+        {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'New Submission' => 'submissions/new']) !!}
     @endif
 
         <h1>

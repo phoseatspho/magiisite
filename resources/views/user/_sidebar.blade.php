@@ -2,7 +2,7 @@
     <li class="sidebar-header"><a href="{{ $user->url }}" class="card-link">{{ Illuminate\Support\Str::limit($user->name, 10, $end='...') }}</a></li>
 
     <li class="sidebar-section">
-        <div class="sidebar-section-header" data-toggle="collapse" data-target="#collapseGallery" aria-expanded="true" aria-controls="collapseGallery" id="headingGallery">
+        <div class="sidebar-section-header" data-toggle="collapse" data-target="#collapseGallery" aria-expanded="false" aria-controls="collapseGallery" id="headingGallery">
             Gallery
         </div>
         <div class="collapse show" aria-labelledby="headingGallery" data-parent="#accordion" id="collapseGallery">

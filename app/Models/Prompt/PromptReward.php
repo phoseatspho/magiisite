@@ -70,7 +70,7 @@ class PromptReward extends Model {
                 break;
             case 'Pet':
                 return $this->belongsTo('App\Models\Pet\Pet', 'rewardable_id');
-            break;
+                break;
             case 'Raffle':
                 return $this->belongsTo(Raffle::class, 'rewardable_id');
             break;

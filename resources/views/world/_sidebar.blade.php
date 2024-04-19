@@ -5,7 +5,7 @@
     </li>
 
     <li class="sidebar-section">
-        <div class="sidebar-section-header" data-toggle="collapse" data-target="#collapseCharacters" aria-expanded="true" aria-controls="collapseCharacters" id="headingCharacters">
+        <div class="sidebar-section-header" data-toggle="collapse" data-target="#collapseCharacters" aria-expanded="false" aria-controls="collapseCharacters" id="headingCharacters">
             Characters
         </div>
         <div class="collapse show" aria-labelledby="headingCharacters" data-parent="#accordion" id="collapseCharacters">
@@ -39,7 +39,10 @@
                 <a href="{{ url('world/items') }}" class="{{ set_active('world/items*') }}">All Items</a>
             </div>
             <div class="sidebar-item">
-                <a href="{{ url('world/currencies') }}" class="{{ set_active('world/currencies*') }}">Currencies</a>
+                <a href="{{ url('world/currencies') }}" class="{{ set_active('world/currencies*') }}">Currencies</a>   
+            </div>
+            <div class="sidebar-item">
+                <a href="{{ url('world/pets') }}" class="{{ set_active('world/pets*') }}">Pets</a>
             </div>
             <div class="sidebar-item">
                 <a href="{{ url('world/collections') }}" class="{{ set_active('world/collections*') }}">Collections</a>

@@ -198,30 +198,52 @@ class GrantController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getPets()
-    {
+    public function getPets() {
         return view('admin.grants.pets', [
             'users' => User::orderBy('id')->pluck('name', 'id'),
-            'pets' => Pet::orderBy('name')->pluck('name', 'id')
+            'pets'  => Pet::orderBy('name')->pluck('name', 'id'),
         ]);
+    }
+
+    /**
+     * Gets all variants of a pet.
+     *
+     * @param mixed $id
+     */
+    public function getPetVariants($id) {
+        $pet = Pet::find($id);
+
+        return $pet->variants->pluck('variant_name', 'id')->toArray();
+    }
+
+    /**
+     * Gets all evlutions of a pet.
+     *
+     * @param mixed $id
+     */
+    public function getPetEvolutions($id) {
+        $pet = Pet::find($id);
+
+        return $pet->evolutions->pluck('evolution_name', 'id')->toArray();
     }
 
     /**
      * Grants or removes pets from multiple users.
      *
-     * @param  \Illuminate\Http\Request        $request
-     * @param  App\Services\InvenntoryManager  $service
+     * @param App\Services\InvenntoryManager $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postPets(Request $request, PetManager $service)
-    {
-        $data = $request->only(['names', 'pet_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
-        if($service->grantPets($data, Auth::user())) {
+    public function postPets(Request $request, PetManager $service) {
+        $data = $request->only(['names', 'pet_ids', 'quantities', 'data', 'disallow_transfer', 'notes', 'variant', 'evolution']);
+        if ($service->grantPets($data, Auth::user())) {
             flash('Pets granted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 

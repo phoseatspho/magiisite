@@ -1,34 +1,27 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class AddCharaTableForPets extends Migration
-{
+class AddCharaTableForPets extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
-    {
+    public function up() {
         //
         Schema::table('user_pets', function (Blueprint $table) {
-            $table->integer('chara_id')->nullable()->default(null);
+            $table->integer('character_id')->nullable()->default(null);
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
-    {
+    public function down() {
         //
         Schema::table('user_pets', function (Blueprint $table) {
-            $table->dropColumn('chara_id');
+            $table->dropColumn('character_id');
         });
     }
 }

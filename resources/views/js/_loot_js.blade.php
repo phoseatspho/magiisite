@@ -74,8 +74,8 @@ $( document ).ready(function() {
 
                 var $clone = null;
                 if (val == 'Item') $clone = $itemSelect.clone();
-                else if (val == 'Currency') $clone = $currencySelect.clone();
                 else if (val == 'Pet') $clone = $PetSelect.clone();
+                else if (val == 'Currency') $clone = $currencySelect.clone();
                 else if (val == 'Weapon') $clone = $WeaponSelect.clone();
                 else if (val == 'Gear') $clone = $GearSelect.clone();
                 else if (val == 'Element') $clone = $ElementSelect.clone();
