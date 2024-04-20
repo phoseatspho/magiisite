@@ -85,6 +85,7 @@
                         <li><a href="{{ url(__('dailies.dailies')) }}">Daily Check In</a></li>
                         <li><a href="{{ url('prompts/prompts') }}">Quests</a></li>
                         <li><a href="{{ url('foraging') }}">Foraging</a></li>
+                        <li><a href="{{ url(__('cultivation.cultivation')) }}">Cultivation</a></li>
                         <li><a href="{{ url('activities') }}">Activities</a></li>
                         <li><a href="{{ url('fetch') }}">Fetch Quests</a></li>
                         <li><a href="{{ url('crafting') }}">Crafting</a></li>

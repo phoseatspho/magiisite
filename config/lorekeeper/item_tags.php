@@ -73,5 +73,21 @@ return [
         'name' => 'Border',
         'text_color' => '#ffffff',
         'background_color' => '#bb6e7d'
+    ],    
+    'seed' => [
+        'name' => 'Seed',
+        'text_color' => '#ffffff',
+        'background_color' => '#3E7C5D'
+    ],
+ 
+    'tool' => [
+        'name' => 'Tool',
+        'text_color' => '#ffffff',
+        'background_color' => '#332312'
+    ],
+    'exploration' => [
+        'name' => 'Exploration',
+        'text_color' => '#ffffff',
+        'background_color' => '#808000'
     ],
 ];

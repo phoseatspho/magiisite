@@ -744,6 +744,24 @@ Route::group(['prefix' => 'raffles', 'middleware' => 'power:manage_raffles'], fu
     Route::post('roll/group/{id}', 'RaffleController@postRollRaffleGroup');
 });
 
+# CULTIVATION
+Route::group(['prefix' => 'cultivation', 'middleware' => 'power:edit_data'], function() {
+    Route::get('areas', 'CultivationController@getAreaIndex');
+    Route::get('plots', 'CultivationController@getPlotIndex');
+
+    Route::get('areas/edit/{id?}', 'CultivationController@getCreateEditArea');
+    Route::post('areas/edit/{id?}', 'CultivationController@postCreateEditArea');
+    Route::get('plots/edit/{id?}', 'CultivationController@getCreateEditPlot');
+    Route::post('plots/edit/{id?}', 'CultivationController@postCreateEditPlot');
+    Route::post('areas/sort', 'CultivationController@postSortAreas');
+    Route::post('plots/sort', 'CultivationController@postSortPlot');
+    Route::get('areas/delete/{id}', 'CultivationController@getDeleteArea');
+    Route::get('plots/delete/{id}', 'CultivationController@getDeletePlot');
+    Route::post('areas/delete/{id}', 'CultivationController@postDeleteArea');
+    Route::post('plots/delete/{id}', 'CultivationController@postDeletePlot');
+
+});
+
 // SUBMISSIONS
 Route::group(['prefix' => 'submissions', 'middleware' => 'power:manage_submissions'], function () {
     Route::get('/', 'SubmissionController@getSubmissionIndex');
