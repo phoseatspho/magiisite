@@ -75,6 +75,7 @@
                         <li><a href="{{ url('characters/myos') }}">My MYOs</a></li>
                         <li><a href="{{ url('bank') }}">Bank</a></a></li>
                         <li><a href="{{ url('inventory') }}">Inventory</a></li>
+                        <li><a href="{{ url('collection') }}">Collections</a></a></li>
                         <li><a href="{{ url('awardcase') }}">Awards</a></li>
                     </ul>
                 </div>
@@ -84,10 +85,10 @@
                         <li><a href="{{ url(__('dailies.dailies')) }}">Daily Check In</a></li>
                         <li><a href="{{ url('prompts/prompts') }}">Quests</a></li>
                         <li><a href="{{ url('foraging') }}">Foraging</a></li>
-                        <li><a href="{{ url('collection') }}">Collections</a></a></li>
                         <li><a href="{{ url('activities') }}">Activities</a></li>
                         <li><a href="{{ url('fetch') }}">Fetch Quests</a></li>
                         <li><a href="{{ url('crafting') }}">Crafting</a></li>
+                        <li><a href="{{ url('higher-or-lower') }}">Higher or Lower</a></li>
                         <li><a href="{{ url('raffles') }}">Raffles</a></li>
                     </ul>
                 </div>

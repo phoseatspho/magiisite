@@ -416,3 +416,13 @@ Route::group(['prefix' => 'criteria'], function() {
     
     Route::get('guide/{id}', 'CriterionController@getCriterionGuide');
 });
+/**************************************************************************************************
+    Higher or Lower
+**************************************************************************************************/
+
+Route::group(['prefix' => 'higher-or-lower'], function() {
+    Route::get('/', 'HolController@getIndex');
+
+    Route::get('play', 'HolController@playHol');
+    Route::post('play/guess', 'HolController@postGuess');
+});

@@ -47,6 +47,9 @@ class Kernel extends ConsoleKernel {
                 ->hourly();
         $schedule->command('generate-rank-card-back')
             ->daily();
+        $schedule->command('reset-hol')
+            ->daily();
+
     }
 
     /**
