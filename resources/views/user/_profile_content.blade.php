@@ -152,7 +152,7 @@
 </div>
 
 <div class="card-deck mb-4 profile-assets">
-    <div class="card profile-currencies profile-assets-card">
+  <div class="card profile-currencies profile-assets-card">
     <div class="card-body text-center">
         <h5 class="card-title">Pets</h5>
         <div class="card-body">
@@ -173,6 +173,7 @@
         </div>
         <div class="text-right"><a href="{{ $user->url . '/pets' }}">View all...</a></div>
     </div>
+  </div>
 </div>
 
 <div class="card profile-inventory profile-assets-card">
