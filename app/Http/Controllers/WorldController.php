@@ -753,7 +753,7 @@ class WorldController extends Controller {
         ]);
     }
 
-   /**
+    /**
      * Shows the pet categories page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -824,7 +824,7 @@ class WorldController extends Controller {
         return view('world.pet_page', [
             'pet' => $pet,
         ]);
-    } 
+    }
 
     /**
      * Shows the weapon categories page.
