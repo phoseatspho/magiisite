@@ -829,6 +829,8 @@ class WorldController extends Controller {
     /**
      * Shows the weapon categories page.
      *
+     *    
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getWeaponCategories(Request $request)
