@@ -1015,7 +1015,7 @@ class WorldController extends Controller {
         $data = $request->only(['name', 'sort']);
         if(isset($data['name']))
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
-        }
+        
 
         if(isset($data['sort']))
         {
@@ -1042,6 +1042,8 @@ class WorldController extends Controller {
         return view('world.recipes.recipes', [
             'recipes' => $query->paginate(20)->appends($request->query()),
         ]);
+
+    }  
     
 
      /**
