@@ -13,7 +13,7 @@ return [
     */
 
     //daily plays for HOL
-    'hol_plays' => 5, 
+    'hol_plays' => 3, 
 
     //amount to grant when guess is successful
     'currency_grant' => 1,
