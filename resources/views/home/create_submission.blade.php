@@ -103,6 +103,7 @@
                         $('#copy-calc').load('{{ url('criteria/prompt') }}/' + $(this).val());
                         if($(this).val()) $('#criterion-section').removeClass('hide');
                     });
+                    @endif
 
                     $confirmSubmit.on('click', function(e) {
                         e.preventDefault();
