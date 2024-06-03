@@ -19,7 +19,6 @@ return [
         'links' => [
             [
                 'name' => 'User Ranks',
-<<<<<<< HEAD
                 'url'  => 'admin/users/ranks',
             ],
             [
@@ -31,11 +30,6 @@ return [
                 'url'  => 'admin/staff-reward-settings',
             ],
         ],
-=======
-                'url' => 'admin/users/ranks'
-            ],
-        ]
->>>>>>> 690b586dad995c92671807b8de6a07487d03f0db
     ],
     'Reports'    => [
         'power' => 'manage_reports',
@@ -78,15 +72,11 @@ return [
                 'name' => 'Invitation Keys',
                 'url'  => 'admin/invitations',
             ],
-<<<<<<< HEAD
-        ],
-=======
             [
                 'name' => 'Rank Rewards',
                 'url' => 'admin/rank-rewards'
             ]
         ]
->>>>>>> 690b586dad995c92671807b8de6a07487d03f0db
     ],
     'Queues'     => [
         'power' => 'manage_submissions',
