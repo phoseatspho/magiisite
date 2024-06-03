@@ -591,5 +591,11 @@ return [
         'name' => 'Rank Reward',
         'message' => 'You recieved rewards for being part of the {rank_name} rank: {rewards}',
         'url' => 'inventory'
+    ],    
+    // REFERRAL
+    905 => [
+        'name' => 'Referral Rewards',
+        'message' => 'You\'ve received the following rewards for referring {count} user(s): {rewards}',
+        'url' => ''
     ]
 ];

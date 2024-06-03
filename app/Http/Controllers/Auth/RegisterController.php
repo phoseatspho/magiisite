@@ -110,7 +110,7 @@ class RegisterController extends Controller {
     protected function create(array $data) {
         DB::beginTransaction();
         $service = new UserService;
-        $user = $service->createUser(Arr::only($data, ['name', 'email', 'password', 'dob']));
+        $user = $service->createUser(Arr::only($data, ['name', 'email', 'password', 'dob', 'referred_by']));
         if (!Settings::get('is_registration_open')) {
             (new InvitationService)->useInvitation(Invitation::where('code', $data['code'])->first(), $user);
         }

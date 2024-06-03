@@ -292,6 +292,11 @@ return [
                 'name' => 'Pets',
                 'url'  => 'admin/data/pets',
             ],
+
+            [
+                'name' => 'Referrals',
+             'url' => 'admin/data/referrals'
+            ], 
             
             [
             'name' => 'Codes',

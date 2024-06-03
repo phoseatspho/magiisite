@@ -416,6 +416,17 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::get('criteria/option/delete/{id}', 'CriterionController@getDeleteCriterionOption');
     Route::post('criteria/option/delete/{id}', 'CriterionController@postDeleteCriterionOption');
 
+
+    # REFERRALS
+    Route::get('referrals', 'ReferralController@getIndex');
+    Route::get('referrals/create', 'ReferralController@getCreate');
+    Route::get('referrals/edit/{id}', 'ReferralController@getEdit');
+    Route::get('referrals/delete/{id}', 'ReferralController@getDelete');
+    Route::post('referrals/create', 'ReferralController@postCreateEdit');
+    Route::post('referrals/edit/{id?}', 'ReferralController@postCreateEdit');
+    Route::post('referrals/delete/{id}', 'ReferralController@postDelete');
+});
+
      # BORDERS
      Route::get('border-categories', 'BorderController@getIndex');
      Route::get('border-categories/create', 'BorderController@getCreateBorderCategory');
