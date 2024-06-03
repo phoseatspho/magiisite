@@ -425,7 +425,6 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('referrals/create', 'ReferralController@postCreateEdit');
     Route::post('referrals/edit/{id?}', 'ReferralController@postCreateEdit');
     Route::post('referrals/delete/{id}', 'ReferralController@postDelete');
-});
 
      # BORDERS
      Route::get('border-categories', 'BorderController@getIndex');
