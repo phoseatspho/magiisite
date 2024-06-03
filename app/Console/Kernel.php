@@ -49,6 +49,8 @@ class Kernel extends ConsoleKernel {
             ->daily();
         $schedule->command('reset-hol')
             ->daily();
+        $schedule->command('reward-ranks')
+                ->daily();
 
     }
 

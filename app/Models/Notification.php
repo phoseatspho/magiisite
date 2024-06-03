@@ -180,4 +180,5 @@ public const COMMENT_REPLY = 240;
     const BIRTHDAY_REWARDED    = 1105;
     const RECIPE_GRANT                      = 600; // Draginraptor - Crafting
     const BORDER_GRANT                      = 1106;
+    const RANK_REWARD    = 1107;
 }

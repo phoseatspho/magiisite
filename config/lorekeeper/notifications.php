@@ -585,4 +585,11 @@ return [
         'message' => 'You have received a staff grant of the user border {border_name} from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Borders</a>)',
         'url' => 'user/{recipient_name}/borders'
     ],
+
+    // RANK_REWARD
+    1107 => [
+        'name' => 'Rank Reward',
+        'message' => 'You recieved rewards for being part of the {rank_name} rank: {rewards}',
+        'url' => 'inventory'
+    ]
 ];
