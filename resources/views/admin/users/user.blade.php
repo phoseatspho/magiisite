@@ -2,7 +2,7 @@
 
 @section('admin-title')
     User Index
-@stop
+@endsection
 
 @section('admin-content')
         {!! breadcrumbs(['Admin Panel' => 'admin', 'User Index' => 'admin/users', $user->name => 'admin/users/' . $user->name . '/edit']) !!}
@@ -54,46 +54,6 @@
         {!! Form::close() !!}
     </div>
 
-    @if(Settings::get('WE_user_locations') > 0)
-<div class="card p-3 mb-2">
-    <h3>Home Location <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
-    @if($char_enabled == 1)
-        <div class="alert alert-warning">This user's characters will have the same home as them.</div>
-    @endif
-    {!! Form::open(['url' => 'admin/users/'.$user->name.'/location']) !!}
-        <div class="form-group row">
-            <label class="col-md-2 col-form-label">Location</label>
-            <div class="col-md-9">
-            {!! Form::select('location', [0=>'Choose a Location'] + $locations, isset($user->home_id) ? $user->home_id : 0, ['class' => 'form-control selectize']) !!}
-            </div>
-            <div class="col-md text-right">
-                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-            </div>
-        </div>
-    {!! Form::close() !!}
-</div>
-@endif
-
-@if(Settings::get('WE_user_factions') > 0)
-<div class="card p-3 mb-2">
-    <h3>Faction <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
-    @if($char_faction_enabled == 1)
-        <div class="alert alert-warning">This user's characters will have the same faction as them.</div>
-    @endif
-    <p>Please note that changing a user's faction will remove them from any special ranks and reset their faction standing!</p>
-    {!! Form::open(['url' => 'admin/users/'.$user->name.'/faction']) !!}
-        <div class="form-group row">
-            <label class="col-md-2 col-form-label">Faction</label>
-            <div class="col-md-9">
-            {!! Form::select('faction', [0=>'Choose a Faction'] + $factions, isset($user->faction_id) ? $user->faction_id : 0, ['class' => 'form-control selectize']) !!}
-            </div>
-            <div class="col-md text-right">
-                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-            </div>
-        </div>
-    {!! Form::close() !!}
-</div>
-@endif
 
     <div class="card p-3 mb-2">
         <h3>Account</h3>
@@ -141,7 +101,7 @@
             {!! Form::close() !!}
         </div>
 
-    @include('widgets._staff_profile_form', ['user' => $user, 'adminView' => 1])
+
 
     <div class="card p-3 mb-2">
         <h3>Birthdate</h3>
@@ -189,9 +149,3 @@
         </div>
 @endsection
 
-@section('scripts')
-@parent
-    @if(Auth::user()->isStaff)
-        @include('js._website_links_js')
-    @endif
-@endsection
