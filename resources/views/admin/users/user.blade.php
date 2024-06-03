@@ -2,7 +2,7 @@
 
 @section('admin-title')
     User Index
-@endsection
+@stop
 
 @section('admin-content')
         {!! breadcrumbs(['Admin Panel' => 'admin', 'User Index' => 'admin/users', $user->name => 'admin/users/' . $user->name . '/edit']) !!}
@@ -189,3 +189,9 @@
         </div>
 @endsection
 
+@section('scripts')
+@parent
+    @if(Auth::user()->isStaff)
+        @include('js._website_links_js')
+    @endif
+@endsection
