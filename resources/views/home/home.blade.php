@@ -1,1 +1,1 @@
-
+@include('widgets._carousel')

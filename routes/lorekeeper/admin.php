@@ -543,6 +543,11 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('faq/create', 'FaqController@postCreateEditFaqQuestion');
     Route::post('faq/edit/{id?}', 'FaqController@postCreateEditFaqQuestion');
     Route::post('faq/delete/{id}', 'FaqController@postDeleteFaqQuestion');
+
+    Route::get('carousel', 'CarouselController@getIndex');
+    Route::post('carousel/create', 'CarouselController@postUploadCarousel');
+    Route::get('carousel/delete/{id}', 'CarouselController@getDeleteCarousel');
+    Route::post('carousel/delete/{id}', 'CarouselController@postDeleteCarousel');
 });
 
 # PAGES
