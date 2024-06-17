@@ -5,7 +5,6 @@ namespace App\Services\Item;
 use App\Models\Item\Item;
 use App\Services\InventoryManager;
 use App\Services\Service;
-use DB;
 use App\Models\Currency\Currency;
 use App\Models\Award\Award;
 use App\Models\Loot\LootTable;
