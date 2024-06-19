@@ -48,7 +48,7 @@ class FortifyServiceProvider extends ServiceProvider {
         Fortify::registerView(fn () => view('auth.register', [
             'userCount'        => User::count(),
             'altRegistrations' => $altRegistrations,
-            'referred_by' => $users,
+            'users' => User::orderBy('name')->pluck('name', 'id')->toArray(),
         ]));
 
         $altLogins = array_filter(config('lorekeeper.sites'), function ($item) {
