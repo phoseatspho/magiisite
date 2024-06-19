@@ -22,7 +22,7 @@
             <p class="pt-3">There is no featured Magii.</p>
             <hr class="mb-2">
         @endif
-        <p class="dark px-2">Draw the <a href="https://www.magiispecies.com/prompts/3">Featured Magii</a> to earn Stardust and Gacha Tokens and be in with the chance to have your character featured for gift art!</p>
+        <p class="dark px-2">Draw the <a href="https://www.magiispecies.com/prompts/3">Featured Magii</a> to earn Stardust and Gacha Tokens!</p>
     </div>
     <div class="scroll-footer"></div>
 </div>
