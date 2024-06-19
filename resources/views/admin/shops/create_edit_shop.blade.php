@@ -166,7 +166,6 @@
         </div>
         @endforeach
     </div>
-</div>
 @endif
 
     <div class="feature-row mb-2 hide">
