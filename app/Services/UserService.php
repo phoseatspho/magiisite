@@ -26,6 +26,7 @@ use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Models\Trade;
 use App\Models\User\User;
+use App\Models\Referral;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
