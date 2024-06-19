@@ -84,10 +84,10 @@
                     <ul class="scroll-list">
                         <li><a href="{{ url(__('dailies.dailies')) }}">Daily Check In</a></li>
                         <li><a href="{{ url('prompts/prompts') }}">Quests</a></li>
-                        <li><a href="{{ url('fetch') }}">Fetch Quests</a></li>
+                        <li><a href="{{ url('fetch') }}">Errands</a></li>
                         <li><a href="{{ url('crafting') }}">Crafting</a></li>
                         <li><a href="{{ url('higher-or-lower') }}">Higher or Lower</a></li>
-                        <li><a href="{{ url('raffles') }}">Raffles</a></li>
+                        <li><a href="https://www.magiispecies.com/info/gacha">Gacha Banner</a></li>
                     </ul>
                 </div>
             @endif
@@ -98,6 +98,7 @@
                     <li><a href="{{ url('world/info') }}">World Expanded</a></li>
                     <li><a href="{{ url('shops') }}">Shops</a></li>
                     <li><a href="{{ url('gallery') }}">Gallery</a></a></li>
+                    <li><a href="{{ url('raffles') }}">Raffles</a></a></li>
                     
                 </ul>
             </div>
