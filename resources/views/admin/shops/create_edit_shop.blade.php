@@ -142,6 +142,10 @@
                         <div class="col-2">
                             <img src="{{ $stock->item->imageUrl }}" style="width: 100%;" alt="{{ $stock->item->name }}">
                         </div>
+                        @endif
+                                <div class="col-{{ $stock->item->has_image ? '8' : '10' }}">
+                                    <div><a href="{{ $stock->item->idUrl }}"><strong>{{ $stock->item->name }} - {{ $stock->stock_type }}</strong></a></div>
+                                    <div><strong>Cost: </strong> {!! $stock->currency->display($stock->cost) !!}</div>
                     </div>
                     <div class="row">
                         @if(!$stock->is_visible)<div class="col-2"> <i class="fas fa-eye-slash"></i></div>@endif
