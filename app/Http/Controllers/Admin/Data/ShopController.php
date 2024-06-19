@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Admin\Data;
 use App\Http\Controllers\Controller;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
-use App\Models\Pet\Pet;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Services\ShopService;
 use App\Models\Pet\Pet;
 use Log;
 use Illuminate\Http\Request;
-use Log;
 use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller {
