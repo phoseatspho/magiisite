@@ -9,7 +9,6 @@ use App\Models\Pet\Pet;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Services\ShopService;
-use App\Models\Shop\ShopStock;
 use App\Models\Pet\Pet;
 use Log;
 use Illuminate\Http\Request;
