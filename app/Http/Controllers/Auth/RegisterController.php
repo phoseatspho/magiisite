@@ -63,6 +63,7 @@ class RegisterController extends Controller {
 
         return view('auth.register_with_driver', [
             'userCount' => User::count(),
+            'users' => User::orderBy('name')->pluck('name', 'id')->toArray(),
             'provider'  => $provider,
             'user'      => $userData->nickname ?? null,
             'token'     => $userData->token ?? null,
