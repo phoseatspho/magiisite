@@ -11,6 +11,7 @@ use App\Services\InvitationService;
 use App\Services\LinkService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Models\Referral;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
