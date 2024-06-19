@@ -54,6 +54,7 @@
         {!! Form::checkbox('use_coupons', 1, $shop->id ? $shop->use_coupons : 0, ['class' => 'form-check-label', 'data-toggle' => 'toggle', 'id' => 'use_coupons']) !!}
         {!! Form::label('use_coupons', 'Allow Coupons?', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Note that ALL coupons will be allowed to be used, unless specified otherwise.') !!}
     </div>
+
     <div class="form-group coupon-row {{ $shop->use_coupons ? '' : 'hide' }}">
         {!! Form::label('allowed_coupons', 'Allowed Coupon(s)', ['class' => 'form-check-label']) !!}
         <p>Leave blank to allow ALL coupons.</p>
@@ -171,6 +172,7 @@
         @endforeach
     </div>
 @endif
+</div>
 
     <div class="feature-row mb-2 hide">
         {!! Form::label('item_id', 'Item', ['class' => 'col-form-label']) !!}
