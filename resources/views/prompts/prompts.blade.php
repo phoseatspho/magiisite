@@ -20,7 +20,7 @@
             <div class="form-group ml-3 mb-3">
                 {!! Form::select('open_prompts', ['any' => 'Any Status', 'open' => 'Open Prompts', 'closed' => 'Closed Prompts'], Request::get('open_prompts') ?? 'any', ['class' => 'form-control selectize']) !!}
             </div>
-            </div>
+            
             {!! Form::close() !!}
         </div>
 
@@ -34,19 +34,17 @@
             @if(!Auth::check() || $submission < $prompt->parent_quantity)
         <div class="card-body" style="background-color:#ddd;">
             @include('prompts._prompt_denied_entry', ['prompt' => $prompt])
-</div>
             @else
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
             @endif
-</div>
         @else
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
         @endif
         </div>
     </div>
-
+  
 @endforeach
 
             {!! $prompts->render() !!}
