@@ -34,17 +34,19 @@
             @if(!Auth::check() || $submission < $prompt->parent_quantity)
         <div class="card-body" style="background-color:#ddd;">
             @include('prompts._prompt_denied_entry', ['prompt' => $prompt])
+</div>
             @else
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
             @endif
+</div>
         @else
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
         @endif
         </div>
     </div>
-</div>  
+
 @endforeach
 
             {!! $prompts->render() !!}
