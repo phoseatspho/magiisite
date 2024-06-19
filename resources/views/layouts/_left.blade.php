@@ -61,7 +61,7 @@
                         @endif
                     </li>
                     <li><a href="{{ url('masterlist') }}">Masterlist</a></li>
-                    <li><a href="{{ url('/') }}">Events</a></li>
+                    <li><a href="https://www.magiispecies.com/info/events">Events</a></li>
                     <li><a href="https://discord.gg/magiispecies">Discord</a></li>
                     <li><a href="{{ url('users') }}">Users</a></li>
                 </ul>
@@ -84,9 +84,6 @@
                     <ul class="scroll-list">
                         <li><a href="{{ url(__('dailies.dailies')) }}">Daily Check In</a></li>
                         <li><a href="{{ url('prompts/prompts') }}">Quests</a></li>
-                        <li><a href="{{ url('foraging') }}">Foraging</a></li>
-                        <li><a href="{{ url(__('cultivation.cultivation')) }}">Cultivation</a></li>
-                        <li><a href="{{ url('activities') }}">Activities</a></li>
                         <li><a href="{{ url('fetch') }}">Fetch Quests</a></li>
                         <li><a href="{{ url('crafting') }}">Crafting</a></li>
                         <li><a href="{{ url('higher-or-lower') }}">Higher or Lower</a></li>
@@ -101,8 +98,7 @@
                     <li><a href="{{ url('world/info') }}">World Expanded</a></li>
                     <li><a href="{{ url('shops') }}">Shops</a></li>
                     <li><a href="{{ url('gallery') }}">Gallery</a></a></li>
-                    <li><a href="{{ url('/') }}">Custom Link 1</a></li>
-                    <li><a href="{{ url('/') }}">Custom Link 2</a></li>
+                    
                 </ul>
             </div>
 
