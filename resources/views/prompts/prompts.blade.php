@@ -38,20 +38,14 @@
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
             @endif
+        @else
+        <div class="card-body">
+            @include('prompts._prompt_entry', ['prompt' => $prompt])
+        @endif
         </div>
     </div>
-</div>
 @endforeach
-{!! $prompts->render() !!}
 
-            {!! $prompts->render() !!}
-            @foreach ($prompts as $prompt)
-    <div class="card mb-3">
-                    <div class="card-body">
-                        @include('prompts._prompt_entry', ['prompt' => $prompt])
-                    </div>
-                </div>
-    @endforeach
             {!! $prompts->render() !!}
 
             <div class="text-center mt-4 small text-muted">{{ $prompts->total() }} result{{ $prompts->total() == 1 ? '' : 's' }} found.</div>
