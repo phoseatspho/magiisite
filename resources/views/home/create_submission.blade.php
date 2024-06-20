@@ -105,6 +105,14 @@
                     });
                     @endif
 
+                    $confirmButton.on('click', function(e) {
+                        e.preventDefault();
+                        $confirmContent.removeClass('hide');
+                        $draftContent.addClass('hide');
+                        $cancelContent.addClass('hide');
+                        $confirmationModal.modal('show');
+                    });
+
                     $confirmSubmit.on('click', function(e) {
                         e.preventDefault();
                         $submissionForm.attr('action', '{{ url()->current() }}');
