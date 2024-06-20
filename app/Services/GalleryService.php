@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Models\Gallery\Gallery;
-use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use App\Models\Gallery\GalleryCriterion;
 use Illuminate\Support\Arr;
