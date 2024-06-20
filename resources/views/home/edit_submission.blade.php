@@ -2,17 +2,17 @@
 
 @section('home-title')
     @if ($isClaim)
-    Claim Draft
-@else
-    Submission Draft
+        Claim Draft
+    @else
+        Submission Draft
     @endif
 @endsection
 
 @section('home-content')
     @if ($isClaim)
-    {!! breadcrumbs(['Claims' => 'claims', 'Claim Draft' => 'claims/drafts']) !!}
-@else
-    {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'Submission Draft' => 'submissions/drafts']) !!}
+        {!! breadcrumbs(['Claims' => 'claims', 'Claim Draft' => 'claims/drafts']) !!}
+    @else
+        {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'Submission Draft' => 'submissions/drafts']) !!}
     @endif
 
     <h1>
@@ -28,7 +28,7 @@
             The {{ $isClaim ? 'claim' : 'submission' }} queue is currently closed. You cannot edit {{ $isClaim ? 'claim' : 'submission' }} drafts at this time.
         </div>
     @else
-        @include('home._submission_form', ['submission' => $submission, 'isClaim' => $isClaim])
+        @include('home._submission_form', ['submission' => $submission, 'criteria' => $criteria, 'isClaim' => $isClaim])
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -88,91 +88,87 @@
 @endsection
 
 @section('scripts')
-        @parent
-        @if (!$closed)
-    @if ($isClaim)
-    @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true])
-@else
-    @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
-    @endif
-            @include('js._character_select_js')
-            @include('widgets._inventory_select_js', ['readOnly' => true])
-            @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
-            @include('widgets._bank_select_js', [])
+    @parent
+    @if (!$closed)
+        @if ($isClaim)
+            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true])
+        @else
+            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
+        @endif
+        @include('js._character_select_js')
+        @include('widgets._inventory_select_js', ['readOnly' => true])
+        @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
+        @include('widgets._bank_select_js', [])
 
-            <script>
-                $(document).ready(function() {
-                    var $confirmationModal = $('#confirmationModal');
-                    var $submissionForm = $('#submissionForm');
+        <script>
+            $(document).ready(function() {
+                var $confirmationModal = $('#confirmationModal');
+                var $submissionForm = $('#submissionForm');
 
-                    var $confirmButton = $('#confirmButton');
-                    var $confirmContent = $('#confirmContent');
-                    var $confirmSubmit = $('#confirmSubmit');
+                var $confirmButton = $('#confirmButton');
+                var $confirmContent = $('#confirmContent');
+                var $confirmSubmit = $('#confirmSubmit');
 
-                    var $draftButton = $('#draftButton');
-                    var $draftContent = $('#draftContent');
-                    var $draftSubmit = $('#draftSubmit');
+                var $draftButton = $('#draftButton');
+                var $draftContent = $('#draftContent');
+                var $draftSubmit = $('#draftSubmit');
 
-                    var $cancelButton = $('#cancelButton');
-                    var $cancelContent = $('#cancelContent');
-                    var $cancelSubmit = $('#cancelSubmit');
+                var $cancelButton = $('#cancelButton');
+                var $cancelContent = $('#cancelContent');
+                var $cancelSubmit = $('#cancelSubmit');
 
 
-                    @if (!$isClaim)
-                        var $prompt = $('#prompt');
-                        var $rewards = $('#rewards');
+                @if (!$isClaim)
+                    var $prompt = $('#prompt');
+                    var $rewards = $('#rewards');
 
-                        $prompt.selectize();
-                        $prompt.on('change', function(e) {
-                            $rewards.load('{{ url('submissions/new/prompt') }}/' + $(this).val());
-                        });
-                    @endif
-
-                    $confirmButton.on('click', function(e) {
-                        e.preventDefault();
-                        $confirmContent.removeClass('hide');
-                        $draftContent.addClass('hide');
-                        $cancelContent.addClass('hide');
-                        $confirmationModal.modal('show');
+                    $prompt.selectize();
+                    $prompt.on('change', function(e) {
+                        $rewards.load('{{ url('submissions/new/prompt') }}/' + $(this).val());
                     });
+                @endif
 
-                    $confirmSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/submit');
-                        $submissionForm.submit();
-                    });
+                $confirmButton.on('click', function(e) {
+                    e.preventDefault();
+                    $confirmContent.removeClass('hide');
+                    $draftContent.addClass('hide');
+                    $cancelContent.addClass('hide');
+                    $confirmationModal.modal('show');
+                });
 
-                    $draftButton.on('click', function(e) {
-                        e.preventDefault();
-                        $draftContent.removeClass('hide');
-                        $confirmContent.addClass('hide');
-                        $cancelContent.addClass('hide');
-                        $confirmationModal.modal('show');
-                    });
+                $confirmSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}/submit');
+                    $submissionForm.submit();
+                });
 
-                    $draftSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}');
-                        $submissionForm.submit();
-                    });
+                $draftButton.on('click', function(e) {
+                    e.preventDefault();
+                    $draftContent.removeClass('hide');
+                    $confirmContent.addClass('hide');
+                    $cancelContent.addClass('hide');
+                    $confirmationModal.modal('show');
+                });
 
-                    $cancelButton.on('click', function(e) {
-                        e.preventDefault();
-                        $cancelContent.removeClass('hide');
-                        $confirmContent.addClass('hide');
-                        $draftContent.addClass('hide');
-                        $confirmationModal.modal('show');
-                    });
+                $draftSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}');
+                    $submissionForm.submit();
+                });
 
-                    $cancelSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/delete');
-                        $submissionForm.submit();
-                    });
+                $cancelButton.on('click', function(e) {
+                    e.preventDefault();
+                    $cancelContent.removeClass('hide');
+                    $confirmContent.addClass('hide');
+                    $draftContent.addClass('hide');
+                    $confirmationModal.modal('show');
+                });
 
-
-                
-
+                $cancelSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}/delete');
+                    $submissionForm.submit();
+                });
 
                 // Criteria
                 $('.add-calc').on('click', function(e) {
