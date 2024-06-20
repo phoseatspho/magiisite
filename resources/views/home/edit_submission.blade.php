@@ -230,41 +230,8 @@
                     });
 
 
-                });
+                
 
-                $confirmSubmit.on('click', function(e) {
-                    e.preventDefault();
-                    $submissionForm.attr('action', '{{ url()->current() }}/submit');
-                    $submissionForm.submit();
-                });
-
-                $draftButton.on('click', function(e) {
-                    e.preventDefault();
-                    $draftContent.removeClass('hide');
-                    $confirmContent.addClass('hide');
-                    $cancelContent.addClass('hide');
-                    $confirmationModal.modal('show');
-                });
-
-                $draftSubmit.on('click', function(e) {
-                    e.preventDefault();
-                    $submissionForm.attr('action', '{{ url()->current() }}');
-                    $submissionForm.submit();
-                });
-
-                $cancelButton.on('click', function(e) {
-                    e.preventDefault();
-                    $cancelContent.removeClass('hide');
-                    $confirmContent.addClass('hide');
-                    $draftContent.addClass('hide');
-                    $confirmationModal.modal('show');
-                });
-
-                $cancelSubmit.on('click', function(e) {
-                    e.preventDefault();
-                    $submissionForm.attr('action', '{{ url()->current() }}/delete');
-                    $submissionForm.submit();
-                });
 
                 // Criteria
                 $('.add-calc').on('click', function(e) {

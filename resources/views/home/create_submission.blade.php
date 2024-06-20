@@ -118,7 +118,6 @@
                         $confirmationModal.modal('show');
                     });
 
-                
 
                 $draftSubmit.on('click', function(e) {
                     e.preventDefault();
