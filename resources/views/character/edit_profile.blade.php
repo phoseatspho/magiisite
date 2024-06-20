@@ -52,10 +52,7 @@
 </div>
 @endif
 
-    <div class="form-group">
-        {!! Form::label('text', 'Profile Content') !!}
-        {!! Form::textarea('text', $character->profile->text, ['class' => 'wysiwyg form-control']) !!}
-    </div>
+ 
 
         {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
         @if (!$character->is_myo_slot)
