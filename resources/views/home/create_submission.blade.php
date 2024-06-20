@@ -118,12 +118,7 @@
                         $confirmationModal.modal('show');
                     });
 
-                    $draftSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/draft');
-                        $submissionForm.submit();
-                    });
-                });
+                
 
                 $draftSubmit.on('click', function(e) {
                     e.preventDefault();
