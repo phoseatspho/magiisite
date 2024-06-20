@@ -81,68 +81,8 @@
                         </div>
                     </div>
                 </div>
-
-        @if ($closed)
-    <div class="alert alert-danger">
-                The {{ $isClaim ? 'claim' : 'submission' }} queue is currently closed. You cannot edit {{ $isClaim ? 'claim' : 'submission' }} drafts at this time.
-            </div>
-@else
-    @include('home._submission_form', ['submission' => $submission])
-
-            <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-
-                    <div class="modal-content hide" id="confirmContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Confirm {{ $isClaim ? 'Claim' : 'Submission' }}</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                                This will submit the form and put it into the {{ $isClaim ? 'claims' : 'prompt' }} approval queue.
-                                You will not be able to edit the contents after the {{ $isClaim ? 'claim' : 'submission' }} has been made.
-                                If you aren't certain that you are ready, consider saving as a draft instead.
-                                Click the Confirm button to complete the {{ $isClaim ? 'claim' : 'submission' }}.
-                            </p>
-                            <div class="text-right">
-                                <a href="#" id="confirmSubmit" class="btn btn-primary">Confirm</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-content hide" id="draftContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Save Draft</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                                This will edit the existing {{ $submission->prompt_id ? 'submission' : 'claim' }} draft.
-                                Items and other attachments will be held, similar to in design update drafts.
-                            </p>
-                            <div class="text-right">
-                                <a href="#" id="draftSubmit" class="btn btn-success">Save Draft</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-content hide" id="cancelContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Delete Draft</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                                This will cancel the {{ $submission->prompt_id ? 'submission' : 'claim' }} draft and return any attachments to your inventories.
-                            </p>
-                            <div class="text-right">
-                                <a href="#" id="cancelSubmit" class="btn btn-danger">Delete Draft</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+             </div>
+        </div>
     @endif
 @endsection
 
