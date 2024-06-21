@@ -77,14 +77,7 @@ class SubmissionManager extends Service {
                     if($submission < $prompt->parent_quantity) throw new \Exception('Please complete the prerequisite.');
                 }
             }
-            else $prompt = null;
             
-            $withCriteriaSelected = isset($data['criterion']) ? array_filter($data['criterion'], function($obj){
-                return isset($obj['id']);
-            }) : [];
-            if(count($withCriteriaSelected) > 0) $data['criterion'] = $withCriteriaSelected;
-            else $data['criterion'] = null;
-
             if(!$isClaim)
             {
                 //level req
@@ -92,6 +85,10 @@ class SubmissionManager extends Service {
                 {
                     if(!$user->level || $user->level->current_level < $prompt->level_req) throw new \Exception('You are not high enough level to enter this prompt');
                 }
+            
+
+            } else {
+                $prompt = null;
             }
 
             $withCriteriaSelected = isset($data['criterion']) ? array_filter($data['criterion'], function($obj){
