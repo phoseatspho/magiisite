@@ -13,7 +13,7 @@
 
     @if ($submission->status == 'Pending')
 
-    <h1>
+        <h1>
             {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
             <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
                 {{ $submission->status }}
@@ -73,7 +73,7 @@
 
         {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
 
-            @if(isset($submission->data['criterion']))
+        @if(isset($submission->data['criterion']))
                 <h2 class="mt-5">Criteria Rewards</h2>
                 @foreach($submission->data['criterion'] as $key => $criterionData)
                     <div class="card p-3 mb-2">
@@ -85,18 +85,14 @@
                 @endforeach
             @endif
 
-        <h2 class="mt-4">Rewards</h2>
+        <h2>Rewards</h2>
         @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
         @if ($submission->prompt_id)
-            <div class="mb-3">
-                @include('home._prompt', ['prompt' => $submission->prompt, 'staffView' => true])
-            </div>
-        @endif
             <div class="mb-3">
                 <h2>Skill Rewards</h2>
                 <div class="form-group">
                     <div id="skillList">
-                        @foreach($submission->prompt->skills as $skill)
+                        @foreach ($submission->prompt->skills as $skill)
                             <div class="d-flex mb-2">
                                 {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
                                 {!! Form::text('skill_quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
@@ -114,34 +110,19 @@
                 @include('home._prompt', ['prompt' => $submission->prompt, 'staffView' => true])
             </div>
         @endif
-        
+
         <h2>Characters</h2>
-        <p>Focus characters will receive skill rewards and EXP/stat rewards.</p>
-        <div class="alert alert-warning">Only input values here if the focus characters in the submission is supposed to get more than the above value points</div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    {!! Form::label('bonus_exp', 'Bonus Character Exp Reward', ['class' => 'form-control-label ml-3']) !!}
-                    {!! Form::number('bonus_exp', null, ['class' => 'form-control',]) !!}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    {!! Form::label('bonus_points', 'Bonus Character Stat Point Reward', ['class' => 'form-control-label ml-3']) !!}
-                    {!! Form::number('bonus_points', null, ['class' => 'form-control',]) !!}
-                </div>
-            </div>
-        </div>
+        <p>Only focus characters will receive skill rewards. Exp and stat point rewards are on a per-character basis.</p>
         <div id="characters" class="mb-3">
-@if (count(
+            @if (count(
                     $submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
                 <div class="alert alert-warning">
                     Some characters have been deleted since this submission was created.
                 </div>
             @endif
             @foreach ($submission->characters()->whereRelation('character', 'deleted_at', null)->get() as $character)
-                @include('widgets._character_select_entry', ['characterCurrencies' => $characterCurrencies, 'items' => $items, 'tables' => $tables, 'elements' => $elements, 'character' => $character, 'characterAwards' => $characterAwards, 'expanded_rewards' => $expanded_rewards, 'submission' => true])
-                @endforeach
+            @include('widgets._character_select_entry', ['characterCurrencies' => $characterCurrencies, 'items' => $items, 'tables' => $tables, 'elements' => $elements, 'character' => $character, 'characterAwards' => $characterAwards, 'expanded_rewards' => $expanded_rewards, 'submission' => true])
+            @endforeach
         </div>
         <div class="text-right mb-3">
             <a href="#" class="btn btn-outline-info" id="addCharacter">Add Character</a>
@@ -225,8 +206,7 @@
                                 <div class="character-image-loaded hide"></div>
                             </div>
                         </div>
-
-                       <div class="col-md-10">
+                        <div class="col-md-10">
                             <a href="#" class="float-right fas fa-close"></a>
                             <div class="form-group">
                                 {!! Form::label('slug[]', 'Character Code') !!}
@@ -263,18 +243,18 @@
             </div>
             <table>
                 <tr class="character-reward-row">
-
-                    @if($expanded_rewards)
-                    <td>
+                    @if ($expanded_rewards)
+                        <td>
                         {!! Form::select('character_rewardable_type[]', ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table',  'Element' => 'Element', 'Award' => ucfirst(__('awards.award'))], null, ['class' => 'form-control character-rewardable-type', 'placeholder' => 'Select Reward Type']) !!}
-                    </td>
-                    <td class="lootDivs">
-                        <div class="character-currencies hide">{!! Form::select('character_rewardable_id[]', $characterCurrencies, 0, ['class' => 'form-control character-currency-id', 'placeholder' => 'Select Currency']) !!}</div>
-                        <div class="character-items hide">{!! Form::select('character_rewardable_id[]', $items, 0, ['class' => 'form-control character-item-id', 'placeholder' => 'Select Item']) !!}</div>
-                        <div class="character-awards hide">{!! Form::select('character_rewardable_id[]', $characterAwards, 0, ['class' => 'form-control character-award-id', 'placeholder' => 'Select '.ucfirst(__('awards.award'))]) !!}</div>
-                        <div class="character-tables hide">{!! Form::select('character_rewardable_id[]', $tables, 0, ['class' => 'form-control character-table-id', 'placeholder' => 'Select Loot Table']) !!}</div>
-                        <div class="character-elements hide">{!! Form::select('character_rewardable_id[]', $elements, 0, ['class' => 'form-control character-element-id', 'placeholder' => 'Select Element']) !!}</div>
-                    </td>
+                        </td>
+                        <td class="lootDivs">
+                            <div class="character-currencies hide">{!! Form::select('character_rewardable_id[]', $characterCurrencies, 0, ['class' => 'form-control character-currency-id', 'placeholder' => 'Select Currency']) !!}</div>
+                            <div class="character-items hide">{!! Form::select('character_rewardable_id[]', $items, 0, ['class' => 'form-control character-item-id', 'placeholder' => 'Select Item']) !!}</div>
+                            <div class="character-tables hide">{!! Form::select('character_rewardable_id[]', $tables, 0, ['class' => 'form-control character-table-id', 'placeholder' => 'Select Loot Table']) !!}</div>
+                            <div class="character-awards hide">{!! Form::select('character_rewardable_id[]', $characterAwards, 0, ['class' => 'form-control character-award-id', 'placeholder' => 'Select '.ucfirst(__('awards.award'))]) !!}</div>
+                            <div class="character-claymores hide">{!! Form::number('character_claymores_id[]', 1, ['class' => 'form-control character-claymores-id']) !!}</div>
+                            <div class="character-elements hide">{!! Form::select('character_rewardable_id[]', $elements, 0, ['class' => 'form-control character-element-id', 'placeholder' => 'Select Element']) !!}</div>
+                        </td>
                     @else
                         <td class="lootDivs">
                             {!! Form::hidden('character_rewardable_type[]', 'Currency', ['class' => 'character-rewardable-type']) !!}
@@ -282,15 +262,14 @@
                         </td>
                     @endif
 
-                <td class="d-flex align-items-center">
-                    {!! Form::text('character_quantity[]', 0, ['class' => 'form-control mr-2  character-rewardable-quantity']) !!}
-                    <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
-                </td>
-            </tr>
-        </table>
-    </div>
-    @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'elements' => $elements, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
-
+                    <td class="d-flex align-items-center">
+                        {!! Form::text('character_quantity[]', 0, ['class' => 'form-control mr-2  character-rewardable-quantity']) !!}
+                        <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'elements' => $elements, 'awards' => $awards, 'pets' => $pets, 'gears' => $gears, 'weapons' => $weapons, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -336,6 +315,7 @@
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
     @endif
+
 @endsection
 
 @section('scripts')
@@ -345,93 +325,91 @@
         @include('js._character_select_js')
 
         <script>
- $('.original.skill-select').selectize();
-
-$('#add-skill').on('click', function(e) {
-    e.preventDefault();
-    addSkillRow();
-});
-$('.remove-skill').on('click', function(e) {
-    e.preventDefault();
-    removeSkillRow($(this));
-});
-
-function addSkillRow() {
-    var $clone = $('.skill-row').clone();
-    $('#skillList').append($clone);
-    $clone.removeClass('hide skill-row');
-    $clone.addClass('d-flex');
-    $clone.find('.remove-skill').on('click', function(e) {
-        e.preventDefault();
-        removeSkillRow($(this));
-    })
-    $clone.find('.skill-select').selectize();
-}
-
-function removeSkillRow($trigger) {
-    $trigger.parent().remove();
-}
-
             $(document).ready(function() {
                 var $confirmationModal = $('#confirmationModal');
                 var $submissionForm = $('#submissionForm');
 
-                    var $approvalButton = $('#approvalButton');
-                    var $approvalContent = $('#approvalContent');
-                    var $approvalSubmit = $('#approvalSubmit');
+                var $approvalButton = $('#approvalButton');
+                var $approvalContent = $('#approvalContent');
+                var $approvalSubmit = $('#approvalSubmit');
 
-                    var $rejectionButton = $('#rejectionButton');
-                    var $rejectionContent = $('#rejectionContent');
-                    var $rejectionSubmit = $('#rejectionSubmit');
+                var $rejectionButton = $('#rejectionButton');
+                var $rejectionContent = $('#rejectionContent');
+                var $rejectionSubmit = $('#rejectionSubmit');
 
-                    var $cancelButton = $('#cancelButton');
-                    var $cancelContent = $('#cancelContent');
-                    var $cancelSubmit = $('#cancelSubmit');
+                var $cancelButton = $('#cancelButton');
+                var $cancelContent = $('#cancelContent');
+                var $cancelSubmit = $('#cancelSubmit');
 
-                    $approvalButton.on('click', function(e) {
-                        e.preventDefault();
-                        $approvalContent.removeClass('hide');
-                        $rejectionContent.addClass('hide');
-                        $cancelContent.addClass('hide');
-                        $confirmationModal.modal('show');
-                    });
-
-                    $rejectionButton.on('click', function(e) {
-                        e.preventDefault();
-                        $rejectionContent.removeClass('hide');
-                        $approvalContent.addClass('hide');
-                        $cancelContent.addClass('hide');
-                        $confirmationModal.modal('show');
-                    });
-
-                    $cancelButton.on('click', function(e) {
-                        e.preventDefault();
-                        $cancelContent.removeClass('hide');
-                        $rejectionContent.addClass('hide');
-                        $approvalContent.addClass('hide');
-                        $confirmationModal.modal('show');
-                    });
-
-                    $approvalSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/approve');
-                        $submissionForm.submit();
-                    });
-
-                    $rejectionSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/reject');
-                        $submissionForm.submit();
-                    });
-
-                    $cancelSubmit.on('click', function(e) {
-                        e.preventDefault();
-                        $submissionForm.attr('action', '{{ url()->current() }}/cancel');
-                        $submissionForm.submit();
-                    });
+                $approvalButton.on('click', function(e) {
+                    e.preventDefault();
+                    $approvalContent.removeClass('hide');
+                    $rejectionContent.addClass('hide');
+                    $cancelContent.addClass('hide');
+                    $confirmationModal.modal('show');
                 });
-            </script>
+
+                $rejectionButton.on('click', function(e) {
+                    e.preventDefault();
+                    $rejectionContent.removeClass('hide');
+                    $approvalContent.addClass('hide');
+                    $cancelContent.addClass('hide');
+                    $confirmationModal.modal('show');
+                });
+
+                $cancelButton.on('click', function(e) {
+                    e.preventDefault();
+                    $cancelContent.removeClass('hide');
+                    $rejectionContent.addClass('hide');
+                    $approvalContent.addClass('hide');
+                    $confirmationModal.modal('show');
+                });
+
+                $approvalSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}/approve');
+                    $submissionForm.submit();
+                });
+
+                $rejectionSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}/reject');
+                    $submissionForm.submit();
+                });
+
+                $cancelSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    $submissionForm.attr('action', '{{ url()->current() }}/cancel');
+                    $submissionForm.submit();
+                });
+
+                $('.original.skill-select').selectize();
+
+                $('#add-skill').on('click', function(e) {
+                    e.preventDefault();
+                    addSkillRow();
+                });
+                $('.remove-skill').on('click', function(e) {
+                    e.preventDefault();
+                    removeSkillRow($(this));
+                });
+
+                function addSkillRow() {
+                    var $clone = $('.skill-row').clone();
+                    $('#skillList').append($clone);
+                    $clone.removeClass('hide skill-row');
+                    $clone.addClass('d-flex');
+                    $clone.find('.remove-skill').on('click', function(e) {
+                        e.preventDefault();
+                        removeSkillRow($(this));
+                    })
+                    $clone.find('.skill-select').selectize();
+                }
+
+                function removeSkillRow($trigger) {
+                    $trigger.parent().remove();
+                }
+            });
+        </script>
     @endif
 @endsection
-
-
