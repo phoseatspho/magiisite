@@ -23,6 +23,7 @@ use App\Models\Skill\Skill;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 use App\Models\Recipe\Recipe;
+use App\Models\Criteria\Criterion;
 
 class SubmissionController extends Controller {
     /**
