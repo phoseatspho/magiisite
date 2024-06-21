@@ -11,21 +11,28 @@
         {!! breadcrumbs(['Admin Panel' => 'admin', 'Claim Queue' => 'admin/claims/pending', 'Claim (#' . $submission->id . ')' => $submission->viewUrl]) !!}
     @endif
 
-        @if ($submission->status == 'Pending')
+    @if ($submission->status == 'Pending')
 
-            <h1>
-                {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
-                <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
-                    {{ $submission->status }}
-                </span>
-            </h1>
+        <h1>
+            {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
+            <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
+                {{ $submission->status }}
+            </span>
+        </h1>
 
-            <div class="mb-1">
+        <div class="mb-1">
+            <div class="row">
+                <div class="col-md-2 col-4">
+                    <h5>User</h5>
+                </div>
+                <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
+            </div>
+            @if ($submission->prompt_id)
                 <div class="row">
                     <div class="col-md-2 col-4">
-                        <h5>User</h5>
+                        <h5>Prompt</h5>
                     </div>
-                    <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
+                    <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-4">
@@ -64,7 +71,7 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
+        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
         @if(isset($submission->data['criterion']))
                 <h2 class="mt-5">Criteria Rewards</h2>
                 @foreach($submission->data['criterion'] as $key => $criterionData)
