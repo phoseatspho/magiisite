@@ -461,61 +461,6 @@
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
     @endif
-
-                        <td class="d-flex align-items-center">
-                            {!! Form::text('character_quantity[]', 0, ['class' => 'form-control mr-2  character-rewardable-quantity']) !!}
-                            <a href="#" class="remove-reward d-block"><i class="fas fa-times text-muted"></i></a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true])
-
-            <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content hide" id="approvalContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Confirm Approval</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>This will approve the {{ $submission->prompt_id ? 'submission' : 'claim' }} and distribute the above rewards to the user.</p>
-                            <div class="text-right">
-                                <a href="#" id="approvalSubmit" class="btn btn-success">Approve</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-content hide" id="cancelContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Confirm Cancellation</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>This will cancel the {{ $submission->prompt_id ? 'submission' : 'claim' }} and send it back to drafts. Make sure to include a staff comment if you do this!</p>
-                            <div class="text-right">
-                                <a href="#" id="cancelSubmit" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-content hide" id="rejectionContent">
-                        <div class="modal-header">
-                            <span class="modal-title h5 mb-0">Confirm Rejection</span>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>This will reject the {{ $submission->prompt_id ? 'submission' : 'claim' }}.</p>
-                            <div class="text-right">
-                                <a href="#" id="rejectionSubmit" class="btn btn-danger">Reject</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-@else
-    <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
-            @include('home._submission_content', ['submission' => $submission])
-        @endif
-
 @endsection
 
 @section('scripts')
