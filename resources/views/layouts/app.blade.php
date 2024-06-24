@@ -87,7 +87,8 @@
 
 <body>
     <div id="app">
-        <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}');"></div>
+        <a href="https://www.magiispecies.com">
+        <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}');"></div></a>
 
         <main class="container-fluid">
             <div class="row px-1 px-lg-0">
