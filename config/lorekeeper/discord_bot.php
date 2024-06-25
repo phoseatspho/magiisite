@@ -98,7 +98,7 @@ return [
         'exp_bar' => '#2f65d6',
 
         // Color used for regular text
-        'text_color' => '#000',
+        'text_color' => '#072447',
         // Color used for EXP bar text. Set to null to use regular text color
         'exp_text' => null,
         // This should be a path relative to the site's public directory
@@ -107,7 +107,7 @@ return [
         // Image file to insert as a "logo" into the corner of the rank card
         // Should be relative to the site's public directory (e.g. 'images/meta-image.png')
         // Set to null to disable
-        'logo_insert' => 'images/meta-image.png',
+        'logo_insert' => 'images/header.png',
     ],
 
     /*
