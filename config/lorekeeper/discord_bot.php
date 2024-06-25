@@ -107,7 +107,7 @@ return [
         // Image file to insert as a "logo" into the corner of the rank card
         // Should be relative to the site's public directory (e.g. 'images/meta-image.png')
         // Set to null to disable
-        'logo_insert' => 'null',
+        'logo_insert' => null,
     ],
 
     /*
