@@ -91,7 +91,7 @@ return [
         'background_color' => '#2f65d6',
         // Color used for background elements, such as the empty part of
         // the EXP bar
-        'accent_color' => '#3777be',
+        'accent_color' => '#4a92ca',
         // Opacity of accent backgrounds. Set to null or 100 for full opacity
         'accent_opacity' => 75,
         // Color used for the filled portion of the EXP bar
