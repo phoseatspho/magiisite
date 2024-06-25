@@ -98,7 +98,7 @@ return [
         'exp_bar' => '#2f65d6',
 
         // Color used for regular text
-        'text_color' => '#072447',
+        'text_color' => '#1844a3',
         // Color used for EXP bar text. Set to null to use regular text color
         'exp_text' => null,
         // This should be a path relative to the site's public directory
