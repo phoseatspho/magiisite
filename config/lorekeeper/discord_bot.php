@@ -88,10 +88,10 @@ return [
     // These settings pertain to the generation of rank cards
     'rank_cards' => [
         // Color used for the background of the rank card
-        'background_color' => '#4a92ca',
+        'background_color' => '#d2edf8',
         // Color used for background elements, such as the empty part of
         // the EXP bar
-        'accent_color' => '#ddd',
+        'accent_color' => '#3777be',
         // Opacity of accent backgrounds. Set to null or 100 for full opacity
         'accent_opacity' => 75,
         // Color used for the filled portion of the EXP bar
@@ -107,7 +107,7 @@ return [
         // Image file to insert as a "logo" into the corner of the rank card
         // Should be relative to the site's public directory (e.g. 'images/meta-image.png')
         // Set to null to disable
-        'logo_insert' => 'images/header.png',
+        'logo_insert' => 'null',
     ],
 
     /*
