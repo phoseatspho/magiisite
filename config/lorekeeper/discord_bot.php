@@ -88,7 +88,7 @@ return [
     // These settings pertain to the generation of rank cards
     'rank_cards' => [
         // Color used for the background of the rank card
-        'background_color' => '#d2edf8',
+        'background_color' => '#2f65d6',
         // Color used for background elements, such as the empty part of
         // the EXP bar
         'accent_color' => '#3777be',
