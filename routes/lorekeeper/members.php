@@ -40,6 +40,7 @@ Route::group(['prefix' => 'account', 'namespace' => 'Users'], function () {
     Route::post('remove-alias/{id}', 'AccountController@postRemoveAlias');
     Route::post('dob', 'AccountController@postBirthday');
     Route::post('border', 'AccountController@postBorder');
+    Route::post('devlog-notif', 'AccountController@postdevLogNotif');
 
     Route::get('two-factor/confirm', 'AccountController@getConfirmTwoFactor');
     Route::post('two-factor/enable', 'AccountController@postEnableTwoFactor');
