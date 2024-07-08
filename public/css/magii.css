@@ -2621,9 +2621,9 @@ a.text-dark:focus {
 }
 
 .card {
-  background-color: #8be4ff;
+  background-color: #a0dff2;
   border: 1px solid #0075CA;
-  border-radius: 2px;
+  border-radius: 4px;
   color: #245fbc;
 }
 .card-header {
