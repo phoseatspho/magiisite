@@ -21,14 +21,14 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <div class="form-group">
+            <div class="form-group">
                     {!! Form::label('slug[]', 'Character Code') !!}
                     {!! Form::select('slug[]', $characters, $character->character ? $character->character->slug : $character->slug, ['class' => 'form-control character-code', 'placeholder' => 'Select Character']) !!}
                 </div>
-                @if(isset($submission))
+                @if (isset($submission))
                     <div class="form-group col-6">
-                        {!! Form::label('character_is_focus['.$character->character->id.']', 'Focus Character?', ['class' => 'mr-2']) !!}
-                        {!! Form::select('character_is_focus['.$character->character->id.']', [0 => 'No' , 1 => 'Yes' ], $character->is_focus, ['class' => 'form-control character-is-focus']) !!}
+                        {!! Form::label('character_is_focus[' . ($character->character ? $character->character->id : $character->id) . ']', 'Focus Character?', ['class' => 'mr-2']) !!}
+                        {!! Form::select('character_is_focus[' . ($character->character ? $character->character->id : $character->id) . ']', [0 => 'No', 1 => 'Yes'], $character->is_focus, ['class' => 'form-control character-is-focus']) !!}
                     </div>
                 @endif
                 <div class="character-rewards">
