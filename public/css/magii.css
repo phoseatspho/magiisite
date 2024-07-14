@@ -2529,19 +2529,18 @@ a.text-dark:focus {
   top: -12.5%;
 }
 
-.alert-warning,
-.alert-warning > th,
-.alert-warning > td {
-  background-color: #cc6d2d;
-  border-color: #cc6d2d !important;
-  border-right-color: #a25724 !important;
+.alert-warning, .alert-warning > th, .alert-warning > td {
+  background-color: #6dd8da;
+  border-color: #64a9c4 !important;
+  border-right-color: #63a5c5 !important;
 }
+
 
 .alert-warning::before,
 .alert-warning > th::before,
 .alert-warning > td::before {
   content: "";
-  background-color: #a25724;
+  background-color: #3f90a4;
   border-radius: 2px;
   height: 125%;
   width: 5px;
